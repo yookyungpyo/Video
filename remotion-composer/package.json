@@ -8,6 +8,7 @@
     "upgrade": "npx remotion upgrade"
   },
   "dependencies": {
+    "@fontsource/noto-sans-kr": "^5.2.9",
     "@remotion/captions": "^4.0.441",
     "@remotion/cli": "^4.0.441",
     "@remotion/google-fonts": "^4.0.441",
