@@ -761,19 +761,21 @@ const Close: React.FC = () => {
         <br />
         <span style={{ color: PINK }}>더 나은 기분</span>을 산다
       </div>
-      <Label x={540} y={1140} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
-      <Wallet x={540} y={1340} w={300} rot={-3} delay={34} />
-      <Coin x={690} y={1280} s={68} delay={42} rot={10} />
+      <Label x={540} y={1110} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
+      {/* brand sign-off: mascot polaroid + wallet motif side by side */}
+      <MascotCut x={385} y={1340} w={215} rot={-4} delay={30} />
+      <Wallet x={715} y={1355} w={250} rot={5} delay={34} />
+      <Coin x={560} y={1250} s={56} delay={42} rot={-8} />
       <div
         style={{
           position: "absolute",
-          bottom: 230,
+          bottom: 210,
           width: "100%",
           textAlign: "center",
           fontFamily: HAND,
           fontWeight: 700,
-          fontSize: 34,
-          color: "#8a7a62",
+          fontSize: 68,
+          color: "#5a4d3a",
         }}
       >
         www.wylieax.com
