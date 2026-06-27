@@ -563,6 +563,7 @@ const OutroScene: React.FC = () => {
   const pop = spring({ frame: frame - 30, fps, config: { damping: 12, stiffness: 130 } });
   const floatY = Math.sin((frame / fps) * Math.PI) * 12;
   const chip = spring({ frame: frame - 48, fps, config: { damping: 16, stiffness: 130 } });
+  const footer = spring({ frame: frame - 58, fps, config: { damping: 18, stiffness: 120 } });
   const mw = 300;
   return (
     <AbsoluteFill>
@@ -610,6 +611,23 @@ const OutroScene: React.FC = () => {
           <Img src={MASCOT} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </div>
       </AbsoluteFill>
+      {/* footer */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 26,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: FONT,
+          fontWeight: 700,
+          fontSize: 30,
+          letterSpacing: 2,
+          color: MUTED,
+          opacity: footer,
+        }}
+      >
+        www.wylieax.com
+      </div>
     </AbsoluteFill>
   );
 };
