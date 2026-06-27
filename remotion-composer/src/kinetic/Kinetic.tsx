@@ -661,44 +661,50 @@ export const Kinetic: React.FC = () => {
     <AbsoluteFill style={{ background: BG }}>
       <FontLoader />
       <DarkBG accent={accent} />
-      <Sequence from={0} durationInFrames={105}>
-        <Fade durationInFrames={105}>
-          <HookScene />
-        </Fade>
-      </Sequence>
-      <Sequence from={105} durationInFrames={210}>
-        <Fade durationInFrames={210}>
-          <ChaosScene />
-        </Fade>
-      </Sequence>
-      <Sequence from={315} durationInFrames={180}>
-        <Fade durationInFrames={180}>
-          <AlignScene />
-        </Fade>
-      </Sequence>
-      <Sequence from={495} durationInFrames={120}>
-        <Fade durationInFrames={120}>
-          <ThesisScene />
-        </Fade>
-      </Sequence>
-      <Sequence from={615} durationInFrames={105}>
-        <Fade durationInFrames={105}>
-          <OutroScene />
-        </Fade>
-      </Sequence>
+      {/* Safe-area group: scale all foreground content into a centered band so
+          the top/bottom platform UI (Instagram Reels avatars, caption, action
+          buttons) never covers the text. Background stays full-frame so the
+          margins read as intentional padding, not black bars. */}
+      <AbsoluteFill style={{ transform: "translateY(-25px) scale(0.80)", transformOrigin: "center center" }}>
+        <Sequence from={0} durationInFrames={105}>
+          <Fade durationInFrames={105}>
+            <HookScene />
+          </Fade>
+        </Sequence>
+        <Sequence from={105} durationInFrames={210}>
+          <Fade durationInFrames={210}>
+            <ChaosScene />
+          </Fade>
+        </Sequence>
+        <Sequence from={315} durationInFrames={180}>
+          <Fade durationInFrames={180}>
+            <AlignScene />
+          </Fade>
+        </Sequence>
+        <Sequence from={495} durationInFrames={120}>
+          <Fade durationInFrames={120}>
+            <ThesisScene />
+          </Fade>
+        </Sequence>
+        <Sequence from={615} durationInFrames={105}>
+          <Fade durationInFrames={105}>
+            <OutroScene />
+          </Fade>
+        </Sequence>
+        {/* progress bar (sits at the bottom of the safe band) */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            height: 5,
+            width: `${prog * 100}%`,
+            background: `linear-gradient(90deg, ${BLUE}, ${GREEN})`,
+            opacity: 0.7,
+          }}
+        />
+      </AbsoluteFill>
       <Vignette />
-      {/* progress bar */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          height: 5,
-          width: `${prog * 100}%`,
-          background: `linear-gradient(90deg, ${BLUE}, ${GREEN})`,
-          opacity: 0.7,
-        }}
-      />
     </AbsoluteFill>
   );
 };
