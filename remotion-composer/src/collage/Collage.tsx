@@ -544,12 +544,12 @@ const Tags: React.FC<{ x: number; y: number; items: { t: string; c: string }[]; 
 // ---------------------------------------------------------------------------
 const Hook: React.FC = () => (
   <AbsoluteFill>
-    <Tape x={540} y={470} w={220} rot={-6} />
-    <Label x={540} y={470} text="사람들은" size={64} color={INK} delay={2} rot={-3} />
+    <Tape x={540} y={468} w={250} rot={-6} />
+    <Label x={540} y={468} text="사람들은" size={74} color={INK} delay={2} rot={-3} />
     <BigWord x={540} y={640} text="어디에 돈을" size={150} delay={8} seed={4} rot={-2} />
     <BigWord x={540} y={800} text="쓸까?" size={170} color={RED} delay={16} seed={5} rot={1} />
     <ScribbleCircle x={690} y={800} w={300} h={210} color={PINK} delay={26} />
-    <Label x={540} y={1015} text="지갑을 여는 3가지" size={58} color={BLUE} delay={34} />
+    <Label x={540} y={1015} text="지갑을 여는 3가지" size={66} color={BLUE} delay={34} />
     <MascotCut x={600} y={1330} w={190} rot={-5} delay={30} />
   </AbsoluteFill>
 );
@@ -591,7 +591,7 @@ const Reason: React.FC<{
     >
       {sub}
     </div>
-    <Label x={540} y={1015} text={insight} size={60} color={accent} delay={20} />
+    <Label x={540} y={1020} text={insight} size={66} color={accent} delay={20} />
     {/* example tags */}
     <Tags x={540} y={1230} items={tags} delay={26} />
     {extra}
@@ -660,7 +660,7 @@ const Close: React.FC = () => {
   ];
   return (
     <AbsoluteFill>
-      <Label x={540} y={430} text="사람의 지갑을 여는" size={58} color={INK} delay={2} />
+      <Label x={540} y={425} text="사람의 지갑을 여는" size={74} color={INK} delay={2} />
       <BigWord x={540} y={560} text="3가지" size={146} color={RED} delay={8} seed={6} />
       <ScribbleCircle x={540} y={560} w={340} h={205} color={PINK} delay={26} />
       {cards.map((c, i) => (
@@ -686,7 +686,7 @@ const Close: React.FC = () => {
         <br />
         <span style={{ color: PINK }}>더 나은 기분</span>을 산다
       </div>
-      <Label x={540} y={1135} text="당신의 고객은 무엇을 사고 있나요?" size={52} color="#3f372c" delay={30} />
+      <Label x={540} y={1140} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
       <MascotCut x={560} y={1330} w={175} rot={-4} delay={20} />
       <div
         style={{
