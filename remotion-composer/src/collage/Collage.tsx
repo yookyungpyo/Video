@@ -728,6 +728,10 @@ const Experience: React.FC = () => (
 );
 
 const Close: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const fpop = usePop(26);
+  const floatY = Math.sin((frame / fps) * Math.PI) * 8;
   const cards = [
     { t: "편리함", c: BLUE },
     { t: "해결책", c: RED },
@@ -761,24 +765,31 @@ const Close: React.FC = () => {
         <br />
         <span style={{ color: PINK }}>더 나은 기분</span>을 산다
       </div>
-      <Label x={540} y={1110} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
-      {/* brand sign-off: mascot polaroid + wallet motif side by side */}
-      <MascotCut x={385} y={1340} w={215} rot={-4} delay={30} />
-      <Wallet x={715} y={1355} w={250} rot={5} delay={34} />
-      <Coin x={560} y={1250} s={56} delay={42} rot={-8} />
+      <Label x={540} y={1120} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
+      {/* brand footer: bare mascot (no paper) before the URL, no overlap */}
       <div
         style={{
           position: "absolute",
-          bottom: 210,
+          bottom: 215,
           width: "100%",
-          textAlign: "center",
-          fontFamily: HAND,
-          fontWeight: 700,
-          fontSize: 68,
-          color: "#5a4d3a",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 26,
+          opacity: fpop > 0.05 ? 1 : 0,
+          transform: `scale(${fpop})`,
         }}
       >
-        www.wylieax.com
+        <Img
+          src={MASCOT}
+          style={{
+            height: 250,
+            width: "auto",
+            transform: `translateY(${floatY}px)`,
+            filter: "drop-shadow(4px 7px 0 rgba(33,28,22,0.18))",
+          }}
+        />
+        <span style={{ fontFamily: HAND, fontWeight: 700, fontSize: 68, color: "#4a4031" }}>www.wylieax.com</span>
       </div>
     </AbsoluteFill>
   );
