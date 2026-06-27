@@ -452,6 +452,93 @@ const Label: React.FC<{ x: number; y: number; text: string; size?: number; color
   );
 };
 
+// drawn collage icon on a torn sticker (replaces repetitive mascot use)
+const ICONS: Record<string, (c: string) => React.ReactNode> = {
+  bolt: (c) => <path d="M58 6 L24 56 L46 56 L38 94 L78 40 L54 40 Z" fill={c} stroke={INK} strokeWidth={4} strokeLinejoin="round" />,
+  key: (c) => (
+    <>
+      <circle cx={32} cy={34} r={20} fill="none" stroke={c} strokeWidth={11} />
+      <path d="M44 44 L86 86" stroke={c} strokeWidth={11} strokeLinecap="round" />
+      <path d="M70 70 L82 58 M80 80 L92 68" stroke={c} strokeWidth={11} strokeLinecap="round" />
+    </>
+  ),
+  heart: (c) => (
+    <path
+      d="M50 86 C 10 56, 14 22, 38 22 C 50 22, 50 34, 50 34 C 50 34, 50 22, 62 22 C 86 22, 90 56, 50 86 Z"
+      fill={c}
+      stroke={INK}
+      strokeWidth={4}
+      strokeLinejoin="round"
+    />
+  ),
+};
+const IconSticker: React.FC<{ x: number; y: number; kind: string; bg: string; iconColor?: string; rot?: number; delay?: number; seed?: number }> = ({
+  x,
+  y,
+  kind,
+  bg,
+  iconColor = "#fff",
+  rot = 6,
+  delay = 0,
+  seed = 40,
+}) => {
+  const pop = usePop(delay);
+  const { jr } = useStep(seed, 0, 1.6, 5);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        transform: `translate(-50%,-50%) rotate(${rot + jr}deg) scale(${pop})`,
+        background: bg,
+        padding: 26,
+        clipPath: tornPath(seed, 3),
+        boxShadow: "6px 9px 0 rgba(33,28,22,0.2)",
+        opacity: pop > 0.05 ? 1 : 0,
+      }}
+    >
+      <Tape x={66} y={2} w={90} rot={-10} color="rgba(255,255,255,0.5)" />
+      <svg width={100} height={100} viewBox="0 0 100 100" style={{ display: "block" }}>
+        {ICONS[kind](iconColor)}
+      </svg>
+    </div>
+  );
+};
+
+// row of small "example" sticker tags
+const Tags: React.FC<{ x: number; y: number; items: { t: string; c: string }[]; delay?: number }> = ({ x, y, items, delay = 0 }) => (
+  <>
+    {items.map((it, i) => {
+      const pop = usePop(delay + i * 5);
+      const rot = (i % 2 ? 1 : -1) * (3 + i);
+      return (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: x + i * 230 - ((items.length - 1) * 230) / 2,
+            top: y,
+            transform: `translate(-50%,-50%) rotate(${rot}deg) scale(${pop})`,
+            background: it.c,
+            color: "#fff",
+            fontFamily: BODY,
+            fontWeight: 900,
+            fontSize: 40,
+            padding: "12px 26px",
+            clipPath: tornPath(50 + i, 3),
+            boxShadow: "4px 6px 0 rgba(33,28,22,0.18)",
+            whiteSpace: "nowrap",
+            opacity: pop > 0.05 ? 1 : 0,
+          }}
+        >
+          {it.t}
+        </div>
+      );
+    })}
+  </>
+);
+
 // ---------------------------------------------------------------------------
 // Scenes
 // ---------------------------------------------------------------------------
@@ -462,10 +549,8 @@ const Hook: React.FC = () => (
     <BigWord x={540} y={640} text="어디에 돈을" size={150} delay={8} seed={4} rot={-2} />
     <BigWord x={540} y={800} text="쓸까?" size={170} color={RED} delay={16} seed={5} rot={1} />
     <ScribbleCircle x={690} y={800} w={300} h={210} color={PINK} delay={26} />
-    <Sparkle x={300} y={560} s={46} delay={20} />
-    <Sparkle x={820} y={640} s={36} color={PINK} delay={24} />
     <Label x={540} y={1010} text="지갑을 여는 3가지" size={46} color={BLUE} delay={34} />
-    <MascotCut x={560} y={1320} w={300} rot={-5} delay={30} />
+    <MascotCut x={600} y={1330} w={190} rot={-5} delay={30} />
   </AbsoluteFill>
 );
 
@@ -475,21 +560,41 @@ const Reason: React.FC<{
   word: string;
   wordColor: string;
   sub: string;
+  insight: string;
   accent: string;
+  icon: string;
+  tags: { t: string; c: string }[];
   extra?: React.ReactNode;
-}> = ({ num, numColor, word, wordColor, sub, accent, extra }) => (
+}> = ({ num, numColor, word, wordColor, sub, insight, accent, icon, tags, extra }) => (
   <AbsoluteFill>
     {/* layered colored paper behind the word card */}
-    <ColorBlock x={585} y={668} w={600} h={300} color={accent} rot={-6} seed={30} delay={5} halftone />
-    <Specks seed={Math.round(word.length * 3 + 1)} color={accent} n={6} box={[140, 1150, 760, 1500]} delay={12} />
-    <NumTag x={250} y={420} n={num} color={numColor} delay={2} />
-    <Card x={560} y={650} rot={-3} bg="#fff" seed={Math.round(word.length + 2)} delay={8} pad="22px 60px">
-      <div style={{ fontFamily: DISPLAY, fontSize: 176, color: wordColor, lineHeight: 1.0, letterSpacing: -2, whiteSpace: "nowrap" }}>{word}</div>
+    <ColorBlock x={520} y={648} w={560} h={290} color={accent} rot={-6} seed={30} delay={5} halftone />
+    <NumTag x={235} y={420} n={num} color={numColor} delay={2} />
+    <Card x={500} y={640} rot={-3} bg="#fff" seed={Math.round(word.length + 2)} delay={8} pad="22px 56px">
+      <div style={{ fontFamily: DISPLAY, fontSize: 168, color: wordColor, lineHeight: 1.0, letterSpacing: -2, whiteSpace: "nowrap" }}>{word}</div>
     </Card>
-    <Underline x={560} y={790} w={460} color={accent} delay={22} />
-    <Label x={540} y={940} text={sub} size={52} color={INK} delay={18} />
+    <IconSticker x={860} y={600} kind={icon} bg={accent} rot={8} delay={14} seed={Math.round(word.length + 41)} />
+    <Underline x={500} y={780} w={430} color={accent} delay={22} />
+    {/* sub headline (bold) + insight (handwriting) */}
+    <div
+      style={{
+        position: "absolute",
+        top: 900,
+        width: "100%",
+        textAlign: "center",
+        fontFamily: BODY,
+        fontWeight: 900,
+        fontSize: 60,
+        color: INK,
+        opacity: 1,
+      }}
+    >
+      {sub}
+    </div>
+    <Label x={540} y={1010} text={insight} size={48} color={accent} delay={20} />
+    {/* example tags */}
+    <Tags x={540} y={1230} items={tags} delay={26} />
     {extra}
-    <MascotCut x={830} y={1320} w={250} rot={6} delay={26} flip />
   </AbsoluteFill>
 );
 
@@ -499,40 +604,35 @@ const Convenience: React.FC = () => (
     numColor={BLUE}
     word="편리함"
     wordColor={INK}
-    sub="편리함에 돈을 쓴다"
+    sub="귀찮음을 없애준다"
+    insight="시간과 수고를 줄여주니까"
     accent={BLUE}
-    extra={
-      <>
-        <Sparkle x={300} y={1120} s={44} color={YELLOW} delay={30} />
-        <ScribbleCircle x={300} y={430} w={180} h={130} color={BLUE} delay={20} />
-      </>
-    }
+    icon="bolt"
+    tags={[
+      { t: "배달", c: BLUE },
+      { t: "구독", c: YELLOW },
+      { t: "자동화", c: RED },
+    ]}
   />
 );
 
-const Solution: React.FC = () => {
-  const frame = useCurrentFrame();
-  const cross = interpolate(frame, [40, 54], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return (
-    <Reason
-      num="02"
-      numColor={RED}
-      word="해결책"
-      wordColor={INK}
-      sub="문제를 없애준다면"
-      accent={RED}
-      extra={
-        <div style={{ position: "absolute", left: 300, top: 1130, transform: "translate(-50%,-50%) rotate(-8deg)" }}>
-          <div style={{ fontFamily: DISPLAY, fontSize: 84, color: INK }}>문제</div>
-          <svg style={{ position: "absolute", left: -20, top: -16, overflow: "visible" }} width={210} height={120}>
-            <path d="M 6 12 L 200 100" stroke={RED} strokeWidth={12} strokeLinecap="round" strokeDasharray={220} strokeDashoffset={220 * (1 - cross)} />
-            <path d="M 200 12 L 6 100" stroke={RED} strokeWidth={12} strokeLinecap="round" strokeDasharray={220} strokeDashoffset={220 * (1 - Math.max(0, cross - 0.5) * 2)} />
-          </svg>
-        </div>
-      }
-    />
-  );
-};
+const Solution: React.FC = () => (
+  <Reason
+    num="02"
+    numColor={RED}
+    word="해결책"
+    wordColor={INK}
+    sub="문제를 없애준다면"
+    insight="고통이 클수록 지갑이 열린다"
+    accent={RED}
+    icon="key"
+    tags={[
+      { t: "불편", c: RED },
+      { t: "불안", c: BLUE },
+      { t: "손해", c: INK },
+    ]}
+  />
+);
 
 const Experience: React.FC = () => (
   <Reason
@@ -540,16 +640,15 @@ const Experience: React.FC = () => (
     numColor={PINK}
     word="경험"
     wordColor={PINK}
-    sub="감정이 클수록 더 쓴다"
+    sub="기억에 남는 감정을 산다"
+    insight="감정이 클수록 더 쓴다"
     accent={PINK}
-    extra={
-      <>
-        <Sparkle x={300} y={500} s={50} color={PINK} delay={28} />
-        <Sparkle x={780} y={520} s={38} color={YELLOW} delay={32} />
-        <ArrowUp x={250} y={1150} h={120} color={GREEN} delay={34} />
-        <Label x={330} y={1080} text="감정↑ = 지갑↑" size={42} color={GREEN} delay={36} rot={-4} />
-      </>
-    }
+    icon="heart"
+    tags={[
+      { t: "여행", c: PINK },
+      { t: "공연", c: BLUE },
+      { t: "선물", c: GREEN },
+    ]}
   />
 );
 
@@ -561,25 +660,44 @@ const Close: React.FC = () => {
   ];
   return (
     <AbsoluteFill>
-      <Label x={540} y={470} text="사람의 지갑을 여는" size={52} color={INK} delay={2} />
-      <BigWord x={540} y={600} text="3가지" size={150} color={RED} delay={8} seed={6} />
+      <Label x={540} y={430} text="사람의 지갑을 여는" size={52} color={INK} delay={2} />
+      <BigWord x={540} y={560} text="3가지" size={146} color={RED} delay={8} seed={6} />
+      <ScribbleCircle x={540} y={560} w={340} h={205} color={PINK} delay={26} />
       {cards.map((c, i) => (
-        <Card key={i} x={250 + i * 290} y={870} rot={i % 2 ? 4 : -4} bg={c.c} seed={i + 20} delay={16 + i * 6} pad="20px 30px">
-          <div style={{ fontFamily: DISPLAY, fontSize: 58, color: "#fff" }}>{c.t}</div>
+        <Card key={i} x={250 + i * 290} y={760} rot={i % 2 ? 4 : -4} bg={c.c} seed={i + 20} delay={16 + i * 6} pad="18px 28px">
+          <div style={{ fontFamily: DISPLAY, fontSize: 56, color: "#fff" }}>{c.t}</div>
         </Card>
       ))}
-      <ScribbleCircle x={540} y={600} w={340} h={210} color={PINK} delay={26} />
-      <MascotCut x={560} y={1230} w={320} rot={-4} delay={22} />
+      {/* conclusion */}
       <div
         style={{
           position: "absolute",
-          bottom: 250,
+          top: 900,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: BODY,
+          fontWeight: 900,
+          fontSize: 56,
+          color: INK,
+          lineHeight: 1.3,
+        }}
+      >
+        결국 사람은
+        <br />
+        <span style={{ color: PINK }}>더 나은 기분</span>을 산다
+      </div>
+      <Label x={540} y={1130} text="당신의 고객은 무엇을 사고 있나요?" size={40} color="#6b5d49" delay={30} />
+      <MascotCut x={560} y={1330} w={175} rot={-4} delay={20} />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 230,
           width: "100%",
           textAlign: "center",
           fontFamily: HAND,
           fontWeight: 700,
           fontSize: 34,
-          color: "#6b5d49",
+          color: "#8a7a62",
         }}
       >
         www.wylieax.com
@@ -608,23 +726,23 @@ export const Collage: React.FC = () => (
           <Hook />
         </Cut>
       </Sequence>
-      <Sequence from={90} durationInFrames={90}>
-        <Cut d={90}>
+      <Sequence from={90} durationInFrames={110}>
+        <Cut d={110}>
           <Convenience />
         </Cut>
       </Sequence>
-      <Sequence from={180} durationInFrames={90}>
-        <Cut d={90}>
+      <Sequence from={200} durationInFrames={110}>
+        <Cut d={110}>
           <Solution />
         </Cut>
       </Sequence>
-      <Sequence from={270} durationInFrames={105}>
-        <Cut d={105}>
+      <Sequence from={310} durationInFrames={110}>
+        <Cut d={110}>
           <Experience />
         </Cut>
       </Sequence>
-      <Sequence from={375} durationInFrames={75}>
-        <Cut d={75}>
+      <Sequence from={420} durationInFrames={95}>
+        <Cut d={95}>
           <Close />
         </Cut>
       </Sequence>
