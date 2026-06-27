@@ -8,6 +8,8 @@
     "upgrade": "npx remotion upgrade"
   },
   "dependencies": {
+    "@fontsource/anton": "^5.2.7",
+    "@fontsource/black-han-sans": "^5.2.8",
     "@fontsource/gaegu": "^5.2.8",
     "@fontsource/noto-sans-kr": "^5.2.9",
     "@remotion/captions": "^4.0.441",
