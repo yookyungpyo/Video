@@ -117,9 +117,20 @@ const DarkBG: React.FC<{ accent: string }> = ({ accent }) => {
   );
 };
 
+// Cinematic vignette — darkens the edges for depth (text stays central/legible).
+const Vignette: React.FC = () => (
+  <AbsoluteFill
+    style={{
+      background:
+        "radial-gradient(125% 90% at 50% 48%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.5) 100%)",
+      pointerEvents: "none",
+    }}
+  />
+);
+
 // ---------------------------------------------------------------------------
-// KLine — a line of text that pops in character-by-character. Accepts colored
-// segments so part of a line can be accented.
+// KLine — character-by-character pop-in with optional colored segments and an
+// animated accent underline.
 // ---------------------------------------------------------------------------
 type Seg = { text: string; color: string };
 const KLine: React.FC<{
@@ -128,47 +139,59 @@ const KLine: React.FC<{
   size: number;
   weight?: number;
   stagger?: number;
-}> = ({ segments, startFrame, size, weight = 900, stagger = 1.3 }) => {
+  underline?: string;
+  underlineWidth?: number;
+}> = ({ segments, startFrame, size, weight = 900, stagger = 1.3, underline, underlineWidth = 0 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const total = segments.reduce((n, s) => n + s.text.length, 0);
   let idx = 0;
+  const uw = interpolate(frame, [startFrame + total * stagger, startFrame + total * stagger + 16], [0, underlineWidth], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
   return (
-    <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
-      {segments.map((seg, si) =>
-        seg.text.split("").map((ch, ci) => {
-          const i = idx++;
-          const sp = spring({
-            frame: frame - startFrame - i * stagger,
-            fps,
-            config: { damping: 13, stiffness: 170 },
-          });
-          return (
-            <span
-              key={`${si}-${ci}`}
-              style={{
-                display: "inline-block",
-                whiteSpace: "pre",
-                transform: `translateY(${(1 - sp) * 46}px) scale(${0.7 + 0.3 * sp})`,
-                opacity: sp,
-                fontFamily: FONT,
-                fontWeight: weight,
-                fontSize: size,
-                color: seg.color,
-                letterSpacing: -1,
-              }}
-            >
-              {ch}
-            </span>
-          );
-        })
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+        {segments.map((seg, si) =>
+          seg.text.split("").map((ch, ci) => {
+            const i = idx++;
+            const sp = spring({
+              frame: frame - startFrame - i * stagger,
+              fps,
+              config: { damping: 13, stiffness: 170 },
+            });
+            return (
+              <span
+                key={`${si}-${ci}`}
+                style={{
+                  display: "inline-block",
+                  whiteSpace: "pre",
+                  transform: `translateY(${(1 - sp) * 46}px) scale(${0.7 + 0.3 * sp})`,
+                  opacity: sp,
+                  fontFamily: FONT,
+                  fontWeight: weight,
+                  fontSize: size,
+                  color: seg.color,
+                  letterSpacing: -1,
+                }}
+              >
+                {ch}
+              </span>
+            );
+          })
+        )}
+      </div>
+      {underline && (
+        <div style={{ height: 6, width: uw, background: underline, borderRadius: 4, marginTop: 14 }} />
       )}
     </div>
   );
 };
 
 // ---------------------------------------------------------------------------
-// FlyWord — a word that flies from an offset to a target offset (from screen
-// center), with optional rotation/jitter and a vanish (fall-away) factor.
+// FlyWord — flies from an offset to a target; `vanish` pushes it outward
+// (explode) + spins + fades.
 // ---------------------------------------------------------------------------
 const FlyWord: React.FC<{
   text: string;
@@ -183,6 +206,9 @@ const FlyWord: React.FC<{
   weight?: number;
   jitter?: number;
   vanish?: number;
+  vanishX?: number;
+  vanishY?: number;
+  vanishRot?: number;
 }> = ({
   text,
   delay,
@@ -196,14 +222,18 @@ const FlyWord: React.FC<{
   weight = 800,
   jitter = 0,
   vanish = 0,
+  vanishX = 0,
+  vanishY = 0,
+  vanishRot = 0,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame: frame - delay, fps, config: { damping: 15, stiffness: 95, mass: 1 } });
-  const x = interpolate(s, [0, 1], [fromX, toX]);
-  const y = interpolate(s, [0, 1], [fromY, toY]) + vanish * 240;
   const jx = jitter ? Math.sin((frame - delay) / 4 + rot) * jitter : 0;
   const jy = jitter ? Math.cos((frame - delay) / 5 + rot) * jitter : 0;
+  const x = interpolate(s, [0, 1], [fromX, toX]) + jx + vanish * vanishX;
+  const y = interpolate(s, [0, 1], [fromY, toY]) + jy + vanish * vanishY;
+  const r = rot + vanish * vanishRot;
   const op = interpolate(s, [0, 0.4], [0, 1], { extrapolateRight: "clamp" }) * (1 - vanish);
   return (
     <div
@@ -211,7 +241,7 @@ const FlyWord: React.FC<{
         position: "absolute",
         left: "50%",
         top: "50%",
-        transform: `translate(-50%, -50%) translate(${x + jx}px, ${y + jy}px) rotate(${rot}deg) scale(${0.6 + 0.4 * s})`,
+        transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${r}deg) scale(${0.6 + 0.4 * s})`,
         color,
         fontFamily: FONT,
         fontWeight: weight,
@@ -242,13 +272,15 @@ const HookScene: React.FC = () => (
         ]}
         startFrame={40}
         size={104}
+        underline={BLUE}
+        underlineWidth={300}
       />
     </div>
   </AbsoluteFill>
 );
 
 // ---------------------------------------------------------------------------
-// Scene 2 — Different directions → collapse (words scatter & shatter)
+// Scene 2 — Different directions → collapse (words scatter & explode)
 // ---------------------------------------------------------------------------
 const ChaosScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -258,20 +290,29 @@ const ChaosScene: React.FC = () => {
     extrapolateRight: "clamp",
     easing: Easing.in(Easing.cubic),
   });
-  // pre-collapse shake
-  const shakeW = frame > 95 && frame < 122 ? (122 - frame) / 27 : 0;
-  const sx = Math.sin(frame * 2.3) * 12 * shakeW;
-  const sy = Math.cos(frame * 2.7) * 12 * shakeW;
+
+  // build-up shake then a sharp impact jolt at the "붕괴" landing
+  const buildShake = frame > 95 && frame < 122 ? (frame - 95) / 27 : 0;
+  const impact = frame >= 122 && frame < 142 ? (142 - frame) / 20 : 0;
+  const shAmt = buildShake * 8 + impact * 28;
+  const shx = Math.sin(frame * 3.1) * shAmt;
+  const shy = Math.cos(frame * 3.7) * shAmt;
 
   const slam = spring({ frame: frame - 122, fps, config: { damping: 9, stiffness: 150, mass: 1.2 } });
   const slamScale = frame >= 122 ? interpolate(slam, [0, 1], [3.4, 1]) : 0;
   const slamOp = interpolate(frame, [122, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const flashOp = interpolate(frame, [120, 126, 138], [0, 0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
+  // shockwave ring
+  const ringK = interpolate(frame, [121, 152], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ringSize = 120 + ringK * 980;
+  const ringOp = frame >= 121 ? (1 - ringK) * 0.55 : 0;
+  const ringBorder = interpolate(ringK, [0, 1], [20, 2]);
+
   const heading = spring({ frame: frame - 2, fps, config: { damping: 18, stiffness: 120 } });
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ transform: `translate(${shx}px, ${shy}px)` }}>
       {/* heading */}
       <div
         style={{
@@ -290,8 +331,8 @@ const ChaosScene: React.FC = () => {
         방향이 <span style={{ color: RED }}>다르면?</span>
       </div>
 
-      {/* scattering opinion words */}
-      <div style={{ position: "absolute", left: sx, top: sy + 80, width: "100%", height: "100%" }}>
+      {/* scattering opinion words that explode outward on collapse */}
+      <div style={{ position: "absolute", left: 0, top: 80, width: "100%", height: "100%" }}>
         {OPINIONS.map((w, i) => {
           const ang = (i / OPINIONS.length) * Math.PI * 2;
           const toX = Math.cos(ang) * 250 + (rand(i, 7) - 0.5) * 60;
@@ -313,15 +354,31 @@ const ChaosScene: React.FC = () => {
               color={col}
               size={50}
               weight={700}
-              jitter={4}
+              jitter={5}
               vanish={collapse}
+              vanishX={Math.cos(ang) * 520}
+              vanishY={Math.sin(ang) * 520}
+              vanishRot={(rand(i, 11) - 0.5) * 240}
             />
           );
         })}
       </div>
 
-      {/* red flash */}
+      {/* red flash + shockwave ring */}
       <AbsoluteFill style={{ background: RED, opacity: flashOp }} />
+      {frame >= 121 && (
+        <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              width: ringSize,
+              height: ringSize,
+              borderRadius: "50%",
+              border: `${ringBorder}px solid ${RED}`,
+              opacity: ringOp,
+            }}
+          />
+        </AbsoluteFill>
+      )}
 
       {/* 붕괴 slam */}
       {frame >= 122 && (
@@ -335,7 +392,7 @@ const ChaosScene: React.FC = () => {
               opacity: slamOp,
               transform: `scale(${slamScale}) rotate(-3deg)`,
               letterSpacing: -4,
-              textShadow: "0 12px 40px rgba(255,90,77,0.45)",
+              textShadow: "0 12px 48px rgba(255,90,77,0.5)",
             }}
           >
             붕괴
@@ -354,7 +411,7 @@ const ChaosScene: React.FC = () => {
           fontWeight: 700,
           fontSize: 46,
           color: WHITE,
-          opacity: interpolate(frame, [150, 168], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+          opacity: interpolate(frame, [152, 170], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
         }}
       >
         방향이 어긋난 조직은 무너진다
@@ -364,18 +421,20 @@ const ChaosScene: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Scene 3 — Same direction → progress (words align into a forward stream)
+// Scene 3 — Same direction → progress (words align & rise as a forward stream)
 // ---------------------------------------------------------------------------
 const AlignScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { height } = useVideoConfig();
   const heading = spring({ frame: frame - 2, fps, config: { damping: 18, stiffness: 120 } });
-  // after alignment, the stack lifts up and fades, punchline resolves
   const lift = interpolate(frame, [108, 150], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.inOut(Easing.cubic),
   });
+  const t = frame / fps;
+
   return (
     <AbsoluteFill>
       <div
@@ -395,8 +454,33 @@ const AlignScene: React.FC = () => {
         방향이 <span style={{ color: GREEN }}>같으면?</span>
       </div>
 
-      {/* opinions slide up into an aligned, evenly-spaced column */}
-      <div style={{ position: "absolute", left: 0, top: -60 - lift * 130, width: "100%", height: "100%" }}>
+      {/* upward speed streaks behind the column (momentum) */}
+      {Array.from({ length: 6 }).map((_, i) => {
+        const x = 170 + i * 150 + (rand(i, 5) - 0.5) * 40;
+        const span = 520;
+        const base = rand(i, 6) * span;
+        const speed = 220 + rand(i, 7) * 160;
+        const y = 640 - (((base + t * speed) % span));
+        const op = lift * (0.12 + rand(i, 8) * 0.16);
+        return (
+          <div
+            key={`st${i}`}
+            style={{
+              position: "absolute",
+              left: x,
+              top: y,
+              width: 4,
+              height: 120,
+              borderRadius: 4,
+              background: `linear-gradient(${GREEN}, transparent)`,
+              opacity: op,
+            }}
+          />
+        );
+      })}
+
+      {/* opinions align into an evenly-spaced column, then rise & fade */}
+      <div style={{ position: "absolute", left: 0, top: -40, width: "100%", height: "100%" }}>
         {OPINIONS.map((w, i) => {
           const toY = (i - 2) * 96;
           return (
@@ -413,37 +497,24 @@ const AlignScene: React.FC = () => {
               size={52}
               weight={700}
               vanish={lift}
+              vanishY={-150}
             />
           );
         })}
-      </div>
-
-      {/* forward chevrons hint (▲) rising */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 470,
-          width: "100%",
-          textAlign: "center",
-          color: GREEN,
-          fontSize: 60,
-          opacity: lift * 0.8,
-          transform: `translateY(${(1 - lift) * 40}px)`,
-        }}
-      >
-        ▲
       </div>
 
       {/* punchline */}
       <div
         style={{
           position: "absolute",
-          bottom: 320,
+          bottom: 300,
           width: "100%",
           textAlign: "center",
           opacity: lift,
+          transform: `translateY(${(1 - lift) * 26}px)`,
         }}
       >
+        <div style={{ color: GREEN, fontSize: 64, marginBottom: 6 }}>▲</div>
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 44, color: MUTED }}>다른 의견은 추진력이 되어</div>
         <div style={{ fontFamily: FONT, fontWeight: 900, fontSize: 86, color: GREEN, marginTop: 10 }}>
           더 멀리 나아간다
@@ -458,7 +529,7 @@ const AlignScene: React.FC = () => {
 // ---------------------------------------------------------------------------
 const ThesisScene: React.FC = () => (
   <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 30 }}>
       <KLine
         segments={[
           { text: "방향", color: BLUE },
@@ -466,14 +537,18 @@ const ThesisScene: React.FC = () => (
         ]}
         startFrame={6}
         size={100}
+        underline={BLUE}
+        underlineWidth={520}
       />
       <KLine
         segments={[
           { text: "의견", color: GREEN },
           { text: "은 다양하게", color: WHITE },
         ]}
-        startFrame={28}
+        startFrame={30}
         size={100}
+        underline={GREEN}
+        underlineWidth={560}
       />
     </div>
   </AbsoluteFill>
@@ -485,13 +560,14 @@ const ThesisScene: React.FC = () => (
 const OutroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const pop = spring({ frame: frame - 30, fps, config: { damping: 13, stiffness: 130 } });
-  const floatY = Math.sin((frame / fps) * Math.PI) * 10;
+  const pop = spring({ frame: frame - 30, fps, config: { damping: 12, stiffness: 130 } });
+  const floatY = Math.sin((frame / fps) * Math.PI) * 12;
+  const chip = spring({ frame: frame - 48, fps, config: { damping: 16, stiffness: 130 } });
   const mw = 300;
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: 120 }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: 140 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
           <KLine segments={[{ text: "같은 곳을 볼 때,", color: WHITE }]} startFrame={4} size={66} weight={700} />
           <KLine
             segments={[
@@ -505,13 +581,30 @@ const OutroScene: React.FC = () => {
           />
         </div>
       </AbsoluteFill>
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 70 }}>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 64 }}>
+        <div
+          style={{
+            opacity: chip,
+            transform: `translateY(${(1 - chip) * 16}px)`,
+            marginBottom: 18,
+            fontFamily: FONT,
+            fontWeight: 700,
+            fontSize: 26,
+            letterSpacing: 4,
+            color: BG,
+            background: WHITE,
+            padding: "10px 26px",
+            borderRadius: 999,
+          }}
+        >
+          ONE DIRECTION
+        </div>
         <div
           style={{
             width: mw,
             height: (mw * 2400) / 1350,
             transform: `translateY(${floatY}px) scale(${pop})`,
-            filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.5))",
+            filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.55))",
           }}
         >
           <Img src={MASCOT} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
@@ -543,9 +636,9 @@ const Fade: React.FC<{ durationInFrames: number; children: React.ReactNode }> = 
 // ---------------------------------------------------------------------------
 export const Kinetic: React.FC = () => {
   const frame = useCurrentFrame();
-  // accent color for the background glow, by phase
   const accent =
     frame < 105 ? BLUE : frame < 315 ? RED : frame < 495 ? GREEN : frame < 615 ? BLUE : GREEN;
+  const prog = frame / 720;
   return (
     <AbsoluteFill style={{ background: BG }}>
       <FontLoader />
@@ -575,6 +668,19 @@ export const Kinetic: React.FC = () => {
           <OutroScene />
         </Fade>
       </Sequence>
+      <Vignette />
+      {/* progress bar */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          height: 5,
+          width: `${prog * 100}%`,
+          background: `linear-gradient(90deg, ${BLUE}, ${GREEN})`,
+          opacity: 0.7,
+        }}
+      />
     </AbsoluteFill>
   );
 };
