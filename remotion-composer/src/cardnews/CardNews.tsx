@@ -84,7 +84,8 @@ const Mascot: React.FC<{ width: number; floatAmp?: number; flip?: boolean }> = (
   );
 };
 
-// Arrow drawn pointing UP by default (angle 0 = up). angle in degrees, clockwise.
+// Curved arrow pointing UP by default (angle 0 = up). `curve` bows the shaft
+// (signed; magnitude ~0.1–0.4). The head is oriented along the curve tangent.
 const Arrow: React.FC<{
   x: number;
   y: number;
@@ -93,8 +94,26 @@ const Arrow: React.FC<{
   color: string;
   thickness?: number;
   opacity?: number;
-}> = ({ x, y, angle, length, color, thickness = 18, opacity = 1 }) => {
+  curve?: number;
+}> = ({ x, y, angle, length, color, thickness = 18, opacity = 1, curve = 0.22 }) => {
   const head = thickness * 2.2;
+  const W = 440;
+  const cx = W / 2;
+  const top = head;
+  const bottom = top + length;
+  const ctrlX = cx + curve * length;
+  const ctrlY = (top + bottom) / 2;
+  // tangent at the tip of a quadratic Bézier ∝ (end - control)
+  const tx = cx - ctrlX;
+  const ty = top - ctrlY;
+  const tlen = Math.hypot(tx, ty) || 1;
+  const headDeg = (Math.atan2(ty, tx) * 180) / Math.PI;
+  // pull the shaft end back so the head covers the seam
+  const endX = cx - (tx / tlen) * head * 0.5;
+  const endY = top - (ty / tlen) * head * 0.5;
+  const H = bottom + head;
+  const h = head * 1.25;
+  const w = head;
   return (
     <div
       style={{
@@ -106,25 +125,17 @@ const Arrow: React.FC<{
         transformOrigin: "center center",
       }}
     >
-      <svg
-        width={head * 2}
-        height={length}
-        viewBox={`0 0 ${head * 2} ${length}`}
-        style={{ overflow: "visible" }}
-      >
-        <line
-          x1={head}
-          y1={length}
-          x2={head}
-          y2={head}
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
+        <path
+          d={`M ${cx} ${bottom} Q ${ctrlX} ${ctrlY} ${endX} ${endY}`}
           stroke={color}
           strokeWidth={thickness}
+          fill="none"
           strokeLinecap="round"
         />
-        <polygon
-          points={`${head},0 ${head * 2},${head * 1.1} ${0},${head * 1.1}`}
-          fill={color}
-        />
+        <g transform={`translate(${cx} ${top}) rotate(${headDeg + 90})`}>
+          <polygon points={`0,${-h} ${w},0 ${-w},0`} fill={color} />
+        </g>
       </svg>
     </div>
   );
@@ -160,13 +171,92 @@ const Bubble: React.FC<{
   </div>
 );
 
-const Background: React.FC<{ tint?: string }> = ({ tint = "#EAF1FA" }) => (
-  <AbsoluteFill
-    style={{
-      background: `radial-gradient(120% 80% at 50% 18%, #FFFFFF 0%, ${tint} 60%, ${tint} 100%)`,
-    }}
-  />
-);
+// deterministic pseudo-random in [0,1)
+const rand = (i: number, salt: number): number => {
+  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+};
+
+const PALETTES: Record<string, { base: string; orbs: string[]; dot: string }> = {
+  blue: { base: "#E9F1FB", orbs: ["#BCD6F0", "#D3E4F7", "#C7DCF3"], dot: "#A9C7E0" },
+  red: { base: "#FBECEA", orbs: ["#F2C5C0", "#F8D6CF", "#F3CBCF"], dot: "#EBB4AE" },
+  green: { base: "#E8F6EF", orbs: ["#B7E3CD", "#CCEBDC", "#BFE6D2"], dot: "#A6D7BF" },
+};
+
+// Animated background: slow-drifting blurred orbs + gently rising particles,
+// topped with a soft white wash so headings stay legible.
+const Background: React.FC<{ variant?: "blue" | "red" | "green" }> = ({ variant = "blue" }) => {
+  const frame = useCurrentFrame();
+  const { fps, width, height } = useVideoConfig();
+  const t = frame / fps;
+  const p = PALETTES[variant];
+  const TAU = Math.PI * 2;
+
+  const blobs = [
+    { c: p.orbs[0], r: 560, bx: 0.18, by: 0.22, ax: 130, ay: 90, sx: 0.05, sy: 0.045, ph: 0 },
+    { c: p.orbs[1], r: 640, bx: 0.84, by: 0.34, ax: 110, ay: 140, sx: 0.042, sy: 0.06, ph: 1.6 },
+    { c: p.orbs[2], r: 500, bx: 0.5, by: 0.82, ax: 150, ay: 90, sx: 0.038, sy: 0.052, ph: 3.1 },
+  ];
+
+  return (
+    <AbsoluteFill style={{ background: p.base, overflow: "hidden" }}>
+      {blobs.map((b, i) => {
+        const x = b.bx * width + Math.sin(t * TAU * b.sx + b.ph) * b.ax;
+        const y = b.by * height + Math.cos(t * TAU * b.sy + b.ph) * b.ay;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: x - b.r / 2,
+              top: y - b.r / 2,
+              width: b.r,
+              height: b.r,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${b.c} 0%, transparent 70%)`,
+              filter: "blur(34px)",
+              opacity: 0.55,
+            }}
+          />
+        );
+      })}
+
+      {Array.from({ length: 16 }).map((_, i) => {
+        const px = rand(i, 1) * width;
+        const speed = 18 + rand(i, 2) * 38;
+        const size = 7 + rand(i, 3) * 14;
+        const startY = rand(i, 4) * (height + 120);
+        const span = height + 120;
+        const y = (((startY - t * speed) % span) + span) % span;
+        const sway = Math.sin(t * 1.1 + i) * 16;
+        const op = 0.18 + 0.22 * (0.5 + 0.5 * Math.sin(t * 1.4 + i * 2));
+        return (
+          <div
+            key={`p${i}`}
+            style={{
+              position: "absolute",
+              left: px + sway - size / 2,
+              top: y - size / 2,
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              background: p.dot,
+              opacity: op,
+            }}
+          />
+        );
+      })}
+
+      {/* soft white wash — keeps the upper text area high-contrast */}
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(110% 55% at 50% 16%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0) 75%)",
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
 
 // Small kicker pill
 const Kicker: React.FC<{ text: string; color: string }> = ({ text, color }) => (
@@ -197,7 +287,7 @@ const TitleScene: React.FC = () => {
   const t2 = spring({ frame: frame - 20, fps, config: { damping: 18, stiffness: 110 } });
   return (
     <AbsoluteFill>
-      <Background tint="#E7F0FB" />
+      <Background variant="blue" />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 150 }}>
         <div style={{ opacity: t1, transform: `translateY(${(1 - t1) * 30}px)` }}>
           <Kicker text="ORGANIZATION" color={BLUE} />
@@ -249,7 +339,7 @@ const ProblemScene: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <Background tint="#FBEDEC" />
+      <Background variant="red" />
       {/* heading */}
       <div
         style={{
@@ -282,6 +372,7 @@ const ProblemScene: React.FC = () => {
               angle={a}
               length={210}
               thickness={20}
+              curve={[0.32, -0.28, 0.36, -0.34, 0.26][i]}
               color={interpolateColor(collapse, BLUE, RED)}
               opacity={appear * (1 - collapse * 0.85)}
             />
@@ -355,7 +446,7 @@ const SolutionScene: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <Background tint="#E6F5EE" />
+      <Background variant="green" />
       <div
         style={{
           position: "absolute",
@@ -386,6 +477,7 @@ const SolutionScene: React.FC = () => {
             angle={a}
             length={230}
             thickness={20}
+            curve={(i - 2) * 0.16}
             color={i % 2 === 0 ? BLUE : GREEN}
             opacity={appear}
           />
@@ -440,8 +532,8 @@ const OutroScene: React.FC = () => {
   const t2 = spring({ frame: frame - 22, fps, config: { damping: 18, stiffness: 110 } });
   return (
     <AbsoluteFill>
-      <Background tint="#E7F0FB" />
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
+      <Background variant="blue" />
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 330 }}>
         <div
           style={{
             textAlign: "center",
@@ -471,8 +563,8 @@ const OutroScene: React.FC = () => {
           같은 곳을 바라볼 때, 다름은 힘이 된다
         </div>
       </AbsoluteFill>
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 80 }}>
-        <Mascot width={520} />
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 70 }}>
+        <Mascot width={500} />
       </AbsoluteFill>
     </AbsoluteFill>
   );
