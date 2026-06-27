@@ -16,7 +16,7 @@ import {
 // ---------------------------------------------------------------------------
 // Design tokens (derived from the mascot palette)
 // ---------------------------------------------------------------------------
-const FONT = "Noto Sans KR";
+const FONT = "Gaegu";
 const INK = "#222633";
 const INK_SOFT = "#5B6376";
 const BLUE = "#3E78C8";
@@ -34,11 +34,9 @@ const MASCOT = staticFile("brand/mascot.png");
 // ---------------------------------------------------------------------------
 const fontCss = `
 @font-face { font-family: '${FONT}'; font-weight: 400; font-style: normal;
-  src: url('${staticFile("fonts/noto-sans-kr-korean-400-normal.woff2")}') format('woff2'); }
+  src: url('${staticFile("fonts/gaegu-korean-400-normal.woff2")}') format('woff2'); }
 @font-face { font-family: '${FONT}'; font-weight: 700; font-style: normal;
-  src: url('${staticFile("fonts/noto-sans-kr-korean-700-normal.woff2")}') format('woff2'); }
-@font-face { font-family: '${FONT}'; font-weight: 900; font-style: normal;
-  src: url('${staticFile("fonts/noto-sans-kr-korean-900-normal.woff2")}') format('woff2'); }
+  src: url('${staticFile("fonts/gaegu-korean-700-normal.woff2")}') format('woff2'); }
 `;
 
 const FontLoader: React.FC = () => {
@@ -48,7 +46,7 @@ const FontLoader: React.FC = () => {
     Promise.all([
       (document as any).fonts.load(`400 64px "${FONT}"`, "가"),
       (document as any).fonts.load(`700 64px "${FONT}"`, "가"),
-      (document as any).fonts.load(`900 64px "${FONT}"`, "가"),
+      (document as any).fonts.load(`700 64px "${FONT}"`, "가"),
     ])
       .then(() => (document as any).fonts.ready)
       .then(done)
@@ -84,36 +82,59 @@ const Mascot: React.FC<{ width: number; floatAmp?: number; flip?: boolean }> = (
   );
 };
 
-// Curved arrow pointing UP by default (angle 0 = up). `curve` bows the shaft
-// (signed; magnitude ~0.1–0.4). The head is oriented along the curve tangent.
+// Hand-drawn wavy ("구불구불") arrow pointing UP by default (angle 0 = up).
+// The shaft is a squiggle (sine wiggle + gentle bow); the head is oriented
+// along the local tangent at the tip. Defaults to a black doodle look.
 const Arrow: React.FC<{
   x: number;
   y: number;
   angle: number;
   length: number;
-  color: string;
+  color?: string;
   thickness?: number;
   opacity?: number;
   curve?: number;
-}> = ({ x, y, angle, length, color, thickness = 18, opacity = 1, curve = 0.22 }) => {
-  const head = thickness * 2.2;
-  const W = 440;
+  amp?: number;
+  waves?: number;
+  seed?: number;
+}> = ({
+  x,
+  y,
+  angle,
+  length,
+  color = "#1A1A1A",
+  thickness = 14,
+  opacity = 1,
+  curve = 0,
+  amp = 16,
+  waves = 2.6,
+  seed = 0,
+}) => {
+  const head = thickness * 2.6;
+  const W = 460;
   const cx = W / 2;
   const top = head;
   const bottom = top + length;
-  const ctrlX = cx + curve * length;
-  const ctrlY = (top + bottom) / 2;
-  // tangent at the tip of a quadratic Bézier ∝ (end - control)
-  const tx = cx - ctrlX;
-  const ty = top - ctrlY;
-  const tlen = Math.hypot(tx, ty) || 1;
-  const headDeg = (Math.atan2(ty, tx) * 180) / Math.PI;
-  // pull the shaft end back so the head covers the seam
-  const endX = cx - (tx / tlen) * head * 0.5;
-  const endY = top - (ty / tlen) * head * 0.5;
   const H = bottom + head;
-  const h = head * 1.25;
-  const w = head;
+
+  const N = 28;
+  const pts: [number, number][] = [];
+  for (let i = 0; i <= N; i++) {
+    const tt = i / N;
+    const yy = bottom - tt * length;
+    const bow = curve * length * 4 * tt * (1 - tt);
+    // taper the wiggle to 0 at both ends so base sits put and head attaches clean
+    const taper = Math.sin(Math.PI * tt);
+    const wig = amp * Math.sin(tt * waves * Math.PI * 2 + seed) * taper;
+    pts.push([cx + bow + wig, yy]);
+  }
+  const d = "M " + pts.map((p) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(" L ");
+  const a = pts[N - 1];
+  const b = pts[N];
+  const headDeg = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
+  const h = head * 1.15;
+  const w = head * 0.92;
+
   return (
     <div
       style={{
@@ -127,13 +148,14 @@ const Arrow: React.FC<{
     >
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
         <path
-          d={`M ${cx} ${bottom} Q ${ctrlX} ${ctrlY} ${endX} ${endY}`}
+          d={d}
           stroke={color}
           strokeWidth={thickness}
           fill="none"
           strokeLinecap="round"
+          strokeLinejoin="round"
         />
-        <g transform={`translate(${cx} ${top}) rotate(${headDeg + 90})`}>
+        <g transform={`translate(${b[0]} ${b[1]}) rotate(${headDeg + 90})`}>
           <polygon points={`0,${-h} ${w},0 ${-w},0`} fill={color} />
         </g>
       </svg>
@@ -263,7 +285,7 @@ const Kicker: React.FC<{ text: string; color: string }> = ({ text, color }) => (
   <div
     style={{
       fontFamily: FONT,
-      fontWeight: 900,
+      fontWeight: 700,
       fontSize: 30,
       letterSpacing: 2,
       color: "#FFFFFF",
@@ -297,7 +319,7 @@ const TitleScene: React.FC = () => {
             marginTop: 34,
             textAlign: "center",
             fontFamily: FONT,
-            fontWeight: 900,
+            fontWeight: 700,
             fontSize: 96,
             lineHeight: 1.22,
             color: INK,
@@ -348,7 +370,7 @@ const ProblemScene: React.FC = () => {
           width: "100%",
           textAlign: "center",
           fontFamily: FONT,
-          fontWeight: 900,
+          fontWeight: 700,
           fontSize: 70,
           color: INK,
           opacity: head,
@@ -371,9 +393,11 @@ const ProblemScene: React.FC = () => {
               y={cy + driftY}
               angle={a}
               length={210}
-              thickness={20}
-              curve={[0.32, -0.28, 0.36, -0.34, 0.26][i]}
-              color={interpolateColor(collapse, BLUE, RED)}
+              thickness={14}
+              color="#1A1A1A"
+              amp={10}
+              waves={1.5}
+              seed={i * 1.7}
               opacity={appear * (1 - collapse * 0.85)}
             />
           );
@@ -419,7 +443,7 @@ const ProblemScene: React.FC = () => {
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 40, color: INK_SOFT }}>
           다른 의견이 더해지면
         </div>
-        <div style={{ fontFamily: FONT, fontWeight: 900, fontSize: 86, color: RED, marginTop: 8 }}>
+        <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 86, color: RED, marginTop: 8 }}>
           조직은 붕괴된다
         </div>
       </div>
@@ -454,7 +478,7 @@ const SolutionScene: React.FC = () => {
           width: "100%",
           textAlign: "center",
           fontFamily: FONT,
-          fontWeight: 900,
+          fontWeight: 700,
           fontSize: 70,
           color: INK,
           opacity: head,
@@ -476,9 +500,11 @@ const SolutionScene: React.FC = () => {
             y={cy - lift}
             angle={a}
             length={230}
-            thickness={20}
-            curve={(i - 2) * 0.16}
-            color={i % 2 === 0 ? BLUE : GREEN}
+            thickness={14}
+            color="#1A1A1A"
+            amp={8}
+            waves={1.3}
+            seed={i * 1.3}
             opacity={appear}
           />
         );
@@ -514,7 +540,7 @@ const SolutionScene: React.FC = () => {
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 40, color: INK_SOFT }}>
           다른 의견이 더해지면
         </div>
-        <div style={{ fontFamily: FONT, fontWeight: 900, fontSize: 80, color: GREEN, marginTop: 8 }}>
+        <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 80, color: GREEN, marginTop: 8 }}>
           더 멀리 나아간다
         </div>
       </div>
@@ -538,7 +564,7 @@ const OutroScene: React.FC = () => {
           style={{
             textAlign: "center",
             fontFamily: FONT,
-            fontWeight: 900,
+            fontWeight: 700,
             fontSize: 84,
             lineHeight: 1.3,
             color: INK,
