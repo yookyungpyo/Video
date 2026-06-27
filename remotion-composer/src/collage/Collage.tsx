@@ -539,6 +539,78 @@ const Tags: React.FC<{ x: number; y: number; items: { t: string; c: string }[]; 
   </>
 );
 
+// collage money motif — replaces the 3D mascot with on-theme cut-outs
+const Coin: React.FC<{ x: number; y: number; s: number; delay?: number; rot?: number; color?: string }> = ({
+  x,
+  y,
+  s,
+  delay = 0,
+  rot = 0,
+  color = YELLOW,
+}) => {
+  const pop = usePop(delay);
+  const { jy, jr } = useStep(Math.round(x + s), 3, 3, 5);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y + jy,
+        width: s,
+        height: s,
+        borderRadius: "50%",
+        background: color,
+        border: `${Math.max(4, s * 0.06)}px solid ${INK}`,
+        boxShadow: `4px 6px 0 rgba(33,28,22,0.2)`,
+        transform: `translate(-50%,-50%) rotate(${rot + jr}deg) scale(${pop})`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: BODY,
+        fontWeight: 900,
+        fontSize: s * 0.52,
+        color: INK,
+        opacity: pop > 0.05 ? 1 : 0,
+      }}
+    >
+      ₩
+    </div>
+  );
+};
+
+const Wallet: React.FC<{ x: number; y: number; w: number; rot?: number; delay?: number }> = ({ x, y, w, rot = -4, delay = 0 }) => {
+  const pop = usePop(delay);
+  const { jr } = useStep(Math.round(x), 0, 1.4, 5);
+  const h = (w * 170) / 240;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        width: w,
+        height: h,
+        transform: `translate(-50%,-50%) rotate(${rot + jr}deg) scale(${pop})`,
+        filter: "drop-shadow(7px 10px 0 rgba(33,28,22,0.2))",
+        opacity: pop > 0.05 ? 1 : 0,
+      }}
+    >
+      <svg width={w} height={h} viewBox="0 0 240 170">
+        {/* card peeking */}
+        <rect x={146} y={14} width={74} height={58} rx={9} fill={BLUE} stroke={INK} strokeWidth={6} />
+        {/* wallet back + front */}
+        <rect x={18} y={38} width={204} height={116} rx={20} fill="#A9682F" stroke={INK} strokeWidth={7} />
+        <rect x={18} y={62} width={204} height={92} rx={20} fill="#C68242" stroke={INK} strokeWidth={7} />
+        {/* clasp */}
+        <rect x={150} y={92} width={56} height={38} rx={9} fill={YELLOW} stroke={INK} strokeWidth={6} />
+        <circle cx={178} cy={111} r={7} fill={INK} />
+        {/* stitch */}
+        <path d="M 34 86 L 120 86" stroke={INK} strokeWidth={4} strokeDasharray="8 8" strokeLinecap="round" opacity={0.5} />
+      </svg>
+    </div>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // Scenes
 // ---------------------------------------------------------------------------
@@ -550,7 +622,10 @@ const Hook: React.FC = () => (
     <BigWord x={540} y={800} text="쓸까?" size={170} color={RED} delay={16} seed={5} rot={1} />
     <ScribbleCircle x={690} y={800} w={300} h={210} color={PINK} delay={26} />
     <Label x={540} y={1015} text="지갑을 여는 3가지" size={66} color={BLUE} delay={34} />
-    <MascotCut x={600} y={1330} w={190} rot={-5} delay={30} />
+    <Wallet x={540} y={1330} w={380} rot={-5} delay={26} />
+    <Coin x={350} y={1190} s={94} delay={34} rot={-12} />
+    <Coin x={730} y={1170} s={78} delay={38} rot={12} color={"#FFD66B"} />
+    <Coin x={700} y={1360} s={66} delay={42} rot={-6} />
   </AbsoluteFill>
 );
 
@@ -687,7 +762,8 @@ const Close: React.FC = () => {
         <span style={{ color: PINK }}>더 나은 기분</span>을 산다
       </div>
       <Label x={540} y={1140} text="당신의 고객은 무엇을 사고 있나요?" size={62} color="#3f372c" delay={30} />
-      <MascotCut x={560} y={1330} w={175} rot={-4} delay={20} />
+      <Wallet x={540} y={1340} w={300} rot={-3} delay={34} />
+      <Coin x={690} y={1280} s={68} delay={42} rot={10} />
       <div
         style={{
           position: "absolute",
