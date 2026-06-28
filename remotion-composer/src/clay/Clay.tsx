@@ -322,7 +322,7 @@ const Hook: React.FC = () => {
           width: "100%",
           textAlign: "center",
           fontFamily: FONT,
-          fontSize: 118,
+          fontSize: 92,
           color: CORAL,
           lineHeight: 1.18,
           opacity: t3,
@@ -330,7 +330,7 @@ const Hook: React.FC = () => {
           textShadow: "3px 5px 0 rgba(120,110,160,0.12)",
         }}
       >
-        아무것도 아니다
+        아무것도 중요하지 않다
       </div>
       <Pill x={540} y={760} text="그래서, 고르는 법" color={BLUE} delay={30} />
       <Mascot x={540} y={1280} w={440} delay={22} floatAmp={16} />
