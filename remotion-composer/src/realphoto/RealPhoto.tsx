@@ -222,28 +222,29 @@ const Scene1: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
     <AbsoluteFill>
       <PhotoBG src={staticFile("realphoto/s1.jpg")} progress={progress} zoom="in" panY={-4} scrim="both" />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-start", paddingTop: 150 }}>
-        <Kicker text="WORK SMART" color={AMBER} op={t1} y={(1 - t1) * 26} />
+        <Kicker text="STOP" color={RED} op={t1} y={(1 - t1) * 26} />
         <div
           style={{
             ...headlineStyle,
-            fontSize: 170,
+            fontSize: 124,
             marginTop: 30,
+            textAlign: "center",
             opacity: t2,
             transform: `translateY(${(1 - t2) * 36}px) scale(${0.9 + t2 * 0.1})`,
           }}
         >
-          바쁨 <span style={{ color: RED }}>≠</span> 성과
+          “요즘<br />너무 바빠”
         </div>
         <div
           style={{
             ...subStyle,
             fontSize: 46,
-            marginTop: 22,
+            marginTop: 24,
             opacity: t3,
             transform: `translateY(${(1 - t3) * 20}px)`,
           }}
         >
-          바쁘다고 일 잘하는 게 아니다
+          입에 달고 사는 그 말
         </div>
       </AbsoluteFill>
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 70 }}>
@@ -265,23 +266,24 @@ const Scene2: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
         <div
           style={{
             ...subStyle,
-            fontSize: 52,
+            fontSize: 48,
             opacity: t1,
             transform: `translateY(${(1 - t1) * 22}px)`,
           }}
         >
-          하루 종일 바빴는데…
+          바빴다고 남는 건 없다
         </div>
         <div
           style={{
             ...headlineStyle,
-            fontSize: 132,
+            fontSize: 126,
             marginTop: 18,
             opacity: t2,
             transform: `translateY(${(1 - t2) * 30}px)`,
           }}
         >
-          남는 게 <span style={{ color: RED }}>없다</span>
+          바쁨은<br />
+          <span style={{ color: RED }}>자랑이 아니다</span>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
@@ -292,30 +294,29 @@ const Scene3: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
   const { local, progress } = useLocal(start, dur);
   const { fps } = useVideoConfig();
   const badge = spring({ frame: local - 6, fps, config: { damping: 12, stiffness: 140 } });
-  const t1 = spring({ frame: local - 18, fps, config: { damping: 16, stiffness: 120 } });
-  const t2 = spring({ frame: local - 34, fps, config: { damping: 16, stiffness: 120 } });
+  const t1 = spring({ frame: local - 14, fps, config: { damping: 16, stiffness: 120 } });
+  const t2 = spring({ frame: local - 28, fps, config: { damping: 16, stiffness: 120 } });
+  const t3 = spring({ frame: local - 48, fps, config: { damping: 14, stiffness: 130 } });
   return (
     <AbsoluteFill>
       <PhotoBG src={staticFile("realphoto/s3.jpg")} progress={progress} zoom="in" panX={-3} scrim="heavy" />
-      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", padding: "0 80px" }}>
-        <NumBadge n={1} color={SKY} op={badge} pop={badge} />
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", padding: "0 70px" }}>
         <div
           style={{
             ...headlineStyle,
-            fontSize: 116,
-            marginTop: 34,
+            fontSize: 108,
             textAlign: "center",
             opacity: t1,
-            transform: `translateY(${(1 - t1) * 26}px)`,
+            transform: `translateY(${(1 - t1) * 26}px) scale(${0.92 + badge * 0.08})`,
           }}
         >
-          바쁨은 <span style={{ color: "rgba(255,255,255,0.6)" }}>움직임</span>
+          바쁨은 <span style={{ color: "rgba(255,255,255,0.5)" }}>움직임</span>
         </div>
         <div
           style={{
             ...headlineStyle,
-            fontSize: 116,
-            marginTop: 6,
+            fontSize: 108,
+            marginTop: 8,
             textAlign: "center",
             opacity: t2,
             transform: `translateY(${(1 - t2) * 26}px)`,
@@ -323,9 +324,26 @@ const Scene3: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
         >
           성과는 <span style={{ color: MINT }}>결과</span>
         </div>
+        <div
+          style={{
+            marginTop: 40,
+            padding: "20px 34px",
+            borderRadius: 22,
+            background: "rgba(255,90,77,0.92)",
+            boxShadow: "0 14px 32px rgba(0,0,0,0.4)",
+            opacity: t3,
+            transform: `translateY(${(1 - t3) * 24}px) scale(${0.9 + t3 * 0.1}) rotate(${(1 - t3) * -3}deg)`,
+          }}
+        >
+          <div style={{ fontFamily: DISPLAY, fontSize: 60, color: WHITE, textAlign: "center", lineHeight: 1.15 }}>
+            결과 없는 바쁨은
+            <br />
+            <span style={{ fontSize: 78 }}>제자리걸음</span>
+          </div>
+        </div>
       </AbsoluteFill>
       <AbsoluteFill style={{ alignItems: "flex-end", justifyContent: "flex-end", padding: "0 50px 60px 0" }}>
-        <Mascot width={230} floatAmp={9} delay={20} />
+        <Mascot width={210} floatAmp={9} delay={20} />
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -341,30 +359,28 @@ const Scene4: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
     <AbsoluteFill>
       <PhotoBG src={staticFile("realphoto/s4.jpg")} progress={progress} zoom="in" panY={-3} scrim="heavy" />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", padding: "0 80px" }}>
-        <NumBadge n={2} color={AMBER} op={badge} pop={badge} />
         <div
           style={{
             ...headlineStyle,
-            fontSize: 116,
-            marginTop: 34,
+            fontSize: 104,
             textAlign: "center",
             opacity: t1,
-            transform: `translateY(${(1 - t1) * 26}px)`,
+            transform: `translateY(${(1 - t1) * 26}px) scale(${0.92 + badge * 0.08})`,
           }}
         >
-          급한 일 <span style={{ color: "rgba(255,255,255,0.6)" }}>말고</span>
+          바쁘다는 말 뒤에
         </div>
         <div
           style={{
             ...headlineStyle,
-            fontSize: 124,
-            marginTop: 6,
+            fontSize: 150,
+            marginTop: 12,
             textAlign: "center",
             opacity: t2,
             transform: `translateY(${(1 - t2) * 26}px)`,
           }}
         >
-          <span style={{ color: AMBER }}>중요한 일</span>을
+          <span style={{ color: AMBER }}>숨지 마라</span>
         </div>
       </AbsoluteFill>
       <AbsoluteFill style={{ alignItems: "flex-start", justifyContent: "flex-end", padding: "0 0 60px 50px" }}>
@@ -393,7 +409,7 @@ const Scene5: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
             transform: `translateY(${(1 - t1) * 26}px)`,
           }}
         >
-          바쁨이 아니라
+          바쁘다 말하지 말고
         </div>
         <div
           style={{
