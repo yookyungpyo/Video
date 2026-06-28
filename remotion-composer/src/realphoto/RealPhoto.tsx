@@ -121,9 +121,17 @@ const PhotoBG: React.FC<{
           height: "100%",
           objectFit: "cover",
           transform: `scale(${base}) translate(${tx}%, ${ty}%)`,
+          filter: "contrast(1.1) saturate(1.14) brightness(0.98)",
         }}
       />
       {tint && <AbsoluteFill style={{ background: tint }} />}
+      {/* cinematic vignette — darkens edges, focuses the eye */}
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(125% 95% at 50% 42%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.28) 80%, rgba(0,0,0,0.5) 100%)",
+        }}
+      />
       <AbsoluteFill style={{ background: scrims[scrim] }} />
     </AbsoluteFill>
   );
