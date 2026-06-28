@@ -100,7 +100,7 @@ const PhotoBG: React.FC<{
   scrim?: "top" | "bottom" | "both" | "heavy";
   tint?: string;
 }> = ({ src, progress, zoom = "in", panX = 0, panY = -3, scrim = "both", tint }) => {
-  const base = zoom === "in" ? 1.06 + progress * 0.1 : 1.16 - progress * 0.1;
+  const base = zoom === "in" ? 1.08 + progress * 0.07 : 1.15 - progress * 0.07;
   const tx = panX * progress;
   const ty = panY * progress;
 
@@ -120,8 +120,13 @@ const PhotoBG: React.FC<{
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          transform: `scale(${base}) translate(${tx}%, ${ty}%)`,
-          filter: "contrast(1.1) saturate(1.14) brightness(0.98)",
+          // tiny scale headroom + GPU layer promotion = smoother sub-pixel zoom
+          transform: `scale(${base}) translate(${tx}%, ${ty}%) translateZ(0)`,
+          // blur(0.9px) removes the high-frequency detail that otherwise crawls/
+          // shimmers ("지지직") when a busy 768px photo is upscaled and zoomed
+          filter: "contrast(1.1) saturate(1.14) brightness(0.98) blur(0.9px)",
+          willChange: "transform",
+          imageRendering: "auto",
         }}
       />
       {tint && <AbsoluteFill style={{ background: tint }} />}
