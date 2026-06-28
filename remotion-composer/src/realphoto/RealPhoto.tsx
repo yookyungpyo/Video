@@ -451,6 +451,70 @@ const Scene5: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
   );
 };
 
+// Data scene — supporting evidence on a dark cinematic canvas
+const StatRow: React.FC<{
+  big: string;
+  bigColor: string;
+  line: string;
+  source: string;
+  op: number;
+  pop: number;
+}> = ({ big, bigColor, line, source, op, pop }) => (
+  <div
+    style={{
+      width: "100%",
+      opacity: op,
+      transform: `translateY(${(1 - pop) * 26}px)`,
+      borderLeft: `8px solid ${bigColor}`,
+      paddingLeft: 28,
+      marginBottom: 6,
+    }}
+  >
+    <div style={{ fontFamily: DISPLAY, fontSize: 104, color: bigColor, lineHeight: 1.05, textShadow: "0 4px 18px rgba(0,0,0,0.6)" }}>
+      {big}
+    </div>
+    <div style={{ ...subStyle, fontSize: 42, marginTop: 4 }}>{line}</div>
+    <div style={{ fontFamily: BODY, fontWeight: 700, fontSize: 26, color: "rgba(255,255,255,0.6)", marginTop: 6 }}>
+      {source}
+    </div>
+  </div>
+);
+
+const SceneData: React.FC<{ start: number; dur: number }> = ({ start, dur }) => {
+  const { local, progress } = useLocal(start, dur);
+  const { fps } = useVideoConfig();
+  const k = spring({ frame: local - 6, fps, config: { damping: 16, stiffness: 130 } });
+  const r1 = spring({ frame: local - 20, fps, config: { damping: 15, stiffness: 130 } });
+  const r2 = spring({ frame: local - 48, fps, config: { damping: 15, stiffness: 130 } });
+  return (
+    <AbsoluteFill>
+      <PhotoBG src={staticFile("realphoto/s6.jpg")} progress={progress} zoom="in" panY={-2} scrim="heavy" tint="rgba(6,10,22,0.45)" />
+      <AbsoluteFill style={{ alignItems: "flex-start", justifyContent: "center", padding: "0 70px" }}>
+        <div style={{ opacity: k, transform: `translateY(${(1 - k) * 20}px)`, marginBottom: 40 }}>
+          <Kicker text="DATA · 근거" color={WHITE} />
+        </div>
+        <StatRow
+          big="55시간 = 70시간"
+          bigColor={AMBER}
+          line="더 일해도 결과는 그대로"
+          source="스탠퍼드대 연구 (J. Pencavel)"
+          op={r1}
+          pop={r1}
+        />
+        <div style={{ height: 34 }} />
+        <StatRow
+          big="77%"
+          bigColor={MINT}
+          line="한국 시간당 생산성 (OECD 평균 대비)"
+          source="OECD · KDI, 한국은 OECD 최장 노동시간급"
+          op={r2}
+          pop={r2}
+        />
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
 // ---------------------------------------------------------------------------
 // Crossfade timeline
 // ---------------------------------------------------------------------------
@@ -485,11 +549,12 @@ const SafeArea: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 export const RealPhoto: React.FC = () => {
   // 1080x1920 / 30fps / 510 frames (17s)
   const scenes: SceneDef[] = [
-    { start: 0, dur: 104, C: Scene1 },
-    { start: 104, dur: 110, C: Scene2 },
-    { start: 214, dur: 104, C: Scene3 },
-    { start: 318, dur: 104, C: Scene4 },
-    { start: 422, dur: 88, C: Scene5 },
+    { start: 0, dur: 100, C: Scene1 },
+    { start: 100, dur: 104, C: Scene2 },
+    { start: 204, dur: 112, C: Scene3 },
+    { start: 316, dur: 132, C: SceneData },
+    { start: 448, dur: 96, C: Scene4 },
+    { start: 544, dur: 92, C: Scene5 },
   ];
   return (
     <AbsoluteFill style={{ background: "#0A0F1C" }}>
