@@ -50,15 +50,28 @@ const FontLoader: React.FC = () => {
 const claySh = "16px 18px 34px rgba(120,110,160,0.30), -8px -10px 22px rgba(255,255,255,0.8)";
 const clayShSm = "8px 10px 20px rgba(120,110,160,0.28), -5px -6px 14px rgba(255,255,255,0.8)";
 
+// bouncier springs (overshoot) for livelier entrances
 const usePop = (delay: number, soft = false) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  return spring({ frame: frame - delay, fps, config: soft ? { damping: 16, stiffness: 110, mass: 1 } : { damping: 12, stiffness: 150, mass: 0.8 } });
+  return spring({ frame: frame - delay, fps, config: soft ? { damping: 11, stiffness: 120, mass: 1 } : { damping: 8, stiffness: 170, mass: 0.8 } });
 };
 const useFloat = (amp = 12, speed = 0.5, phase = 0) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   return Math.sin((frame / fps) * 2 * Math.PI * speed + phase) * amp;
+};
+// continuous rotation wobble (deg)
+const useWobble = (amp = 3, speed = 0.45, phase = 0) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  return Math.sin((frame / fps) * 2 * Math.PI * speed + phase) * amp;
+};
+// subtle breathing scale around 1
+const useBreathe = (amp = 0.015, speed = 0.5, phase = 0) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  return 1 + Math.sin((frame / fps) * 2 * Math.PI * speed + phase) * amp;
 };
 
 // ---------------------------------------------------------------------------
@@ -69,9 +82,9 @@ const ClayBG: React.FC<{ a: string; b: string }> = ({ a, b }) => {
   const { fps, width, height } = useVideoConfig();
   const t = frame / fps;
   const blobs = [
-    { c: a, r: 760, bx: 0.2, by: 0.25, ax: 60, ay: 50, s: 0.05, ph: 0 },
-    { c: b, r: 820, bx: 0.82, by: 0.72, ax: 70, ay: 60, s: 0.04, ph: 2 },
-    { c: "#FFFFFF", r: 600, bx: 0.7, by: 0.2, ax: 50, ay: 40, s: 0.06, ph: 4 },
+    { c: a, r: 760, bx: 0.2, by: 0.25, ax: 110, ay: 90, s: 0.09, ph: 0 },
+    { c: b, r: 820, bx: 0.82, by: 0.72, ax: 120, ay: 100, s: 0.075, ph: 2 },
+    { c: "#FFFFFF", r: 600, bx: 0.7, by: 0.2, ax: 90, ay: 70, s: 0.11, ph: 4 },
   ];
   return (
     <AbsoluteFill style={{ background: "linear-gradient(160deg, #F3EEFB 0%, #F7EFEA 50%, #EAF3FB 100%)", overflow: "hidden" }}>
@@ -112,8 +125,10 @@ const ClayCard: React.FC<{
   float?: number;
   children: React.ReactNode;
 }> = ({ x, y, w, bg = "#FFFFFF", pad = "30px 50px", radius = 48, delay = 0, float = 0, children }) => {
-  const pop = usePop(delay, true);
-  const fl = useFloat(float, 0.5, x);
+  const pop = usePop(delay);
+  const fl = useFloat(float + 6, 0.5, x);
+  const wob = useWobble(1.6, 0.4, x);
+  const br = useBreathe(0.014, 0.55, x);
   return (
     <div
       style={{
@@ -121,7 +136,7 @@ const ClayCard: React.FC<{
         left: x,
         top: y,
         width: w,
-        transform: `translate(-50%,-50%) translateY(${fl}px) scale(${pop})`,
+        transform: `translate(-50%,-50%) translateY(${fl + (1 - pop) * 40}px) rotate(${wob}deg) scale(${pop * br})`,
         background: bg,
         padding: pad,
         borderRadius: radius,
@@ -162,7 +177,8 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 const ClayIcon: React.FC<{ x: number; y: number; kind: string; color: string; size?: number; delay?: number }> = ({ x, y, kind, color, size = 150, delay = 0 }) => {
   const pop = usePop(delay);
-  const fl = useFloat(8, 0.6, x);
+  const fl = useFloat(13, 0.62, x);
+  const wob = useWobble(7, 0.5, x + 1);
   return (
     <div
       style={{
@@ -171,7 +187,7 @@ const ClayIcon: React.FC<{ x: number; y: number; kind: string; color: string; si
         top: y,
         width: size,
         height: size,
-        transform: `translate(-50%,-50%) translateY(${fl}px) scale(${pop})`,
+        transform: `translate(-50%,-50%) translateY(${fl}px) rotate(${wob + (1 - pop) * -40}deg) scale(${pop})`,
         background: color,
         borderRadius: size * 0.3,
         boxShadow: claySh,
@@ -189,14 +205,15 @@ const ClayIcon: React.FC<{ x: number; y: number; kind: string; color: string; si
 
 const Pill: React.FC<{ x: number; y: number; text: string; color: string; delay?: number }> = ({ x, y, text, color, delay = 0 }) => {
   const pop = usePop(delay);
-  const fl = useFloat(6, 0.55, x);
+  const fl = useFloat(10, 0.58, x);
+  const wob = useWobble(2.2, 0.5, x);
   return (
     <div
       style={{
         position: "absolute",
         left: x,
         top: y,
-        transform: `translate(-50%,-50%) translateY(${fl}px) scale(${pop})`,
+        transform: `translate(-50%,-50%) translateY(${fl}px) rotate(${wob}deg) scale(${pop})`,
         background: color,
         color: "#fff",
         fontFamily: BODY,
@@ -216,7 +233,12 @@ const Pill: React.FC<{ x: number; y: number; text: string; color: string; delay?
 
 const Mascot: React.FC<{ x: number; y: number; w: number; delay?: number; flip?: boolean; floatAmp?: number }> = ({ x, y, w, delay = 0, flip = false, floatAmp = 14 }) => {
   const pop = usePop(delay);
-  const fl = useFloat(floatAmp, 0.5, x);
+  const fl = useFloat(floatAmp + 8, 0.5, x);
+  const tilt = useWobble(3.2, 0.5, x);
+  // squash & stretch synced to the float (volume-preserving)
+  const sq = Math.sin((useCurrentFrame() / useVideoConfig().fps) * 2 * Math.PI * 0.5 + x);
+  const sx = 1 - sq * 0.04;
+  const sy = 1 + sq * 0.04;
   const h = (w * 2400) / 1350;
   return (
     <div
@@ -226,7 +248,8 @@ const Mascot: React.FC<{ x: number; y: number; w: number; delay?: number; flip?:
         top: y,
         width: w,
         height: h,
-        transform: `translate(-50%,-50%) translateY(${fl}px) scale(${pop}) ${flip ? "scaleX(-1)" : ""}`,
+        transform: `translate(-50%,-50%) translateY(${fl}px) rotate(${tilt}deg) scale(${pop}) scaleX(${sx}) scaleY(${sy}) ${flip ? "scaleX(-1)" : ""}`,
+        transformOrigin: "center bottom",
         filter: "drop-shadow(10px 18px 22px rgba(120,110,160,0.4))",
         opacity: pop > 0.05 ? 1 : 0,
       }}
@@ -238,7 +261,8 @@ const Mascot: React.FC<{ x: number; y: number; w: number; delay?: number; flip?:
 
 const NumBubble: React.FC<{ x: number; y: number; n: string; color: string; delay?: number }> = ({ x, y, n, color, delay = 0 }) => {
   const pop = usePop(delay);
-  const fl = useFloat(7, 0.6, x + 3);
+  const fl = useFloat(10, 0.62, x + 3);
+  const wob = useWobble(5, 0.5, x + 2);
   return (
     <div
       style={{
@@ -247,7 +271,7 @@ const NumBubble: React.FC<{ x: number; y: number; n: string; color: string; dela
         top: y,
         width: 120,
         height: 120,
-        transform: `translate(-50%,-50%) translateY(${fl}px) scale(${pop})`,
+        transform: `translate(-50%,-50%) translateY(${fl}px) rotate(${wob + (1 - pop) * 200}deg) scale(${pop})`,
         background: color,
         borderRadius: "50%",
         boxShadow: claySh,
@@ -434,11 +458,18 @@ const Close: React.FC = () => {
   );
 };
 
-// gentle cross-fade
+// pop-in cross-fade (each scene springs in + slides up)
 const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const opacity = interpolate(frame, [0, 8, d - 8, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
+  const ent = spring({ frame, fps, config: { damping: 13, stiffness: 110, mass: 1 } });
+  const out = interpolate(frame, [d - 10, d], [0, 18], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <AbsoluteFill style={{ opacity, transform: `translateY(${(1 - ent) * 34 - out}px) scale(${0.93 + ent * 0.07})` }}>
+      {children}
+    </AbsoluteFill>
+  );
 };
 
 export const Clay: React.FC = () => {
