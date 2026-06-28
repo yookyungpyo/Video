@@ -231,24 +231,57 @@ const Pill: React.FC<{ x: number; y: number; text: string; color: string; delay?
   );
 };
 
-const Mascot: React.FC<{ x: number; y: number; w: number; delay?: number; flip?: boolean; floatAmp?: number }> = ({ x, y, w, delay = 0, flip = false, floatAmp = 14 }) => {
+type Walk = { fromX: number; startFrame: number; dur: number; steps?: number };
+const Mascot: React.FC<{ x: number; y: number; w: number; delay?: number; flip?: boolean; floatAmp?: number; walk?: Walk }> = ({
+  x,
+  y,
+  w,
+  delay = 0,
+  flip = false,
+  floatAmp = 14,
+  walk,
+}) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const pop = usePop(delay);
-  const fl = useFloat(floatAmp + 8, 0.5, x);
-  const tilt = useWobble(3.2, 0.5, x);
-  // squash & stretch synced to the float (volume-preserving)
-  const sq = Math.sin((useCurrentFrame() / useVideoConfig().fps) * 2 * Math.PI * 0.5 + x);
-  const sx = 1 - sq * 0.04;
-  const sy = 1 + sq * 0.04;
   const h = (w * 2400) / 1350;
+
+  // idle motion (default)
+  const flIdle = useFloat(floatAmp + 8, 0.5, x);
+  const tiltIdle = useWobble(3.2, 0.5, x);
+  const sqI = Math.sin((frame / fps) * 2 * Math.PI * 0.5 + x);
+
+  let curX = x;
+  let bob = flIdle;
+  let lean = tiltIdle;
+  let sx = 1 - sqI * 0.04;
+  let sy = 1 + sqI * 0.04;
+
+  if (walk) {
+    const steps = walk.steps ?? 2;
+    const end = walk.startFrame + walk.dur;
+    const p = interpolate(frame, [walk.startFrame, end], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    curX = interpolate(p, [0, 1], [walk.fromX, x]);
+    if (frame >= walk.startFrame && frame < end) {
+      // stylized puppet walk while travelling
+      const ph = ((frame - walk.startFrame) / fps) * steps * 2 * Math.PI;
+      bob = -Math.abs(Math.sin(ph)) * 20; // 2 bobs per stride
+      lean = Math.sin(ph) * 4.5; // alternating lean
+      const plant = Math.max(0, Math.sin(ph * 2)); // foot contact
+      sy = 1 - plant * 0.06;
+      sx = 1 + plant * 0.05;
+    }
+  }
+
   return (
     <div
       style={{
         position: "absolute",
-        left: x,
+        left: curX,
         top: y,
         width: w,
         height: h,
-        transform: `translate(-50%,-50%) translateY(${fl}px) rotate(${tilt}deg) scale(${pop}) scaleX(${sx}) scaleY(${sy}) ${flip ? "scaleX(-1)" : ""}`,
+        transform: `translate(-50%,-50%) translateY(${bob}px) rotate(${lean}deg) scale(${pop}) scaleX(${sx}) scaleY(${sy}) ${flip ? "scaleX(-1)" : ""}`,
         transformOrigin: "center bottom",
         filter: "drop-shadow(10px 18px 22px rgba(120,110,160,0.4))",
         opacity: pop > 0.05 ? 1 : 0,
@@ -333,7 +366,7 @@ const Hook: React.FC = () => {
         아무것도 중요하지 않다
       </div>
       <Pill x={540} y={760} text="그래서, 고르는 법" color={BLUE} delay={30} />
-      <Mascot x={540} y={1280} w={440} delay={22} floatAmp={16} />
+      <Mascot x={540} y={1280} w={440} delay={4} floatAmp={16} walk={{ fromX: -160, startFrame: 8, dur: 50, steps: 2 }} />
     </AbsoluteFill>
   );
 };
@@ -385,7 +418,7 @@ const Step: React.FC<{
     {tags.map((tg, i) => (
       <Pill key={i} x={300 + i * 240} y={1130} text={tg.t} color={tg.c} delay={24 + i * 5} />
     ))}
-    <Mascot x={870} y={1430} w={230} delay={28} flip={flip} floatAmp={12} />
+    <Mascot x={870} y={1430} w={230} delay={6} flip={flip} floatAmp={12} walk={{ fromX: 1280, startFrame: 22, dur: 42, steps: 2 }} />
   </AbsoluteFill>
 );
 
@@ -439,7 +472,7 @@ const Close: React.FC = () => {
         <br />
         <span style={{ color: CORAL }}>'아무것도 안 하겠다'</span>와 같다
       </div>
-      <Mascot x={540} y={1290} w={300} delay={20} floatAmp={14} />
+      <Mascot x={540} y={1290} w={300} delay={4} floatAmp={14} walk={{ fromX: -160, startFrame: 14, dur: 46, steps: 2 }} />
       <div
         style={{
           position: "absolute",
