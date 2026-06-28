@@ -18,17 +18,28 @@ and `remotion-composer/scripts/collage-soundtrack.sh`. Copy/adapt these rather
 than starting from scratch.
 
 ## 0. Environment (this sandbox)
-Outbound web is blocked except package registries, so everything is offline.
-- Render with the already-downloaded Chrome + cert bypass (do NOT let Remotion
-  fetch its own browser — `remotion.media` is blocked):
+Outbound web is blocked except package registries, so everything is offline (do
+NOT let Remotion fetch its own browser — `remotion.media` returns 403). Render
+with a Chrome that already exists on the machine.
+- **Use the helper** (auto-detects Chrome + the right flags):
   ```bash
-  CH=/root/.cache/hyperframes/chrome/chrome-headless-shell/linux-131.0.6778.85/chrome-headless-shell-linux64/chrome-headless-shell
-  env NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt npx remotion render \
-    src/<name>/index.tsx <CompId> <out.mp4> \
-    --browser-executable "$CH" --ignore-certificate-errors --codec h264
+  cd remotion-composer
+  bash scripts/render.sh src/<name>/index.tsx <CompId> ../projects/cardnews/<out>.mp4
   ```
-  If that Chrome path is gone, run `npx hyperframes browser ensure` (installs to
-  `~/.cache/hyperframes/chrome/...`), or render any composition once to trigger it.
+- **Explicit form** (what the helper runs):
+  ```bash
+  CH=$(ls /opt/pw-browsers/chromium*/chrome-linux/chrome | head -1)
+  npx remotion render src/<name>/index.tsx <CompId> <out.mp4> \
+    --chrome-mode=chrome-for-testing --browser-executable "$CH" \
+    --ignore-certificate-errors --codec h264
+  ```
+  `--chrome-mode=chrome-for-testing` is **REQUIRED** with the Playwright Chromium
+  (`/opt/pw-browsers/...`): it's a FULL Chrome and old headless was removed, so
+  Remotion must use `--headless=new`. Omitting it fails with *"Old Headless mode
+  has been removed."* (A `chrome-headless-shell` binary wouldn't need the flag;
+  if you have one under `~/.cache/hyperframes/chrome/...`, point `--browser-executable`
+  at it and drop the mode flag — `scripts/render.sh` handles both.)
+  Renders are CPU-heavy (~3–6 min / 500 frames) — use a long timeout, not the 2-min default.
 - `ffmpeg`/`ffprobe` are static binaries on PATH (installed via imageio-ffmpeg +
   a static ffprobe). Needed for frame extraction + audio.
 
