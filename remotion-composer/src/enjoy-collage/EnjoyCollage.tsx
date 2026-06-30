@@ -762,7 +762,7 @@ const Close: React.FC = () => {
 // ---------------------------------------------------------------------------
 const Cut: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
   const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 3, d - 3, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const opacity = interpolate(frame, [0, 6, d - 6, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
 };
 
@@ -772,33 +772,33 @@ export const EnjoyCollage: React.FC = () => (
     <PaperBG />
     {/* safe-area band for Reels UI */}
     <AbsoluteFill style={{ transform: "translateY(-20px) scale(0.84)", transformOrigin: "center center" }}>
-      <Sequence from={0} durationInFrames={95}>
-        <Cut d={95}>
+      <Sequence from={0} durationInFrames={140}>
+        <Cut d={140}>
           <Hook />
         </Cut>
       </Sequence>
-      <Sequence from={95} durationInFrames={100}>
-        <Cut d={100}>
+      <Sequence from={140} durationInFrames={150}>
+        <Cut d={150}>
           <Trap />
         </Cut>
       </Sequence>
-      <Sequence from={195} durationInFrames={100}>
-        <Cut d={100}>
+      <Sequence from={290} durationInFrames={150}>
+        <Cut d={150}>
           <Truth />
         </Cut>
       </Sequence>
-      <Sequence from={295} durationInFrames={110}>
-        <Cut d={110}>
+      <Sequence from={440} durationInFrames={160}>
+        <Cut d={160}>
           <Pivot />
         </Cut>
       </Sequence>
-      <Sequence from={405} durationInFrames={100}>
-        <Cut d={100}>
+      <Sequence from={600} durationInFrames={150}>
+        <Cut d={150}>
           <Why />
         </Cut>
       </Sequence>
-      <Sequence from={505} durationInFrames={100}>
-        <Cut d={100}>
+      <Sequence from={750} durationInFrames={160}>
+        <Cut d={160}>
           <Close />
         </Cut>
       </Sequence>
