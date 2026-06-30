@@ -26,12 +26,12 @@ inp=""; fc=""; lab=""; n=${#barrows[@]}
 for i in "${!barrows[@]}"; do set -- ${barrows[$i]}; inp+=" -i $AD/$1.wav"; fc+="[$i]adelay=$2:all=1,volume=$3[b$i];"; lab+="[b$i]"; done
 fc+="${lab}amix=inputs=$n:normalize=0:dropout_transition=0,apad=whole_dur=2.4,atrim=0:2.4[out]"
 ffmpeg -y -v error $inp -filter_complex "$fc" -map "[out]" "$AD/bar.wav"
-ffmpeg -y -v error -stream_loop 13 -i "$AD/bar.wav" -t 30.4 -af "lowpass=f=9000,volume=0.30" "$AD/beat.wav"
+ffmpeg -y -v error -stream_loop 13 -i "$AD/bar.wav" -t 30.4 -af "lowpass=f=9000,volume=0.55" "$AD/beat.wav"
 
 # event-synced placement: "file delay_ms volume"
 # cut boundaries (ms): 0, 4666, 9666, 14666, 20000, 25000
 rows=(
- "beat 0 0.26"
+ "beat 0 0.5"
  "paper 60 0.34" "paper 4666 0.32" "paper 9666 0.32" "paper 14666 0.36" "paper 20000 0.32" "paper 25000 0.32"
  "stamp 300 0.42" "stamp 480 0.42" "stamp 660 0.42"
  "stamp 4940 0.46" "stamp 9940 0.44" "stamp 10210 0.40"
@@ -45,7 +45,7 @@ rows=(
 inp=""; fc=""; lab=""; n=${#rows[@]}
 for i in "${!rows[@]}"; do set -- ${rows[$i]}; inp+=" -i $AD/$1.wav"; fc+="[$i]adelay=$2:all=1,volume=$3[a$i];"; lab+="[a$i]"; done
 fc+="${lab}amix=inputs=$n:normalize=0:dropout_transition=0[mx];"
-fc+="[mx]volume=3.0,acompressor=threshold=-20dB:ratio=3:attack=12:release=180,alimiter=limit=0.96,lowpass=f=16000,afade=t=out:st=29.8:d=0.5,atrim=0:30.4,aformat=channel_layouts=stereo[out]"
+fc+="[mx]volume=3.0,acompressor=threshold=-24dB:ratio=3:attack=12:release=180,loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.97,lowpass=f=16000,afade=t=out:st=29.8:d=0.5,atrim=0:30.4,aformat=channel_layouts=stereo[out]"
 ffmpeg -y -v error $inp -filter_complex "$fc" -map "[out]" "$AD/track.wav"
 ffmpeg -y -v error -i "$IN" -i "$AD/track.wav" -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest "$OUT"
 echo "Wrote $OUT"
