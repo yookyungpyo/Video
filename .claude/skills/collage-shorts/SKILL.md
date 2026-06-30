@@ -113,13 +113,25 @@ childish). Collage palette:
 - **coin** clink (bright inharmonic partials, fast decay) for ₩/wallet
 - soft tag **ticks**; a **minimal beat** (soft kick/hat/clap, one 2.4s bar looped, ~−20 dB bed)
 Place each at its event time with `adelay`, `amix` (normalize=0), then master
-`volume → acompressor → alimiter → lowpass → afade out`. Mux:
+`volume → acompressor → loudnorm → alimiter → lowpass → afade out`. Mux:
 ```bash
 ffmpeg -i video.mp4 -i track.wav -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest out.mp4
 ```
+
+### ⚠️ LOUDNESS — make it actually audible (learned the hard way)
+A "light = sparse" mix with a ~−20 dB beat bed lands around **mean −31 dB**, which
+reads as **"no sound"** on phone speakers (a user reported exactly this). Light
+should mean *sparse events*, NOT *quiet master*. Two fixes, both required:
+1. **Loudness-normalize the master** to the social standard. Put
+   `loudnorm=I=-16:TP=-1.5:LRA=11` in the master chain (after `acompressor`,
+   before `alimiter`). This guarantees an audible, consistent level on every device.
+2. **Keep the beat bed present**, not a whisper — bed gen `volume≈0.55` and place it
+   at `~0.5` in the event mix so music fills the gaps between accents.
+
 Check levels with `volumedetect` (run ffmpeg WITHOUT `-v error` or the summary is
-hidden): accents ~−8 dB, beat bed ~−20 dB, no clipping (max < −3). Keep gaps —
-"light" = sparse.
+hidden). **Target: mean ≈ −19 dB, max ≈ −1.5 dB (no clipping).** If mean is below
+~−24 dB the video will feel silent — re-master, don't ship it.
+See `scripts/enjoy-soundtrack.sh` for a corrected, loudnorm'd reference.
 
 ## 8. Outputs
 Renders go to `projects/cardnews/` (gitignored). Commit the composition source +
