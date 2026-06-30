@@ -561,8 +561,8 @@ const BareMascot: React.FC<{ x: number; y: number; w: number; rot?: number; dela
 // 1) Hook — the provocative question
 const Hook: React.FC = () => (
   <AbsoluteFill>
-    <Tape x={540} y={392} w={250} rot={-6} />
-    <Label x={540} y={392} text="있잖아…" size={70} color={INK} delay={2} rot={-3} />
+    <Tape x={540} y={392} w={420} rot={-6} />
+    <Label x={540} y={392} text="있잖아…" size={140} color={INK} delay={2} rot={-3} />
     <BigWord x={540} y={560} text="잘하는 게" size={128} delay={8} seed={4} rot={-2} />
     <BigWord x={540} y={720} text="뭐 그리" size={140} delay={14} seed={6} rot={1} />
     <BigWord x={540} y={890} text="중요해??" size={156} color={RED} delay={20} seed={5} rot={-1} />
@@ -578,7 +578,7 @@ const Hook: React.FC = () => (
 // 2) The trap — comparison / "남보다 잘해야 해"
 const Trap: React.FC = () => (
   <AbsoluteFill>
-    <Label x={540} y={400} text="남들은 다 잘하는데" size={60} color={INK} delay={2} />
+    <Label x={540} y={385} text="남들은 다 잘하는데" size={120} color={INK} delay={2} />
     <ColorBlock x={520} y={660} w={620} h={300} color={BLUE} rot={-6} seed={30} delay={5} halftone />
     <Card x={500} y={650} rot={-3} bg="#fff" seed={7} delay={8} pad="22px 54px">
       <div style={{ fontFamily: DISPLAY, fontSize: 150, color: INK, lineHeight: 1.0, letterSpacing: -2, whiteSpace: "nowrap" }}>나만 뒤처져</div>
@@ -607,7 +607,7 @@ const Trap: React.FC = () => (
 // 3) The truth — being good but not enjoying = won't last
 const Truth: React.FC = () => (
   <AbsoluteFill>
-    <Label x={540} y={400} text="근데 말이야," size={62} color={INK} delay={2} />
+    <Label x={540} y={385} text="근데 말이야," size={124} color={INK} delay={2} />
     <BigWord x={400} y={580} text="잘해도" size={150} delay={8} seed={9} rot={-2} />
     <CrossOut x={400} y={580} w={420} h={180} color={RED} delay={26} />
     <Card x={560} y={770} rot={3} bg={YELLOW} seed={11} delay={16} pad="16px 40px">
@@ -670,7 +670,7 @@ const Pivot: React.FC = () => {
 // 5) Why it works — 공자: those who enjoy can't be beaten
 const Why: React.FC = () => (
   <AbsoluteFill>
-    <Label x={540} y={400} text="공자도 말했어" size={62} color={INK} delay={2} />
+    <Label x={540} y={385} text="공자도 말했어" size={124} color={INK} delay={2} />
     <ColorBlock x={520} y={645} w={640} h={300} color={GREEN} rot={-5} seed={36} delay={5} halftone />
     <Card x={500} y={640} rot={-3} bg="#fff" seed={17} delay={8} pad="20px 48px">
       <div style={{ fontFamily: DISPLAY, fontSize: 120, color: INK, lineHeight: 1.0, letterSpacing: -2, whiteSpace: "nowrap" }}>즐기는 사람</div>
@@ -691,7 +691,7 @@ const Why: React.FC = () => (
     >
       못 이겨!
     </div>
-    <Label x={540} y={1050} text="知之者不如樂之者" size={56} color={"#6b5d45"} delay={24} rot={1} />
+    <Label x={540} y={1050} text="즐기면 더 오래, 더 멀리 가" size={60} color={"#6b5d45"} delay={24} rot={1} />
     <Tags x={540} y={1250} items={[{ t: "몰입", c: GREEN }, { t: "꾸준함", c: BLUE }, { t: "성장", c: PINK }]} delay={28} />
   </AbsoluteFill>
 );
@@ -704,7 +704,7 @@ const Close: React.FC = () => {
   const floatY = Math.sin((frame / fps) * Math.PI) * 8;
   return (
     <AbsoluteFill>
-      <Label x={540} y={400} text="그러니까 우리," size={62} color={INK} delay={2} />
+      <Label x={540} y={385} text="그러니까 우리," size={124} color={INK} delay={2} />
       <BigWord x={460} y={560} text="잘하지 마." size={120} delay={8} seed={18} rot={-2} />
       <CrossOut x={460} y={560} w={520} h={150} color={"#9a8b70"} delay={24} />
       <BigWord x={540} y={740} text="즐겨버려!" size={172} color={PINK} delay={16} seed={19} rot={1} />
