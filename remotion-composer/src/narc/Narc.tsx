@@ -365,10 +365,10 @@ const centerText = (top: number, size: number, color: string, family = FONT): Re
 
 export const Cover: React.FC = () => (
   <CardFrame a={LAV} b={BLUE}>
-    <Pill x={540} y={235} text="심리 카드 · 성격" color={LAV} delay={2} />
-    <div style={{ ...centerText(360, 138, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>나르시시즘</div>
-    <div style={{ ...centerText(560, 52, INK, BODY), fontWeight: 900 }}>겉과 속이 다른 사람</div>
-    <div style={{ ...centerText(640, 82, CORAL) }}>3가지 특징</div>
+    <Pill x={540} y={225} text="자기 점검 · 반성" color={LAV} delay={2} />
+    <div style={{ ...centerText(345, 100, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>나는,</div>
+    <div style={{ ...centerText(470, 80, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>나르시시스트일까?</div>
+    <div style={{ ...centerText(605, 50, INK, BODY), fontWeight: 900 }}>문득, 나를 돌아봤다</div>
     <Mascot x={540} y={1010} w={410} delay={4} floatAmp={16} />
     <div style={{ ...centerText(1275, 44, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
@@ -403,12 +403,12 @@ const TraitCard: React.FC<{
 export const Trait1: React.FC = () => (
   <TraitCard
     num="1"
-    word="공감 능력 부족"
+    word="나만 생각했다"
     accent={CORAL}
-    sub="타인보다 '나'가 늘 먼저"
-    detail={<>상대의 감정·상황보다<br />자기 감정과 욕구를 최우선으로 여긴다</>}
+    sub="상대보다 내 기분이 먼저"
+    detail={<>상대의 마음을 헤아리기보다<br />내 감정과 욕구를 앞세웠다</>}
     icon="heartbreak"
-    tags={[{ t: "자기중심", c: CORAL }, { t: "무관심", c: BLUE }, { t: "냉담", c: LAV }]}
+    tags={[{ t: "나 먼저", c: CORAL }, { t: "무심함", c: BLUE }, { t: "미안함", c: LAV }]}
     a={CORAL}
     b={YELLOW}
   />
@@ -417,12 +417,12 @@ export const Trait1: React.FC = () => (
 export const Trait2: React.FC = () => (
   <TraitCard
     num="2"
-    word="특권 의식 · 과장"
+    word="인정받고 싶었다"
     accent={BLUE}
-    sub="나는 특별한 존재다"
-    detail={<>칭찬과 관심의 중심에 있어야 만족하고<br />자신을 실제보다 크게 과장한다</>}
+    sub="특별한 사람이고 싶었다"
+    detail={<>관심과 칭찬의 중심에 서려고<br />나를 실제보다 부풀렸다</>}
     icon="crown"
-    tags={[{ t: "우월감", c: BLUE }, { t: "과시", c: YELLOW }, { t: "인정욕구", c: MINT }]}
+    tags={[{ t: "인정욕구", c: BLUE }, { t: "과시", c: YELLOW }, { t: "비교", c: MINT }]}
     a={BLUE}
     b={MINT}
   />
@@ -431,12 +431,12 @@ export const Trait2: React.FC = () => (
 export const Trait3: React.FC = () => (
   <TraitCard
     num="3"
-    word="취약한 내면"
+    word="사실은 두려웠다"
     accent={LAV}
-    sub="겉은 강, 속은 유리"
-    detail={<>비판에 매우 취약하고<br />내면에 깊은 수치심을 숨기고 있다</>}
+    sub="겉으론 강한 척했다"
+    detail={<>비판이 두려웠고<br />속으론 부끄러움을 숨겼다</>}
     icon="mask"
-    tags={[{ t: "예민함", c: LAV }, { t: "수치심", c: CORAL }, { t: "불안", c: BLUE }]}
+    tags={[{ t: "두려움", c: LAV }, { t: "부끄러움", c: CORAL }, { t: "불안", c: BLUE }]}
     a={LAV}
     b={PINKR}
   />
@@ -444,16 +444,15 @@ export const Trait3: React.FC = () => (
 
 export const Closing: React.FC = () => (
   <CardFrame a={LAV} b={PINKR}>
-    <Pill x={540} y={240} text="기억하세요" color={LAV} delay={2} />
-    <div style={{ ...centerText(380, 78, INK) }}>겉이 강할수록</div>
+    <Pill x={540} y={240} text="그리고, 반성" color={LAV} delay={2} />
+    <div style={{ ...centerText(380, 78, INK) }}>인정하는 순간,</div>
     <ClayCard x={540} y={590} w={820} bg="#FFFFFF" delay={8} float={7} pad="26px 40px" radius={44}>
-      <div style={{ fontFamily: FONT, fontSize: 104, color: CORAL, lineHeight: 1.0, textAlign: "center" }}>속은 유리다</div>
+      <div style={{ fontFamily: FONT, fontSize: 100, color: CORAL, lineHeight: 1.0, textAlign: "center" }}>나는 달라진다</div>
     </ClayCard>
-    <div style={{ display: "flex", position: "absolute", top: 760, width: "100%", justifyContent: "center", gap: 18 }} />
-    <Pill x={300} y={820} text="공감부족" color={CORAL} delay={16} />
-    <Pill x={540} y={820} text="특권의식" color={BLUE} delay={21} />
-    <Pill x={790} y={820} text="취약한 내면" color={LAV} delay={26} />
-    <div style={{ ...centerText(940, 48, "#5b5570", BODY), fontWeight: 900 }}>이해하면, 휘둘리지 않는다</div>
+    <Pill x={320} y={820} text="인정" color={CORAL} delay={16} />
+    <Pill x={540} y={820} text="성찰" color={BLUE} delay={21} />
+    <Pill x={745} y={820} text="변화" color={LAV} delay={26} />
+    <div style={{ ...centerText(940, 48, "#5b5570", BODY), fontWeight: 900 }}>나를 아는 게, 변화의 시작이다</div>
     <Mascot x={540} y={1150} w={330} delay={6} floatAmp={14} />
     <div style={{ ...centerText(1290, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
