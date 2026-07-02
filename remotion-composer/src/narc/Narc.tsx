@@ -444,16 +444,39 @@ export const Trait3: React.FC = () => (
 
 export const Closing: React.FC = () => (
   <CardFrame a={LAV} b={PINKR}>
-    <Pill x={540} y={240} text="그리고, 반성" color={LAV} delay={2} />
-    <div style={{ ...centerText(380, 78, INK) }}>인정하는 순간,</div>
-    <ClayCard x={540} y={590} w={820} bg="#FFFFFF" delay={8} float={7} pad="26px 40px" radius={44}>
-      <div style={{ fontFamily: FONT, fontSize: 100, color: CORAL, lineHeight: 1.0, textAlign: "center" }}>나는 달라진다</div>
+    <Pill x={540} y={225} text="그리고, 반성" color={LAV} delay={2} />
+    <div style={{ ...centerText(340, 74, INK) }}>인정하는 순간,</div>
+    <ClayCard x={540} y={515} w={820} bg="#FFFFFF" delay={8} float={7} pad="24px 40px" radius={44}>
+      <div style={{ fontFamily: FONT, fontSize: 96, color: CORAL, lineHeight: 1.0, textAlign: "center" }}>나는 달라진다</div>
     </ClayCard>
-    <Pill x={320} y={820} text="인정" color={CORAL} delay={16} />
-    <Pill x={540} y={820} text="성찰" color={BLUE} delay={21} />
-    <Pill x={745} y={820} text="변화" color={LAV} delay={26} />
-    <div style={{ ...centerText(940, 48, "#5b5570", BODY), fontWeight: 900 }}>나를 아는 게, 변화의 시작이다</div>
-    <Mascot x={540} y={1150} w={330} delay={6} floatAmp={14} />
-    <div style={{ ...centerText(1290, 42, "#7a728e") }}>www.wylieax.com</div>
+    <Pill x={322} y={700} text="인정" color={CORAL} delay={16} />
+    <Pill x={540} y={700} text="성찰" color={BLUE} delay={21} />
+    <Pill x={742} y={700} text="변화" color={LAV} delay={26} />
+    <div style={{ ...centerText(800, 46, "#5b5570", BODY), fontWeight: 900 }}>나를 아는 게, 변화의 시작이다</div>
+    <Mascot x={540} y={1075} w={240} delay={6} floatAmp={13} />
+    <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
+);
+
+// ---------------------------------------------------------------------------
+// Video (Reels/feed) — the 5 cards sequenced with a soft crossfade
+// ---------------------------------------------------------------------------
+const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const opacity = interpolate(frame, [0, 12, d - 12, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
+  return (
+    <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>
+  );
+};
+
+export const NarcVideo: React.FC = () => (
+  <AbsoluteFill style={{ background: "#F3EEFB" }}>
+    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover /></Fade></Sequence>
+    <Sequence from={95} durationInFrames={110}><Fade d={110}><Trait1 /></Fade></Sequence>
+    <Sequence from={190} durationInFrames={110}><Fade d={110}><Trait2 /></Fade></Sequence>
+    <Sequence from={285} durationInFrames={110}><Fade d={110}><Trait3 /></Fade></Sequence>
+    <Sequence from={380} durationInFrames={120}><Fade d={120}><Closing /></Fade></Sequence>
+  </AbsoluteFill>
 );
