@@ -389,7 +389,7 @@ const TraitCard: React.FC<{
     <NumBubble x={190} y={250} n={num} color={accent} delay={2} />
     <ClayIcon x={870} y={255} kind={icon} color={accent} size={150} delay={10} />
     <ClayCard x={540} y={480} w={880} bg="#FFFFFF" delay={6} float={6} pad="30px 40px" radius={46}>
-      <div style={{ fontFamily: FONT, fontSize: 86, color: INK, lineHeight: 1.05, textAlign: "center" }}>{word}</div>
+      <div style={{ fontFamily: FONT, fontSize: 78, color: INK, lineHeight: 1.05, textAlign: "center", whiteSpace: "nowrap" }}>{word}</div>
     </ClayCard>
     <div style={{ ...centerText(660, 60, accent) }}>{sub}</div>
     <div style={{ ...centerText(780, 44, "#5b5570", BODY), fontWeight: 700, lineHeight: 1.45 }}>{detail}</div>
@@ -403,10 +403,10 @@ const TraitCard: React.FC<{
 export const Trait1: React.FC = () => (
   <TraitCard
     num="1"
-    word="나만 생각했다"
+    word="나만 생각하고 있나?"
     accent={CORAL}
-    sub="상대보다 내 기분이 먼저"
-    detail={<>상대의 마음을 헤아리기보다<br />내 감정과 욕구를 앞세웠다</>}
+    sub="상대보다 내 기분이 먼저인가?"
+    detail={<>상대의 마음을 헤아리기보다<br />내 감정과 욕구를 앞세우진 않나?</>}
     icon="heartbreak"
     tags={[{ t: "나 먼저", c: CORAL }, { t: "무심함", c: BLUE }, { t: "미안함", c: LAV }]}
     a={CORAL}
@@ -417,10 +417,10 @@ export const Trait1: React.FC = () => (
 export const Trait2: React.FC = () => (
   <TraitCard
     num="2"
-    word="인정받고 싶었다"
+    word="인정만 바라고 있나?"
     accent={BLUE}
-    sub="특별한 사람이고 싶었다"
-    detail={<>관심과 칭찬의 중심에 서려고<br />나를 실제보다 부풀렸다</>}
+    sub="특별한 사람이고 싶은가?"
+    detail={<>관심과 칭찬의 중심에 서려고<br />나를 실제보다 부풀리진 않나?</>}
     icon="crown"
     tags={[{ t: "인정욕구", c: BLUE }, { t: "과시", c: YELLOW }, { t: "비교", c: MINT }]}
     a={BLUE}
@@ -431,10 +431,10 @@ export const Trait2: React.FC = () => (
 export const Trait3: React.FC = () => (
   <TraitCard
     num="3"
-    word="사실은 두려웠다"
+    word="속으론 두려운가?"
     accent={LAV}
-    sub="겉으론 강한 척했다"
-    detail={<>비판이 두려웠고<br />속으론 부끄러움을 숨겼다</>}
+    sub="강한 척하고 있진 않나?"
+    detail={<>비판이 두렵고<br />부끄러움을 숨기고 있진 않나?</>}
     icon="mask"
     tags={[{ t: "두려움", c: LAV }, { t: "부끄러움", c: CORAL }, { t: "불안", c: BLUE }]}
     a={LAV}
