@@ -394,11 +394,11 @@ const centerText = (top: number, size: number, color: string, family = FONT): Re
 
 export const Cover: React.FC = () => (
   <CardFrame a={BLUE} b={MINT}>
-    <Pill x={540} y={225} text="사람 · 관계" color={LAV} delay={2} />
-    <div style={{ ...centerText(345, 108, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>사람은</div>
-    <div style={{ ...centerText(480, 100, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>어려울 때 안다</div>
-    <div style={{ ...centerText(635, 50, INK, BODY), fontWeight: 900 }}>좋을 때 말고, 힘들 때</div>
-    <Mascot x={540} y={1010} w={410} delay={4} floatAmp={16} />
+    <Pill x={540} y={205} text="사람 · 관계" color={LAV} delay={2} />
+    <div style={{ ...centerText(315, 58, INK, BODY), fontWeight: 900 }}>사람은 어려운 일이 생겼을 때,</div>
+    <div style={{ ...centerText(420, 92, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>그 사람을</div>
+    <div style={{ ...centerText(540, 92, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>제대로 알 수 있다</div>
+    <Mascot x={540} y={1040} w={395} delay={4} floatAmp={16} />
     <div style={{ ...centerText(1290, 44, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
 );
@@ -430,10 +430,10 @@ const StatementCard: React.FC<{
 export const Good: React.FC = () => (
   <StatementCard
     icon="sun"
-    lead="형편이 좋을 땐"
+    lead="상황이 좋을 때는"
     big="누구나 좋다"
     bigColor={MINT}
-    detail={<>웃고, 베풀고, 곁에 있다<br />그건 어렵지 않은 일</>}
+    detail={<>웃고, 베풀고, 격려하고<br />그건 어렵지 않은 일</>}
     tags={[{ t: "미소", c: MINT }, { t: "여유", c: BLUE }, { t: "곁", c: YELLOW }]}
     a={YELLOW}
     b={MINT}
@@ -466,9 +466,9 @@ export const Real: React.FC = () => (
 export const Closing: React.FC = () => (
   <CardFrame a={MINT} b={BLUE}>
     <Pill x={540} y={290} text="결국," color={LAV} delay={2} />
-    <div style={{ ...centerText(420, 74, INK) }}>사람은</div>
+    <div style={{ ...centerText(410, 64, INK) }}>사람은 어려울 때,</div>
     <ClayCard x={540} y={620} w={880} bg="#FFFFFF" delay={8} float={7} pad="24px 40px" radius={44}>
-      <div style={{ fontFamily: FONT, fontSize: 92, color: CORAL, lineHeight: 1.0, textAlign: "center", whiteSpace: "nowrap" }}>어려울 때 안다</div>
+      <div style={{ fontFamily: FONT, fontSize: 88, color: CORAL, lineHeight: 1.0, textAlign: "center", whiteSpace: "nowrap" }}>제대로 알 수 있다</div>
     </ClayCard>
     <Mascot x={540} y={1000} w={300} delay={6} floatAmp={14} />
     <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
