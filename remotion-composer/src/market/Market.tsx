@@ -378,10 +378,10 @@ const centerText = (top: number, size: number, color: string, family = FONT): Re
 
 export const Cover: React.FC = () => (
   <CardFrame a={CORAL} b={YELLOW}>
-    <Pill x={540} y={225} text="AI 시대 · 시장" color={LAV} delay={2} />
+    <Pill x={540} y={225} text="AI 시대 · 바이브코딩" color={LAV} delay={2} />
     <div style={{ ...centerText(350, 104, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>프로덕트가</div>
     <div style={{ ...centerText(485, 112, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>넘쳐난다</div>
-    <div style={{ ...centerText(645, 50, INK, BODY), fontWeight: 900 }}>이제, 누구나 만든다</div>
+    <div style={{ ...centerText(645, 50, INK, BODY), fontWeight: 900 }}>바이브코딩으로, 누구나 만든다</div>
     <Mascot x={540} y={1010} w={410} delay={4} floatAmp={16} />
     <div style={{ ...centerText(1290, 44, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
