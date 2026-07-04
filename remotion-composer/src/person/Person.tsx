@@ -474,3 +474,24 @@ export const Closing: React.FC = () => (
     <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
 );
+
+// ---------------------------------------------------------------------------
+// Video (Reels/feed) — the 5 cards sequenced with a soft crossfade
+// ---------------------------------------------------------------------------
+const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const opacity = interpolate(frame, [0, 12, d - 12, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
+  return <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>;
+};
+
+export const PersonVideo: React.FC = () => (
+  <AbsoluteFill style={{ background: "#F3EEFB" }}>
+    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover /></Fade></Sequence>
+    <Sequence from={95} durationInFrames={110}><Fade d={110}><Good /></Fade></Sequence>
+    <Sequence from={190} durationInFrames={110}><Fade d={110}><Hard /></Fade></Sequence>
+    <Sequence from={285} durationInFrames={110}><Fade d={110}><Real /></Fade></Sequence>
+    <Sequence from={380} durationInFrames={120}><Fade d={120}><Closing /></Fade></Sequence>
+  </AbsoluteFill>
+);
