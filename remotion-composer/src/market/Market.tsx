@@ -454,8 +454,22 @@ export const Closing: React.FC = () => (
     <ClayCard x={540} y={620} w={820} bg="#FFFFFF" delay={8} float={7} pad="24px 40px" radius={44}>
       <div style={{ fontFamily: FONT, fontSize: 100, color: CORAL, lineHeight: 1.0, textAlign: "center" }}>해야 할까?</div>
     </ClayCard>
-    <div style={{ ...centerText(800, 46, "#5b5570", BODY), fontWeight: 900 }}>차별화 · 유통 · 브랜드</div>
-    <Mascot x={540} y={1075} w={250} delay={6} floatAmp={13} />
+    <Mascot x={540} y={1000} w={300} delay={6} floatAmp={14} />
     <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
+  </CardFrame>
+);
+
+export const Answer: React.FC = () => (
+  <CardFrame a={YELLOW} b={MINT}>
+    <Pill x={540} y={235} text="해답" color={LAV} delay={2} />
+    <div style={{ ...centerText(360, 52, INK) }}>정답은 '잘 만들기'가 아니다</div>
+    <ClayCard x={540} y={575} w={880} bg="#FFFFFF" delay={8} float={7} pad="26px 40px" radius={46}>
+      <div style={{ fontFamily: FONT, fontSize: 88, color: CORAL, lineHeight: 1.0, textAlign: "center", whiteSpace: "nowrap" }}>닿는 힘을 키워라</div>
+    </ClayCard>
+    <Pill x={310} y={770} text="뾰족함" color={CORAL} delay={16} />
+    <Pill x={540} y={770} text="브랜드" color={BLUE} delay={21} />
+    <Pill x={760} y={770} text="커뮤니티" color={MINT} delay={26} />
+    <Mascot x={540} y={1080} w={240} delay={6} floatAmp={13} />
+    <div style={{ ...centerText(1305, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
 );
