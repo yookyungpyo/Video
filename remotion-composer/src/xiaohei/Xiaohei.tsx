@@ -16,16 +16,16 @@ import {
 // ink-cat host. Visual grammar follows the reference: strokes draw themselves
 // on, diagrams accumulate, accent colors carry meaning.
 // ---------------------------------------------------------------------------
-const HAND = "Gaegu";
-const BODY = "Noto Sans KR";
-const BG = "#0B0B0E";
-const CHALK = "#F2F2EC";
-const MUTED = "#9BA0A8";
-const ORANGE = "#F5A93F";
-const YELLOW = "#E8E45A";
-const PINK = "#E86BD0";
-const GREEN = "#8CE08C";
-const TEAL = "#8FE3D2";
+export const HAND = "Gaegu";
+export const BODY = "Noto Sans KR";
+export const BG = "#0B0B0E";
+export const CHALK = "#F2F2EC";
+export const MUTED = "#9BA0A8";
+export const ORANGE = "#F5A93F";
+export const YELLOW = "#E8E45A";
+export const PINK = "#E86BD0";
+export const GREEN = "#8CE08C";
+export const TEAL = "#8FE3D2";
 
 const fontCss = `
 @font-face { font-family: '${HAND}'; font-weight: 400; font-style: normal;
@@ -203,7 +203,8 @@ export const Cat: React.FC<{
   size?: number;
   flip?: boolean;
   sleeping?: boolean;
-}> = ({ start, size = 230, flip = false, sleeping = false }) => {
+  winkAt?: number;
+}> = ({ start, size = 230, flip = false, sleeping = false, winkAt }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -217,6 +218,7 @@ export const Cat: React.FC<{
   const wag = Math.sin(t * 2.6) * 10;
   const blinkCycle = (frame - start) % 84;
   const blink = sleeping ? 0.08 : blinkCycle >= 78 && blinkCycle < 84 ? 0.12 : 1;
+  const winking = winkAt !== undefined && frame >= winkAt && frame < winkAt + 24;
   const j = useStep(start + 7, 1.2);
 
   return (
@@ -257,13 +259,21 @@ export const Cat: React.FC<{
               <path d="M120,92 Q129,100 138,92" stroke={TEAL} strokeWidth={5} fill="none" strokeLinecap="round" />
             </>
           ) : (
-            <g style={{ transform: `scaleY(${blink})`, transformOrigin: "112px 92px" }}>
-              <ellipse cx="95" cy="92" rx="13" ry="16" fill={TEAL} />
-              <ellipse cx="129" cy="92" rx="13" ry="16" fill={TEAL} />
-              <ellipse cx="97" cy="94" rx="5.5" ry="9" fill="#0A0A0C" />
-              <ellipse cx="127" cy="94" rx="5.5" ry="9" fill="#0A0A0C" />
-              <circle cx="99" cy="87" r="3" fill="#FFFFFF" />
-              <circle cx="125" cy="87" r="3" fill="#FFFFFF" />
+            <g>
+              <g style={{ transform: `scaleY(${blink})`, transformOrigin: "95px 92px" }}>
+                <ellipse cx="95" cy="92" rx="13" ry="16" fill={TEAL} />
+                <ellipse cx="97" cy="94" rx="5.5" ry="9" fill="#0A0A0C" />
+                <circle cx="99" cy="87" r="3" fill="#FFFFFF" />
+              </g>
+              {winking ? (
+                <path d="M118,92 Q129,100 140,92" stroke={TEAL} strokeWidth={5} fill="none" strokeLinecap="round" />
+              ) : (
+                <g style={{ transform: `scaleY(${blink})`, transformOrigin: "129px 92px" }}>
+                  <ellipse cx="129" cy="92" rx="13" ry="16" fill={TEAL} />
+                  <ellipse cx="127" cy="94" rx="5.5" ry="9" fill="#0A0A0C" />
+                  <circle cx="125" cy="87" r="3" fill="#FFFFFF" />
+                </g>
+              )}
             </g>
           )}
           {/* mouth ω */}
@@ -452,7 +462,7 @@ export const HarnessScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <div style={{ position: "absolute", top: 175, width: "100%" }}>
-        <HandText text="Harness 엔지니어링" start={4} size={88} color={ORANGE} />
+        <HandText text="3. Harness 엔지니어링" start={4} size={88} color={ORANGE} />
       </div>
       <div style={{ position: "absolute", top: 292, width: "100%" }}>
         <HandText text="긴 작업은 컨텍스트만으론 질식한다" start={22} size={52} color={MUTED} />
