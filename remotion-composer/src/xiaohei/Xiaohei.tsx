@@ -468,39 +468,46 @@ export const HarnessScene: React.FC = () => {
         <HandText text="긴 작업은 컨텍스트만으론 질식한다" start={22} size={52} color={MUTED} />
       </div>
 
-      {/* diagram */}
+      {/* diagram — mirrors the reference: the USER sits OUTSIDE the harness;
+          the harness wraps the context window AND the task list (tasks live
+          outside the context but inside the harness). */}
       <div style={{ position: "absolute", top: 430, left: 0, width: 1080, height: 760 }}>
         <svg viewBox="0 0 1080 760" width="1080" height="760">
+          {/* user box — outside the harness */}
+          <Draw d="M40,240 L200,236 L204,434 L44,438 Z" start={64} dur={14} color={MUTED} width={5} />
+          <Draw d="M122,290 a24,24 0 1,1 0.1,0 M122,314 L122,376 M122,330 L96,354 M122,330 L148,354 M122,376 L104,412 M122,376 L140,412" start={72} dur={18} width={5} />
+          {/* prompt arrow crossing INTO the harness */}
+          <Draw d="M212,335 L300,335 L287,323 M300,335 L287,347" start={92} dur={10} width={5} />
           {/* harness outer box */}
           <Draw
-            d="M60,80 L740,74 L744,560 L64,566 Z"
+            d="M250,80 L1030,74 L1034,560 L254,566 Z"
             start={40}
             dur={26}
             color={ORANGE}
             width={6}
           />
-          {/* person → prompt arrow */}
-          <Draw d="M128,300 a26,26 0 1,1 0.1,0 M128,326 L128,392 M128,344 L100,368 M128,344 L156,368 M128,392 L108,428 M128,392 L148,428" start={70} dur={20} width={5} />
-          <Draw d="M175,330 L285,330 L272,318 M285,330 L272,342" start={92} dur={10} width={5} />
-          {/* context box + net squiggle + window bar */}
-          <Draw d="M320,240 L640,240 L640,430 L320,430 Z" start={104} dur={18} color={PINK} width={5} />
+          {/* prompt → context inside the harness */}
+          <Draw d="M452,335 L486,335 L476,326 M486,335 L476,344" start={100} dur={8} width={4.5} />
+          {/* context box + net squiggle + window bar (partially filled) */}
+          <Draw d="M500,240 L800,240 L800,430 L500,430 Z" start={104} dur={18} color={PINK} width={5} />
           <Draw
-            d="M355,320 L390,290 L425,350 L460,285 L495,350 L530,290 L565,345 L600,300"
+            d="M530,320 L560,290 L590,350 L620,285 L650,350 L680,290 L710,345 L740,300"
             start={120}
             dur={16}
             width={4.5}
           />
-          <Draw d="M355,385 L605,385" start={134} dur={10} color={GREEN} width={9} />
-          {/* task panel */}
-          <Draw d="M790,74 L1020,74 L1020,560 L790,560 Z" start={60} dur={20} width={5} />
+          <Draw d="M530,388 L770,388" start={132} dur={10} color={MUTED} width={9} />
+          <Draw d="M530,388 L634,388" start={142} dur={12} color={GREEN} width={9} />
+          {/* task panel divider — the list is INSIDE the harness */}
+          <Draw d="M840,78 L844,562" start={60} dur={12} color={ORANGE} width={5} />
           {[0, 1, 2, 3, 4].map((i) => (
-            <Draw key={i} d={`M865,${140 + i * 88} L985,${140 + i * 88}`} start={82 + i * 5} dur={7} color={MUTED} width={4.5} />
+            <Draw key={i} d={`M905,${140 + i * 88} L1005,${140 + i * 88}`} start={82 + i * 5} dur={7} color={MUTED} width={4.5} />
           ))}
           {/* checkmarks */}
           {checks.map((cf, i) => (
             <Draw
               key={`c${i}`}
-              d={`M812,${138 + i * 88} l12,14 l22,-28`}
+              d={`M862,${136 + i * 88} l12,14 l22,-28`}
               start={cf}
               dur={8}
               color={GREEN}
@@ -510,7 +517,7 @@ export const HarnessScene: React.FC = () => {
           {/* highlight ring on current task */}
           {frame >= 96 && (
             <Scribble
-              cx={838}
+              cx={890}
               cy={
                 140 +
                 Math.min(
@@ -518,30 +525,38 @@ export const HarnessScene: React.FC = () => {
                   2
                 ) * 88
               }
-              rx={44}
+              rx={52}
               ry={30}
               start={96}
               color={ORANGE}
               width={5}
             />
           )}
+          {/* "not needed yet" pointer to the unchecked tasks */}
+          <Draw d="M950,505 C965,545 950,565 935,585" start={168} dur={10} color={PINK} width={4.5} />
         </svg>
         {/* labels */}
-        <div style={{ position: "absolute", left: 60, top: -6, width: 300, textAlign: "left", paddingLeft: 30 }}>
+        <div style={{ position: "absolute", left: 250, top: -6, width: 300, textAlign: "left", paddingLeft: 30 }}>
           <HandText text="Harness" start={66} size={48} color={ORANGE} />
         </div>
-        <div style={{ position: "absolute", left: 320, top: 158, width: 320, textAlign: "center" }}>
+        <div style={{ position: "absolute", left: 285, top: 268, width: 160, textAlign: "center" }}>
+          <HandText text="Prompt" start={96} size={42} />
+        </div>
+        <div style={{ position: "absolute", left: 500, top: 158, width: 300, textAlign: "center" }}>
           <HandText text="Context" start={112} size={44} color={PINK} />
         </div>
-        <div style={{ position: "absolute", left: 790, top: -6, width: 230, textAlign: "center" }}>
+        <div style={{ position: "absolute", left: 840, top: -6, width: 194, textAlign: "center" }}>
           <HandText text="할 일" start={72} size={44} />
         </div>
         {/* task numbers */}
         {[1, 2, 3, 4, 5].map((n, i) => (
-          <div key={n} style={{ position: "absolute", left: 802, top: 96 + i * 88, width: 44, textAlign: "center" }}>
+          <div key={n} style={{ position: "absolute", left: 852, top: 96 + i * 88, width: 44, textAlign: "center" }}>
             <HandText text={`${n}.`} start={84 + i * 5} size={38} color={MUTED} stagger={0.8} />
           </div>
         ))}
+        <div style={{ position: "absolute", left: 760, top: 592, width: 300, textAlign: "center" }}>
+          <HandText text="아직 필요 없음!" start={172} size={38} color={PINK} />
+        </div>
       </div>
 
       {/* cat working through the list */}
