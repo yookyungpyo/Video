@@ -31,9 +31,39 @@
       "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021333_89bc2264-1ed7-44b0-9d63-a53929c5fe74.png"
     }
   ],
+  "videos": {
+    "model": "kling3_0_turbo",
+    "spec": "720x720, 5s, image-to-video (start_image = frame job_id), locked-off camera / window scenery motion",
+    "clips": [
+      {
+        "id": "clip_01",
+        "from_frame": "frame_01",
+        "job_id": "6e2ff243-5458-472b-87f7-ce9372204c3e",
+        "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021916_6e2ff243-5458-472b-87f7-ce9372204c3e.mp4"
+      },
+      {
+        "id": "clip_02",
+        "from_frame": "frame_02",
+        "job_id": "70c9a6a7-1dd5-42bc-9c8f-0cf33dd3d5d6",
+        "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021926_70c9a6a7-1dd5-42bc-9c8f-0cf33dd3d5d6.mp4"
+      },
+      {
+        "id": "clip_03",
+        "from_frame": "frame_03",
+        "job_id": "75aefdee-f6c5-4e66-9024-26695bfa25e8",
+        "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021738_75aefdee-f6c5-4e66-9024-26695bfa25e8.mp4"
+      },
+      {
+        "id": "clip_04",
+        "from_frame": "frame_04",
+        "job_id": "45309a25-deeb-4919-9b2f-644684ad0146",
+        "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021935_45309a25-deeb-4919-9b2f-644684ad0146.mp4"
+      }
+    ]
+  },
   "next_steps": [
-    "9:16 릴스 풀화면이 필요하면 각 job_id를 outpaint로 상하 확장",
-    "영상화: 각 job_id를 image-to-video(kling3_0_turbo 등)로 5초 애니메이트 — prompts.json:video_motion_prompt 사용",
-    "고해상도 필요 시 upscale_image로 2K/4K 업스케일"
+    "9:16 릴스 풀화면이 필요하면 각 job_id를 outpaint/reframe으로 확장",
+    "고해상도 필요 시 upscale_image / upscale_video로 2K/4K 업스케일",
+    "4클립을 이어붙여 20초 연속 시퀀스로 합치기 (ffmpeg concat)"
   ]
 }
