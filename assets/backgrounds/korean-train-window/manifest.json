@@ -1,0 +1,39 @@
+{
+  "series": "korean-train-window-bg",
+  "provider": "higgsfield",
+  "model": "nano_banana_pro (nano_banana_2)",
+  "resolution": "1024x1024 (1:1, 1k)",
+  "method": "frame_01 generated from text; frames 02-04 edited from frame_01 (window view only) for interior consistency",
+  "generated_at": "2026-07-11",
+  "frames": [
+    {
+      "id": "frame_01",
+      "scene": "역 통과 (모션블러 승강장)",
+      "job_id": "42bce407-fd28-434e-a53d-fe4c4a5307c4",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021213_42bce407-fd28-434e-a53d-fe4c4a5307c4.png"
+    },
+    {
+      "id": "frame_02",
+      "scene": "저층 상가 거리",
+      "job_id": "feea1baa-1ee5-4ad0-91bf-9f129c210bd9",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021310_feea1baa-1ee5-4ad0-91bf-9f129c210bd9.png"
+    },
+    {
+      "id": "frame_03",
+      "scene": "아파트 단지",
+      "job_id": "b6abe08b-be4e-467f-9223-6dc0db78c4f3",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021322_b6abe08b-be4e-467f-9223-6dc0db78c4f3.png"
+    },
+    {
+      "id": "frame_04",
+      "scene": "한강 철교 / 하늘",
+      "job_id": "89bc2264-1ed7-44b0-9d63-a53929c5fe74",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_021333_89bc2264-1ed7-44b0-9d63-a53929c5fe74.png"
+    }
+  ],
+  "next_steps": [
+    "9:16 릴스 풀화면이 필요하면 각 job_id를 outpaint로 상하 확장",
+    "영상화: 각 job_id를 image-to-video(kling3_0_turbo 등)로 5초 애니메이트 — prompts.json:video_motion_prompt 사용",
+    "고해상도 필요 시 upscale_image로 2K/4K 업스케일"
+  ]
+}
