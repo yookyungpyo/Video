@@ -1,0 +1,31 @@
+{
+  "series": "korean-train-window-bg",
+  "aspect_ratio": "1:1",
+  "seed": 428711,
+  "interior_block": "Cinematic film photograph, interior of an old Korean commuter train on the Seoul metropolitan line, an empty forest-green moquette fabric bench seat running along the wall, the worn green seat cushion filling the lower foreground, one brushed stainless-steel vertical grab pole with a textured grip standing slightly right of center, a large sliding window with rounded black rubber trim above the seatback, a warm fluorescent light strip glowing along the top edge of the seatback, a small Korean advertisement placard with Hangul text mounted above the window corner, dark moody teal-green cinematic color grade, soft 35mm film grain, low camera angle shot from across the aisle facing the bench straight on, nobody in the frame, nostalgic melancholic mood, film still",
+  "negative_prompt": "people, person, face, hands, Japanese text, kanji, hiragana, katakana, warped pole, bent window frame, distorted perspective, cartoon, anime, illustration, 3d render, oversaturated colors, watermark, logo",
+  "frames": [
+    {
+      "id": "frame_01",
+      "scene": "역 통과 (모션블러 승강장)",
+      "window_view": "through the window: an underground subway station platform rushing past in strong horizontal motion blur, blurred platform screen doors and green pillars, streaks of yellow-green fluorescent light smeared sideways by the train's speed"
+    },
+    {
+      "id": "frame_02",
+      "scene": "저층 상가 거리",
+      "window_view": "through the window: low-rise Korean commercial street buildings with colorful Hangul shop signs sliding past, utility poles and tangled power lines, muted overcast daylight, slight motion blur on the nearest buildings"
+    },
+    {
+      "id": "frame_03",
+      "scene": "아파트 단지",
+      "window_view": "through the window: a vast Korean apartment complex, repeating rows of beige and white high-rise apartment towers with large painted building numbers, bare spring trees along a fence in front, hazy warm afternoon light"
+    },
+    {
+      "id": "frame_04",
+      "scene": "한강 철교 / 하늘",
+      "window_view": "through the window: the train crossing a bridge over the Han River, pale blue sky with soft white clouds, sunlight glittering on the wide river, a distant city skyline on the far bank, gentle golden backlight flooding the seat"
+    }
+  ],
+  "video_motion_prompt": "Static locked-off camera inside the train. Only the scenery outside the window moves horizontally from right to left at commuter-train speed. The grab pole sways almost imperceptibly, the fluorescent light flickers subtly, gentle film grain. No people. Loopable.",
+  "reframe_note": "릴스 9:16 풀화면이 필요하면 생성 결과를 outpaint(상하 확장)로 늘릴 것 — 시트/창문 구도는 유지"
+}
