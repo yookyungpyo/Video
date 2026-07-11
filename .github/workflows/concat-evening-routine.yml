@@ -2,6 +2,11 @@ name: Concat evening-routine clips
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - claude/hissfield-seedance-video-3j4ccm
+    paths:
+      - .github/workflows/concat-evening-routine.yml
 
 permissions:
   contents: write
