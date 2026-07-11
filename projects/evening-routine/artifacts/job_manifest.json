@@ -1,0 +1,27 @@
+{
+  "project": "evening-routine",
+  "provider": "higgsfield (MCP)",
+  "model": "seedance_2_0",
+  "mode": "fast",
+  "resolution": "720p",
+  "duration_s": 5,
+  "generate_audio": true,
+  "aspect_ratio": "auto (1280x720)",
+  "cost_per_clip_credits": 22.5,
+  "declined_preset_id": "24bae836-2c4a-48e0-89b6-49fcc0b21612",
+  "frames": {
+    "frame_01": "5968669f-ecdd-4c74-9f79-e66782a7154d",
+    "frame_02": "040a35b7-4359-4e4b-8944-b922bf4e8278",
+    "frame_03": "ab442630-aec9-4908-ad13-87618429f2d3",
+    "frame_04": "bc0e08af-8633-4361-8443-dad9a703f7ab",
+    "frame_05": "c4e8a5f2-35ec-424a-b151-8c4edb412904",
+    "frame_06": "acc4baec-f23c-466e-bb09-de048dbb510a",
+    "frame_07": "b95ff2d4-d71a-4a4b-9a7d-9d066d44932c",
+    "frame_08": "e70fcf53-0932-48a6-b05b-78e8d8e055c2",
+    "frame_09": "daac9b4f-7e6a-48ae-a949-6316944b1867"
+  },
+  "jobs": {
+    "clip_01": "c9e32735-6c70-4624-b265-5942e15b947c",
+    "clip_03": "a72a21e6-51fc-4082-b40a-74a321fb779d"
+  }
+}

@@ -1,0 +1,56 @@
+name: Concat evening-routine clips
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  concat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/hissfield-seedance-video-3j4ccm
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Download clips
+        run: |
+          mkdir -p clips
+          curl -fsSL -o clips/clip_01.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_171414_c9e32735-6c70-4624-b265-5942e15b947c.mp4"
+          curl -fsSL -o clips/clip_02.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_171751_cac97fc8-cb7d-42d6-8018-8be614947007.mp4"
+          curl -fsSL -o clips/clip_03.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_171441_a72a21e6-51fc-4082-b40a-74a321fb779d.mp4"
+          curl -fsSL -o clips/clip_04.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_171755_2ba3da3a-13cb-47de-8422-22230a416da9.mp4"
+          curl -fsSL -o clips/clip_05.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_172036_83407ee7-7e0a-460a-9681-45805d6ddfc9.mp4"
+          curl -fsSL -o clips/clip_06.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_172242_32fa7a28-fe83-41a6-8c47-4fc241a4e4b7.mp4"
+          curl -fsSL -o clips/clip_07.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_172246_189d440b-7bac-4b2b-88d1-6c298ebf1f83.mp4"
+          curl -fsSL -o clips/clip_08.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_172451_103f5adb-64c1-4483-93e4-e27724c89007.mp4"
+          curl -fsSL -o clips/clip_09.mp4 "https://d8j0ntlcm91z4.cloudfront.net/user_3FJfhLNmXvzjzVnQTUhdqHvSj5r/hf_20260711_172658_aeafc83f-262c-43a6-b778-d0f10a77a559.mp4"
+          ls -la clips
+
+      - name: Concat with ffmpeg
+        run: |
+          mkdir -p norm
+          for i in 01 02 03 04 05 06 07 08 09; do
+            ffmpeg -y -i "clips/clip_$i.mp4" \
+              -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,fps=24" \
+              -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p \
+              -c:a aac -b:a 192k -ar 48000 -ac 2 \
+              "norm/clip_$i.mp4"
+            echo "file 'norm/clip_$i.mp4'" >> list.txt
+          done
+          ffmpeg -y -f concat -safe 0 -i list.txt -c copy -movflags +faststart final.mp4
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 final.mp4
+
+      - name: Commit result
+        run: |
+          mkdir -p renders/evening-routine
+          mv final.mp4 renders/evening-routine/final.mp4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add renders/evening-routine/final.mp4
+          git commit -m "Add evening-routine final concatenated video (Seedance 2.0 x9 clips)"
+          git push origin claude/hissfield-seedance-video-3j4ccm
