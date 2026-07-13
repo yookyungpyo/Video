@@ -388,13 +388,19 @@ const NumBubble: React.FC<{ x: number; y: number; n: string; color: string; dela
 // ---------------------------------------------------------------------------
 // Instagram card-news (1080x1350, each rendered as a still)
 // ---------------------------------------------------------------------------
-const CardFrame: React.FC<{ a: string; b: string; children: React.ReactNode }> = ({ a, b, children }) => (
-  <AbsoluteFill style={{ background: "#F3EEFB" }}>
-    <FontLoader />
-    <ClayBG a={a} b={b} />
+// `bare` renders content on a TRANSPARENT frame (no own bg/FontLoader/ClayBG) so
+// the video can crossfade cards over ONE shared background — otherwise two opaque
+// backgrounds cross-dissolving makes brightness oscillate ("깜빡임").
+const CardFrame: React.FC<{ a: string; b: string; bare?: boolean; children: React.ReactNode }> = ({ a, b, bare, children }) =>
+  bare ? (
     <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
-  </AbsoluteFill>
-);
+  ) : (
+    <AbsoluteFill style={{ background: "#F3EEFB" }}>
+      <FontLoader />
+      <ClayBG a={a} b={b} />
+      <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
+    </AbsoluteFill>
+  );
 
 const centerText = (top: number, size: number, color: string, family = FONT): React.CSSProperties => ({
   position: "absolute",
@@ -407,8 +413,8 @@ const centerText = (top: number, size: number, color: string, family = FONT): Re
   lineHeight: 1.2,
 });
 
-export const Cover: React.FC = () => (
-  <CardFrame a={MINT} b={BLUE}>
+export const Cover: React.FC<{ bare?: boolean }> = ({ bare }) => (
+  <CardFrame a={MINT} b={BLUE} bare={bare}>
     <Pill x={540} y={220} text="조직문화 · 리더십" color={LAV} delay={2} />
     <div style={{ ...centerText(345, 96, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>심리적 안정감</div>
     <div style={{ ...centerText(490, 58, CORAL), fontFamily: FONT }}>있는 조직 vs 없는 조직</div>
@@ -427,8 +433,9 @@ const StatementCard: React.FC<{
   tags: { t: string; c: string }[];
   a: string;
   b: string;
-}> = ({ icon, lead, big, bigColor, detail, tags, a, b }) => (
-  <CardFrame a={a} b={b}>
+  bare?: boolean;
+}> = ({ icon, lead, big, bigColor, detail, tags, a, b, bare }) => (
+  <CardFrame a={a} b={b} bare={bare}>
     <ClayIcon x={540} y={250} kind={icon} color={bigColor} size={150} delay={8} />
     <div style={{ ...centerText(425, 56, INK) }}>{lead}</div>
     <ClayCard x={540} y={615} w={960} bg="#FFFFFF" delay={6} float={6} pad="28px 36px" radius={46}>
@@ -442,8 +449,9 @@ const StatementCard: React.FC<{
   </CardFrame>
 );
 
-export const Define: React.FC = () => (
+export const Define: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <StatementCard
+    bare={bare}
     icon="shield"
     lead="심리적 안정감이란?"
     big="실수해도 안전한 느낌"
@@ -474,8 +482,9 @@ const VersusCard: React.FC<{
   rows: { l: string; r: string }[];
   a: string;
   b: string;
-}> = ({ title, leftLabel, rightLabel, rows, a, b }) => (
-  <CardFrame a={a} b={b}>
+  bare?: boolean;
+}> = ({ title, leftLabel, rightLabel, rows, a, b, bare }) => (
+  <CardFrame a={a} b={b} bare={bare}>
     <div style={{ ...centerText(205, 54, INK) }}>{title}</div>
     <Pill x={286} y={345} text={leftLabel} color={CORAL} delay={4} />
     <Pill x={794} y={345} text={rightLabel} color={MINT} delay={6} />
@@ -503,8 +512,9 @@ const VersusCard: React.FC<{
   </CardFrame>
 );
 
-export const Versus: React.FC = () => (
+export const Versus: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <VersusCard
+    bare={bare}
     title="행동이 이렇게 다르다"
     leftLabel="없는 조직"
     rightLabel="있는 조직"
@@ -518,8 +528,9 @@ export const Versus: React.FC = () => (
   />
 );
 
-export const Result: React.FC = () => (
+export const Result: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <StatementCard
+    bare={bare}
     icon="growth"
     lead="결국, 성과가 갈린다"
     big="안전한 팀이 이긴다"
@@ -531,8 +542,8 @@ export const Result: React.FC = () => (
   />
 );
 
-export const Closing: React.FC = () => (
-  <CardFrame a={BLUE} b={MINT}>
+export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
+  <CardFrame a={BLUE} b={MINT} bare={bare}>
     <Pill x={540} y={290} text="기억하세요" color={LAV} delay={2} />
     <div style={{ ...centerText(420, 68, INK) }}>안전해야 말하고,</div>
     <ClayCard x={540} y={620} w={860} bg="#FFFFFF" delay={8} float={7} pad="24px 40px" radius={44}>
@@ -556,10 +567,14 @@ const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children 
 
 export const SafetyVideo: React.FC = () => (
   <AbsoluteFill style={{ background: "#F3EEFB" }}>
-    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover /></Fade></Sequence>
-    <Sequence from={95} durationInFrames={115}><Fade d={115}><Define /></Fade></Sequence>
-    <Sequence from={200} durationInFrames={135}><Fade d={135}><Versus /></Fade></Sequence>
-    <Sequence from={325} durationInFrames={115}><Fade d={115}><Result /></Fade></Sequence>
-    <Sequence from={430} durationInFrames={120}><Fade d={120}><Closing /></Fade></Sequence>
+    {/* ONE persistent background + font loader — cards render `bare` (transparent)
+        so crossfades dissolve only content and brightness stays constant. */}
+    <FontLoader />
+    <ClayBG a={LAV} b={MINT} />
+    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover bare /></Fade></Sequence>
+    <Sequence from={95} durationInFrames={115}><Fade d={115}><Define bare /></Fade></Sequence>
+    <Sequence from={200} durationInFrames={135}><Fade d={135}><Versus bare /></Fade></Sequence>
+    <Sequence from={325} durationInFrames={115}><Fade d={115}><Result bare /></Fade></Sequence>
+    <Sequence from={430} durationInFrames={120}><Fade d={120}><Closing bare /></Fade></Sequence>
   </AbsoluteFill>
 );
