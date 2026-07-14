@@ -373,13 +373,18 @@ const NumBubble: React.FC<{ x: number; y: number; n: string; color: string; dela
 // ---------------------------------------------------------------------------
 // Instagram card-news (1080x1350, each rendered as a still)
 // ---------------------------------------------------------------------------
-const CardFrame: React.FC<{ a: string; b: string; children: React.ReactNode }> = ({ a, b, children }) => (
-  <AbsoluteFill style={{ background: "#F3EEFB" }}>
-    <FontLoader />
-    <ClayBG a={a} b={b} />
+// `bare` renders content transparent (no own bg/FontLoader/ClayBG) so the video
+// can crossfade cards over ONE shared background — avoids brightness flicker.
+const CardFrame: React.FC<{ a: string; b: string; bare?: boolean; children: React.ReactNode }> = ({ a, b, bare, children }) =>
+  bare ? (
     <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
-  </AbsoluteFill>
-);
+  ) : (
+    <AbsoluteFill style={{ background: "#F3EEFB" }}>
+      <FontLoader />
+      <ClayBG a={a} b={b} />
+      <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
+    </AbsoluteFill>
+  );
 
 const centerText = (top: number, size: number, color: string, family = FONT): React.CSSProperties => ({
   position: "absolute",
@@ -392,8 +397,8 @@ const centerText = (top: number, size: number, color: string, family = FONT): Re
   lineHeight: 1.2,
 });
 
-export const Cover: React.FC = () => (
-  <CardFrame a={YELLOW} b={CORAL}>
+export const Cover: React.FC<{ bare?: boolean }> = ({ bare }) => (
+  <CardFrame a={YELLOW} b={CORAL} bare={bare}>
     <Pill x={540} y={225} text="행복 · 마음" color={LAV} delay={2} />
     <div style={{ ...centerText(350, 104, INK), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>행복하게</div>
     <div style={{ ...centerText(490, 104, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>사는 법</div>
@@ -412,8 +417,9 @@ const StatementCard: React.FC<{
   tags: { t: string; c: string }[];
   a: string;
   b: string;
-}> = ({ icon, lead, big, bigColor, detail, tags, a, b }) => (
-  <CardFrame a={a} b={b}>
+  bare?: boolean;
+}> = ({ icon, lead, big, bigColor, detail, tags, a, b, bare }) => (
+  <CardFrame a={a} b={b} bare={bare}>
     <ClayIcon x={540} y={250} kind={icon} color={bigColor} size={150} delay={8} />
     <div style={{ ...centerText(425, 58, INK) }}>{lead}</div>
     <ClayCard x={540} y={615} w={900} bg="#FFFFFF" delay={6} float={6} pad="30px 44px" radius={46}>
@@ -427,8 +433,9 @@ const StatementCard: React.FC<{
   </CardFrame>
 );
 
-export const Threshold: React.FC = () => (
+export const Threshold: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <StatementCard
+    bare={bare}
     icon="sun"
     lead="첫째,"
     big="역치를 낮게"
@@ -440,8 +447,9 @@ export const Threshold: React.FC = () => (
   />
 );
 
-export const Size: React.FC = () => (
+export const Size: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <StatementCard
+    bare={bare}
     icon="heart"
     lead="둘째,"
     big="크기를 작게"
@@ -453,8 +461,8 @@ export const Size: React.FC = () => (
   />
 );
 
-export const Effect: React.FC = () => (
-  <CardFrame a={MINT} b={BLUE}>
+export const Effect: React.FC<{ bare?: boolean }> = ({ bare }) => (
+  <CardFrame a={MINT} b={BLUE} bare={bare}>
     <Pill x={540} y={300} text="그렇게 살면" color={LAV} delay={2} />
     <div style={{ ...centerText(430, 76, INK) }}>매일이</div>
     <div style={{ ...centerText(555, 128, CORAL), textShadow: "3px 6px 0 rgba(120,110,160,0.12)" }}>행복해져</div>
@@ -464,8 +472,8 @@ export const Effect: React.FC = () => (
   </CardFrame>
 );
 
-export const Closing: React.FC = () => (
-  <CardFrame a={YELLOW} b={CORAL}>
+export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
+  <CardFrame a={YELLOW} b={CORAL} bare={bare}>
     <Pill x={540} y={300} text="기억해요" color={LAV} delay={2} />
     <div style={{ ...centerText(430, 58, INK) }}>크게 바라지 않아도 괜찮아</div>
     <ClayCard x={540} y={630} w={960} bg="#FFFFFF" delay={8} float={7} pad="26px 40px" radius={46}>
@@ -475,4 +483,27 @@ export const Closing: React.FC = () => (
     <Mascot x={540} y={1055} w={280} delay={6} floatAmp={14} />
     <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
+);
+
+// ---------------------------------------------------------------------------
+// Video — cards crossfaded over ONE shared background (no flicker)
+// ---------------------------------------------------------------------------
+const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const opacity = interpolate(frame, [0, 12, d - 12, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
+  return <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>;
+};
+
+export const HappyVideo: React.FC = () => (
+  <AbsoluteFill style={{ background: "#F3EEFB" }}>
+    <FontLoader />
+    <ClayBG a={YELLOW} b={MINT} />
+    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover bare /></Fade></Sequence>
+    <Sequence from={95} durationInFrames={115}><Fade d={115}><Threshold bare /></Fade></Sequence>
+    <Sequence from={200} durationInFrames={115}><Fade d={115}><Size bare /></Fade></Sequence>
+    <Sequence from={305} durationInFrames={110}><Fade d={110}><Effect bare /></Fade></Sequence>
+    <Sequence from={405} durationInFrames={120}><Fade d={120}><Closing bare /></Fade></Sequence>
+  </AbsoluteFill>
 );
