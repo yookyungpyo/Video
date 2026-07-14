@@ -377,12 +377,12 @@ const NumBubble: React.FC<{ x: number; y: number; n: string; color: string; dela
 // can crossfade cards over ONE shared background — avoids brightness flicker.
 const CardFrame: React.FC<{ a: string; b: string; bare?: boolean; children: React.ReactNode }> = ({ a, b, bare, children }) =>
   bare ? (
-    <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
+    <AbsoluteFill style={{ transform: "translateY(-48px) scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
   ) : (
     <AbsoluteFill style={{ background: "#F3EEFB" }}>
       <FontLoader />
       <ClayBG a={a} b={b} />
-      <AbsoluteFill style={{ transform: "scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
+      <AbsoluteFill style={{ transform: "translateY(-48px) scale(0.97)", transformOrigin: "center center" }}>{children}</AbsoluteFill>
     </AbsoluteFill>
   );
 
