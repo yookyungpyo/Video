@@ -1,5 +1,5 @@
 import { Composition } from "remotion";
-import { Cover, Example, Follow, Confidence, Closing } from "./Lead2";
+import { Cover, Example, Follow, Confidence, Closing, Lead2Video } from "./Lead2";
 
 const W = 1080, H = 1350, FPS = 30, DUR = 60;
 export const Root: React.FC = () => (
@@ -9,5 +9,6 @@ export const Root: React.FC = () => (
     <Composition id="Follow" component={Follow} durationInFrames={DUR} fps={FPS} width={W} height={H} />
     <Composition id="Confidence" component={Confidence} durationInFrames={DUR} fps={FPS} width={W} height={H} />
     <Composition id="Closing" component={Closing} durationInFrames={DUR} fps={FPS} width={W} height={H} />
+    <Composition id="Lead2Video" component={Lead2Video} durationInFrames={525} fps={FPS} width={W} height={H} />
   </>
 );

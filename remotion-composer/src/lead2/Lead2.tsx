@@ -483,3 +483,26 @@ export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
     <div style={{ ...centerText(1300, 42, "#7a728e") }}>www.wylieax.com</div>
   </CardFrame>
 );
+
+// ---------------------------------------------------------------------------
+// Video — cards crossfaded over ONE shared background (no flicker)
+// ---------------------------------------------------------------------------
+const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const opacity = interpolate(frame, [0, 12, d - 12, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
+  return <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>;
+};
+
+export const Lead2Video: React.FC = () => (
+  <AbsoluteFill style={{ background: "#F3EEFB" }}>
+    <FontLoader />
+    <ClayBG a={BLUE} b={LAV} />
+    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover bare /></Fade></Sequence>
+    <Sequence from={95} durationInFrames={115}><Fade d={115}><Example bare /></Fade></Sequence>
+    <Sequence from={200} durationInFrames={115}><Fade d={115}><Follow bare /></Fade></Sequence>
+    <Sequence from={305} durationInFrames={110}><Fade d={110}><Confidence bare /></Fade></Sequence>
+    <Sequence from={405} durationInFrames={120}><Fade d={120}><Closing bare /></Fade></Sequence>
+  </AbsoluteFill>
+);
