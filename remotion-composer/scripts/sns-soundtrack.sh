@@ -13,7 +13,7 @@ genf twinkle "(sin(2*PI*1568*t)+0.6*sin(2*PI*2349*t))*exp(-9*t)" 0.6 "aecho=0.8:
 genf swish "(random(0)*2-1)*exp(-26*(t-0.12)^2)" 0.3 "lowpass=f=1600, highpass=f=500, aecho=0.8:0.8:18:0.25"
 rows=(
  "pad 0 0.22"
- "swish 3170 0.16" "swish 6670 0.16" "swish 10170 0.16" "swish 13500 0.16"
+ "swish 3450 0.16" "swish 6950 0.16" "swish 10450 0.16" "swish 13950 0.16"
  "pop 320 0.34" "pop 640 0.30"
  "pop 3450 0.34" "pop 6800 0.34" "pop 10300 0.34"
  "pop 13650 0.34" "pop 14000 0.30"

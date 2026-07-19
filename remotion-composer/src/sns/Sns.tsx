@@ -494,7 +494,7 @@ export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
 const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const opacity = interpolate(frame, [0, 12, d - 12, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const opacity = interpolate(frame, [0, 9, d - 9, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
   return <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>;
 };
@@ -503,10 +503,12 @@ export const SnsVideo: React.FC = () => (
   <AbsoluteFill style={{ background: "#F3EEFB" }}>
     <FontLoader />
     <ClayBG a={LAV} b={BLUE} />
-    <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover bare /></Fade></Sequence>
-    <Sequence from={95} durationInFrames={115}><Fade d={115}><Truth bare /></Fade></Sequence>
-    <Sequence from={200} durationInFrames={115}><Fade d={115}><Trap bare /></Fade></Sequence>
-    <Sequence from={305} durationInFrames={110}><Fade d={110}><Shift bare /></Fade></Sequence>
-    <Sequence from={405} durationInFrames={120}><Fade d={120}><Closing bare /></Fade></Sequence>
+    {/* non-overlapping scenes → each fades out to the shared background before the
+        next fades in, so two scenes are never on screen together (no 겹침). */}
+    <Sequence from={0} durationInFrames={105}><Fade d={105}><Cover bare /></Fade></Sequence>
+    <Sequence from={105} durationInFrames={105}><Fade d={105}><Truth bare /></Fade></Sequence>
+    <Sequence from={210} durationInFrames={105}><Fade d={105}><Trap bare /></Fade></Sequence>
+    <Sequence from={315} durationInFrames={105}><Fade d={105}><Shift bare /></Fade></Sequence>
+    <Sequence from={420} durationInFrames={105}><Fade d={105}><Closing bare /></Fade></Sequence>
   </AbsoluteFill>
 );
