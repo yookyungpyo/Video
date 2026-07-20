@@ -1,5 +1,5 @@
 import { Composition } from "remotion";
-import { Cover, Pyramid, Mistake, Leverage, Closing, AxVideo } from "./Ax";
+import { Cover, Pyramid, Mistake, Leverage, Closing, AxVideo, AxReels } from "./Ax";
 
 const W = 1080, H = 1350, FPS = 30, DUR = 60;
 export const Root: React.FC = () => (
@@ -10,5 +10,6 @@ export const Root: React.FC = () => (
     <Composition id="Leverage" component={Leverage} durationInFrames={DUR} fps={FPS} width={W} height={H} />
     <Composition id="Closing" component={Closing} durationInFrames={DUR} fps={FPS} width={W} height={H} />
     <Composition id="AxVideo" component={AxVideo} durationInFrames={570} fps={FPS} width={W} height={H} />
+    <Composition id="AxReels" component={AxReels} durationInFrames={570} fps={FPS} width={1080} height={1920} />
   </>
 );

@@ -528,3 +528,20 @@ export const AxVideo: React.FC = () => (
     <Sequence from={455} durationInFrames={115}><Fade d={115}><Closing bare /></Fade></Sequence>
   </AbsoluteFill>
 );
+
+// Native 9:16 Reel (1080x1920): ONE full-frame ClayBG + the same non-overlapping
+// bare cards, vertically centered. No blurred-pad background (that duplicated the
+// card content top/bottom = "겹침"). This is the correct way to make a 9:16 reel.
+export const AxReels: React.FC = () => (
+  <AbsoluteFill style={{ background: "#F3EEFB" }}>
+    <FontLoader />
+    <ClayBG a={CORAL} b={BLUE} />
+    <div style={{ position: "absolute", left: 0, top: 285, width: 1080, height: 1350 }}>
+      <Sequence from={0} durationInFrames={110}><Fade d={110}><Cover bare /></Fade></Sequence>
+      <Sequence from={110} durationInFrames={125}><Fade d={125}><Pyramid bare /></Fade></Sequence>
+      <Sequence from={235} durationInFrames={110}><Fade d={110}><Mistake bare /></Fade></Sequence>
+      <Sequence from={345} durationInFrames={110}><Fade d={110}><Leverage bare /></Fade></Sequence>
+      <Sequence from={455} durationInFrames={115}><Fade d={115}><Closing bare /></Fade></Sequence>
+    </div>
+  </AbsoluteFill>
+);

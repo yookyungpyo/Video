@@ -75,6 +75,36 @@ accents + gentle **swishes** on scene cuts. NO hard beat (clay = calm). All
 ffmpeg `aevalsrc` + lowpass/aecho; place with `adelay`+`amix`, master
 volume→compressor→limiter→lowpass→fade. Mux as AAC. Levels: accents ~−8 dB.
 
+## 5b. Card-news VIDEO from stills — transitions & Reels (MUST FOLLOW)
+When turning a set of static clay cards into a video, two mistakes cause an
+on-screen **"겹침" (overlap / doubled content)**. Both have bitten us repeatedly —
+do it right the first time:
+
+**(1) Transitions must be NON-OVERLAPPING (fade-through), never a crossfade.**
+- Each card carries its own opaque `ClayBG`. Cross-dissolving two of them shows
+  BOTH scenes (two mascots / two headlines) at once = 겹침, and also makes frame
+  brightness oscillate (flicker).
+- Fix: give `CardFrame` a `bare` prop (transparent: no own bg/FontLoader/ClayBG).
+  The video renders ONE shared `<FontLoader/>` + `<ClayBG/>`, and the bare cards
+  sit on top. Make the `<Sequence>`s **back-to-back (non-overlapping)** — e.g.
+  `from={0} dur={110}`, `from={110} dur={125}`, … — so a scene fully fades out to
+  the shared background before the next fades in. Never two scenes on screen.
+- `Fade` = `interpolate(frame,[0,9,d-9,d],[0,1,1,0])` (9-frame in/out) over the
+  shared bg. Verify: sample a frame mid-transition — you must see ONLY the clay
+  background, no doubled content. (Optional numeric check: per-frame `YAVG` via
+  `signalstats` should not oscillate ±>4 luma at cuts.)
+
+**(2) 9:16 Reels must be rendered NATIVELY, never blur-padded.**
+- Do NOT take the 1080×1350 video and ffmpeg-pad it to 1080×1920 with a blurred
+  copy of itself — the blurred background duplicates the card content (mascot,
+  text) in the top/bottom bands = 겹침. (`scripts/reels-9x16.sh` does this — avoid
+  it for clay cards.)
+- Instead add a **native 1080×1920 composition**: one full-frame `<ClayBG/>` +
+  the same non-overlapping bare-card `<Sequence>`s wrapped in
+  `<div style={{position:'absolute', top:285, left:0, width:1080, height:1350}}>`
+  so the 4:5 card content is vertically centered and the clay gradient fills the
+  whole 9:16 frame seamlessly. Reference: `src/ax/Ax.tsx` → `AxReels`.
+
 ## 6. Deliver + commit
 Render → `projects/cardnews/*-clay*.mp4` (gitignored). Commit the composition
 source + soundtrack script + the bundled Jua font so it re-renders later.
