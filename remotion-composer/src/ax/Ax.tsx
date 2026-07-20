@@ -509,12 +509,14 @@ export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
 // ---------------------------------------------------------------------------
 // Video — non-overlapping fade-through over one shared background (no 겹침)
 // ---------------------------------------------------------------------------
+// Hard cut, no scene-level opacity fade → the shared background never dims, so
+// there is no full-screen blink ("깜박임"). Content enters via each card's own
+// per-element pop-in (usePop). Scenes are non-overlapping, so no 겹침 either.
 const Fade: React.FC<{ d: number; children: React.ReactNode }> = ({ d, children }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const opacity = interpolate(frame, [0, 9, d - 9, d], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const ent = spring({ frame, fps, config: { damping: 14, stiffness: 110, mass: 1 } });
-  return <AbsoluteFill style={{ opacity, transform: `scale(${0.96 + ent * 0.04})` }}>{children}</AbsoluteFill>;
+  const ent = spring({ frame, fps, config: { damping: 16, stiffness: 120, mass: 1 } });
+  return <AbsoluteFill style={{ transform: `scale(${0.985 + ent * 0.015})` }}>{children}</AbsoluteFill>;
 };
 
 export const AxVideo: React.FC = () => (

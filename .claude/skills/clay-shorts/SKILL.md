@@ -80,19 +80,24 @@ When turning a set of static clay cards into a video, two mistakes cause an
 on-screen **"겹침" (overlap / doubled content)**. Both have bitten us repeatedly —
 do it right the first time:
 
-**(1) Transitions must be NON-OVERLAPPING (fade-through), never a crossfade.**
-- Each card carries its own opaque `ClayBG`. Cross-dissolving two of them shows
-  BOTH scenes (two mascots / two headlines) at once = 겹침, and also makes frame
-  brightness oscillate (flicker).
-- Fix: give `CardFrame` a `bare` prop (transparent: no own bg/FontLoader/ClayBG).
-  The video renders ONE shared `<FontLoader/>` + `<ClayBG/>`, and the bare cards
-  sit on top. Make the `<Sequence>`s **back-to-back (non-overlapping)** — e.g.
-  `from={0} dur={110}`, `from={110} dur={125}`, … — so a scene fully fades out to
-  the shared background before the next fades in. Never two scenes on screen.
-- `Fade` = `interpolate(frame,[0,9,d-9,d],[0,1,1,0])` (9-frame in/out) over the
-  shared bg. Verify: sample a frame mid-transition — you must see ONLY the clay
-  background, no doubled content. (Optional numeric check: per-frame `YAVG` via
-  `signalstats` should not oscillate ±>4 luma at cuts.)
+**(1) Use a HARD CUT over a shared background — not a crossfade, not a fade-through.**
+- Each card carries its own opaque `ClayBG`. Two failure modes we've hit:
+  - **Crossfade** (overlapping sequences) → both scenes visible at once (two
+    mascots / two headlines) = **겹침**, plus brightness oscillation (flicker).
+  - **Fade-through** (non-overlapping, but each scene fades its opacity out to the
+    bg then the next fades in) → the WHOLE screen dims to background between every
+    scene = a full-screen **깜박임 (blink)**.
+- Correct fix — give `CardFrame` a `bare` prop (transparent: no own bg/FontLoader/
+  ClayBG). The video renders ONE shared `<FontLoader/>` + `<ClayBG/>` (which never
+  changes → no dim, no flicker), and bare cards sit on top in **back-to-back,
+  non-overlapping** `<Sequence>`s (`from={0} dur={110}`, `from={110} dur={125}`,…).
+  The transition wrapper does **NO scene-level opacity fade** — content stays
+  opaque; a scene just hard-cuts to the next. Entrances come from each card's own
+  per-element `usePop` (localized pop-in, not a full-screen fade). A subtle
+  scene-level `scale(0.985→1)` spring is fine; opacity must stay 1.
+- Verify: per-frame `YAVG` (`signalstats`) should show a **single clean step** at
+  each cut (e.g. 228→237), never a dip-and-recover (blink) or oscillation
+  (flicker). Reference: `src/ax/Ax.tsx` → `Fade` (opacity-free) + `AxVideo`/`AxReels`.
 
 **(2) 9:16 Reels must be rendered NATIVELY, never blur-padded.**
 - Do NOT take the 1080×1350 video and ffmpeg-pad it to 1080×1920 with a blurred
