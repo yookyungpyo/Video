@@ -8,6 +8,21 @@ metadata:
 
 # Clay Shorts — soft 3D / claymorphism vertical videos
 
+> ## ⚠️ MUST-READ before making ANY card→video / Reel (repeat-offender bugs)
+> These caused "겹침" (overlap) and "깜박임" (blink) more than once. Full detail in
+> **§5b**. Non-negotiable rules:
+> 1. **Transitions = HARD CUT over ONE shared background.** No crossfade
+>    (→ doubled content = 겹침), no per-scene opacity fade-through (→ full-screen
+>    dim = 깜박임). Cards render `bare` over a single continuous `<ClayBG/>`;
+>    `<Sequence>`s are back-to-back (non-overlapping); the transition wrapper does
+>    NO opacity fade (opacity stays 1, subtle `scale` only). Entrances come from
+>    each card's own `usePop`.
+> 2. **9:16 Reels = NATIVE 1080×1920 render** (full-frame `ClayBG` + cards centered
+>    via a `top:285` wrapper). NEVER blur-pad a 1080×1350 video up to 9:16
+>    (`scripts/reels-9x16.sh`) — the blurred copy duplicates card content = 겹침.
+> 3. Verify every video: per-frame `YAVG` (`signalstats`) must step ONCE per cut,
+>    never dip-and-recover or oscillate. Reference: `src/ax/Ax.tsx`.
+
 A repeatable pipeline (built and proven in this repo) for warm, soft, "squishy"
 vertical videos. The headline win: the **3D plush brand mascot finally fits**
 (it clashes with flat collage but belongs in this soft-3D world), so use it as

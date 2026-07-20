@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-# Convert a 1080x1350 (4:5) card-news video into a 1080x1920 (9:16) full-screen
-# Reel: the sharp card is centered, top/bottom filled with a blurred, slightly
-# brightened copy of the same frame (seamless clay-gradient extension).
+# ⚠️ DO NOT USE for clay/card-news videos. The blurred fill duplicates the card
+#    content (mascot/text) in the top/bottom bands = visible "겹침" (overlap).
+#    For clay cards, render a NATIVE 1080x1920 composition instead (full-frame
+#    ClayBG + cards centered via a top:285 wrapper) — see src/ax/Ax.tsx AxReels,
+#    and clay-shorts SKILL.md §5b. This script remains only for opaque full-bleed
+#    footage (e.g. photo/cinematic) where a blurred extension is acceptable.
+#
+# Convert a 1080x1350 (4:5) video into 1080x1920 (9:16): sharp center + blurred
+# top/bottom fill.
 # Usage: bash scripts/reels-9x16.sh <in_4x5.mp4> <out_9x16.mp4>
 set -euo pipefail
 IN="${1:?input 1080x1350 mp4}"; OUT="${2:?output 1080x1920 mp4}"
