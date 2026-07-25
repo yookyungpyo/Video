@@ -29,7 +29,7 @@ const Fonts: React.FC = () => {
 };
 
 const Grain: React.FC = () => (
-  <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.08, mixBlendMode: "overlay", pointerEvents: "none" }}>
+  <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.05, mixBlendMode: "overlay", pointerEvents: "none" }}>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
     </filter>
@@ -76,7 +76,7 @@ export const QuoteR: React.FC = () => <QuoteCard photo="quotephoto/r1.jpg" lines
 export const QuoteG: React.FC = () => <QuoteCard photo="quotephoto/r2.jpg" lines={["한계라고 느낀 순간이", "진짜 시작이다"]} size={66} />;
 
 // ── athletic quote REEL (Ken Burns + crossfade + quote fade) ──────────────
-type Scene = { photo: string; lines: string[]; size: number; top: number; dynamic?: boolean };
+type Scene = { photo: string; lines: string[]; size: number; top: number; dynamic?: boolean; scrim?: number };
 const REEL: Scene[] = [
   { photo: "quotephoto/r1.jpg", lines: ["오늘의 땀은,", "배신하지 않는다"], size: 76, top: 250 },
   { photo: "quotephoto/r3.jpg", lines: ["변명은 짧고,", "후회는 길다"], size: 76, top: 250 },
@@ -104,7 +104,7 @@ const ReelScene: React.FC<{ s: Scene; f: number; dur: number; first: boolean }> 
       <AbsoluteFill style={{ transform: `translateX(${panX}px) scale(${scale}) translateZ(0)`, willChange: "transform", backfaceVisibility: "hidden" }}>
         <Img src={staticFile(s.photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(1.02) contrast(1.05) saturate(1.03)", transform: "translateZ(0)", backfaceVisibility: "hidden" }} />
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.2) 22%, transparent 42%, transparent 86%, rgba(20,22,30,0.44) 100%)" }} />
+      <AbsoluteFill style={{ background: `linear-gradient(to bottom, rgba(20,22,30,${s.scrim ?? 0.5}) 0%, rgba(20,22,30,${(s.scrim ?? 0.5) * 0.55}) 24%, transparent 46%, transparent 86%, rgba(20,22,30,0.44) 100%)` }} />
       <Grain />
       <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 40px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
         {s.lines.map((l, i) => (
@@ -151,3 +151,26 @@ const MIND: Scene[] = [
 export const MIND_TOTAL = MIND.length * REEL_DUR;
 
 export const MindReel: React.FC = () => <HardReel scenes={MIND} dur={REEL_DUR} />;
+
+// ── "IQ500 천재 친구" story reel (Luo Xiaohei / 샤오헤이풍 illustrations) ──────
+const SC = 0.62; // stronger top scrim for legibility over bright illustration ceilings
+const STORY: Scene[] = [
+  { photo: "quotephoto/st1.jpg", lines: ["AI를 쓰는 너를", "가장 쉽게 설명해줄게"], size: 48, top: 205, scrim: SC },
+  { photo: "quotephoto/st2.jpg", lines: ["AI는 말이야,", "IQ 500 천재야"], size: 50, top: 205, scrim: SC },
+  { photo: "quotephoto/st3.jpg", lines: ["그런 천재가", "내 친구가 된 거야"], size: 48, top: 205, scrim: SC },
+  { photo: "quotephoto/st4.jpg", lines: ["그 친구를 우리집에", "처음 초대했어"], size: 48, top: 205, scrim: SC },
+  { photo: "quotephoto/st5.jpg", lines: ["이 천재 친구는", "우리집 구조를", "전혀 몰라"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st6.jpg", lines: ["하필 그날,", "정전이 됐어"], size: 50, top: 205, scrim: SC },
+  { photo: "quotephoto/st7.jpg", lines: ["들어온 친구에게", "'불 좀 켜줘' 했어"], size: 48, top: 205, scrim: SC },
+  { photo: "quotephoto/st8.jpg", lines: ["천재는 보통 집처럼", "입구 오른쪽을", "더듬기 시작했어"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st9.jpg", lines: ["근데 스위치는", "한참 안쪽,", "거실에 있거든"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st10.jpg", lines: ["스위치가 없자", "핸드폰으로", "불을 비췄어"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st11.jpg", lines: ["'조금 더 안쪽으로'", "내가 다시 말했어"], size: 46, top: 205, scrim: SC },
+  { photo: "quotephoto/st12.jpg", lines: ["부엌 쪽에서", "스위치를 찾아", "드디어 불을 켰어"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st13.jpg", lines: ["'밝아졌으니", "나쁘진 않네'", "하고 넘겼지"], size: 46, top: 172, scrim: SC },
+  { photo: "quotephoto/st14.jpg", lines: ["이게 우리가", "AI를 대하는 모습이야"], size: 48, top: 205, scrim: SC },
+];
+export const STORY_DUR = 78;
+export const STORY_TOTAL = STORY.length * STORY_DUR;
+
+export const StoryReel: React.FC = () => <HardReel scenes={STORY} dur={STORY_DUR} />;
