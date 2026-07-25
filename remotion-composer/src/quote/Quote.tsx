@@ -170,7 +170,7 @@ const STORY: Scene[] = [
   { photo: "quotephoto/st13.jpg", lines: ["'밝아졌으니", "나쁘진 않네'", "하고 넘겼지"], size: 46, top: 172, scrim: SC },
   { photo: "quotephoto/st14.jpg", lines: ["이게 우리가", "AI를 대하는 모습이야"], size: 48, top: 205, scrim: SC },
 ];
-export const STORY_DUR = 78;
+export const STORY_DUR = 110;
 export const STORY_TOTAL = STORY.length * STORY_DUR;
 
 export const StoryReel: React.FC = () => <HardReel scenes={STORY} dur={STORY_DUR} />;
