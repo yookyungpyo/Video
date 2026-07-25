@@ -84,29 +84,25 @@ const REEL: Scene[] = [
   { photo: "quotephoto/r4.jpg", lines: ["결국,", "해내는 사람이 이긴다"], size: 72, top: 250 },
   { photo: "quotephoto/r5.jpg", lines: ["묵묵히 해낸 하루가,", "나를 만든다"], size: 72, top: 250 },
 ];
-export const REEL_DUR = 120;
-export const REEL_OV = 16;
+export const REEL_DUR = 108;
+export const REEL_OV = 0; // hard cuts (no crossfade) — avoids two-image tile-load flicker
 export const REEL_TOTAL = (REEL.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
 
-const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean }> = ({ s, dur, first, last }) => {
-  const f = useCurrentFrame();
-  // Only fade the INCOMING scene in over the previous (which stays fully opaque
-  // underneath until covered) — never fade a scene out to black. This keeps total
-  // on-screen brightness constant across cuts → no crossfade brightness flicker.
-  const sceneOp = first ? 1 : interpolate(f, [0, 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+const ReelScene: React.FC<{ s: Scene; f: number; dur: number; first: boolean }> = ({ s, f, dur, first }) => {
   const dyn = s.dynamic;
-  const scale = interpolate(f, [0, dur], dyn ? [1.12, 1.32] : [1.06, 1.16], { extrapolateRight: "clamp" });
-  const panX = dyn ? interpolate(f, [0, dur], [-26, 26], { extrapolateRight: "clamp" }) : 0;
+  // keep the zoomed raster under Chrome's ~4MP single-tile threshold to avoid
+  // partial (black-block) rasterization: max ~1.16× of a 1080×1920 fill.
+  const scale = interpolate(f, [0, dur], dyn ? [1.05, 1.16] : [1.03, 1.1], { extrapolateRight: "clamp" });
+  const panX = dyn ? interpolate(f, [0, dur], [-14, 14], { extrapolateRight: "clamp" }) : 0;
   // first scene: quote appears TOGETHER with the scene (no delay)
   const qIn0 = first ? 0 : 12;
   const qIn1 = first ? 6 : 26;
   const qOp = interpolate(f, [qIn0, qIn1, dur - 30, dur - 14], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const qY = interpolate(f, [qIn0, qIn1], [18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ opacity: sceneOp }}>
-      <AbsoluteFill style={{ background: "#000" }} />
-      <AbsoluteFill style={{ transform: `translateX(${panX}px) scale(${scale})` }}>
-        <Img src={staticFile(s.photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(1.02) contrast(1.05) saturate(1.03)" }} />
+    <AbsoluteFill>
+      <AbsoluteFill style={{ transform: `translateX(${panX}px) scale(${scale}) translateZ(0)`, willChange: "transform", backfaceVisibility: "hidden" }}>
+        <Img src={staticFile(s.photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(1.02) contrast(1.05) saturate(1.03)", transform: "translateZ(0)", backfaceVisibility: "hidden" }} />
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.2) 22%, transparent 42%, transparent 86%, rgba(20,22,30,0.44) 100%)" }} />
       <Grain />
@@ -120,16 +116,29 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
   );
 };
 
-export const QuoteReel: React.FC = () => (
-  <AbsoluteFill style={{ background: "#000" }}>
-    <Fonts />
-    {REEL.map((s, i) => (
-      <Sequence key={i} from={i * (REEL_DUR - REEL_OV)} durationInFrames={REEL_DUR}>
-        <ReelScene s={s} dur={REEL_DUR} first={i === 0} last={i === REEL.length - 1} />
-      </Sequence>
-    ))}
-  </AbsoluteFill>
-);
+// All scenes stay MOUNTED for the whole reel (so every photo is decoded once,
+// up front) and we hard-switch which one is visible. Nothing re-mounts mid-video,
+// so a partially-decoded image can never flash black at a cut.
+const HardReel: React.FC<{ scenes: Scene[]; dur: number }> = ({ scenes, dur }) => {
+  const gf = useCurrentFrame();
+  return (
+    <AbsoluteFill style={{ background: "#000" }}>
+      <Fonts />
+      {scenes.map((s, i) => {
+        const start = i * dur;
+        const local = gf - start;
+        const visible = local >= 0 && local < dur;
+        return (
+          <AbsoluteFill key={i} style={{ opacity: visible ? 1 : 0 }}>
+            <ReelScene s={s} f={Math.max(0, Math.min(dur - 1, local))} dur={dur} first={i === 0} />
+          </AbsoluteFill>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+export const QuoteReel: React.FC = () => <HardReel scenes={REEL} dur={REEL_DUR} />;
 
 // ── "남의 시선" reflective reel (self-focus / stoic) ──────────────────────
 const MIND: Scene[] = [
@@ -139,15 +148,6 @@ const MIND: Scene[] = [
   { photo: "quotephoto/v4.jpg", lines: ["아니요,", "불가능해요"], size: 84, top: 230 },
   { photo: "quotephoto/v5.jpg", lines: ["바꿀 수 있는 건,", "오직 나 자신뿐"], size: 68, top: 220, dynamic: true },
 ];
-export const MIND_TOTAL = (MIND.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
+export const MIND_TOTAL = MIND.length * REEL_DUR;
 
-export const MindReel: React.FC = () => (
-  <AbsoluteFill style={{ background: "#000" }}>
-    <Fonts />
-    {MIND.map((s, i) => (
-      <Sequence key={i} from={i * (REEL_DUR - REEL_OV)} durationInFrames={REEL_DUR}>
-        <ReelScene s={s} dur={REEL_DUR} first={i === 0} last={i === MIND.length - 1} />
-      </Sequence>
-    ))}
-  </AbsoluteFill>
-);
+export const MindReel: React.FC = () => <HardReel scenes={MIND} dur={REEL_DUR} />;

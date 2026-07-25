@@ -21,13 +21,13 @@ rows=(
  "pad 0 0.34"
  "arp 300 0.30"
  "sub 300 0.30"
- "swish 3470 0.26" "swish 6930 0.26" "swish 10400 0.26" "swish 13870 0.30"
- "lift 13870 0.42"
+ "swish 3600 0.26" "swish 7200 0.26" "swish 10800 0.26" "swish 14400 0.30"
+ "lift 14400 0.42"
 )
 inp=""; fc=""; lab=""; n=${#rows[@]}
 for i in "${!rows[@]}"; do set -- ${rows[$i]}; inp+=" -i $AD/$1.wav"; if [ "$1" = "pad" ]; then fc+="[$i]adelay=$2:all=1,volume=$3,afade=t=in:st=0:d=2[a$i];"; elif [ "$1" = "arp" ]; then fc+="[$i]adelay=$2:all=1,volume=$3,afade=t=in:st=0:d=2.5[a$i];"; else fc+="[$i]adelay=$2:all=1,volume=$3[a$i];"; fi; lab+="[a$i]"; done
 fc+="${lab}amix=inputs=$n:normalize=0:dropout_transition=0[mx];"
-fc+="[mx]volume=3.0,acompressor=threshold=-20dB:ratio=3:attack=14:release=200,loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.97,lowpass=f=15000,afade=t=out:st=17.2:d=0.6,atrim=0:17.85,aformat=channel_layouts=stereo[out]"
+fc+="[mx]volume=3.0,acompressor=threshold=-20dB:ratio=3:attack=14:release=200,loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.97,lowpass=f=15000,afade=t=out:st=17.4:d=0.6,atrim=0:18.0,aformat=channel_layouts=stereo[out]"
 ffmpeg -y -v error $inp -filter_complex "$fc" -map "[out]" "$AD/track.wav"
 ffmpeg -y -v error -i "$IN" -i "$AD/track.wav" -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest "$OUT"
 echo "Wrote $OUT"; rm -rf "$AD"
