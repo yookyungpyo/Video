@@ -108,9 +108,9 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.2) 22%, transparent 42%, transparent 86%, rgba(20,22,30,0.44) 100%)" }} />
       <Grain />
-      <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 86px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
+      <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 40px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
         {s.lines.map((l, i) => (
-          <div key={i} style={{ fontFamily: HAND, fontWeight: 700, fontSize: s.size * 1.12, lineHeight: 1.32, color: "#FFFFFF", textShadow: "0 2px 16px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.55)", letterSpacing: 0 }}>{l}</div>
+          <div key={i} style={{ fontFamily: HAND, fontWeight: 700, fontSize: s.size * 1.68, lineHeight: 1.3, color: "#FFFFFF", textShadow: "0 2px 18px rgba(0,0,0,0.62), 0 1px 3px rgba(0,0,0,0.55)", letterSpacing: 0 }}>{l}</div>
         ))}
       </div>
       <div style={{ position: "absolute", bottom: 116, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 32, letterSpacing: 6, color: "rgba(255,255,255,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.5)", opacity: qOp }}>@wylieax</div>
@@ -131,11 +131,11 @@ export const QuoteReel: React.FC = () => (
 
 // ── "남의 시선" reflective reel (self-focus / stoic) ──────────────────────
 const MIND: Scene[] = [
-  { photo: "quotephoto/v1.jpg", lines: ["남의 시선을", "바꾸려 하지 마세요"], size: 72, top: 250 },
-  { photo: "quotephoto/v2.jpg", lines: ["그런 데", "내 시간을 허비하지 마세요"], size: 64, top: 240 },
-  { photo: "quotephoto/v3.jpg", lines: ["타인의 생각과 행동을", "통제할 수 있을까요?"], size: 64, top: 240, dynamic: true },
-  { photo: "quotephoto/v4.jpg", lines: ["아니요,", "불가능해요"], size: 88, top: 250 },
-  { photo: "quotephoto/v5.jpg", lines: ["바꿀 수 있는 건,", "오직 나 자신뿐"], size: 72, top: 250, dynamic: true },
+  { photo: "quotephoto/v1.jpg", lines: ["남의 시선을", "바꾸려 하지", "마세요"], size: 72, top: 190 },
+  { photo: "quotephoto/v2.jpg", lines: ["그런 데", "내 시간을", "허비하지 마세요"], size: 64, top: 180 },
+  { photo: "quotephoto/v3.jpg", lines: ["타인의", "생각과 행동을", "통제할 수 있을까요?"], size: 58, top: 170, dynamic: true },
+  { photo: "quotephoto/v4.jpg", lines: ["아니요,", "불가능해요"], size: 84, top: 230 },
+  { photo: "quotephoto/v5.jpg", lines: ["바꿀 수 있는 건,", "오직 나 자신뿐"], size: 68, top: 220, dynamic: true },
 ];
 export const MIND_TOTAL = (MIND.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
 
