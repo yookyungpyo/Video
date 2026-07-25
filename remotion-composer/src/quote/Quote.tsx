@@ -121,3 +121,24 @@ export const QuoteReel: React.FC = () => (
     ))}
   </AbsoluteFill>
 );
+
+// ── "남의 시선" reflective reel (self-focus / stoic) ──────────────────────
+const MIND: Scene[] = [
+  { photo: "quotephoto/v1.jpg", lines: ["남의 시선을", "바꾸려 하지 마세요"], size: 72, top: 250 },
+  { photo: "quotephoto/v2.jpg", lines: ["그런 데", "내 시간을 허비하지 마세요"], size: 64, top: 240 },
+  { photo: "quotephoto/v3.jpg", lines: ["타인의 생각과 행동을", "통제할 수 있을까요?"], size: 64, top: 240 },
+  { photo: "quotephoto/v4.jpg", lines: ["아니요,", "불가능해요"], size: 88, top: 250 },
+  { photo: "quotephoto/v5.jpg", lines: ["바꿀 수 있는 건,", "오직 나 자신뿐"], size: 72, top: 250 },
+];
+export const MIND_TOTAL = (MIND.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
+
+export const MindReel: React.FC = () => (
+  <AbsoluteFill style={{ background: "#000" }}>
+    <Fonts />
+    {MIND.map((s, i) => (
+      <Sequence key={i} from={i * (REEL_DUR - REEL_OV)} durationInFrames={REEL_DUR}>
+        <ReelScene s={s} dur={REEL_DUR} first={i === 0} last={i === MIND.length - 1} />
+      </Sequence>
+    ))}
+  </AbsoluteFill>
+);
