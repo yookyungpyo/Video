@@ -5,15 +5,14 @@ import { AbsoluteFill, Img, Sequence, interpolate, staticFile, continueRender, d
 // Korean serif line near the top over a soft scrim, light grain. Ref: viral IG quote reels.
 const SERIF = "Noto Serif KR";
 const SANS = "Noto Sans KR";
-const HAND = "Gaegu"; // handwriting
+const HAND = "Nanum Pen Script"; // handwriting (pen)
 
 const fontCss = `
 @font-face{font-family:'${SERIF}';font-weight:500;src:url('${staticFile("fonts/noto-serif-kr-korean-500-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SERIF}';font-weight:600;src:url('${staticFile("fonts/noto-serif-kr-korean-600-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SERIF}';font-weight:700;src:url('${staticFile("fonts/noto-serif-kr-korean-700-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SANS}';font-weight:400;src:url('${staticFile("fonts/noto-sans-kr-korean-400-normal.woff2")}') format('woff2');}
-@font-face{font-family:'${HAND}';font-weight:400;src:url('${staticFile("fonts/gaegu-korean-400-normal.woff2")}') format('woff2');}
-@font-face{font-family:'${HAND}';font-weight:700;src:url('${staticFile("fonts/gaegu-korean-700-normal.woff2")}') format('woff2');}
+@font-face{font-family:'${HAND}';font-weight:400;src:url('${staticFile("fonts/nanum-pen-script-korean-400-normal.woff2")}') format('woff2');}
 `;
 
 const Fonts: React.FC = () => {
@@ -22,7 +21,7 @@ const Fonts: React.FC = () => {
     const done = () => continueRender(h);
     Promise.all([
       (document as any).fonts.load(`600 80px "${SERIF}"`, "성과묵묵"),
-      (document as any).fonts.load(`700 80px "${HAND}"`, "남시선"),
+      (document as any).fonts.load(`400 80px "${HAND}"`, "남시선"),
       (document as any).fonts.load(`400 40px "${SANS}"`, "성과"),
     ]).then(() => (document as any).fonts.ready).then(done).catch(done);
   }, [h]);
@@ -98,8 +97,11 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
   const dyn = s.dynamic;
   const scale = interpolate(f, [0, dur], dyn ? [1.12, 1.32] : [1.06, 1.16], { extrapolateRight: "clamp" });
   const panX = dyn ? interpolate(f, [0, dur], [-26, 26], { extrapolateRight: "clamp" }) : 0;
-  const qOp = interpolate(f, [16, 34, dur - 30, dur - 14], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const qY = interpolate(f, [16, 34], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // first scene: quote appears fast so the reel doesn't start "empty"
+  const qIn0 = first ? 2 : 12;
+  const qIn1 = first ? 12 : 26;
+  const qOp = interpolate(f, [qIn0, qIn1, dur - 30, dur - 14], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const qY = interpolate(f, [qIn0, qIn1], [18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <AbsoluteFill style={{ opacity: sceneOp }}>
       <AbsoluteFill style={{ background: "#000" }} />
@@ -110,7 +112,7 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
       <Grain />
       <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 40px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
         {s.lines.map((l, i) => (
-          <div key={i} style={{ fontFamily: HAND, fontWeight: 700, fontSize: s.size * 1.68, lineHeight: 1.3, color: "#FFFFFF", textShadow: "0 2px 18px rgba(0,0,0,0.62), 0 1px 3px rgba(0,0,0,0.55)", letterSpacing: 0 }}>{l}</div>
+          <div key={i} style={{ fontFamily: HAND, fontWeight: 400, fontSize: s.size * 2.0, lineHeight: 1.18, color: "#FFFFFF", textShadow: "0 3px 22px rgba(0,0,0,0.72), 0 1px 3px rgba(0,0,0,0.7), 0 0 2px rgba(0,0,0,0.6)", letterSpacing: 0 }}>{l}</div>
         ))}
       </div>
       <div style={{ position: "absolute", bottom: 116, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 32, letterSpacing: 6, color: "rgba(255,255,255,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.5)", opacity: qOp }}>@wylieax</div>
