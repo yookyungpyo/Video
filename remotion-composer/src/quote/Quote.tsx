@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AbsoluteFill, Img, staticFile, continueRender, delayRender } from "remotion";
+import { AbsoluteFill, Img, Sequence, interpolate, staticFile, continueRender, delayRender, useCurrentFrame } from "remotion";
 
 // Bright cinematic "quote reel" — airy real photo (kept bright), a single elegant
 // Korean serif line near the top over a soft scrim, light grain. Ref: viral IG quote reels.
@@ -71,3 +71,53 @@ export const QuoteE: React.FC = () => <QuoteCard photo="quotephoto/p5.jpg" lines
 // athletic-woman aesthetic samples
 export const QuoteR: React.FC = () => <QuoteCard photo="quotephoto/r1.jpg" lines={["오늘의 땀은,", "배신하지 않는다"]} />;
 export const QuoteG: React.FC = () => <QuoteCard photo="quotephoto/r2.jpg" lines={["한계라고 느낀 순간이", "진짜 시작이다"]} size={66} />;
+
+// ── athletic quote REEL (Ken Burns + crossfade + quote fade) ──────────────
+type Scene = { photo: string; lines: string[]; size: number; top: number };
+const REEL: Scene[] = [
+  { photo: "quotephoto/r1.jpg", lines: ["오늘의 땀은,", "배신하지 않는다"], size: 76, top: 250 },
+  { photo: "quotephoto/r3.jpg", lines: ["변명은 짧고,", "후회는 길다"], size: 76, top: 250 },
+  { photo: "quotephoto/r2.jpg", lines: ["한계라고 느낀 순간이", "진짜 시작이다"], size: 66, top: 250 },
+  { photo: "quotephoto/r4.jpg", lines: ["결국,", "해내는 사람이 이긴다"], size: 72, top: 250 },
+  { photo: "quotephoto/r5.jpg", lines: ["묵묵히 해낸 하루가,", "나를 만든다"], size: 72, top: 250 },
+];
+export const REEL_DUR = 120;
+export const REEL_OV = 16;
+export const REEL_TOTAL = (REEL.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
+
+const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean }> = ({ s, dur, first, last }) => {
+  const f = useCurrentFrame();
+  const fadeIn = first ? 1 : interpolate(f, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const fadeOut = last ? 1 : interpolate(f, [dur - 14, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const sceneOp = fadeIn * fadeOut;
+  const scale = interpolate(f, [0, dur], [1.06, 1.16], { extrapolateRight: "clamp" });
+  const qOp = interpolate(f, [16, 34, dur - 30, dur - 14], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const qY = interpolate(f, [16, 34], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <AbsoluteFill style={{ opacity: sceneOp }}>
+      <AbsoluteFill style={{ background: "#000" }} />
+      <AbsoluteFill style={{ transform: `scale(${scale})` }}>
+        <Img src={staticFile(s.photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(1.02) contrast(1.05) saturate(1.03)" }} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.2) 22%, transparent 42%, transparent 86%, rgba(20,22,30,0.44) 100%)" }} />
+      <Grain />
+      <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 92px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
+        {s.lines.map((l, i) => (
+          <div key={i} style={{ fontFamily: SERIF, fontWeight: 600, fontSize: s.size, lineHeight: 1.44, color: "#FFFFFF", textShadow: "0 2px 16px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.5)", letterSpacing: -0.5 }}>{l}</div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", bottom: 116, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 32, letterSpacing: 6, color: "rgba(255,255,255,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.5)", opacity: qOp }}>@wylieax</div>
+    </AbsoluteFill>
+  );
+};
+
+export const QuoteReel: React.FC = () => (
+  <AbsoluteFill style={{ background: "#000" }}>
+    <Fonts />
+    {REEL.map((s, i) => (
+      <Sequence key={i} from={i * (REEL_DUR - REEL_OV)} durationInFrames={REEL_DUR}>
+        <ReelScene s={s} dur={REEL_DUR} first={i === 0} last={i === REEL.length - 1} />
+      </Sequence>
+    ))}
+  </AbsoluteFill>
+);
