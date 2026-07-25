@@ -5,12 +5,15 @@ import { AbsoluteFill, Img, Sequence, interpolate, staticFile, continueRender, d
 // Korean serif line near the top over a soft scrim, light grain. Ref: viral IG quote reels.
 const SERIF = "Noto Serif KR";
 const SANS = "Noto Sans KR";
+const HAND = "Gaegu"; // handwriting
 
 const fontCss = `
 @font-face{font-family:'${SERIF}';font-weight:500;src:url('${staticFile("fonts/noto-serif-kr-korean-500-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SERIF}';font-weight:600;src:url('${staticFile("fonts/noto-serif-kr-korean-600-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SERIF}';font-weight:700;src:url('${staticFile("fonts/noto-serif-kr-korean-700-normal.woff2")}') format('woff2');}
 @font-face{font-family:'${SANS}';font-weight:400;src:url('${staticFile("fonts/noto-sans-kr-korean-400-normal.woff2")}') format('woff2');}
+@font-face{font-family:'${HAND}';font-weight:400;src:url('${staticFile("fonts/gaegu-korean-400-normal.woff2")}') format('woff2');}
+@font-face{font-family:'${HAND}';font-weight:700;src:url('${staticFile("fonts/gaegu-korean-700-normal.woff2")}') format('woff2');}
 `;
 
 const Fonts: React.FC = () => {
@@ -19,6 +22,7 @@ const Fonts: React.FC = () => {
     const done = () => continueRender(h);
     Promise.all([
       (document as any).fonts.load(`600 80px "${SERIF}"`, "성과묵묵"),
+      (document as any).fonts.load(`700 80px "${HAND}"`, "남시선"),
       (document as any).fonts.load(`400 40px "${SANS}"`, "성과"),
     ]).then(() => (document as any).fonts.ready).then(done).catch(done);
   }, [h]);
@@ -87,9 +91,10 @@ export const REEL_TOTAL = (REEL.length - 1) * (REEL_DUR - REEL_OV) + REEL_DUR;
 
 const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean }> = ({ s, dur, first, last }) => {
   const f = useCurrentFrame();
-  const fadeIn = first ? 1 : interpolate(f, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const fadeOut = last ? 1 : interpolate(f, [dur - 14, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const sceneOp = fadeIn * fadeOut;
+  // Only fade the INCOMING scene in over the previous (which stays fully opaque
+  // underneath until covered) — never fade a scene out to black. This keeps total
+  // on-screen brightness constant across cuts → no crossfade brightness flicker.
+  const sceneOp = first ? 1 : interpolate(f, [0, 16], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const dyn = s.dynamic;
   const scale = interpolate(f, [0, dur], dyn ? [1.12, 1.32] : [1.06, 1.16], { extrapolateRight: "clamp" });
   const panX = dyn ? interpolate(f, [0, dur], [-26, 26], { extrapolateRight: "clamp" }) : 0;
@@ -103,9 +108,9 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.2) 22%, transparent 42%, transparent 86%, rgba(20,22,30,0.44) 100%)" }} />
       <Grain />
-      <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 92px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
+      <div style={{ position: "absolute", top: s.top, width: "100%", padding: "0 86px", textAlign: "center", opacity: qOp, transform: `translateY(${qY}px)` }}>
         {s.lines.map((l, i) => (
-          <div key={i} style={{ fontFamily: SERIF, fontWeight: 600, fontSize: s.size, lineHeight: 1.44, color: "#FFFFFF", textShadow: "0 2px 16px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.5)", letterSpacing: -0.5 }}>{l}</div>
+          <div key={i} style={{ fontFamily: HAND, fontWeight: 700, fontSize: s.size * 1.12, lineHeight: 1.32, color: "#FFFFFF", textShadow: "0 2px 16px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.55)", letterSpacing: 0 }}>{l}</div>
         ))}
       </div>
       <div style={{ position: "absolute", bottom: 116, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 32, letterSpacing: 6, color: "rgba(255,255,255,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.5)", opacity: qOp }}>@wylieax</div>
