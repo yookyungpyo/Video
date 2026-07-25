@@ -235,14 +235,16 @@ export const Step3: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <StageCard bare={bare} stage={3} no="03" kicker="기준이 아래로 무너진다" lead="그렇게 조직은" big="하향 평준화된다" bigColor={CORAL} bigSize={104} detail={<>잘하던 사람이 지치면,<br />기준은 아래로 내려간다</>} tags={["악순환", "이탈", "하향"]} />
 );
 
-// ⑤ 마무리 — 메우게 두지 마라 (도미노를 떠받쳐 멈춘다)
+// ⑤ 마무리 — 에이스를 갈아 넣는 건 가장 빠른 붕괴다 (그 한 조각을 떠받쳐 멈춘다)
 export const Closing: React.FC<{ bare?: boolean }> = ({ bare }) => (
   <Frame bare={bare}>
-    <Kicker no="04" text="연쇄를 여기서 끊어라" />
+    <Kicker no="04" text="한 사람에 기대지 마라" />
     <DominoRow stage={4} />
-    <div style={{ position: "absolute", top: 665, left: 92, fontFamily: BODY, fontWeight: 700, fontSize: 46, color: MUTE }}>그러니 리더는</div>
-    <div style={{ position: "absolute", top: 728, left: 90, fontFamily: BHS, fontSize: 122, lineHeight: 1.04, color: CORAL }}>메우게 두지 마라</div>
-    <div style={{ position: "absolute", top: 928, left: 92, fontFamily: BODY, fontWeight: 700, fontSize: 40, color: MUTE, lineHeight: 1.4 }}>성과를 방치하는 건 배려가 아니라,<br />팀을 무너뜨리는 일</div>
+    {/* 에이스 label over the held (coral) tile */}
+    <div style={{ position: "absolute", top: 300, left: 812, background: CORAL, color: "#3A1A12", fontFamily: BODY, fontWeight: 900, fontSize: 27, padding: "7px 18px", borderRadius: 999, boxShadow: "0 6px 14px rgba(0,0,0,0.4)" }}>에이스</div>
+    <div style={{ position: "absolute", top: 665, left: 92, fontFamily: BODY, fontWeight: 700, fontSize: 46, color: MUTE }}>에이스를 갈아 넣는 건</div>
+    <div style={{ position: "absolute", top: 728, left: 90, fontFamily: BHS, fontSize: 118, lineHeight: 1.04, color: CORAL }}>가장 빠른 붕괴다</div>
+    <div style={{ position: "absolute", top: 928, left: 92, fontFamily: BODY, fontWeight: 700, fontSize: 40, color: MUTE, lineHeight: 1.4 }}>한 사람이 지치면,<br />팀 전체가 주저앉는다</div>
     <SmallMascot />
     <Footer />
   </Frame>
