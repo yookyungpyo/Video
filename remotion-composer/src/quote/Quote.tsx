@@ -97,9 +97,9 @@ const ReelScene: React.FC<{ s: Scene; dur: number; first: boolean; last: boolean
   const dyn = s.dynamic;
   const scale = interpolate(f, [0, dur], dyn ? [1.12, 1.32] : [1.06, 1.16], { extrapolateRight: "clamp" });
   const panX = dyn ? interpolate(f, [0, dur], [-26, 26], { extrapolateRight: "clamp" }) : 0;
-  // first scene: quote appears fast so the reel doesn't start "empty"
-  const qIn0 = first ? 2 : 12;
-  const qIn1 = first ? 12 : 26;
+  // first scene: quote appears TOGETHER with the scene (no delay)
+  const qIn0 = first ? 0 : 12;
+  const qIn1 = first ? 6 : 26;
   const qOp = interpolate(f, [qIn0, qIn1, dur - 30, dur - 14], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const qY = interpolate(f, [qIn0, qIn1], [18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
