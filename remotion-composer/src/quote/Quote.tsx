@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { AbsoluteFill, Img, staticFile, continueRender, delayRender } from "remotion";
 
-// Cinematic "quote reel" style — full-bleed moody real photo, film grain +
-// vignette, a single elegant Korean serif line centered. Ref: viral IG quote reels.
+// Bright cinematic "quote reel" — airy real photo (kept bright), a single elegant
+// Korean serif line near the top over a soft scrim, light grain. Ref: viral IG quote reels.
 const SERIF = "Noto Serif KR";
 const SANS = "Noto Sans KR";
 
@@ -26,7 +26,7 @@ const Fonts: React.FC = () => {
 };
 
 const Grain: React.FC = () => (
-  <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.09, mixBlendMode: "overlay", pointerEvents: "none" }}>
+  <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.05, mixBlendMode: "overlay", pointerEvents: "none" }}>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
     </filter>
@@ -37,39 +37,37 @@ const Grain: React.FC = () => (
 const QuoteCard: React.FC<{
   photo: string;
   lines: string[];
-  top: number; // vertical anchor for the quote (px, 1920 tall)
+  top?: number;
   size?: number;
-  tint?: string;
-}> = ({ photo, lines, top, size = 78, tint = "rgba(10,14,26,0.30)" }) => (
+}> = ({ photo, lines, top = 250, size = 76 }) => (
   <AbsoluteFill style={{ background: "#000" }}>
     <Fonts />
-    <Img src={staticFile(photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.66) contrast(1.1) saturate(0.82)" }} />
-    {/* cool cinematic tint */}
-    <AbsoluteFill style={{ background: tint }} />
-    {/* legibility scrims top + bottom */}
-    <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 26%, transparent 62%, rgba(0,0,0,0.8) 100%)" }} />
-    {/* vignette */}
-    <AbsoluteFill style={{ boxShadow: "inset 0 0 320px rgba(0,0,0,0.72)" }} />
+    {/* kept BRIGHT: only mild contrast/warmth, no darkening */}
+    <Img src={staticFile(photo)} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "brightness(1.02) contrast(1.05) saturate(1.03)" }} />
+    {/* warm airy wash */}
+    <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(255,244,230,0.05), rgba(255,250,240,0.02))" }} />
+    {/* soft scrim ONLY behind top text + a touch at the very bottom for the handle */}
+    <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(20,22,30,0.5) 0%, rgba(20,22,30,0.22) 22%, transparent 40%, transparent 88%, rgba(20,22,30,0.4) 100%)" }} />
     <Grain />
-    {/* quote */}
-    <div style={{ position: "absolute", top, width: "100%", padding: "0 96px", textAlign: "center" }}>
+    {/* quote near the top */}
+    <div style={{ position: "absolute", top, width: "100%", padding: "0 92px", textAlign: "center" }}>
       {lines.map((l, i) => (
-        <div key={i} style={{ fontFamily: SERIF, fontWeight: 600, fontSize: size, lineHeight: 1.42, color: "#F4F1EC", textShadow: "0 2px 20px rgba(0,0,0,0.6)", letterSpacing: -0.5 }}>
+        <div key={i} style={{ fontFamily: SERIF, fontWeight: 600, fontSize: size, lineHeight: 1.44, color: "#FFFFFF", textShadow: "0 2px 16px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.5)", letterSpacing: -0.5 }}>
           {l}
         </div>
       ))}
     </div>
     {/* handle */}
-    <div style={{ position: "absolute", bottom: 120, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 34, letterSpacing: 6, color: "rgba(255,255,255,0.6)" }}>@wylieax</div>
+    <div style={{ position: "absolute", bottom: 116, width: "100%", textAlign: "center", fontFamily: SANS, fontWeight: 400, fontSize: 32, letterSpacing: 6, color: "rgba(255,255,255,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>@wylieax</div>
   </AbsoluteFill>
 );
 
-// Sample 1 — overloaded desk
-export const QuoteA: React.FC = () => (
-  <QuoteCard photo="realphoto/s1.jpg" lines={["부족한 성과는", "결국 누군가의 몫이 된다"]} top={560} size={80} />
-);
+export const QuoteA: React.FC = () => <QuoteCard photo="quotephoto/p1.jpg" lines={["부족한 성과는", "결국 누군가의 몫이 된다"]} size={72} />;
+export const QuoteB: React.FC = () => <QuoteCard photo="quotephoto/p2.jpg" lines={["티 안 나게, 그 빈자리를", "누군가 대신 메운다"]} size={70} />;
+export const QuoteC: React.FC = () => <QuoteCard photo="quotephoto/p3.jpg" lines={["묵묵히 메우는 사람이", "가장 먼저 지친다"]} />;
+export const QuoteD: React.FC = () => <QuoteCard photo="quotephoto/p4.jpg" lines={["한 사람이 무너지면", "팀 전체가 주저앉는다"]} />;
+export const QuoteE: React.FC = () => <QuoteCard photo="quotephoto/p5.jpg" lines={["에이스를 갈아 넣는 건", "가장 빠른 붕괴다"]} />;
 
-// Sample 2 — tired person
-export const QuoteB: React.FC = () => (
-  <QuoteCard photo="realphoto/s2.jpg" lines={["묵묵히 메우는 사람이", "가장 먼저 지친다"]} top={520} size={80} tint="rgba(12,16,30,0.34)" />
-);
+// athletic-woman aesthetic samples
+export const QuoteR: React.FC = () => <QuoteCard photo="quotephoto/r1.jpg" lines={["오늘의 땀은,", "배신하지 않는다"]} />;
+export const QuoteG: React.FC = () => <QuoteCard photo="quotephoto/r2.jpg" lines={["한계라고 느낀 순간이", "진짜 시작이다"]} size={66} />;
