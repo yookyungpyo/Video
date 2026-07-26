@@ -233,12 +233,12 @@ const Caption: React.FC<{ head?: string; lines: string[]; f: number; dur: number
 type Scene = { head?: string; lines: string[]; content: React.ReactNode };
 const SCENES: Scene[] = [
   { lines: ["천재 셰프(AI)를", "진짜 미슐랭으로 만드는 법"], content: <><Boy x={380} /><Chef x={730} /></> },
-  { head: "① 하네스", lines: ["요리하는 주방 그 자체"], content: <><Wrap x={540} y={1340}><Stove /></Wrap><Chef x={800} /><Steam x={452} y={1240} /></> },
-  { head: "② 프롬프트", lines: ["주문서를 구체적으로"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1360}><Ticket /></Wrap><Chef x={790} /></> },
-  { head: "③ 컨텍스트", lines: ["우리 부엌 사정을 알려주기"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1350}><StickyNote /></Wrap><Chef x={790} /></> },
-  { head: "④ 스킬", lines: ["우리집 레시피 카드"], content: <><Chef x={760} /><Wrap x={430} y={1330}><RecipeCard /></Wrap></> },
-  { head: "⑤ 명령어", lines: ["단축 주문 버튼 하나로"], content: <><Chef x={780} /><Wrap x={430} y={1360}><CmdBtn /></Wrap></> },
-  { head: "⑥ 플러그인", lines: ["밖과 연결해 없는 걸 조달"], content: <><Chef x={820} /><Wrap x={430} y={1350}><Plugin /></Wrap></> },
+  { head: "① 프롬프트", lines: ["주문서를 구체적으로"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1360}><Ticket /></Wrap><Chef x={790} /></> },
+  { head: "② 컨텍스트", lines: ["우리 부엌 사정을 알려주기"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1350}><StickyNote /></Wrap><Chef x={790} /></> },
+  { head: "③ 스킬", lines: ["우리집 레시피 카드"], content: <><Chef x={760} /><Wrap x={430} y={1330}><RecipeCard /></Wrap></> },
+  { head: "④ 명령어", lines: ["단축 주문 버튼 하나로"], content: <><Chef x={780} /><Wrap x={430} y={1360}><CmdBtn /></Wrap></> },
+  { head: "⑤ 플러그인", lines: ["밖과 연결해 없는 걸 조달"], content: <><Chef x={820} /><Wrap x={430} y={1350}><Plugin /></Wrap></> },
+  { head: "⑥ 하네스", lines: ["요리하는 주방 그 자체"], content: <><Wrap x={540} y={1340}><Stove /></Wrap><Chef x={800} /><Steam x={452} y={1240} /></> },
   { head: "⑦ 루프", lines: ["맛보고 고치기, 반복"], content: <><Chef x={800} arm="down" /><Wrap x={430} y={1320}><LoopBowl /></Wrap></> },
   { lines: ["이 7가지를 갖춰줄 때", "천재는 진짜 미슐랭이 된다"], content: <><Boy x={360} /><Chef x={720} arm="up" /><Wrap x={540} y={1360}><StarDish /></Wrap></> },
 ];
