@@ -47,14 +47,14 @@ const useBob = (amp = 5, speed = 0.5, phase = 0) => {
 const usePop = (delay = 0) => spring({ frame: useCurrentFrame() - delay, fps: useVideoConfig().fps, config: { damping: 12, stiffness: 120 } });
 
 // ── backdrop ────────────────────────────────────────────────────────────────
-const Kitchen: React.FC = () => (
+const Kitchen: React.FC<{ noWindow?: boolean }> = ({ noWindow }) => (
   <AbsoluteFill>
     <AbsoluteFill style={{ background: `linear-gradient(180deg, ${WALL_A} 0%, ${WALL_B} 100%)` }} />
-    <div style={{ position: "absolute", right: 100, top: 610, width: 250, height: 260, background: "#33405C", borderRadius: 14, border: `10px solid ${WALL_A}`, boxShadow: `0 0 0 6px ${INK}` }}>
+    {!noWindow && <div style={{ position: "absolute", right: 100, top: 610, width: 250, height: 260, background: "#33405C", borderRadius: 14, border: `10px solid ${WALL_A}`, boxShadow: `0 0 0 6px ${INK}` }}>
       <div style={{ position: "absolute", left: "50%", top: 0, width: 6, height: "100%", marginLeft: -3, background: WALL_A }} />
       <div style={{ position: "absolute", top: "50%", left: 0, height: 6, width: "100%", marginTop: -3, background: WALL_A }} />
       <div style={{ position: "absolute", right: 24, top: 22, width: 34, height: 34, borderRadius: "50%", background: "#F4E6B0", opacity: 0.85 }} />
-    </div>
+    </div>}
     <div style={{ position: "absolute", left: 0, right: 0, top: 1560, height: 360, background: WOOD }} />
     <div style={{ position: "absolute", left: 0, right: 0, top: 1548, height: 16, background: WOOD_D }} />
   </AbsoluteFill>
@@ -243,8 +243,25 @@ const ExampleCard: React.FC<{ lines: string[]; f: number }> = ({ lines, f }) => 
   );
 };
 
+// ── strong closing punch ────────────────────────────────────────────────────
+const PunchBlock: React.FC<{ f: number }> = ({ f }) => {
+  const { fps } = useVideoConfig();
+  const p1 = spring({ frame: f - 4, fps, config: { damping: 13, stiffness: 130 } });
+  const p2 = spring({ frame: f - 20, fps, config: { damping: 11, stiffness: 130 } });
+  return (
+    <div style={{ position: "absolute", top: 470, width: "100%", textAlign: "center", padding: "0 60px" }}>
+      <div style={{ fontFamily: HAND, fontSize: 88, color: INK, opacity: p1, transform: `translateY(${(1 - p1) * 20}px)`, textShadow: "0 2px 0 rgba(255,255,255,0.5)" }}>AI가 무능한 게 아니다,</div>
+      <div style={{ position: "relative", display: "inline-block", marginTop: 18, opacity: p2, transform: `scale(${0.8 + p2 * 0.2})` }}>
+        <div style={{ fontFamily: HAND, fontSize: 132, color: ACC, lineHeight: 1.1, textShadow: "0 3px 0 rgba(255,255,255,0.5)" }}>당신이</div>
+        <div style={{ fontFamily: HAND, fontSize: 132, color: ACC, lineHeight: 1.05, textShadow: "0 3px 0 rgba(255,255,255,0.5)" }}>안 차려준 것이다</div>
+        <svg style={{ position: "absolute", left: "50%", bottom: -30, transform: "translateX(-50%)" }} width={560} height={30} viewBox="0 0 560 30"><path d="M10 18 Q160 4 300 16 T552 12" fill="none" stroke={ACC} strokeWidth={10} strokeLinecap="round" opacity={0.8} /></svg>
+      </div>
+    </div>
+  );
+};
+
 // ── scenes ────────────────────────────────────────────────────────────────────
-type Scene = { head?: string; lines: string[]; example?: string[]; content: React.ReactNode };
+type Scene = { head?: string; lines?: string[]; example?: string[]; punch?: boolean; content: React.ReactNode };
 const SCENES: Scene[] = [
   { lines: ["천재 셰프(AI)를", "진짜 미슐랭으로 만드는 법"], example: ["천재도", "잘 부려야", "제 실력이 난다"], content: <><Boy x={380} /><Chef x={730} /></> },
   { head: "① 프롬프트", lines: ["주문서를 구체적으로"], example: ["그냥: \"밥 해줘\"", "구체적: \"매콤 김치볶음밥,", "계란 반숙, 2인분\""], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1360}><Ticket /></Wrap><Chef x={790} /></> },
@@ -254,17 +271,23 @@ const SCENES: Scene[] = [
   { head: "⑤ 플러그인", lines: ["밖과 연결해 없는 걸 조달"], example: ["재료가 없네?", "→ 마트앱 연결", "셰프가 알아서 주문"], content: <><Chef x={820} /><Wrap x={430} y={1350}><Plugin /></Wrap></> },
   { head: "⑥ 하네스", lines: ["요리하는 주방 그 자체"], example: ["불·물·팬이 있어야", "머릿속 레시피가", "진짜 요리가 된다"], content: <><Wrap x={540} y={1340}><Stove /></Wrap><Chef x={800} /><Steam x={452} y={1240} /></> },
   { head: "⑦ 루프", lines: ["맛보고 고치기, 반복"], example: ["간 보고 → 소금 넣고", "다시 간 보고…", "될 때까지 반복"], content: <><Chef x={800} arm="down" /><Wrap x={430} y={1320}><LoopBowl /></Wrap></> },
-  { lines: ["이 7가지를 갖춰줄 때", "천재는 진짜 미슐랭이 된다"], example: ["주문·정보·레시피·", "버튼·연결·주방·반복", "다 갖추면 완성!"], content: <><Boy x={360} /><Chef x={720} arm="up" /><Wrap x={540} y={1360}><StarDish /></Wrap></> },
+  { punch: true, content: <><Boy x={360} /><Chef x={720} arm="up" /><Wrap x={540} y={1440}><StarDish /></Wrap></> },
 ];
 export const SCENE_DUR = 120;
 export const CHEF_TOTAL = SCENES.length * SCENE_DUR;
 
 const SceneView: React.FC<{ sc: Scene; f: number; first: boolean }> = ({ sc, f, first }) => (
   <AbsoluteFill>
-    <Kitchen />
+    <Kitchen noWindow={!!sc.punch} />
     {sc.content}
-    {sc.example && <ExampleCard lines={sc.example} f={f} />}
-    <Caption head={sc.head} lines={sc.lines} f={f} dur={SCENE_DUR} first={first} />
+    {sc.punch ? (
+      <PunchBlock f={f} />
+    ) : (
+      <>
+        {sc.example && <ExampleCard lines={sc.example} f={f} />}
+        <Caption head={sc.head} lines={sc.lines ?? []} f={f} dur={SCENE_DUR} first={first} />
+      </>
+    )}
     <div style={{ position: "absolute", bottom: 84, width: "100%", textAlign: "center", fontFamily: SANS, fontSize: 30, letterSpacing: 6, color: "#8a8175" }}>@wylieax</div>
   </AbsoluteFill>
 );
