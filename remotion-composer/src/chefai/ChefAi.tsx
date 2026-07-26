@@ -229,18 +229,32 @@ const Caption: React.FC<{ head?: string; lines: string[]; f: number; dur: number
   );
 };
 
+// ── example card (center-left, fills the space + aids understanding) ─────────
+const ExampleCard: React.FC<{ lines: string[]; f: number }> = ({ lines, f }) => {
+  const { fps } = useVideoConfig();
+  const pop = spring({ frame: f - 10, fps, config: { damping: 13, stiffness: 120 } });
+  return (
+    <div style={{ position: "absolute", left: 78, top: 720, width: 600, transform: `translateY(${(1 - pop) * 18}px) scale(${0.9 + pop * 0.1})`, transformOrigin: "left center", opacity: pop > 0.05 ? 1 : 0, background: PAPER, border: `5px solid ${INK}`, borderRadius: 28, padding: "28px 34px 34px", boxShadow: "10px 12px 0 rgba(58,53,64,0.14)" }}>
+      <div style={{ display: "inline-block", background: ACC, color: "#fff", fontFamily: SANS, fontWeight: 700, fontSize: 30, padding: "6px 22px", borderRadius: 999, marginBottom: 18 }}>예시</div>
+      {lines.map((l, i) => (
+        <div key={i} style={{ fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.5, color: INK }}>{l}</div>
+      ))}
+    </div>
+  );
+};
+
 // ── scenes ────────────────────────────────────────────────────────────────────
-type Scene = { head?: string; lines: string[]; content: React.ReactNode };
+type Scene = { head?: string; lines: string[]; example?: string[]; content: React.ReactNode };
 const SCENES: Scene[] = [
-  { lines: ["천재 셰프(AI)를", "진짜 미슐랭으로 만드는 법"], content: <><Boy x={380} /><Chef x={730} /></> },
-  { head: "① 프롬프트", lines: ["주문서를 구체적으로"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1360}><Ticket /></Wrap><Chef x={790} /></> },
-  { head: "② 컨텍스트", lines: ["우리 부엌 사정을 알려주기"], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1350}><StickyNote /></Wrap><Chef x={790} /></> },
-  { head: "③ 스킬", lines: ["우리집 레시피 카드"], content: <><Chef x={760} /><Wrap x={430} y={1330}><RecipeCard /></Wrap></> },
-  { head: "④ 명령어", lines: ["단축 주문 버튼 하나로"], content: <><Chef x={780} /><Wrap x={430} y={1360}><CmdBtn /></Wrap></> },
-  { head: "⑤ 플러그인", lines: ["밖과 연결해 없는 걸 조달"], content: <><Chef x={820} /><Wrap x={430} y={1350}><Plugin /></Wrap></> },
-  { head: "⑥ 하네스", lines: ["요리하는 주방 그 자체"], content: <><Wrap x={540} y={1340}><Stove /></Wrap><Chef x={800} /><Steam x={452} y={1240} /></> },
-  { head: "⑦ 루프", lines: ["맛보고 고치기, 반복"], content: <><Chef x={800} arm="down" /><Wrap x={430} y={1320}><LoopBowl /></Wrap></> },
-  { lines: ["이 7가지를 갖춰줄 때", "천재는 진짜 미슐랭이 된다"], content: <><Boy x={360} /><Chef x={720} arm="up" /><Wrap x={540} y={1360}><StarDish /></Wrap></> },
+  { lines: ["천재 셰프(AI)를", "진짜 미슐랭으로 만드는 법"], example: ["천재도", "잘 부려야", "제 실력이 난다"], content: <><Boy x={380} /><Chef x={730} /></> },
+  { head: "① 프롬프트", lines: ["주문서를 구체적으로"], example: ["그냥: \"밥 해줘\"", "구체적: \"매콤 김치볶음밥,", "계란 반숙, 2인분\""], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1360}><Ticket /></Wrap><Chef x={790} /></> },
+  { head: "② 컨텍스트", lines: ["우리 부엌 사정을 알려주기"], example: ["\"냄비는 싱크대 아래,", "애는 안 매운 걸로,", "새우 알레르기 있어\""], content: <><Boy x={330} arm="up" /><Wrap x={560} y={1350}><StickyNote /></Wrap><Chef x={790} /></> },
+  { head: "③ 스킬", lines: ["우리집 레시피 카드"], example: ["\"우리집 된장찌개는", "이 순서, 이 비율\"", "→ 매번 같은 맛"], content: <><Chef x={760} /><Wrap x={430} y={1330}><RecipeCard /></Wrap></> },
+  { head: "④ 명령어", lines: ["단축 주문 버튼 하나로"], example: ["/아침세트 →", "토스트+계란+커피", "자동으로 뚝딱"], content: <><Chef x={780} /><Wrap x={430} y={1360}><CmdBtn /></Wrap></> },
+  { head: "⑤ 플러그인", lines: ["밖과 연결해 없는 걸 조달"], example: ["재료가 없네?", "→ 마트앱 연결", "셰프가 알아서 주문"], content: <><Chef x={820} /><Wrap x={430} y={1350}><Plugin /></Wrap></> },
+  { head: "⑥ 하네스", lines: ["요리하는 주방 그 자체"], example: ["불·물·팬이 있어야", "머릿속 레시피가", "진짜 요리가 된다"], content: <><Wrap x={540} y={1340}><Stove /></Wrap><Chef x={800} /><Steam x={452} y={1240} /></> },
+  { head: "⑦ 루프", lines: ["맛보고 고치기, 반복"], example: ["간 보고 → 소금 넣고", "다시 간 보고…", "될 때까지 반복"], content: <><Chef x={800} arm="down" /><Wrap x={430} y={1320}><LoopBowl /></Wrap></> },
+  { lines: ["이 7가지를 갖춰줄 때", "천재는 진짜 미슐랭이 된다"], example: ["주문·정보·레시피·", "버튼·연결·주방·반복", "다 갖추면 완성!"], content: <><Boy x={360} /><Chef x={720} arm="up" /><Wrap x={540} y={1360}><StarDish /></Wrap></> },
 ];
 export const SCENE_DUR = 120;
 export const CHEF_TOTAL = SCENES.length * SCENE_DUR;
@@ -249,6 +263,7 @@ const SceneView: React.FC<{ sc: Scene; f: number; first: boolean }> = ({ sc, f, 
   <AbsoluteFill>
     <Kitchen />
     {sc.content}
+    {sc.example && <ExampleCard lines={sc.example} f={f} />}
     <Caption head={sc.head} lines={sc.lines} f={f} dur={SCENE_DUR} first={first} />
     <div style={{ position: "absolute", bottom: 84, width: "100%", textAlign: "center", fontFamily: SANS, fontSize: 30, letterSpacing: 6, color: "#8a8175" }}>@wylieax</div>
   </AbsoluteFill>
