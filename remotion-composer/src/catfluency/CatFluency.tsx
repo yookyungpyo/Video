@@ -77,16 +77,16 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
 const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 380, width: "100%", textAlign: "center", color: INK }}>
-      <div style={{ fontSize: 66, ...rise(local, 0) }}>지식은 검색되고</div>
-      <div style={{ fontSize: 66, marginTop: 4, ...rise(local, 6) }}>유창함은 쌓인다</div>
-      <div style={{ fontSize: 80, color: YELLOW, marginTop: 34, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>격차는 벌어진다<span style={{ opacity: 0.9 }}> ]</span>
+      <div style={{ fontSize: 66, ...rise(local, 0) }}>유창함은 목적이 아니라</div>
+      <div style={{ fontSize: 66, marginTop: 4, ...rise(local, 6) }}>수단일 뿐</div>
+      <div style={{ fontSize: 76, color: YELLOW, marginTop: 34, ...rise(local, 16) }}>
+        <span style={{ opacity: 0.9 }}>[ </span>결국, 고객의 고민<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 940, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 48, color: YELLOW }}>AI는 도구가 아니라 언어</div>
-      <div style={{ fontSize: 42, color: DIM, marginTop: 10 }}>겁내지 말고</div>
-      <div style={{ fontSize: 62, color: INK, marginTop: 6 }}>오늘부터 말 걸어라</div>
+      <div style={{ fontSize: 48, color: YELLOW }}>고객을 더 깊이 생각해</div>
+      <div style={{ fontSize: 42, color: DIM, marginTop: 10 }}>한 걸음이라도</div>
+      <div style={{ fontSize: 62, color: INK, marginTop: 6 }}>해답에 더 가까이</div>
     </div>
     <div style={{ position: "absolute", top: 1520, width: "100%", display: "flex", justifyContent: "center" }}><Cat /></div>
   </AbsoluteFill>
