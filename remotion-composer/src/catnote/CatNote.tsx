@@ -26,13 +26,16 @@ export const Fonts: React.FC = () => {
 };
 
 // ---- Cat mascot (black body, white outline, mint eyes) ----
-export const Cat: React.FC<{ size?: number }> = ({ size = 190 }) => {
+export type CatMood = "calm" | "curious" | "question" | "wink" | "happy";
+export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 190, mood = "calm" }) => {
   const f = useCurrentFrame();
   const bob = Math.sin(f / 18) * 4;
   const cyc = f % 150;
-  const blink = cyc > 140 ? 0.15 : 1; // quick blink
+  const blink = cyc > 140 ? 0.15 : 1; // quick natural blink
+  const tilt = mood === "curious" ? -8 : mood === "question" ? 9 : 0;
+  const eyeR = mood === "curious" ? 13 : 12;
   return (
-    <svg width={size} height={size * 190 / 160} viewBox="0 0 160 190" style={{ transform: `translateY(${bob}px)` }}>
+    <svg width={size} height={size * 210 / 160} viewBox="0 0 160 210" style={{ transform: `translateY(${bob}px) rotate(${tilt}deg)`, transformOrigin: "80px 165px", overflow: "visible" }}>
       <g fill="#040405" stroke={INK} strokeWidth={4.5} strokeLinejoin="round" strokeLinecap="round">
         {/* ears (behind body) */}
         <path d="M52 46 L44 15 L74 37 Z" />
@@ -43,13 +46,31 @@ export const Cat: React.FC<{ size?: number }> = ({ size = 190 }) => {
         <path d="M108 152 C150 156 158 92 130 96 C144 98 142 120 122 120" fill="none" />
       </g>
       {/* eyes */}
-      <g fill={MINT}>
-        <ellipse cx={67} cy={95} rx={8.5} ry={12 * blink} />
-        <ellipse cx={93} cy={95} rx={8.5} ry={12 * blink} />
-      </g>
+      {mood === "happy" ? (
+        <g fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round">
+          <path d="M59 98 q8 -12 16 0" /><path d="M85 98 q8 -12 16 0" />
+        </g>
+      ) : mood === "wink" ? (
+        <>
+          <ellipse cx={67} cy={95} rx={8.5} ry={12} fill={MINT} />
+          <path d="M85 97 q8 -11 16 0" fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round" />
+        </>
+      ) : (
+        <g fill={MINT}>
+          <ellipse cx={67} cy={95} rx={8.5} ry={eyeR * blink} />
+          <ellipse cx={93} cy={95} rx={8.5} ry={eyeR * blink} />
+        </g>
+      )}
       {/* nose + mouth */}
       <path d="M75 112 L85 112 L80 118 Z" fill={INK} />
-      <path d="M80 118 C80 124 74 126 69 123 M80 118 C80 124 86 126 91 123" fill="none" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
+      {mood === "happy" ? (
+        <path d="M80 118 C80 127 71 130 64 125 M80 118 C80 127 89 130 96 125" fill="none" stroke={INK} strokeWidth={2.8} strokeLinecap="round" />
+      ) : (
+        <path d="M80 118 C80 124 74 126 69 123 M80 118 C80 124 86 126 91 123" fill="none" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
+      )}
+      {/* accessory */}
+      {mood === "question" && <text x={118} y={44} fontFamily="Gaegu" fontSize={40} fill={INK}>?</text>}
+      {mood === "happy" && <path transform="translate(112 30) scale(1.5)" d="M8 3 C8 1 6 0 4 0 C2 0 0 2 0 4 C0 7 4 9 8 13 C12 9 16 7 16 4 C16 2 14 0 12 0 C10 0 8 1 8 3 Z" fill="#F2A0A0" />}
     </svg>
   );
 };
