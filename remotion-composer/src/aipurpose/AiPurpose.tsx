@@ -59,12 +59,12 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
   const Doodle = c.doodle;
   return (
     <AbsoluteFill style={{ background: BG, fontFamily: G }}>
-      <div style={{ position: "absolute", top: 300, width: "100%", textAlign: "center", fontSize: 82, color: INK, ...rise(local, 0) }}>{c.head}</div>
-      <div style={{ position: "absolute", top: 520, width: "100%", textAlign: "center", fontSize: 78, color: ORANGE, ...rise(local, 8) }}>
+      <div style={{ position: "absolute", top: 286, width: "100%", textAlign: "center", fontSize: 96, color: INK, ...rise(local, 0) }}>{c.head}</div>
+      <div style={{ position: "absolute", top: 512, width: "100%", textAlign: "center", fontSize: 92, color: ORANGE, ...rise(local, 8) }}>
         <span style={{ opacity: 0.85 }}>[ </span>{c.bracket}<span style={{ opacity: 0.85 }}> ]</span>
       </div>
-      <div style={{ position: "absolute", top: 656, width: "100%", textAlign: "center", fontSize: 44, color: DIM, ...rise(local, 18) }}>{c.sub}</div>
-      <div style={{ position: "absolute", top: 900, width: "100%", display: "flex", justifyContent: "center", ...rise(local, 12) }}><Doodle /></div>
+      <div style={{ position: "absolute", top: 664, width: "100%", textAlign: "center", fontSize: 54, color: DIM, ...rise(local, 18) }}>{c.sub}</div>
+      <div style={{ position: "absolute", top: 908, width: "100%", display: "flex", justifyContent: "center", ...rise(local, 12) }}><Doodle /></div>
       <div style={{ position: "absolute", top: 1500, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood={c.mood} /></div>
     </AbsoluteFill>
   );
@@ -72,17 +72,17 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
 
 const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
-    <div style={{ position: "absolute", top: 380, width: "100%", textAlign: "center", color: INK }}>
-      <div style={{ fontSize: 66, ...rise(local, 0) }}>변화엔 빠르게</div>
-      <div style={{ fontSize: 66, marginTop: 4, ...rise(local, 6) }}>적응하되</div>
-      <div style={{ fontSize: 80, color: YELLOW, marginTop: 34, ...rise(local, 16) }}>
+    <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
+      <div style={{ fontSize: 78, ...rise(local, 0) }}>변화엔 빠르게</div>
+      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>적응하되</div>
+      <div style={{ fontSize: 94, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
         <span style={{ opacity: 0.9 }}>[ </span>목적은 그대로<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
-    <div style={{ position: "absolute", top: 940, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 48, color: YELLOW }}>AI로 고객의 문제를</div>
-      <div style={{ fontSize: 42, color: DIM, marginTop: 10 }}>더 깊이, 더 잘</div>
-      <div style={{ fontSize: 62, color: INK, marginTop: 6 }}>해결하는 회사로</div>
+    <div style={{ position: "absolute", top: 960, width: "100%", textAlign: "center", ...rise(local, 26) }}>
+      <div style={{ fontSize: 58, color: YELLOW }}>AI로 고객의 문제를</div>
+      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>더 깊이, 더 잘</div>
+      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>해결하는 회사로</div>
     </div>
     <div style={{ position: "absolute", top: 1500, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood="happy" /></div>
   </AbsoluteFill>
