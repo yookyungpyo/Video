@@ -29,21 +29,30 @@ export const Fonts: React.FC = () => {
 export type CatMood = "calm" | "curious" | "question" | "wink" | "happy";
 export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 190, mood = "calm" }) => {
   const f = useCurrentFrame();
-  const bob = Math.sin(f / 18) * 4;
-  const cyc = f % 150;
-  const blink = cyc > 140 ? 0.15 : 1; // quick natural blink
-  const tilt = mood === "curious" ? -8 : mood === "question" ? 9 : 0;
+  // livelier motion
+  const bounce = mood === "happy" ? -Math.abs(Math.sin(f / 9)) * 10 : Math.sin(f / 16) * 5;
+  const blink = f % 84 > 76 ? 0.14 : 1; // blink every ~2.8s
+  const tiltBase = mood === "curious" ? -8 : mood === "question" ? 9 : 0;
+  const tiltOsc = mood === "curious" || mood === "question" ? Math.sin(f / 20) * 4 : Math.sin(f / 40) * 1.5;
+  const tilt = tiltBase + tiltOsc;
   const eyeR = mood === "curious" ? 13 : 12;
+  const wag = Math.sin(f / 8) * 9; // tail sway
+  const qbob = Math.sin(f / 9) * 5;
+  const heartPulse = 1.5 * (1 + Math.sin(f / 6) * 0.16);
+  // active wink: mostly closed, briefly opens then winks again
+  const winkOpen = f % 96 >= 42 && f % 96 <= 54;
   return (
-    <svg width={size} height={size * 210 / 160} viewBox="0 0 160 210" style={{ transform: `translateY(${bob}px) rotate(${tilt}deg)`, transformOrigin: "80px 165px", overflow: "visible" }}>
+    <svg width={size} height={size * 210 / 160} viewBox="0 0 160 210" style={{ transform: `translateY(${bounce}px) rotate(${tilt}deg)`, transformOrigin: "80px 165px", overflow: "visible" }}>
       <g fill="#040405" stroke={INK} strokeWidth={4.5} strokeLinejoin="round" strokeLinecap="round">
         {/* ears (behind body) */}
         <path d="M52 46 L44 15 L74 37 Z" />
         <path d="M108 46 L116 15 L86 37 Z" />
         {/* body/head bell */}
         <path d="M80 33 C55 33 43 58 43 97 C43 130 52 160 61 160 L99 160 C108 160 117 130 117 97 C117 58 105 33 80 33 Z" />
-        {/* tail (curls up on the right) */}
-        <path d="M108 152 C150 156 158 92 130 96 C144 98 142 120 122 120" fill="none" />
+      </g>
+      {/* tail (curls up on the right) — wags */}
+      <g transform={`rotate(${wag} 113 150)`}>
+        <path d="M108 152 C150 156 158 92 130 96 C144 98 142 120 122 120" fill="none" stroke={INK} strokeWidth={4.5} strokeLinecap="round" strokeLinejoin="round" />
       </g>
       {/* eyes */}
       {mood === "happy" ? (
@@ -52,8 +61,8 @@ export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 190, m
         </g>
       ) : mood === "wink" ? (
         <>
-          <ellipse cx={67} cy={95} rx={8.5} ry={12} fill={MINT} />
-          <path d="M85 97 q8 -11 16 0" fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round" />
+          <ellipse cx={67} cy={95} rx={8.5} ry={12 * blink} fill={MINT} />
+          {winkOpen ? <ellipse cx={93} cy={95} rx={8.5} ry={12} fill={MINT} /> : <path d="M85 97 q8 -11 16 0" fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round" />}
         </>
       ) : (
         <g fill={MINT}>
@@ -69,8 +78,8 @@ export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 190, m
         <path d="M80 118 C80 124 74 126 69 123 M80 118 C80 124 86 126 91 123" fill="none" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
       )}
       {/* accessory */}
-      {mood === "question" && <text x={118} y={44} fontFamily="Gaegu" fontSize={40} fill={INK}>?</text>}
-      {mood === "happy" && <path transform="translate(112 30) scale(1.5)" d="M8 3 C8 1 6 0 4 0 C2 0 0 2 0 4 C0 7 4 9 8 13 C12 9 16 7 16 4 C16 2 14 0 12 0 C10 0 8 1 8 3 Z" fill="#F2A0A0" />}
+      {mood === "question" && <text x={118} y={44 + qbob} fontFamily="Gaegu" fontSize={40} fill={INK}>?</text>}
+      {mood === "happy" && <path transform={`translate(120 42) scale(${heartPulse})`} d="M0 -5 C0 -8 -6 -9 -8 -5 C-10 -1 -4 3 0 7 C4 3 10 -1 8 -5 C6 -9 0 -8 0 -5 Z" fill="#F2A0A0" />}
     </svg>
   );
 };
