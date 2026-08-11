@@ -34,11 +34,13 @@ const MaskDoodle: React.FC = () => (
     <path d="M150 166 L150 190" />
   </g></svg>
 );
-const RadarDoodle: React.FC = () => (
-  <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <circle cx={92} cy={110} r={6} fill={INK} />
-    <path d="M112 84 a34 34 0 0 1 0 52 M130 72 a52 52 0 0 1 0 76 M148 62 a68 68 0 0 1 0 96" />
-    <path d="M212 92 q12 -12 24 0 q12 12 24 0" strokeWidth={3.4} />
+const BurdenDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <rect x={100} y={44} width={100} height={40} rx={6} />
+    <path d="M92 58 L82 74 M208 58 L218 74" strokeWidth={3} />
+    <circle cx={150} cy={110} r={15} />
+    <path d="M150 126 L128 84 M150 126 L172 84" />
+    <path d="M150 126 L150 152 M150 140 L130 172 M150 140 L170 172" />
   </g></svg>
 );
 
@@ -47,7 +49,7 @@ const CARDS: Card[] = [
   { head: "힘을 가진 사람은", bracket: "꽤 자주", sub: "자기 기분을 업무처럼 말한다", doodle: PowerDoodle, mood: "curious" },
   { head: "그의 기분이", bracket: "곧 안건이 된다", sub: "오늘의 분위기가 팀의 우선순위", doodle: MoodAgendaDoodle, mood: "calm" },
   { head: "겉은 업무인데", bracket: "속은 기분", sub: "논리 같지만 실은 그날의 컨디션", doodle: MaskDoodle, mood: "question" },
-  { head: "약한 쪽은", bracket: "눈치로 갚는다", sub: "기분을 읽고 대신 감당한다", doodle: RadarDoodle, mood: "wink" },
+  { head: "약한 쪽이", bracket: "대신 치른다", sub: "눈치 보며 그 기분을 감당한다", doodle: BurdenDoodle, mood: "wink" },
 ];
 
 const rise = (p: number, d = 0) => {
@@ -74,16 +76,16 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
 const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
-      <div style={{ fontSize: 78, ...rise(local, 0) }}>기분은 사적이고</div>
-      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>일은 공적이다</div>
-      <div style={{ fontSize: 96, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>섞지 마라<span style={{ opacity: 0.9 }}> ]</span>
+      <div style={{ fontSize: 78, ...rise(local, 0) }}>힘이 클수록</div>
+      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>네 기분은 비싸진다</div>
+      <div style={{ fontSize: 92, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
+        <span style={{ opacity: 0.9 }}>[ </span>일에 섞지 마라<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 970, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 56, color: YELLOW }}>힘이 셀수록</div>
-      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>더 나눠야 한다</div>
-      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>감정과 일을 분리하라</div>
+      <div style={{ fontSize: 56, color: YELLOW }}>감정은 네 것</div>
+      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>일은 모두의 것</div>
+      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>선을 지켜라</div>
     </div>
     <div style={{ position: "absolute", top: 1500, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood="happy" /></div>
   </AbsoluteFill>
