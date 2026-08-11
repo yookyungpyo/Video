@@ -26,11 +26,12 @@ const MoodAgendaDoodle: React.FC = () => (
     <path d="M186 82 h56 M186 100 h56 M186 118 h40" strokeWidth={3.2} />
   </g></svg>
 );
-const WrapDoodle: React.FC = () => (
-  <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <rect x={94} y={94} width={112} height={78} rx={6} />
-    <path d="M150 94 L150 172" />
-    <path d="M150 94 C130 70 110 78 122 94 M150 94 C170 70 190 78 178 94" />
+const MaskDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <path d="M150 40 C104 40 92 78 92 108 C92 140 118 166 150 166 C182 166 208 140 208 108 C208 78 196 40 150 40 Z" />
+    <path d="M120 96 q12 -10 24 0 M156 96 q12 -10 24 0" strokeWidth={3.4} />
+    <path d="M132 128 q18 12 36 0" strokeWidth={3.4} />
+    <path d="M150 166 L150 190" />
   </g></svg>
 );
 const RadarDoodle: React.FC = () => (
@@ -45,7 +46,7 @@ type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood
 const CARDS: Card[] = [
   { head: "힘을 가진 사람은", bracket: "꽤 자주", sub: "자기 기분을 업무처럼 말한다", doodle: PowerDoodle, mood: "curious" },
   { head: "그의 기분이", bracket: "곧 안건이 된다", sub: "오늘의 분위기가 팀의 우선순위", doodle: MoodAgendaDoodle, mood: "calm" },
-  { head: "포장은 일인데", bracket: "속은 감정", sub: "논리 같지만 실은 오늘의 컨디션", doodle: WrapDoodle, mood: "question" },
+  { head: "겉은 업무인데", bracket: "속은 기분", sub: "논리 같지만 실은 그날의 컨디션", doodle: MaskDoodle, mood: "question" },
   { head: "약한 쪽은", bracket: "눈치로 갚는다", sub: "기분을 읽고 대신 감당한다", doodle: RadarDoodle, mood: "wink" },
 ];
 
