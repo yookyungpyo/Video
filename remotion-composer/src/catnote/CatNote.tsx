@@ -25,61 +25,61 @@ export const Fonts: React.FC = () => {
   return <style dangerouslySetInnerHTML={{ __html: fontCss }} />;
 };
 
-// ---- Cat mascot (black body, white outline, mint eyes) ----
+// ---- Cat mascot (🐱 emoji-style cat face: tan face, pink ears, whiskers) ----
 export type CatMood = "calm" | "curious" | "question" | "wink" | "happy";
-export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 190, mood = "calm" }) => {
+const FACE = "#F3B24C";
+const FACE_L = "#D9922E";
+const EARIN = "#EC8E96";
+const EYE = "#3A2E1E";
+const NOSE = "#E9868E";
+const MOUTH = "#7A521F";
+const WHISK = "#CFC9BE";
+export const Cat: React.FC<{ size?: number; mood?: CatMood }> = ({ size = 200, mood = "calm" }) => {
   const f = useCurrentFrame();
-  // livelier motion
-  const bounce = mood === "happy" ? -Math.abs(Math.sin(f / 9)) * 10 : Math.sin(f / 16) * 5;
-  const blink = f % 84 > 76 ? 0.14 : 1; // blink every ~2.8s
+  const bounce = mood === "happy" ? -Math.abs(Math.sin(f / 9)) * 10 : Math.sin(f / 16) * 4;
+  const blink = f % 84 > 76 ? 0.12 : 1; // blink every ~2.8s
   const tiltBase = mood === "curious" ? -8 : mood === "question" ? 9 : 0;
-  const tiltOsc = mood === "curious" || mood === "question" ? Math.sin(f / 20) * 4 : Math.sin(f / 40) * 1.5;
+  const tiltOsc = mood === "curious" || mood === "question" ? Math.sin(f / 20) * 4 : Math.sin(f / 42) * 1.4;
   const tilt = tiltBase + tiltOsc;
-  const eyeR = mood === "curious" ? 13 : 12;
-  const wag = Math.sin(f / 8) * 9; // tail sway
+  const eyeRy = (mood === "curious" ? 17 : 15) * blink;
+  const earTw = Math.sin(f / 20) * 3;
   const qbob = Math.sin(f / 9) * 5;
   const heartPulse = 1.5 * (1 + Math.sin(f / 6) * 0.16);
-  // active wink: mostly closed, briefly opens then winks again
   const winkOpen = f % 96 >= 42 && f % 96 <= 54;
+  const OUT = { stroke: FACE_L, strokeWidth: 3, strokeLinejoin: "round" as const };
   return (
-    <svg width={size} height={size * 210 / 160} viewBox="0 0 160 210" style={{ transform: `translateY(${bounce}px) rotate(${tilt}deg)`, transformOrigin: "80px 165px", overflow: "visible" }}>
-      <g fill="#040405" stroke={INK} strokeWidth={4.5} strokeLinejoin="round" strokeLinecap="round">
-        {/* ears (behind body) */}
-        <path d="M52 46 L44 15 L74 37 Z" />
-        <path d="M108 46 L116 15 L86 37 Z" />
-        {/* body/head bell */}
-        <path d="M80 33 C55 33 43 58 43 97 C43 130 52 160 61 160 L99 160 C108 160 117 130 117 97 C117 58 105 33 80 33 Z" />
-      </g>
-      {/* tail (curls up on the right) — wags */}
-      <g transform={`rotate(${wag} 113 150)`}>
-        <path d="M108 152 C150 156 158 92 130 96 C144 98 142 120 122 120" fill="none" stroke={INK} strokeWidth={4.5} strokeLinecap="round" strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 200 200" style={{ transform: `translateY(${bounce}px) rotate(${tilt}deg)`, transformOrigin: "100px 175px", overflow: "visible" }}>
+      {/* ears (twitch) */}
+      <g transform={`rotate(${-earTw} 70 60)`}><path d="M42 66 L58 16 L100 56 Z" fill={FACE} {...OUT} /><path d="M58 58 L67 30 L88 53 Z" fill={EARIN} /></g>
+      <g transform={`rotate(${earTw} 130 60)`}><path d="M158 66 L142 16 L100 56 Z" fill={FACE} {...OUT} /><path d="M142 58 L133 30 L112 53 Z" fill={EARIN} /></g>
+      {/* face */}
+      <ellipse cx={100} cy={112} rx={80} ry={66} fill={FACE} {...OUT} />
+      {/* whiskers */}
+      <g stroke={WHISK} strokeWidth={3} strokeLinecap="round" fill="none">
+        <path d="M24 108 L66 113 M22 126 L66 124" /><path d="M176 108 L134 113 M178 126 L134 124" />
       </g>
       {/* eyes */}
       {mood === "happy" ? (
-        <g fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round">
-          <path d="M59 98 q8 -12 16 0" /><path d="M85 98 q8 -12 16 0" />
+        <g fill="none" stroke={EYE} strokeWidth={5} strokeLinecap="round">
+          <path d="M60 104 q13 -15 26 0" /><path d="M114 104 q13 -15 26 0" />
         </g>
       ) : mood === "wink" ? (
         <>
-          <ellipse cx={67} cy={95} rx={8.5} ry={12 * blink} fill={MINT} />
-          {winkOpen ? <ellipse cx={93} cy={95} rx={8.5} ry={12} fill={MINT} /> : <path d="M85 97 q8 -11 16 0" fill="none" stroke={MINT} strokeWidth={4.6} strokeLinecap="round" />}
+          <ellipse cx={73} cy={102} rx={12} ry={15 * blink} fill={EYE} /><circle cx={77} cy={96} r={3.2} fill="#fff" />
+          {winkOpen ? <><ellipse cx={127} cy={102} rx={12} ry={15} fill={EYE} /><circle cx={131} cy={96} r={3.2} fill="#fff" /></> : <path d="M114 104 q13 -15 26 0" fill="none" stroke={EYE} strokeWidth={5} strokeLinecap="round" />}
         </>
       ) : (
-        <g fill={MINT}>
-          <ellipse cx={67} cy={95} rx={8.5} ry={eyeR * blink} />
-          <ellipse cx={93} cy={95} rx={8.5} ry={eyeR * blink} />
+        <g fill={EYE}>
+          <ellipse cx={73} cy={102} rx={12} ry={eyeRy} /><ellipse cx={127} cy={102} rx={12} ry={eyeRy} />
+          {blink > 0.5 && <g fill="#fff"><circle cx={77} cy={96} r={3.2} /><circle cx={131} cy={96} r={3.2} /></g>}
         </g>
       )}
-      {/* nose + mouth */}
-      <path d="M75 112 L85 112 L80 118 Z" fill={INK} />
-      {mood === "happy" ? (
-        <path d="M80 118 C80 127 71 130 64 125 M80 118 C80 127 89 130 96 125" fill="none" stroke={INK} strokeWidth={2.8} strokeLinecap="round" />
-      ) : (
-        <path d="M80 118 C80 124 74 126 69 123 M80 118 C80 124 86 126 91 123" fill="none" stroke={INK} strokeWidth={2.6} strokeLinecap="round" />
-      )}
+      {/* nose + cat mouth */}
+      <path d="M91 118 L109 118 L100 128 Z" fill={NOSE} />
+      <path d="M100 128 L100 134 M100 134 C100 143 88 145 82 138 M100 134 C100 143 112 145 118 138" fill="none" stroke={MOUTH} strokeWidth={3} strokeLinecap="round" />
       {/* accessory */}
-      {mood === "question" && <text x={118} y={44 + qbob} fontFamily="Gaegu" fontSize={40} fill={INK}>?</text>}
-      {mood === "happy" && <path transform={`translate(120 42) scale(${heartPulse})`} d="M0 -5 C0 -8 -6 -9 -8 -5 C-10 -1 -4 3 0 7 C4 3 10 -1 8 -5 C6 -9 0 -8 0 -5 Z" fill="#F2A0A0" />}
+      {mood === "question" && <text x={150} y={40 + qbob} fontFamily="Gaegu" fontSize={44} fill={INK}>?</text>}
+      {mood === "happy" && <path transform={`translate(150 40) scale(${heartPulse})`} d="M0 -5 C0 -8 -6 -9 -8 -5 C-10 -1 -4 3 0 7 C4 3 10 -1 8 -5 C6 -9 0 -8 0 -5 Z" fill="#F2A0A0" />}
     </svg>
   );
 };
