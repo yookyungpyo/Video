@@ -42,7 +42,7 @@ const TallyDoodle: React.FC = () => (
 type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood: CatMood };
 const CARDS: Card[] = [
   { head: "영업의 정답은", bracket: "많이 만나라", sub: "재지 말고 일단 많이", doodle: CrowdDoodle, mood: "curious" },
-  { head: "결국은", bracket: "확률 게임", sub: "만난 수가 곧 기회의 수", doodle: FunnelDoodle, mood: "calm" },
+  { head: "만난 수가", bracket: "기회가 된다", sub: "적게 만나면 될 것도 안 된다", doodle: FunnelDoodle, mood: "calm" },
   { head: "감각도", bracket: "발로 는다", sub: "많이 만나야 화법이 는다", doodle: StepsDoodle, mood: "question" },
   { head: "거절은", bracket: "당연한 비용", sub: "열 번 거절이 한 번 계약을 만든다", doodle: TallyDoodle, mood: "wink" },
 ];
