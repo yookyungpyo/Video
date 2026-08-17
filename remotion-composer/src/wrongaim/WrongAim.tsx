@@ -1,7 +1,8 @@
 import { AbsoluteFill, useCurrentFrame, interpolate, Easing } from "remotion";
 import { Cat, Fonts, CatMood } from "../catnote/CatNote";
 
-// Cat-note style (6 cards), topic: how fatal a leader's wrong direction is.
+// Cat-note style (6 cards), hypothesis: the org goes wrong because of the
+// LEADER'S PRIVATE goal (self-interest disguised as vision).
 const G = "Gaegu";
 const BG = "#0E0E10";
 const INK = "#F2F1EA";
@@ -11,25 +12,32 @@ const YELLOW = "#ECE24C";
 
 const D = { stroke: INK, strokeWidth: 4, fill: "none" as const, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
 const person = (x: number, cy: number, r: number) => `M${x} ${cy + r + 2} L${x - r * 1.3} ${cy + r * 3.4} L${x + r * 1.3} ${cy + r * 3.4} Z`;
+const star = (cx: number, cy: number, R: number, r: number) => {
+  let d = "";
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + (i * Math.PI) / 5; const rad = i % 2 ? r : R; d += `${i ? "L" : "M"}${cx + Math.cos(a) * rad} ${cy + Math.sin(a) * rad} `; }
+  return d + "Z";
+};
 
+const CrownStarDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <path d={star(150, 58, 22, 9)} />
+    <path d="M96 158 L104 108 L126 138 L150 96 L174 138 L196 108 L204 158 Z" />
+    <path d="M96 158 h108" />
+  </g></svg>
+);
+const MaskDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <path d="M150 42 C104 42 92 80 92 110 C92 142 118 168 150 168 C182 168 208 142 208 110 C208 80 196 42 150 42 Z" />
+    <path d="M120 98 q12 -10 24 0 M156 98 q12 -10 24 0" strokeWidth={3.4} />
+    <path d="M132 130 q18 12 36 0" strokeWidth={3.4} />
+    <path d="M150 168 L150 192" />
+  </g></svg>
+);
 const PulledDoodle: React.FC = () => (
   <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
     {[64, 100, 136].map((x) => <g key={x} opacity={0.8}><circle cx={x} cy={96} r={11} /><path d={person(x, 96, 11)} /></g>)}
     <path d="M164 118 L238 152 M238 152 L214 150 M238 152 L226 132" />
     <path d="M52 168 L212 168" strokeWidth={2.6} opacity={0.5} strokeDasharray="6 8" />
-  </g></svg>
-);
-const SilenceDoodle: React.FC = () => (
-  <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <path d="M92 100 h116" />
-    <path d="M108 90 v20 M128 90 v20 M148 90 v20 M168 90 v20 M188 90 v20" strokeWidth={3} />
-  </g></svg>
-);
-const WrongFastDoodle: React.FC = () => (
-  <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <path d="M44 78 h34 M40 98 h34 M44 118 h34" strokeWidth={3} opacity={0.6} />
-    <path d="M92 98 L214 98 M214 98 L194 86 M214 98 L194 110" strokeWidth={5} />
-    <path d="M110 140 L214 140 L214 98" opacity={0.6} />
   </g></svg>
 );
 const SinkDoodle: React.FC = () => (
@@ -50,10 +58,10 @@ const HourglassDoodle: React.FC = () => (
 
 type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood: CatMood };
 const CARDS: Card[] = [
-  { head: "잘못된 목표에", bracket: "끌려간다면", sub: "틀린 줄 알면서 어쩔 수 없이", doodle: PulledDoodle, mood: "curious" },
-  { head: "말 안 하면", bracket: "동의가 된다", sub: "침묵을 리더는 지지로 읽는다", doodle: SilenceDoodle, mood: "calm" },
-  { head: "열심히 할수록", bracket: "더 빨리 틀린다", sub: "방향이 틀리면 속도는 독", doodle: WrongFastDoodle, mood: "question" },
-  { head: "한 사람 실수는", bracket: "덮을 수 있어도", sub: "리더의 방향은 전부를 삼킨다", doodle: SinkDoodle, mood: "wink" },
+  { head: "조직이 잘못 가면", bracket: "리더의 사심 탓", sub: "회사 목표가 아니라 개인 목표", doodle: CrownStarDoodle, mood: "curious" },
+  { head: "사적 목표를", bracket: "비전으로 포장", sub: "회사를 위한 척, 자기를 위해", doodle: MaskDoodle, mood: "calm" },
+  { head: "그래서 다들", bracket: "알면서 끌려간다", sub: "틀린 줄 알아도 말 못 한다", doodle: PulledDoodle, mood: "question" },
+  { head: "한 사람 실수는", bracket: "덮을 수 있어도", sub: "리더의 사심은 조직을 삼킨다", doodle: SinkDoodle, mood: "wink" },
   { head: "깨달았을 땐", bracket: "이미 늦는다", sub: "멀리 갈수록 되돌릴 수 없다", doodle: HourglassDoodle, mood: "curious" },
 ];
 
@@ -81,16 +89,16 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
 const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
-      <div style={{ fontSize: 78, ...rise(local, 0) }}>속도가 아니라</div>
-      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>방향이 먼저다</div>
-      <div style={{ fontSize: 88, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>방향부터 의심하라<span style={{ opacity: 0.9 }}> ]</span>
+      <div style={{ fontSize: 76, ...rise(local, 0) }}>방향을 따르기 전에</div>
+      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>이걸 물어라</div>
+      <div style={{ fontSize: 86, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
+        <span style={{ opacity: 0.9 }}>[ </span>누구를 위한 건가<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 980, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 56, color: YELLOW }}>틀렸다 싶으면</div>
-      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>멈추는 게 실력</div>
-      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>그게 다 같이 산다</div>
+      <div style={{ fontSize: 56, color: YELLOW }}>회사를 위한 건지</div>
+      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>자기를 위한 건지</div>
+      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>그게 갈림길이다</div>
     </div>
     <div style={{ position: "absolute", top: 1520, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood="happy" /></div>
   </AbsoluteFill>
