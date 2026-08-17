@@ -58,7 +58,7 @@ const HourglassDoodle: React.FC = () => (
 
 type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood: CatMood };
 const CARDS: Card[] = [
-  { head: "조직이 잘못 가면", bracket: "리더의 사심 탓", sub: "회사 목표가 아니라 개인 목표", doodle: CrownStarDoodle, mood: "curious" },
+  { head: "조직이 잘못 가면", bracket: "리더의 사심일 수도", sub: "그런 경우가 더러 있다", doodle: CrownStarDoodle, mood: "curious" },
   { head: "사적 목표를", bracket: "비전으로 포장", sub: "회사를 위한 척, 자기를 위해", doodle: MaskDoodle, mood: "calm" },
   { head: "그래서 다들", bracket: "알면서 끌려간다", sub: "틀린 줄 알아도 말 못 한다", doodle: PulledDoodle, mood: "question" },
   { head: "한 사람 실수는", bracket: "덮을 수 있어도", sub: "리더의 사심은 조직을 삼킨다", doodle: SinkDoodle, mood: "wink" },
