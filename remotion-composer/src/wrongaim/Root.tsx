@@ -1,5 +1,5 @@
 import { Composition } from "remotion";
-import { Note1, Note2, Note3, Note4, Note5, CatReel, REEL_DUR } from "./WrongAim";
+import { Note1, Note2, Note3, Note4, Note5, Note6, CatReel, REEL_DUR } from "./WrongAim";
 
 const S = { durationInFrames: 60, fps: 30, width: 1080, height: 1920 };
 export const Root: React.FC = () => (
@@ -9,6 +9,7 @@ export const Root: React.FC = () => (
     <Composition id="Note3" component={Note3} {...S} />
     <Composition id="Note4" component={Note4} {...S} />
     <Composition id="Note5" component={Note5} {...S} />
+    <Composition id="Note6" component={Note6} {...S} />
     <Composition id="CatReel" component={CatReel} durationInFrames={REEL_DUR} fps={30} width={1080} height={1920} />
   </>
 );

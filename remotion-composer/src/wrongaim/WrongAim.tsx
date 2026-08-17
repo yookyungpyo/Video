@@ -1,7 +1,7 @@
 import { AbsoluteFill, useCurrentFrame, interpolate, Easing } from "remotion";
 import { Cat, Fonts, CatMood } from "../catnote/CatNote";
 
-// Cat-note style, topic: reluctantly following a leader's wrong goal.
+// Cat-note style (6 cards), topic: how fatal a leader's wrong direction is.
 const G = "Gaegu";
 const BG = "#0E0E10";
 const INK = "#F2F1EA";
@@ -32,12 +32,19 @@ const WrongFastDoodle: React.FC = () => (
     <path d="M110 140 L214 140 L214 98" opacity={0.6} />
   </g></svg>
 );
-const SpeakDoodle: React.FC = () => (
+const SinkDoodle: React.FC = () => (
   <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
-    <circle cx={108} cy={116} r={16} /><path d={person(108, 116, 16)} />
-    <path d="M108 132 L150 92" />
-    <path d="M150 46 h60 a12 12 0 0 1 12 12 v30 a12 12 0 0 1 -12 12 h-30 l-18 16 l3 -16 h-15 a12 12 0 0 1 -12 -12 v-30 a12 12 0 0 1 12 -12 Z" />
-    <path d="M180 60 v22 M180 90 v3" strokeWidth={4} />
+    <path d="M60 108 L196 126 L172 156 L86 148 Z" />
+    <path d="M118 110 L126 66" /><path d="M126 66 L162 82 L126 92" />
+    <path d="M40 170 q16 -12 32 0 t32 0 t32 0 t32 0 t32 0 t32 0" strokeWidth={3} opacity={0.7} />
+  </g></svg>
+);
+const HourglassDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <path d="M96 48 h108 M96 162 h108" />
+    <path d="M104 48 L150 105 L104 162 M196 48 L150 105 L196 162" />
+    <path d="M116 162 L184 162 L150 122 Z" fill={INK} />
+    <path d="M150 105 l0 18" strokeWidth={3} opacity={0.7} />
   </g></svg>
 );
 
@@ -46,7 +53,8 @@ const CARDS: Card[] = [
   { head: "잘못된 목표에", bracket: "끌려간다면", sub: "틀린 줄 알면서 어쩔 수 없이", doodle: PulledDoodle, mood: "curious" },
   { head: "말 안 하면", bracket: "동의가 된다", sub: "침묵을 리더는 지지로 읽는다", doodle: SilenceDoodle, mood: "calm" },
   { head: "열심히 할수록", bracket: "더 빨리 틀린다", sub: "방향이 틀리면 속도는 독", doodle: WrongFastDoodle, mood: "question" },
-  { head: "진짜 충성은", bracket: "이견을 말하는 것", sub: "맞추기가 아니라 바로잡기", doodle: SpeakDoodle, mood: "wink" },
+  { head: "한 사람 실수는", bracket: "덮을 수 있어도", sub: "리더의 방향은 전부를 삼킨다", doodle: SinkDoodle, mood: "wink" },
+  { head: "깨달았을 땐", bracket: "이미 늦는다", sub: "멀리 갈수록 되돌릴 수 없다", doodle: HourglassDoodle, mood: "curious" },
 ];
 
 const rise = (p: number, d = 0) => {
@@ -73,16 +81,16 @@ const ArgCard: React.FC<{ c: Card; local: number }> = ({ c, local }) => {
 const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
-      <div style={{ fontSize: 78, ...rise(local, 0) }}>방향이 틀리면</div>
-      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>멈춤도 전진이다</div>
+      <div style={{ fontSize: 78, ...rise(local, 0) }}>속도가 아니라</div>
+      <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>방향이 먼저다</div>
       <div style={{ fontSize: 88, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>한 명이라도 말하라<span style={{ opacity: 0.9 }}> ]</span>
+        <span style={{ opacity: 0.9 }}>[ </span>방향부터 의심하라<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 980, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 56, color: YELLOW }}>끌려가지 말고</div>
-      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>질문을 던져라</div>
-      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>그게 조직을 구한다</div>
+      <div style={{ fontSize: 56, color: YELLOW }}>틀렸다 싶으면</div>
+      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>멈추는 게 실력</div>
+      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>그게 다 같이 산다</div>
     </div>
     <div style={{ position: "absolute", top: 1520, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood="happy" /></div>
   </AbsoluteFill>
@@ -92,14 +100,15 @@ export const Note1: React.FC = () => <><Fonts /><ArgCard c={CARDS[0]} local={40}
 export const Note2: React.FC = () => <><Fonts /><ArgCard c={CARDS[1]} local={40} /></>;
 export const Note3: React.FC = () => <><Fonts /><ArgCard c={CARDS[2]} local={40} /></>;
 export const Note4: React.FC = () => <><Fonts /><ArgCard c={CARDS[3]} local={40} /></>;
-export const Note5: React.FC = () => <><Fonts /><CloseCard local={40} /></>;
+export const Note5: React.FC = () => <><Fonts /><ArgCard c={CARDS[4]} local={40} /></>;
+export const Note6: React.FC = () => <><Fonts /><CloseCard local={40} /></>;
 
 const SCENE = 108;
-export const REEL_DUR = SCENE * 5;
+export const REEL_DUR = SCENE * 6;
 export const CatReel: React.FC = () => {
   const gf = useCurrentFrame();
-  const scenes = [0, 1, 2, 3, 4];
-  const cur = Math.min(4, Math.floor(gf / SCENE));
+  const scenes = [0, 1, 2, 3, 4, 5];
+  const cur = Math.min(5, Math.floor(gf / SCENE));
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Fonts />
@@ -110,7 +119,7 @@ export const CatReel: React.FC = () => {
         const lc = Math.max(0, Math.min(SCENE - 1, local));
         return (
           <AbsoluteFill key={s} style={{ opacity: visible ? 1 : 0 }}>
-            {s < 4 ? <ArgCard c={CARDS[s]} local={lc} /> : <CloseCard local={lc} />}
+            {s < 5 ? <ArgCard c={CARDS[s]} local={lc} /> : <CloseCard local={lc} />}
           </AbsoluteFill>
         );
       })}
