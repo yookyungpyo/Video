@@ -41,7 +41,7 @@ const BrokenDoodle: React.FC = () => (
 
 type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood: CatMood };
 const CARDS: Card[] = [
-  { head: "요즘 조직의 병", bracket: "Workslop", sub: "그럴듯한데 알맹이 없는 AI 결과물", doodle: ShinyPaperDoodle, mood: "curious" },
+  { head: "요즘 조직의 병", bracket: "Workslop", sub: "그럴듯한데 본질이 빠진 AI 결과물", doodle: ShinyPaperDoodle, mood: "curious" },
   { head: "겉은 완성인데", bracket: "속은 텅 빈다", sub: "폼만 그럴듯, 내용은 없다", doodle: EmptyBoxDoodle, mood: "calm" },
   { head: "일은 안 사라진다", bracket: "떠넘겨질 뿐", sub: "결국 받는 사람이 다시 한다", doodle: PassDoodle, mood: "question" },
   { head: "그래서 무너진다", bracket: "서로의 신뢰가", sub: "또 검산해야 하는 결과물", doodle: BrokenDoodle, mood: "wink" },
@@ -74,7 +74,7 @@ const CloseCard: React.FC<{ local: number }> = ({ local }) => (
       <div style={{ fontSize: 78, ...rise(local, 0) }}>AI는 도구지</div>
       <div style={{ fontSize: 78, marginTop: 4, ...rise(local, 6) }}>대신이 아니다</div>
       <div style={{ fontSize: 92, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>알맹이를 남겨라<span style={{ opacity: 0.9 }}> ]</span>
+        <span style={{ opacity: 0.9 }}>[ </span>본질을 남겨라<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 980, width: "100%", textAlign: "center", ...rise(local, 26) }}>
