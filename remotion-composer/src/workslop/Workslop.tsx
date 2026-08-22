@@ -25,17 +25,18 @@ const EmptyBoxDoodle: React.FC = () => (
     <path d="M150 120 v38" strokeWidth={3} opacity={0.45} strokeDasharray="5 8" />
   </g></svg>
 );
-const PassDoodle: React.FC = () => (
+const RestartDoodle: React.FC = () => (
   <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <rect x={64} y={74} width={58} height={46} rx={4} /><path d="M64 92 h58 M93 74 v46" strokeWidth={3} opacity={0.7} />
-    <path d="M136 100 L196 128 M196 128 L177 124 M196 128 L188 142" />
-    <circle cx={232} cy={112} r={13} /><path d="M232 125 L214 160 M232 125 L250 160" />
+    <path d="M64 148 L236 148" />
+    <circle cx={64} cy={148} r={6} fill={INK} />
+    <path d="M236 148 C236 78 64 78 64 132" />
+    <path d="M64 132 L52 112 M64 132 L80 118" />
   </g></svg>
 );
-const BrokenDoodle: React.FC = () => (
-  <svg width={300} height={200} viewBox="0 0 300 200"><g {...D}>
-    <ellipse cx={106} cy={104} rx={30} ry={20} /><ellipse cx={194} cy={104} rx={30} ry={20} />
-    <path d="M150 72 l-11 18 l15 8 l-11 22" strokeWidth={3.4} />
+const PersonRedoDoodle: React.FC = () => (
+  <svg width={300} height={210} viewBox="0 0 300 210"><g {...D}>
+    <circle cx={150} cy={128} r={16} /><path d="M150 144 L128 182 L172 182 Z" opacity={0} /><path d="M150 144 L150 176 M150 158 L130 182 M150 158 L170 182 M150 148 L126 122 M150 148 L174 122" />
+    <path d="M120 66 a30 30 0 1 1 -10 34" /><path d="M120 66 L100 60 M120 66 L112 84" />
   </g></svg>
 );
 
@@ -43,8 +44,8 @@ type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood
 const CARDS: Card[] = [
   { head: "요즘 조직의 병", bracket: "Workslop", sub: "그럴듯한데 본질이 빠진 AI 결과물", doodle: ShinyPaperDoodle, mood: "curious" },
   { head: "겉은 완성인데", bracket: "속은 텅 빈다", sub: "폼만 그럴듯, 내용은 없다", doodle: EmptyBoxDoodle, mood: "calm" },
-  { head: "일은 안 사라진다", bracket: "떠넘겨질 뿐", sub: "결국 받는 사람이 다시 한다", doodle: PassDoodle, mood: "question" },
-  { head: "그래서 무너진다", bracket: "서로의 신뢰가", sub: "또 검산해야 하는 결과물", doodle: BrokenDoodle, mood: "wink" },
+  { head: "결국 그 일은", bracket: "원점으로", sub: "일이 처음부터 다시 시작된다", doodle: RestartDoodle, mood: "question" },
+  { head: "AI가 아니라", bracket: "사람이 다시", sub: "결국 처음부터 사람 손으로", doodle: PersonRedoDoodle, mood: "wink" },
 ];
 
 const rise = (p: number, d = 0) => {
