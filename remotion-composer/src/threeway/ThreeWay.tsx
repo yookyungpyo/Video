@@ -44,7 +44,7 @@ const AsideDoodle: React.FC = () => (
 
 type Card = { head: string; bracket: string; sub: string; doodle: React.FC; mood: CatMood };
 const CARDS: Card[] = [
-  { head: "조직에서 넌", bracket: "셋 중 하나", sub: "어중간이 제일 나쁘다", doodle: ThreeWayDoodle, mood: "curious" },
+  { head: "조직에서 넌", bracket: "셋 중 하나", sub: "무엇이든 하나는 골라라", doodle: ThreeWayDoodle, mood: "curious" },
   { head: "① 이끌든가", bracket: "앞에서 책임져라", sub: "방향을 정하고 짊어져라", doodle: LeadDoodle, mood: "calm" },
   { head: "② 따르든가", bracket: "제대로 밀어라", sub: "정해졌으면 힘을 보태라", doodle: FollowDoodle, mood: "question" },
   { head: "③ 비키든가", bracket: "길을 막지 마라", sub: "못 할 거면 자리를 내줘라", doodle: AsideDoodle, mood: "wink" },
@@ -75,15 +75,15 @@ const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
       <div style={{ fontSize: 72, ...rise(local, 0) }}>이끌든 따르든 비키든</div>
-      <div style={{ fontSize: 78, marginTop: 6, ...rise(local, 6) }}>하나만 해라</div>
+      <div style={{ fontSize: 78, marginTop: 6, ...rise(local, 6) }}>하나만 골라</div>
       <div style={{ fontSize: 92, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>가운데는 없다<span style={{ opacity: 0.9 }}> ]</span>
+        <span style={{ opacity: 0.9 }}>[ </span>고르면 다 옳다<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 980, width: "100%", textAlign: "center", ...rise(local, 26) }}>
-      <div style={{ fontSize: 56, color: YELLOW }}>막고 서 있는 게</div>
-      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>제일 나쁘다</div>
-      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>지금, 정하라</div>
+      <div style={{ fontSize: 56, color: YELLOW }}>고른 쪽을</div>
+      <div style={{ fontSize: 50, color: DIM, marginTop: 12 }}>끝까지</div>
+      <div style={{ fontSize: 74, color: INK, marginTop: 8 }}>밀고 가라</div>
     </div>
     <div style={{ position: "absolute", top: 1520, width: "100%", display: "flex", justifyContent: "center" }}><Cat mood="happy" /></div>
   </AbsoluteFill>
