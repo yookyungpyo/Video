@@ -75,9 +75,9 @@ const CloseCard: React.FC<{ local: number }> = ({ local }) => (
   <AbsoluteFill style={{ background: BG, fontFamily: G }}>
     <div style={{ position: "absolute", top: 360, width: "100%", textAlign: "center", color: INK }}>
       <div style={{ fontSize: 72, ...rise(local, 0) }}>이끌든 따르든 비키든</div>
-      <div style={{ fontSize: 78, marginTop: 6, ...rise(local, 6) }}>하나만 골라</div>
-      <div style={{ fontSize: 92, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
-        <span style={{ opacity: 0.9 }}>[ </span>고르면 다 옳다<span style={{ opacity: 0.9 }}> ]</span>
+      <div style={{ fontSize: 72, marginTop: 6, ...rise(local, 6) }}>고르면 다 옳다</div>
+      <div style={{ fontSize: 88, color: YELLOW, marginTop: 36, ...rise(local, 16) }}>
+        <span style={{ opacity: 0.9 }}>[ </span>셋 중 하나만 해라<span style={{ opacity: 0.9 }}> ]</span>
       </div>
     </div>
     <div style={{ position: "absolute", top: 980, width: "100%", textAlign: "center", ...rise(local, 26) }}>
