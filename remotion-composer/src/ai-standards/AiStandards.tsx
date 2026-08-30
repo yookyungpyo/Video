@@ -187,14 +187,14 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
 
   return (
     <AbsoluteFill style={{ background: BG }}>
-      {/* Content block: centered between y=300 and y=1540 (upper-center of safe zone) */}
+      {/* Content block: centered in upper portion of screen */}
       <div
         style={{
           position: "absolute",
-          top: 300,
+          top: 200,
           left: 0,
           right: 0,
-          bottom: 380,
+          bottom: 640,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -275,11 +275,11 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
         </div>
       </div>
 
-      {/* Cat — fixed above Instagram bottom UI */}
+      {/* Cat */}
       <div
         style={{
           position: "absolute",
-          bottom: 360,
+          bottom: 500,
           left: 0,
           right: 0,
           display: "flex",
