@@ -175,19 +175,31 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 140 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const t = frame / fps;
 
-  const pop = (delay: number) =>
-    spring({ frame: frame - delay, fps, config: { damping: 22, stiffness: 120, mass: 0.9 } });
+  const pop = (delay: number, stiff = 120) =>
+    spring({ frame: frame - delay, fps, config: { damping: 20, stiffness: stiff, mass: 0.85 } });
 
-  const t1 = pop(4);
+  const t1 = pop(4, 130);
   const t2 = pop(16);
   const t3 = pop(30);
   const t4 = pop(46);
-  const tCat = pop(58);
+  const tCat = pop(54, 100);
+
+  // Icon: idle breathe after settling
+  const iconIdle = t1 > 0.98 ? Math.sin(t * Math.PI * 2 * 0.6) * 6 : 0;
+  const iconRot = t1 > 0.98 ? Math.sin(t * Math.PI * 2 * 0.4) * 2 : 0;
+
+  // Bracket glow pulse
+  const glowSize = 28 + 12 * Math.sin(t * Math.PI * 2 * 0.8);
+
+  // Cat: float up-down + entry bounce
+  const catFloat = tCat > 0.95 ? Math.sin(t * Math.PI * 2 * 0.55) * 14 : 0;
+  const catWiggle = tCat > 0.95 ? Math.sin(t * Math.PI * 2 * 1.1) * 3 : 0;
 
   return (
     <AbsoluteFill style={{ background: BG }}>
-      {/* Content block: centered in upper portion of screen */}
+      {/* Content block */}
       <div
         style={{
           position: "absolute",
@@ -201,12 +213,12 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
           justifyContent: "center",
         }}
       >
-        {/* Icon */}
+        {/* Icon — spin-drop entry + gentle idle breathe */}
         <div
           style={{
             opacity: t1,
-            transform: `scale(${0.55 + 0.45 * t1}) translateY(${(1 - t1) * 44}px)`,
-            marginBottom: 48,
+            transform: `scale(${0.5 + 0.5 * t1}) translateY(${(1 - t1) * 60 + iconIdle}px) rotate(${(1 - t1) * -20 + iconRot}deg)`,
+            marginBottom: 44,
             width: iconW,
             display: "flex",
             justifyContent: "center",
@@ -215,18 +227,18 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
           {icon}
         </div>
 
-        {/* Context label */}
+        {/* Context — slide in from left */}
         <div
           style={{
             opacity: t2,
-            transform: `translateY(${(1 - t2) * 22}px)`,
+            transform: `translateX(${(1 - t2) * -40}px) translateY(${(1 - t2) * 10}px)`,
             fontFamily: FONT,
             fontWeight: 400,
             fontSize: 54,
             color: GRAY,
             textAlign: "center",
             letterSpacing: -0.5,
-            marginBottom: 20,
+            marginBottom: 18,
             paddingLeft: 60,
             paddingRight: 60,
             lineHeight: 1.4,
@@ -235,31 +247,34 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
           {context}
         </div>
 
-        {/* Bracket headline */}
+        {/* Bracket — scale-pop + continuous glow pulse */}
         <div
           style={{
             opacity: t3,
-            transform: `scale(${0.80 + 0.20 * t3})`,
+            transform: `scale(${0.75 + 0.25 * t3})`,
             fontFamily: FONT,
             fontWeight: 900,
-            fontSize: 108,
+            fontSize: 112,
             color: YELLOW,
             textAlign: "center",
             letterSpacing: -3,
             lineHeight: 1.1,
             paddingLeft: 30,
             paddingRight: 30,
-            marginBottom: 28,
+            marginBottom: 26,
+            textShadow: t3 > 0.9
+              ? `0 0 ${glowSize}px ${YELLOW}55, 0 0 ${glowSize * 2}px ${YELLOW}22`
+              : "none",
           }}
         >
           {`[ ${bracket} ]`}
         </div>
 
-        {/* Punchline */}
+        {/* Punchline — slide in from right */}
         <div
           style={{
             opacity: t4,
-            transform: `translateY(${(1 - t4) * 18}px)`,
+            transform: `translateX(${(1 - t4) * 40}px) translateY(${(1 - t4) * 10}px)`,
             fontFamily: FONT,
             fontWeight: 700,
             fontSize: 56,
@@ -275,18 +290,18 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
         </div>
       </div>
 
-      {/* Cat */}
+      {/* Cat — large, floating, slight wiggle */}
       <div
         style={{
           position: "absolute",
-          bottom: 500,
+          bottom: 480,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          fontSize: 52,
+          fontSize: 96,
           opacity: tCat,
-          transform: `translateY(${(1 - tCat) * 16}px)`,
+          transform: `scale(${0.4 + 0.6 * tCat}) translateY(${(1 - tCat) * 40 - catFloat}px) rotate(${catWiggle}deg)`,
         }}
       >
         🐱
