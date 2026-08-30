@@ -187,19 +187,18 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
 
   return (
     <AbsoluteFill style={{ background: BG }}>
-      {/* Safe-zone content block */}
+      {/* Content block: centered between y=300 and y=1540 (upper-center of safe zone) */}
       <div
         style={{
           position: "absolute",
-          top: SAFE_TOP,
+          top: 300,
           left: 0,
           right: 0,
-          bottom: SAFE_BOTTOM,
+          bottom: 380,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 0,
         }}
       >
         {/* Icon */}
@@ -207,7 +206,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
           style={{
             opacity: t1,
             transform: `scale(${0.55 + 0.45 * t1}) translateY(${(1 - t1) * 44}px)`,
-            marginBottom: 56,
+            marginBottom: 48,
             width: iconW,
             display: "flex",
             justifyContent: "center",
@@ -223,14 +222,14 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             transform: `translateY(${(1 - t2) * 22}px)`,
             fontFamily: FONT,
             fontWeight: 400,
-            fontSize: 42,
+            fontSize: 54,
             color: GRAY,
             textAlign: "center",
             letterSpacing: -0.5,
-            marginBottom: 24,
-            paddingLeft: 64,
-            paddingRight: 64,
-            lineHeight: 1.45,
+            marginBottom: 20,
+            paddingLeft: 60,
+            paddingRight: 60,
+            lineHeight: 1.4,
           }}
         >
           {context}
@@ -243,14 +242,14 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             transform: `scale(${0.80 + 0.20 * t3})`,
             fontFamily: FONT,
             fontWeight: 900,
-            fontSize: 86,
+            fontSize: 108,
             color: YELLOW,
             textAlign: "center",
-            letterSpacing: -2,
-            lineHeight: 1.15,
-            paddingLeft: 36,
-            paddingRight: 36,
-            marginBottom: 32,
+            letterSpacing: -3,
+            lineHeight: 1.1,
+            paddingLeft: 30,
+            paddingRight: 30,
+            marginBottom: 28,
           }}
         >
           {`[ ${bracket} ]`}
@@ -263,29 +262,29 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             transform: `translateY(${(1 - t4) * 18}px)`,
             fontFamily: FONT,
             fontWeight: 700,
-            fontSize: 44,
+            fontSize: 56,
             color: WHITE,
             textAlign: "center",
             letterSpacing: -0.5,
-            paddingLeft: 64,
-            paddingRight: 64,
-            lineHeight: 1.45,
+            paddingLeft: 60,
+            paddingRight: 60,
+            lineHeight: 1.4,
           }}
         >
           {punchline}
         </div>
       </div>
 
-      {/* Cat — anchored above Instagram bottom UI */}
+      {/* Cat — fixed above Instagram bottom UI */}
       <div
         style={{
           position: "absolute",
-          bottom: SAFE_BOTTOM - 40,
+          bottom: 360,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          fontSize: 50,
+          fontSize: 52,
           opacity: tCat,
           transform: `translateY(${(1 - tCat) * 16}px)`,
         }}
