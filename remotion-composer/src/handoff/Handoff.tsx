@@ -119,23 +119,22 @@ const IconBothRise: React.FC = () => (
   </svg>
 );
 
-// Card 5: Person trying to speak (open mouth) + large speech bubble with ? = can't explain
+// Card 5: Person (gray) + speech bubble with bold X (yellow) = speech is blocked, can't explain
 const IconCantExplain: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Person — left side */}
-    <circle cx={26} cy={38} r={15} stroke={GRAY} strokeWidth={3.5} fill="none" />
-    {/* Open mouth */}
-    <path d="M19 45 Q26 52 33 45" stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" fill="none" />
-    <line x1={26} y1={53} x2={26} y2={84} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
-    <line x1={26} y1={67} x2={10} y2={57} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={26} y1={67} x2={42} y2={57} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={17} y1={84} x2={26} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={35} y1={84} x2={26} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    {/* Person — larger for visual weight */}
+    <circle cx={28} cy={32} r={16} stroke={GRAY} strokeWidth={3.5} fill="none" />
+    <line x1={28} y1={48} x2={28} y2={82} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
+    <line x1={28} y1={64} x2={10} y2={54} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={28} y1={64} x2={46} y2={54} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={18} y1={82} x2={28} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={38} y1={82} x2={28} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
     {/* Large speech bubble — right side */}
-    <path d="M52 20 Q52 8 66 8 L122 8 Q134 8 134 22 L134 78 Q134 90 120 90 L76 90 L58 110 L62 90 Q52 90 52 78 Z"
+    <path d="M54 14 Q54 4 66 4 L126 4 Q136 4 136 18 L136 72 Q136 84 124 84 L82 84 L64 104 L68 84 Q54 84 54 72 Z"
       stroke={YELLOW} strokeWidth={3.5} fill="none" strokeLinejoin="round" />
-    {/* Big ? inside bubble */}
-    <text x={93} y={68} textAnchor="middle" fontSize={56} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+    {/* Bold X inside bubble — speech blocked, can't explain */}
+    <line x1={74} y1={24} x2={118} y2={66} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" />
+    <line x1={118} y1={24} x2={74} y2={66} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" />
   </svg>
 );
 
