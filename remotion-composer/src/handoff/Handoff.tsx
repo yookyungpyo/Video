@@ -113,31 +113,39 @@ const IconHandoffFail: React.FC = () => (
   </svg>
 );
 
-// Card 4: Two rising trend lines on axes — speed and cost both climbing
+// Card 4: Two rising trend lines — speed moderate, cost steep (clearly separated)
 const IconBothRise: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <line x1={18} y1={122} x2={18} y2={18} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
-    <line x1={18} y1={122} x2={132} y2={122} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
-    <path d="M18 122 Q62 108 98 58" stroke={GRAY} strokeWidth={4.5} strokeLinecap="round" fill="none" />
-    <circle cx={98} cy={58} r={6} fill={GRAY} />
-    <text x={100} y={52} fontSize={12} fill={GRAY} fontFamily="sans-serif" fontWeight={700}>속도</text>
-    <path d="M18 122 Q62 104 112 36" stroke={YELLOW} strokeWidth={4.5} strokeLinecap="round" fill="none" />
-    <circle cx={112} cy={36} r={6} fill={YELLOW} />
-    <text x={114} y={30} fontSize={12} fill={YELLOW} fontFamily="sans-serif" fontWeight={700}>비용</text>
+    <line x1={16} y1={126} x2={16} y2={12} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
+    <line x1={16} y1={126} x2={132} y2={126} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
+    {/* 속도 — moderate slope, ends lower */}
+    <path d="M16 126 Q72 120 90 78" stroke={GRAY} strokeWidth={5} strokeLinecap="round" fill="none" />
+    <circle cx={90} cy={78} r={6} fill={GRAY} />
+    <text x={94} y={86} fontSize={15} fill={GRAY} fontFamily="sans-serif" fontWeight={700}>속도</text>
+    {/* 비용 — steep slope, ends much higher */}
+    <path d="M16 126 Q52 114 114 26" stroke={YELLOW} strokeWidth={5} strokeLinecap="round" fill="none" />
+    <circle cx={114} cy={26} r={6} fill={YELLOW} />
+    <text x={88} y={16} fontSize={15} fill={YELLOW} fontFamily="sans-serif" fontWeight={700}>비용</text>
   </svg>
 );
 
-// Card 5: Document with checkmark X'd out + speech bubble ? = can't explain = not done
+// Card 5: Person trying to speak (open mouth) + large speech bubble with ? = can't explain
 const IconCantExplain: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <path d="M14 24 L90 24 L106 40 L106 124 L14 124 Z" stroke={GRAY} strokeWidth={3.5} fill="none" strokeLinejoin="round" />
-    <path d="M90 24 L90 40 L106 40" stroke={GRAY} strokeWidth={3} strokeLinejoin="round" />
-    <path d="M34 74 L50 90 L76 56" stroke={GRAY} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
-    <line x1={22} y1={32} x2={98} y2={116} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" opacity={0.9} />
-    <line x1={98} y1={32} x2={22} y2={116} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" opacity={0.9} />
-    <path d="M112 18 Q130 18 130 34 Q130 50 118 52 L115 62 L108 52 Q96 50 96 34 Q96 18 112 18 Z"
-      stroke={YELLOW} strokeWidth={3} fill="none" strokeLinejoin="round" />
-    <text x={113} y={42} textAnchor="middle" fontSize={20} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+    {/* Person — left side */}
+    <circle cx={26} cy={38} r={15} stroke={GRAY} strokeWidth={3.5} fill="none" />
+    {/* Open mouth */}
+    <path d="M19 45 Q26 52 33 45" stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" fill="none" />
+    <line x1={26} y1={53} x2={26} y2={84} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
+    <line x1={26} y1={67} x2={10} y2={57} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={26} y1={67} x2={42} y2={57} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={17} y1={84} x2={26} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={35} y1={84} x2={26} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    {/* Large speech bubble — right side */}
+    <path d="M52 20 Q52 8 66 8 L122 8 Q134 8 134 22 L134 78 Q134 90 120 90 L76 90 L58 110 L62 90 Q52 90 52 78 Z"
+      stroke={YELLOW} strokeWidth={3.5} fill="none" strokeLinejoin="round" />
+    {/* Big ? inside bubble */}
+    <text x={93} y={68} textAnchor="middle" fontSize={56} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
   </svg>
 );
 
