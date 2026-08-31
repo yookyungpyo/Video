@@ -53,87 +53,91 @@ const Fade: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, child
 
 // ─── SVG Icons ───────────────────────────────────────────────────────────────
 
-// Card 1: Rocket (speed) + cost arrow both going up — the paradox
-const IconParadox: React.FC = () => (
+// Card 1: Robot (AI) + speed → growing bill stack = handoff cost rises
+const IconAIHandoff: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Rocket */}
-    <path d="M70 14 C70 14 88 30 88 60 L70 72 L52 60 C52 30 70 14 70 14 Z" stroke={YELLOW} strokeWidth={4} fill="none" strokeLinejoin="round" />
-    <path d="M52 60 L44 80 L60 72 L70 72 L80 72 L96 80 L88 60 Z" stroke={GRAY} strokeWidth={3} fill="none" strokeLinejoin="round" />
-    <circle cx={70} cy={48} r={8} stroke={YELLOW} strokeWidth={3.5} fill="none" />
-    {/* Cost arrow rising — dashed, alarming */}
-    <path d="M20 120 Q36 90 56 72" stroke={YELLOW} strokeWidth={3} strokeDasharray="5 4" strokeLinecap="round" />
-    <polygon points="56,72 46,76 52,84" fill={YELLOW} />
-    {/* $ label */}
-    <text x={14} y={124} fontSize={20} fill={YELLOW} fontFamily="sans-serif" fontWeight={700}>↑$</text>
+    <rect x={8} y={34} width={48} height={40} rx={8} stroke={GRAY} strokeWidth={3.5} fill="none" />
+    <rect x={18} y={45} width={9} height={9} rx={2} fill={GRAY} />
+    <rect x={37} y={45} width={9} height={9} rx={2} fill={GRAY} />
+    <line x1={20} y1={62} x2={46} y2={62} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
+    <line x1={32} y1={34} x2={32} y2={24} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <circle cx={32} cy={20} r={5} fill={YELLOW} />
+    <line x1={58} y1={46} x2={72} y2={46} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <line x1={56} y1={54} x2={70} y2={54} stroke={YELLOW} strokeWidth={2.5} strokeLinecap="round" />
+    <line x1={58} y1={62} x2={72} y2={62} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <line x1={76} y1={54} x2={90} y2={54} stroke={GRAY} strokeWidth={4} strokeLinecap="round" />
+    <polygon points="98,54 87,48 87,60" fill={GRAY} />
+    <rect x={102} y={84} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
+    <rect x={102} y={68} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
+    <rect x={102} y={52} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
+    <line x1={117} y1={46} x2={117} y2={32} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" />
+    <polygon points="117,24 109,35 125,35" fill={YELLOW} />
   </svg>
 );
 
-// Card 2: Document with big question mark — no context
-const IconNoContext: React.FC = () => (
+// Card 2: Document with missing context (big ?) + must restart from top
+const IconMissingContext: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Document shape */}
-    <path d="M24 16 L96 16 L116 36 L116 128 L24 128 Z" stroke={GRAY} strokeWidth={4} fill="none" strokeLinejoin="round" />
-    {/* Folded corner */}
-    <path d="M96 16 L96 36 L116 36" stroke={GRAY} strokeWidth={3} strokeLinejoin="round" />
-    {/* Text lines — missing / dotted */}
-    <line x1={40} y1={58} x2={100} y2={58} stroke={GRAY} strokeWidth={3} strokeLinecap="round" strokeDasharray="6 5" />
-    <line x1={40} y1={74} x2={100} y2={74} stroke={GRAY} strokeWidth={3} strokeLinecap="round" strokeDasharray="6 5" />
-    <line x1={40} y1={90} x2={80} y2={90} stroke={GRAY} strokeWidth={3} strokeLinecap="round" strokeDasharray="6 5" />
-    {/* Giant question mark */}
-    <text x={70} y={114} textAnchor="middle" fontSize={48} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+    <path d="M18 12 L106 12 L106 128 L18 128 Z" stroke={GRAY} strokeWidth={3.5} fill="none" />
+    <line x1={30} y1={30} x2={94} y2={30} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={30} y1={44} x2={94} y2={44} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <text x={62} y={94} textAnchor="middle" fontSize={52} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+    <line x1={30} y1={110} x2={94} y2={110} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="4 5" />
+    <line x1={30} y1={122} x2={70} y2={122} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="4 5" />
+    <path d="M122 110 Q134 70 122 28" stroke={YELLOW} strokeWidth={3.5} strokeLinecap="round" fill="none" />
+    <polygon points="122,20 114,32 130,32" fill={YELLOW} />
   </svg>
 );
 
-// Card 3: Checkmark done but blocked wall — completed but can't hand off
-const IconBlocked: React.FC = () => (
+// Card 3: Done checkmark + failed handoff arrow + two people can't receive (X marks)
+const IconHandoffFail: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Check circle — done */}
-    <circle cx={36} cy={70} r={26} stroke={GRAY} strokeWidth={4} fill="none" />
-    <path d="M22 70 L32 82 L52 58" stroke={GRAY} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
-    {/* Wall / barrier in middle */}
-    <rect x={62} y={34} width={16} height={72} rx={4} fill={YELLOW} opacity={0.9} />
-    {/* Bricks pattern */}
-    <line x1={62} y1={58} x2={78} y2={58} stroke={BG} strokeWidth={2} />
-    <line x1={62} y1={82} x2={78} y2={82} strokeWidth={2} stroke={BG} />
-    <line x1={70} y1={34} x2={70} y2={58} stroke={BG} strokeWidth={2} />
-    <line x1={70} y1={58} x2={70} y2={82} stroke={BG} strokeWidth={2} opacity={0} />
-    {/* Person reaching from right — blocked */}
-    <circle cx={108} cy={52} r={10} stroke={GRAY} strokeWidth={3.5} fill="none" />
-    <path d="M108 62 L108 90" stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
-    <path d="M108 76 L86 68" stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
-    <line x1={94} y1={90} x2={108} y2={110} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
-    <line x1={122} y1={90} x2={108} y2={110} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
+    <circle cx={32} cy={70} r={26} stroke={GRAY} strokeWidth={4} fill="none" />
+    <path d="M18 70 L28 82 L50 56" stroke={GRAY} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
+    <line x1={60} y1={70} x2={82} y2={70} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" strokeDasharray="5 4" />
+    <polygon points="90,70 80,64 80,76" fill={YELLOW} />
+    <line x1={92} y1={44} x2={106} y2={58} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <line x1={106} y1={44} x2={92} y2={58} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <line x1={92} y1={104} x2={106} y2={118} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <line x1={106} y1={104} x2={92} y2={118} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
+    <circle cx={112} cy={36} r={10} stroke={GRAY} strokeWidth={3} fill="none" />
+    <line x1={112} y1={46} x2={112} y2={62} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <path d="M112 54 L98 62" stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={104} y1={62} x2={112} y2={76} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={120} y1={62} x2={112} y2={76} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <circle cx={112} cy={96} r={10} stroke={GRAY} strokeWidth={3} fill="none" />
+    <line x1={112} y1={106} x2={112} y2={122} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <path d="M112 114 L98 122" stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={104} y1={122} x2={112} y2={136} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    <line x1={120} y1={122} x2={112} y2={136} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
   </svg>
 );
 
-// Card 4: Two arrows both up — speed ↑ cost ↑
-const IconBothUp: React.FC = () => (
+// Card 4: Two rising trend lines on axes — speed and cost both climbing
+const IconBothRise: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Left arrow: speed */}
-    <line x1={38} y1={110} x2={38} y2={30} stroke={GRAY} strokeWidth={5} strokeLinecap="round" />
-    <polygon points="38,20 28,42 48,42" fill={GRAY} />
-    {/* Speed label */}
-    <text x={38} y={126} textAnchor="middle" fontSize={18} fill={GRAY} fontFamily="sans-serif" fontWeight={700}>속도</text>
-    {/* Right arrow: cost — yellow, alarming */}
-    <line x1={102} y1={110} x2={102} y2={30} stroke={YELLOW} strokeWidth={5} strokeLinecap="round" />
-    <polygon points="102,20 92,42 112,42" fill={YELLOW} />
-    {/* Cost label */}
-    <text x={102} y={126} textAnchor="middle" fontSize={18} fill={YELLOW} fontFamily="sans-serif" fontWeight={700}>비용</text>
-    {/* Equal sign / both same */}
-    <line x1={58} y1={66} x2={82} y2={66} stroke={WHITE} strokeWidth={3} strokeLinecap="round" opacity={0.5} />
-    <line x1={58} y1={76} x2={82} y2={76} stroke={WHITE} strokeWidth={3} strokeLinecap="round" opacity={0.5} />
+    <line x1={18} y1={122} x2={18} y2={18} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
+    <line x1={18} y1={122} x2={132} y2={122} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
+    <path d="M18 122 Q62 108 98 58" stroke={GRAY} strokeWidth={4.5} strokeLinecap="round" fill="none" />
+    <circle cx={98} cy={58} r={6} fill={GRAY} />
+    <text x={100} y={52} fontSize={12} fill={GRAY} fontFamily="sans-serif" fontWeight={700}>속도</text>
+    <path d="M18 122 Q62 104 112 36" stroke={YELLOW} strokeWidth={4.5} strokeLinecap="round" fill="none" />
+    <circle cx={112} cy={36} r={6} fill={YELLOW} />
+    <text x={114} y={30} fontSize={12} fill={YELLOW} fontFamily="sans-serif" fontWeight={700}>비용</text>
   </svg>
 );
 
-// Card 5: Speech bubble with X — can't explain = not done
-const IconNoExplain: React.FC = () => (
+// Card 5: Document with checkmark X'd out + speech bubble ? = can't explain = not done
+const IconCantExplain: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Speech bubble */}
-    <path d="M16 24 Q16 12 28 12 L112 12 Q124 12 124 24 L124 84 Q124 96 112 96 L58 96 L38 124 L42 96 L28 96 Q16 96 16 84 Z"
-      stroke={YELLOW} strokeWidth={4} fill="none" strokeLinejoin="round" />
-    {/* X inside */}
-    <line x1={50} y1={40} x2={90} y2={72} stroke={YELLOW} strokeWidth={6} strokeLinecap="round" />
-    <line x1={90} y1={40} x2={50} y2={72} stroke={YELLOW} strokeWidth={6} strokeLinecap="round" />
+    <path d="M14 24 L90 24 L106 40 L106 124 L14 124 Z" stroke={GRAY} strokeWidth={3.5} fill="none" strokeLinejoin="round" />
+    <path d="M90 24 L90 40 L106 40" stroke={GRAY} strokeWidth={3} strokeLinejoin="round" />
+    <path d="M34 74 L50 90 L76 56" stroke={GRAY} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
+    <line x1={22} y1={32} x2={98} y2={116} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" opacity={0.9} />
+    <line x1={98} y1={32} x2={22} y2={116} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" opacity={0.9} />
+    <path d="M112 18 Q130 18 130 34 Q130 50 118 52 L115 62 L108 52 Q96 50 96 34 Q96 18 112 18 Z"
+      stroke={YELLOW} strokeWidth={3} fill="none" strokeLinejoin="round" />
+    <text x={113} y={42} textAnchor="middle" fontSize={20} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
   </svg>
 );
 
@@ -288,31 +292,31 @@ const cards: CardProps[] = [
     context: "AI 시대의 아이러니",
     bracket: "AI가 빠를수록",
     punchline: "넘기는 비용은 더 커진다",
-    icon: <IconParadox />,
+    icon: <IconAIHandoff />,
   },
   {
     context: "AI 결과물의 특징",
     bracket: "맥락이 없다",
     punchline: "받는 사람은 처음부터 읽어야 한다",
-    icon: <IconNoContext />,
+    icon: <IconMissingContext />,
   },
   {
     context: "실제로 일어나는 일",
     bracket: "완성됐는데",
     punchline: "팀원 누구도 이어받지 못한다",
-    icon: <IconBlocked />,
+    icon: <IconHandoffFail />,
   },
   {
     context: "진짜 병목",
     bracket: "속도는 올랐다",
     punchline: "협업 비용도 같이 올랐다",
-    icon: <IconBothUp />,
+    icon: <IconBothRise />,
   },
   {
     context: "",
     bracket: "설명 못 하면",
     punchline: "완성이 아니다",
-    icon: <IconNoExplain />,
+    icon: <IconCantExplain />,
   },
 ];
 
