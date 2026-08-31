@@ -53,63 +53,53 @@ const Fade: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, child
 
 // ─── SVG Icons ───────────────────────────────────────────────────────────────
 
-// Card 1: Robot (AI) + speed → growing bill stack = handoff cost rises
+// Card 1: Lightning bolt (AI speed) → growing bill stack (rising cost)
 const IconAIHandoff: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <rect x={8} y={34} width={48} height={40} rx={8} stroke={GRAY} strokeWidth={3.5} fill="none" />
-    <rect x={18} y={45} width={9} height={9} rx={2} fill={GRAY} />
-    <rect x={37} y={45} width={9} height={9} rx={2} fill={GRAY} />
-    <line x1={20} y1={62} x2={46} y2={62} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" />
-    <line x1={32} y1={34} x2={32} y2={24} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <circle cx={32} cy={20} r={5} fill={YELLOW} />
-    <line x1={58} y1={46} x2={72} y2={46} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <line x1={56} y1={54} x2={70} y2={54} stroke={YELLOW} strokeWidth={2.5} strokeLinecap="round" />
-    <line x1={58} y1={62} x2={72} y2={62} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <line x1={76} y1={54} x2={90} y2={54} stroke={GRAY} strokeWidth={4} strokeLinecap="round" />
-    <polygon points="98,54 87,48 87,60" fill={GRAY} />
-    <rect x={102} y={84} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
-    <rect x={102} y={68} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
-    <rect x={102} y={52} width={30} height={14} rx={3} stroke={YELLOW} strokeWidth={3} fill="none" />
-    <line x1={117} y1={46} x2={117} y2={32} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" />
-    <polygon points="117,24 109,35 125,35" fill={YELLOW} />
+    {/* Lightning bolt — left side, large */}
+    <path d="M42 15 L22 72 L36 72 L18 125 L62 60 L48 60 Z" fill={GRAY} />
+    {/* Arrow → center */}
+    <line x1={70} y1={70} x2={88} y2={70} stroke={YELLOW} strokeWidth={5} strokeLinecap="round" />
+    <polygon points="96,70 86,63 86,77" fill={YELLOW} />
+    {/* Bill stack — right side, 3 stacked rectangles growing up */}
+    <rect x={100} y={96} width={36} height={18} rx={3} stroke={YELLOW} strokeWidth={3.5} fill="none" />
+    <rect x={100} y={72} width={36} height={18} rx={3} stroke={YELLOW} strokeWidth={3.5} fill="none" />
+    <rect x={100} y={48} width={36} height={18} rx={3} stroke={YELLOW} strokeWidth={3.5} fill="none" />
+    {/* Up-arrow above bills */}
+    <line x1={118} y1={44} x2={118} y2={28} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" />
+    <polygon points="118,18 110,30 126,30" fill={YELLOW} />
   </svg>
 );
 
-// Card 2: Document with missing context (big ?) + must restart from top
+// Card 2: Document + giant ? (no context = must restart)
 const IconMissingContext: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <path d="M18 12 L106 12 L106 128 L18 128 Z" stroke={GRAY} strokeWidth={3.5} fill="none" />
-    <line x1={30} y1={30} x2={94} y2={30} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={30} y1={44} x2={94} y2={44} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <text x={62} y={94} textAnchor="middle" fontSize={52} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
-    <line x1={30} y1={110} x2={94} y2={110} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="4 5" />
-    <line x1={30} y1={122} x2={70} y2={122} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="4 5" />
-    <path d="M122 110 Q134 70 122 28" stroke={YELLOW} strokeWidth={3.5} strokeLinecap="round" fill="none" />
-    <polygon points="122,20 114,32 130,32" fill={YELLOW} />
+    {/* Document outline */}
+    <path d="M14 10 L110 10 L110 130 L14 130 Z" stroke={GRAY} strokeWidth={3.5} fill="none" />
+    {/* Two solid lines at top = content */}
+    <line x1={26} y1={28} x2={98} y2={28} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
+    <line x1={26} y1={42} x2={98} y2={42} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
+    {/* Giant ? — dominant center element */}
+    <text x={62} y={100} textAnchor="middle" fontSize={68} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+    {/* Two dashed lines at bottom = missing content */}
+    <line x1={26} y1={112} x2={98} y2={112} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="5 5" />
+    <line x1={26} y1={124} x2={74} y2={124} stroke={GRAY} strokeWidth={2.5} strokeLinecap="round" strokeDasharray="5 5" />
   </svg>
 );
 
-// Card 3: Done checkmark + failed handoff arrow + two people can't receive (X marks)
+// Card 3: Checkmark circle (done) → dashed arrow → X circle (can't receive)
 const IconHandoffFail: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <circle cx={32} cy={70} r={26} stroke={GRAY} strokeWidth={4} fill="none" />
-    <path d="M18 70 L28 82 L50 56" stroke={GRAY} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
-    <line x1={60} y1={70} x2={82} y2={70} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" strokeDasharray="5 4" />
-    <polygon points="90,70 80,64 80,76" fill={YELLOW} />
-    <line x1={92} y1={44} x2={106} y2={58} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <line x1={106} y1={44} x2={92} y2={58} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <line x1={92} y1={104} x2={106} y2={118} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <line x1={106} y1={104} x2={92} y2={118} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" />
-    <circle cx={112} cy={36} r={10} stroke={GRAY} strokeWidth={3} fill="none" />
-    <line x1={112} y1={46} x2={112} y2={62} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <path d="M112 54 L98 62" stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={104} y1={62} x2={112} y2={76} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={120} y1={62} x2={112} y2={76} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <circle cx={112} cy={96} r={10} stroke={GRAY} strokeWidth={3} fill="none" />
-    <line x1={112} y1={106} x2={112} y2={122} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <path d="M112 114 L98 122" stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={104} y1={122} x2={112} y2={136} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={120} y1={122} x2={112} y2={136} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
+    {/* Left: done circle with checkmark */}
+    <circle cx={34} cy={70} r={30} stroke={GRAY} strokeWidth={4} fill="none" />
+    <path d="M18 70 L29 84 L52 52" stroke={GRAY} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+    {/* Center: dashed handoff arrow */}
+    <line x1={68} y1={70} x2={88} y2={70} stroke={YELLOW} strokeWidth={3.5} strokeLinecap="round" strokeDasharray="5 4" />
+    <polygon points="96,70 85,63 85,77" fill={YELLOW} />
+    {/* Right: blocked circle with X */}
+    <circle cx={116} cy={70} r={22} stroke={YELLOW} strokeWidth={4} fill="none" />
+    <line x1={103} y1={57} x2={129} y2={83} stroke={YELLOW} strokeWidth={5.5} strokeLinecap="round" />
+    <line x1={129} y1={57} x2={103} y2={83} stroke={YELLOW} strokeWidth={5.5} strokeLinecap="round" />
   </svg>
 );
 
