@@ -55,7 +55,7 @@ const Fade: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, child
 
 // Card 1: Rocket (speed) + cost arrow both going up — the paradox
 const IconParadox: React.FC = () => (
-  <svg width={140} height={140} viewBox="0 0 140 140" fill="none">
+  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
     {/* Rocket */}
     <path d="M70 14 C70 14 88 30 88 60 L70 72 L52 60 C52 30 70 14 70 14 Z" stroke={YELLOW} strokeWidth={4} fill="none" strokeLinejoin="round" />
     <path d="M52 60 L44 80 L60 72 L70 72 L80 72 L96 80 L88 60 Z" stroke={GRAY} strokeWidth={3} fill="none" strokeLinejoin="round" />
@@ -70,7 +70,7 @@ const IconParadox: React.FC = () => (
 
 // Card 2: Document with big question mark — no context
 const IconNoContext: React.FC = () => (
-  <svg width={140} height={140} viewBox="0 0 140 140" fill="none">
+  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
     {/* Document shape */}
     <path d="M24 16 L96 16 L116 36 L116 128 L24 128 Z" stroke={GRAY} strokeWidth={4} fill="none" strokeLinejoin="round" />
     {/* Folded corner */}
@@ -86,7 +86,7 @@ const IconNoContext: React.FC = () => (
 
 // Card 3: Checkmark done but blocked wall — completed but can't hand off
 const IconBlocked: React.FC = () => (
-  <svg width={140} height={140} viewBox="0 0 140 140" fill="none">
+  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
     {/* Check circle — done */}
     <circle cx={36} cy={70} r={26} stroke={GRAY} strokeWidth={4} fill="none" />
     <path d="M22 70 L32 82 L52 58" stroke={GRAY} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
@@ -108,7 +108,7 @@ const IconBlocked: React.FC = () => (
 
 // Card 4: Two arrows both up — speed ↑ cost ↑
 const IconBothUp: React.FC = () => (
-  <svg width={140} height={140} viewBox="0 0 140 140" fill="none">
+  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
     {/* Left arrow: speed */}
     <line x1={38} y1={110} x2={38} y2={30} stroke={GRAY} strokeWidth={5} strokeLinecap="round" />
     <polygon points="38,20 28,42 48,42" fill={GRAY} />
@@ -127,7 +127,7 @@ const IconBothUp: React.FC = () => (
 
 // Card 5: Speech bubble with X — can't explain = not done
 const IconNoExplain: React.FC = () => (
-  <svg width={140} height={140} viewBox="0 0 140 140" fill="none">
+  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
     {/* Speech bubble */}
     <path d="M16 24 Q16 12 28 12 L112 12 Q124 12 124 24 L124 84 Q124 96 112 96 L58 96 L38 124 L42 96 L28 96 Q16 96 16 84 Z"
       stroke={YELLOW} strokeWidth={4} fill="none" strokeLinejoin="round" />
@@ -147,7 +147,7 @@ type CardProps = {
   iconW?: number;
 };
 
-const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 140 }) => {
+const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 280 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
