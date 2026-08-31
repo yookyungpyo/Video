@@ -2,7 +2,7 @@
 name: cat-shorts
 description: Produce vertical (9:16) dark "Cat format" Reels in Remotion — pure black background (#060608), yellow bracket [ headline ], SVG icon per card, 🐱 emoji mascot with float animation, dark ambient soundtrack, Reels safe-area layout. 5-card structure at ~20 seconds. MANDATORY workflow: always present the 5-card scenario to the user first and wait for confirmation before producing. Use when asked for a cat-format, dark-bracket, short-form Reels video (or any keyword like "고양이 포맷", "cat format", "다크 브라켓").
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   tags: remotion, video, reels, shorts, dark, cat, bracket, korean, mascot, instagram
 ---
 
@@ -193,18 +193,71 @@ export const TopicName: React.FC = () => {
 
 ## 6. SVG Icons
 
-Design one SVG icon per card (140×140 viewBox="0 0 140 140") that visually matches the card's theme.
-Use strokes in `#FFD60A` or `#888`. Keep paths clean and legible at 140px.
+Design one SVG icon per card (`width={280} height={280} viewBox="0 0 140 140"`) that visually matches the card's theme.
+Use strokes in `#FFD60A` (YELLOW) or `#888899` (GRAY). Keep paths clean and legible at 140px.
 Do NOT use external icon libraries — inline SVG only.
+
+### 6-A. What WORKS ✅
+
+| Pattern | Example |
+|---------|---------|
+| **2-element bold composition** | ⚡ bolt → bill stack; ✓ circle → ⊗ circle |
+| **One dominant symbol** | Giant `?` filling document (fontSize=68), fills most of space |
+| **Contrasting circles** | Done circle (GRAY ✓) vs Blocked circle (YELLOW ⊗) |
+| **Black-box metaphor** | Box outline + padlock + large `?` inside = "can't explain" |
+| **GRAY for status quo, YELLOW for problem** | Gray = existing state, Yellow = impact/blockage |
+| **Curved graph lines clearly separated** | Make speed end at y=78, cost end at y=26 — never let two trend lines land near same y |
+
+### 6-B. Anti-patterns — Never Repeat ❌
+
+| Anti-pattern | What went wrong | Fix |
+|-------------|----------------|-----|
+| **Horizontal 3-part layout** | Robot + arrow + bills: too cramped at 140×140, all elements tiny | Max 2 bold elements |
+| **Confusing curved arrows** | "Restart arrow" arc looked like random decoration | Remove ambiguous arrows |
+| **Two tiny stick figures** | 2 figures at r=10 each are unreadable; look like dots | Use circles/bold shapes instead |
+| **`?` for "can't explain"** | `?` reads as "confused/unknown", not "can't speak/blocked" | Use padlock, box+?, or X-in-bubble |
+| **Overlapping elements at same coords** | Checkmark + X at same position just looks like a single X | Separate spatially (left/right halves) or use circle-negation |
+| **Pointed-end mouth shape** | `M12,70 Q70,28 128,70 Q70,112 12,70` → looks like an eye | Use rounder arcs or different metaphor entirely |
+| **Circle-slash over checkmark** | Both overlapping, circle-slash dominates and erases the checkmark | Different approach needed |
+
+### 6-C. Card 5 "설명 못 하면" Revision Log
+
+Five attempts were made — record kept to prevent repetition:
+
+1. **Person + speech bubble + `?`** → User: "doesn't match content" (? = confused, not blocked)
+2. **Person + speech bubble + `X`** → User: "completely change"
+3. **Checkmark + X overlay** → Checkmark invisible; just looked like a big X
+4. **Checkmark + yellow circle-slash** → User: "even worse"
+5. **Mouth + padlock** → Mouth path looked like an eye, not a mouth
+6. **Box (chest) + padlock + `?`** ✅ → User approved ("좋아")
+
+**Winning formula for "설명 못 하면":**
+```tsx
+// Box lid
+<rect x={12} y={30} width={116} height={24} rx={5} stroke={GRAY} strokeWidth={4} fill="none" />
+// Box body  
+<rect x={12} y={52} width={116} height={78} rx={5} stroke={GRAY} strokeWidth={4} fill="none" />
+// Padlock
+<rect x={54} y={46} width={32} height={24} rx={6} stroke={YELLOW} strokeWidth={4} fill={BG} />
+<path d="M62 46 L62 38 Q70 28 78 38 L78 46" stroke={YELLOW} strokeWidth={4} strokeLinecap="round" fill="none" />
+// ? inside
+<text x={70} y={120} textAnchor="middle" fontSize={66} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
+```
 
 ## 7. Render
 
+**IMPORTANT — Use headless_shell, NOT chrome:**
+
 ```bash
-bash scripts/render.sh src/<topic-slug>/index.tsx TopicName /tmp/<topic>.mp4
+npx remotion render src/<topic-slug>/index.tsx <CompositionId> /tmp/<topic>.mp4 \
+  --browser-executable=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell \
+  --log=error
 ```
 
-The render script uses Playwright Chromium at:
-`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`
+`/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (full Chrome) will fail with "Old Headless mode removed" error.
+Always use `chromium_headless_shell-1194`.
+
+Each topic needs its own `src/<topic>/index.tsx` + `Root.tsx` — do **NOT** add the composition to the main `src/Root.tsx` (other compositions there load Google Fonts which are blocked by the network policy and will cause render failure).
 
 After render, verify with a frame extract:
 ```bash
@@ -220,8 +273,9 @@ The bundled Remotion ffmpeg does NOT support `aevalsrc`. Generate audio in pure 
 python3 /path/to/gen_audio.py /tmp/<topic>_track.wav
 ```
 
-The audio script uses `numpy` + `wave` only. **Phone-speaker friendly: use 180–500Hz range, NOT 40-80Hz (inaudible on phone).**
-Structure:
+The audio script uses `numpy` + `wave` only. **Phone-speaker friendly: use 120–800Hz range, NOT 40-80Hz (inaudible on phone speakers).**
+
+### 8-A. Dark Ambient (original style)
 - Atmospheric pad: 180Hz + 181Hz (beat) + 240Hz + 360Hz with slow tremolo — gain × 0.30
 - Card-transition whooshes: broadband noise filtered with moving avg (k=80) — gain × 0.55 each
 - Heartbeat pulses: 120Hz + 200Hz + 80Hz with fast exp decay — gains 0.5–0.8
@@ -229,16 +283,32 @@ Structure:
 - Final swell: 300Hz + 400Hz + 500Hz — gain × 0.40
 - Master: normalize → tanh(x×1.8)/1.8 → normalize to 0.95
 
-**Merge with aresample filter (MANDATORY):** WAV is 44100Hz, MP4 expects 48000Hz.
-Wrong: `-c:a aac -b:a 192k` (Qavg=65536 → silent)
-Correct: `-filter_complex "[1:a]aresample=48000[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k`
+### 8-B. Upbeat / Reels-optimized (BPM 128) ✅ preferred for engagement
+- **Kick**: 120Hz fundamental, exp decay (k=22), every beat — gain 0.85
+- **Snare**: white noise × exp decay (k=30), beats 2&4 — gain 0.55
+- **Hi-hat**: white noise × very fast decay (k=80), every 8th note — gain 0.18
+- **Bass**: 180Hz + harmonics with envelope, follows kick — gain 0.35
+- **Melody**: 440→660→550→880Hz sequence, short notes, ADSR — gain 0.28
+- **Chords**: 3-voice pad 520+660+780Hz, long attack — gain 0.18
+- **Master**: normalize → tanh(x×1.5)/1.5 → normalize to 0.92. Peak≈92%, RMS≈25%
 
-Then merge with bundled ffmpeg:
+**⚠️ np.exp() overflow fix:** When computing exp(-k*lt) for notes outside their onset window, `lt` is large and negative → NaN. Always mask:
+```python
+lt_safe = np.where(mask, lt, 0.0)
+envelope = np.where(mask, np.exp(-k * lt_safe), 0.0)
+```
+
+**Merge with aresample filter (MANDATORY):** WAV is 44100Hz, MP4 expects 48000Hz.
+- ❌ Wrong: `-c:a aac -b:a 192k` (Qavg=65536 → near-silent output)
+- ✅ Correct:
 ```bash
 node_modules/@remotion/compositor-linux-x64-gnu/ffmpeg \
   -i /tmp/<topic>.mp4 -i /tmp/<topic>_track.wav \
-  -c:v copy -c:a aac -b:a 192k -shortest /tmp/<topic>_final.mp4
+  -filter_complex "[1:a]aresample=48000[a]" \
+  -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k \
+  -shortest /tmp/<topic>_final.mp4
 ```
+Healthy output: `Qavg: ~980` (not 65536).
 
 ## 9. Card Scenario Format (for user confirmation)
 
