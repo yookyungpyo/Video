@@ -119,14 +119,18 @@ const IconBothRise: React.FC = () => (
   </svg>
 );
 
-// Card 5: Gray checkmark (looks done) + yellow circle-slash (negated) = NOT complete
+// Card 5: Black box (locked chest + ?) = AI output nobody can explain
 const IconCantExplain: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Checkmark (GRAY) — "완성처럼 보임" */}
-    <path d="M28 70 L54 98 L112 36" stroke={GRAY} strokeWidth={10} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    {/* Circle-slash (YELLOW) — "아니다 / 완성이 아니다" */}
-    <circle cx={70} cy={70} r={58} stroke={YELLOW} strokeWidth={5} fill="none" />
-    <line x1={29} y1={111} x2={111} y2={29} stroke={YELLOW} strokeWidth={9} strokeLinecap="round" />
+    {/* Box lid */}
+    <rect x={12} y={30} width={116} height={24} rx={5} stroke={GRAY} strokeWidth={4} fill="none" />
+    {/* Box body */}
+    <rect x={12} y={52} width={116} height={78} rx={5} stroke={GRAY} strokeWidth={4} fill="none" />
+    {/* Padlock (YELLOW) on lid seam */}
+    <rect x={54} y={46} width={32} height={24} rx={6} stroke={YELLOW} strokeWidth={4} fill={BG} />
+    <path d="M62 46 L62 38 Q70 28 78 38 L78 46" stroke={YELLOW} strokeWidth={4} strokeLinecap="round" fill="none" />
+    {/* Giant ? inside box */}
+    <text x={70} y={120} textAnchor="middle" fontSize={66} fill={YELLOW} fontFamily="sans-serif" fontWeight={900}>?</text>
   </svg>
 );
 
