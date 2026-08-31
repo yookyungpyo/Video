@@ -220,12 +220,18 @@ The bundled Remotion ffmpeg does NOT support `aevalsrc`. Generate audio in pure 
 python3 /path/to/gen_audio.py /tmp/<topic>_track.wav
 ```
 
-The audio script uses `numpy` + `wave` only. Structure:
-- Sub drone (≈38Hz) with slow tremolo, 2s fade-in
-- Heartbeat pulses (52Hz + 39Hz) at ~1.5s intervals
-- Whoosh noise at each card transition boundary
-- Resolve swell in final card (~3s before end)
-- Master: normalize → tanh soft clip → final fade-out
+The audio script uses `numpy` + `wave` only. **Phone-speaker friendly: use 180–500Hz range, NOT 40-80Hz (inaudible on phone).**
+Structure:
+- Atmospheric pad: 180Hz + 181Hz (beat) + 240Hz + 360Hz with slow tremolo — gain × 0.30
+- Card-transition whooshes: broadband noise filtered with moving avg (k=80) — gain × 0.55 each
+- Heartbeat pulses: 120Hz + 200Hz + 80Hz with fast exp decay — gains 0.5–0.8
+- Tension rise texture: filtered noise in cards 3–4 — gain × 0.22
+- Final swell: 300Hz + 400Hz + 500Hz — gain × 0.40
+- Master: normalize → tanh(x×1.8)/1.8 → normalize to 0.95
+
+**Merge with aresample filter (MANDATORY):** WAV is 44100Hz, MP4 expects 48000Hz.
+Wrong: `-c:a aac -b:a 192k` (Qavg=65536 → silent)
+Correct: `-filter_complex "[1:a]aresample=48000[a]" -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k`
 
 Then merge with bundled ffmpeg:
 ```bash
