@@ -119,22 +119,14 @@ const IconBothRise: React.FC = () => (
   </svg>
 );
 
-// Card 5: Person (gray) + speech bubble with bold X (yellow) = speech is blocked, can't explain
+// Card 5: Gray checkmark (looks done) + yellow circle-slash (negated) = NOT complete
 const IconCantExplain: React.FC = () => (
   <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    {/* Person — larger for visual weight */}
-    <circle cx={28} cy={32} r={16} stroke={GRAY} strokeWidth={3.5} fill="none" />
-    <line x1={28} y1={48} x2={28} y2={82} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" />
-    <line x1={28} y1={64} x2={10} y2={54} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={28} y1={64} x2={46} y2={54} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={18} y1={82} x2={28} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    <line x1={38} y1={82} x2={28} y2={110} stroke={GRAY} strokeWidth={3} strokeLinecap="round" />
-    {/* Large speech bubble — right side */}
-    <path d="M54 14 Q54 4 66 4 L126 4 Q136 4 136 18 L136 72 Q136 84 124 84 L82 84 L64 104 L68 84 Q54 84 54 72 Z"
-      stroke={YELLOW} strokeWidth={3.5} fill="none" strokeLinejoin="round" />
-    {/* Bold X inside bubble — speech blocked, can't explain */}
-    <line x1={74} y1={24} x2={118} y2={66} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" />
-    <line x1={118} y1={24} x2={74} y2={66} stroke={YELLOW} strokeWidth={7} strokeLinecap="round" />
+    {/* Checkmark (GRAY) — "완성처럼 보임" */}
+    <path d="M28 70 L54 98 L112 36" stroke={GRAY} strokeWidth={10} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    {/* Circle-slash (YELLOW) — "아니다 / 완성이 아니다" */}
+    <circle cx={70} cy={70} r={58} stroke={YELLOW} strokeWidth={5} fill="none" />
+    <line x1={29} y1={111} x2={111} y2={29} stroke={YELLOW} strokeWidth={9} strokeLinecap="round" />
   </svg>
 );
 
