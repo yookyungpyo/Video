@@ -2,7 +2,7 @@
 name: cat-shorts
 description: Produce vertical (9:16) dark "Cat format" Reels in Remotion — pure black background (#060608), yellow bracket [ headline ], SVG icon per card, 🐱 emoji mascot with float animation, dark ambient soundtrack, Reels safe-area layout. 5-card structure at ~20 seconds. MANDATORY workflow: always present the 5-card scenario to the user first and wait for confirmation before producing. Use when asked for a cat-format, dark-bracket, short-form Reels video (or any keyword like "고양이 포맷", "cat format", "다크 브라켓").
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   tags: remotion, video, reels, shorts, dark, cat, bracket, korean, mascot, instagram
 ---
 
@@ -207,6 +207,9 @@ Do NOT use external icon libraries — inline SVG only.
 | **Black-box metaphor** | Box outline + padlock + large `?` inside = "can't explain" |
 | **GRAY for status quo, YELLOW for problem** | Gray = existing state, Yellow = impact/blockage |
 | **Curved graph lines clearly separated** | Make speed end at y=78, cost end at y=26 — never let two trend lines land near same y |
+| **Dice + % (probability)** | 3-dot diagonal dice (GRAY) + large `%` text (YELLOW, fontSize=72) |
+| **Warning triangle + ! (critical risk)** | Outlined triangle path (GRAY) + vertical line + circle (YELLOW) |
+| **Bullseye target (precision/discretion)** | 3 concentric circles (GRAY) + filled center dot (YELLOW) + dashed crosshairs |
 
 ### 6-B. Anti-patterns — Never Repeat ❌
 
@@ -262,10 +265,51 @@ Each topic needs its own `src/<topic>/index.tsx` + `Root.tsx` — do **NOT** add
 After render, verify with a frame extract:
 ```bash
 node_modules/@remotion/compositor-linux-x64-gnu/ffmpeg \
-  -i /tmp/<topic>.mp4 -vf "select=eq(n\,0)" -vframes 1 -q:v 2 /tmp/frame0.jpg
+  -ss 00:00:02 -i /tmp/<topic>.mp4 -frames:v 1 -q:v 2 /tmp/frame_2s.jpg
 ```
 
-## 8. Audio
+**⚠️ Frame extraction gotchas:**
+- `select=eq(n\,0)` filter does NOT work with the bundled ffmpeg (error: "No option name near 'eq(n,0)'"). Always use `-ss <time>` instead.
+- Frame 0 is always black due to the card fade-in. Extract at 2–4s to see actual card content.
+
+## 8. Text Layout Control
+
+### 8-A. Bracket Overflow Prevention
+
+Long bracket strings (Korean + Latin + punctuation) can exceed the container width at the default `fontSize: 108`, causing the closing `]` to wrap to a new line — a jarring visual.
+
+**Fix: add an optional `bracketFontSize` prop to CardProps (default 108). Apply `whiteSpace: "nowrap"` automatically when the size is reduced:**
+
+```tsx
+type CardProps = {
+  // ...
+  bracketFontSize?: number;  // default 108
+};
+
+// In Card's bracket div:
+fontSize: bracketFontSize,
+whiteSpace: bracketFontSize < 108 ? "nowrap" : undefined,
+```
+
+For cards with quotes or mixed-script brackets that look crowded at 108px, pass `bracketFontSize: 84` (or similar). The `nowrap` ensures it stays on one line.
+
+### 8-B. Intentional Punchline Line Breaks
+
+Let the punchline break at a semantically meaningful point (comma, clause boundary) rather than wherever the browser decides to wrap. This improves readability hierarchy.
+
+**Fix: add `whiteSpace: "pre-line"` to the punchline div globally, then use `\n` in the punchline string to force the break:**
+
+```tsx
+// Punchline div style:
+whiteSpace: "pre-line",
+
+// Card data:
+punchline: "맞을 가능성이 높을 뿐,\n틀릴 확률도 항상 존재한다",
+```
+
+Without this, the browser wraps at word boundaries based on container width, which often lands mid-clause and reads awkwardly.
+
+## 9. Audio
 
 The bundled Remotion ffmpeg does NOT support `aevalsrc`. Generate audio in pure Python:
 
@@ -275,7 +319,7 @@ python3 /path/to/gen_audio.py /tmp/<topic>_track.wav
 
 The audio script uses `numpy` + `wave` only. **Phone-speaker friendly: use 120–800Hz range, NOT 40-80Hz (inaudible on phone speakers).**
 
-### 8-A. Dark Ambient (original style)
+### 9-A. Dark Ambient (original style)
 - Atmospheric pad: 180Hz + 181Hz (beat) + 240Hz + 360Hz with slow tremolo — gain × 0.30
 - Card-transition whooshes: broadband noise filtered with moving avg (k=80) — gain × 0.55 each
 - Heartbeat pulses: 120Hz + 200Hz + 80Hz with fast exp decay — gains 0.5–0.8
@@ -283,7 +327,7 @@ The audio script uses `numpy` + `wave` only. **Phone-speaker friendly: use 120�
 - Final swell: 300Hz + 400Hz + 500Hz — gain × 0.40
 - Master: normalize → tanh(x×1.8)/1.8 → normalize to 0.95
 
-### 8-B. Upbeat / Reels-optimized (BPM 128) ✅ preferred for engagement
+### 9-B. Upbeat / Reels-optimized (BPM 128) ✅ preferred for engagement
 - **Kick**: 120Hz fundamental, exp decay (k=22), every beat — gain 0.85
 - **Snare**: white noise × exp decay (k=30), beats 2&4 — gain 0.55
 - **Hi-hat**: white noise × very fast decay (k=80), every 8th note — gain 0.18
@@ -310,7 +354,7 @@ node_modules/@remotion/compositor-linux-x64-gnu/ffmpeg \
 ```
 Healthy output: `Qavg: ~980` (not 65536).
 
-## 9. Card Scenario Format (for user confirmation)
+## 10. Card Scenario Format (for user confirmation)
 
 When presenting the scenario, use this format:
 
@@ -331,7 +375,7 @@ When presenting the scenario, use this format:
 확인되면 제작 시작할게요!
 ```
 
-## 10. Working Reference
+## 11. Working Reference
 
 Full working example: `remotion-composer/src/ai-standards/`
 - `AiStandards.tsx` — 5 SVG icons + full Card component
