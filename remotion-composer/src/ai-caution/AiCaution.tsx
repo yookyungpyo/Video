@@ -244,6 +244,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             paddingLeft: 60,
             paddingRight: 60,
             lineHeight: 1.4,
+            whiteSpace: "pre-line",
           }}
         >
           {punchline}
@@ -278,7 +279,7 @@ const cards: CardProps[] = [
   {
     context: "AI의 본질",
     bracket: "AI는 확률이다",
-    punchline: "맞을 가능성이 높을 뿐, 틀릴 확률도 항상 존재한다",
+    punchline: "맞을 가능성이 높을 뿐,\n틀릴 확률도 항상 존재한다",
     icon: <IconProbability />,
   },
   {
