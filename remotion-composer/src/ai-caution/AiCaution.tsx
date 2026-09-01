@@ -134,9 +134,10 @@ type CardProps = {
   punchline: string;
   icon: React.ReactNode;
   iconW?: number;
+  bracketFontSize?: number;
 };
 
-const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 280 }) => {
+const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 280, bracketFontSize = 108 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -213,7 +214,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             transform: `scale(${0.75 + 0.25 * t3})`,
             fontFamily: FONT,
             fontWeight: 900,
-            fontSize: 108,
+            fontSize: bracketFontSize,
             color: YELLOW,
             textAlign: "center",
             letterSpacing: -3,
@@ -221,6 +222,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, iconW = 
             paddingLeft: 30,
             paddingRight: 30,
             marginBottom: 26,
+            whiteSpace: bracketFontSize < 108 ? "nowrap" : undefined,
             textShadow: t3 > 0.9
               ? `0 0 ${glowSize}px ${YELLOW}55, 0 0 ${glowSize * 2}px ${YELLOW}22`
               : "none",
@@ -290,6 +292,7 @@ const cards: CardProps[] = [
     bracket: '"맞다" or "아니다"',
     punchline: "AI는 이걸 보장하지 못한다",
     icon: <IconUncertain />,
+    bracketFontSize: 84,
   },
   {
     context: "검증 책임",
