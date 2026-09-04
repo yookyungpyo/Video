@@ -278,7 +278,7 @@ const cards: CardProps[] = [
   },
   {
     context: "더하기의 함정",
-    bracket: "더하기의 끝은 마비다",
+    bracket: "더하기의 끝은 과부하다",
     punchline: "넘쳐나는 기능 속에서\n정작 결정을 못 한다",
     icon: <IconParalysis />,
     bracketFontSize: 80,
