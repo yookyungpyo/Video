@@ -281,7 +281,7 @@ const cards: CardProps[] = [
     bracket: "더하기의 끝은 마비다",
     punchline: "넘쳐나는 기능 속에서\n정작 결정을 못 한다",
     icon: <IconParalysis />,
-    bracketFontSize: 88,
+    bracketFontSize: 80,
   },
   {
     context: "진짜 실력",
