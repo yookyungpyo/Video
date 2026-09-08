@@ -481,6 +481,23 @@ class PhotoMotion(BaseTool):
 
         bg_depth = float(inputs.get("bg_depth", 0.45))
 
+        # The camera can only pan as far as the zoom margin allows before the
+        # frame edge runs out of picture and smears. The background takes only
+        # bg_depth of the dolly, so it is the layer that runs out first — size
+        # the floor off that, not off the subject's zoom.
+        half_diagonal = math.hypot(out_w, out_h) / 2.0
+        excursion = cfg["handheld"] * (
+            cfg["drift_px"] + math.radians(cfg["drift_roll_deg"]) * half_diagonal
+        )
+        share = bg_depth if alpha is not None else 1.0
+        floor = 1.0 + 2.0 * excursion / (min(out_w, out_h) * max(share, 1e-6))
+        zoom_floor_applied = None
+        if cfg["zoom_start"] < floor:
+            zoom_floor_applied = round(floor, 4)
+            span = cfg["zoom_end"] - cfg["zoom_start"]
+            cfg["zoom_start"] = floor
+            cfg["zoom_end"] = floor + span
+
         text_layer = self._build_text_layer((out_w, out_h), inputs)
         fade_in = float(inputs.get("text_fade_in", 0.8))
 
@@ -550,6 +567,8 @@ class PhotoMotion(BaseTool):
                 "fps": fps,
                 "resolution": f"{out_w}x{out_h}",
                 "frames": n_frames,
+                "layered": alpha is not None,
+                "zoom_floor_applied": zoom_floor_applied,
             },
             artifacts=[str(out_path)],
             cost_usd=0.0,
