@@ -355,7 +355,9 @@ class PhotoMotion(BaseTool):
                     base,
                     matrix,
                     (out_w, out_h),
-                    flags=cv2.INTER_CUBIC,
+                    # Lanczos holds edge detail better than cubic, and the
+                    # dolly means most frames are a mild upscale.
+                    flags=cv2.INTER_LANCZOS4,
                     borderMode=cv2.BORDER_REPLICATE,
                 )
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
