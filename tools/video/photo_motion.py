@@ -4,18 +4,24 @@ This is a *camera* simulator, not a subject animator. It does not generate
 limbs, gait, or cloth motion; it moves a virtual camera over a still frame so
 a standing/walking subject reads as being followed by a handheld shot.
 
-The motion model layers four signals:
+The motion model layers three signals:
 
 1. ``dolly``  — an eased zoom from ``zoom_start`` to ``zoom_end``. This is the
    "camera approaching the subject" component, and it does most of the work of
    selling forward movement.
-2. ``bob``    — a vertical dip at the footfall rate. A walking body drops
-   slightly each time a foot lands, so the dip is driven by ``|sin|`` at
-   ``steps_per_second`` rather than a plain sine.
-3. ``sway``   — a horizontal weight shift at *half* the footfall rate: one full
-   left/right cycle per gait cycle (two steps), plus a coupled micro-roll.
-4. ``breath`` — a slow scale oscillation so the shot never looks mechanically
-   linear.
+2. ``gait``   — the operator's own footfalls. A carried camera rises and falls
+   once per step, so the vertical term is a plain cosine at
+   ``steps_per_second``; weight shifts side to side once per *gait cycle*
+   (two steps), so the lateral term and its coupled roll run at half that.
+   Both are deliberately small — on a still frame a strong periodic bounce
+   reads as a glitch rather than as walking.
+3. ``drift``  — band-limited noise on position, roll and scale. This is the
+   layer that actually sells "handheld". Real camera motion is never a pure
+   sine; without an aperiodic component the shot reads as a mechanical
+   wobble no matter how the gait terms are tuned.
+
+Noise is cubic-interpolated from a seeded value table, so output stays
+deterministic for a given ``seed``.
 
 Everything runs through OpenCV + the bundled imageio-ffmpeg binary, so the tool
 needs no API key, no GPU, and no system ffmpeg on PATH.
@@ -109,6 +115,52 @@ def _wrap(draw, text: str, font, max_width: int) -> list[str]:
     return lines
 
 
+class _Drift:
+    """Deterministic band-limited noise, sampled as a function of time.
+
+    Random values on a fixed lattice, cubic-interpolated between them and
+    summed over a couple of octaves. The result wanders like a hand rather
+    than oscillating like a sine, which is the whole point of using it over
+    ``sin`` for the handheld layer.
+    """
+
+    _TABLE = 2048
+
+    def __init__(self, seed: int, freq: float, octaves: int = 2) -> None:
+        import random
+
+        rng = random.Random(seed)
+        self._values = [rng.uniform(-1.0, 1.0) for _ in range(self._TABLE)]
+        self._freq = freq
+        self._octaves = max(1, octaves)
+
+    def _sample(self, x: float) -> float:
+        """Catmull-Rom interpolation of the value table at position ``x``."""
+        table = self._values
+        n = len(table)
+        i = int(math.floor(x))
+        t = x - i
+        p0, p1, p2, p3 = (table[(i + k) % n] for k in (-1, 0, 1, 2))
+        return 0.5 * (
+            2.0 * p1
+            + (-p0 + p2) * t
+            + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t * t
+            + (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t * t * t
+        )
+
+    def __call__(self, t: float) -> float:
+        total = 0.0
+        norm = 0.0
+        amp = 1.0
+        freq = self._freq
+        for _ in range(self._octaves):
+            total += amp * self._sample(t * freq)
+            norm += amp
+            amp *= 0.5
+            freq *= 2.0
+        return total / norm
+
+
 class PhotoMotion(BaseTool):
     """Still image -> short vertical motion clip, rendered locally for free."""
 
@@ -171,12 +223,24 @@ class PhotoMotion(BaseTool):
             "height": {"type": "integer", "default": 1920},
             "zoom_start": {"type": "number", "default": 1.05},
             "zoom_end": {"type": "number", "default": 1.22},
-            "steps_per_second": {"type": "number", "default": 0.9},
-            "bob_px": {"type": "number", "default": 9.0},
-            "sway_px": {"type": "number", "default": 7.0},
-            "tilt_deg": {"type": "number", "default": 0.35},
-            "breath_amp": {"type": "number", "default": 0.004},
-            "breath_period": {"type": "number", "default": 5.0},
+            "steps_per_second": {"type": "number", "default": 1.6},
+            "bob_px": {"type": "number", "default": 4.0},
+            "sway_px": {"type": "number", "default": 3.0},
+            "tilt_deg": {"type": "number", "default": 0.18},
+            "handheld": {
+                "type": "number",
+                "default": 1.0,
+                "description": "Master amount for the drift layer. 0 disables it.",
+            },
+            "drift_px": {"type": "number", "default": 12.0},
+            "drift_roll_deg": {"type": "number", "default": 0.22},
+            "drift_scale": {"type": "number", "default": 0.010},
+            "drift_freq": {
+                "type": "number",
+                "default": 0.28,
+                "description": "Base drift rate in Hz. Higher is jitterier.",
+            },
+            "seed": {"type": "integer", "default": 7},
             "text": {"type": "string", "default": ""},
             "text_position": {"enum": ["top", "center", "bottom"], "default": "top"},
             "text_size": {"type": "integer", "description": "Defaults to width/16."},
@@ -203,7 +267,7 @@ class PhotoMotion(BaseTool):
         "Motion should read as a handheld follow; limbs stay static by design.",
     ]
 
-    idempotency_key_fields = ["image_path", "duration", "fps", "text"]
+    idempotency_key_fields = ["image_path", "duration", "fps", "text", "seed"]
 
     def estimate_cost(self, inputs: dict[str, Any]) -> float:
         return 0.0
@@ -215,21 +279,35 @@ class PhotoMotion(BaseTool):
     # ---- motion model ----
 
     @staticmethod
-    def _transform_at(t: float, cfg: dict[str, float]) -> tuple[float, float, float, float]:
+    def _transform_at(
+        t: float, cfg: dict[str, Any], drift: dict[str, "_Drift"]
+    ) -> tuple[float, float, float, float]:
         """Return (scale, dx, dy, roll_deg) for time ``t`` seconds."""
         progress = min(max(t / cfg["duration"], 0.0), 1.0)
-        eased = progress * progress * (3.0 - 2.0 * progress)  # smoothstep
+        # Mostly smoothstep, but blended with a linear ramp so the push-in is
+        # already moving in the first second instead of sitting still.
+        smooth = progress * progress * (3.0 - 2.0 * progress)
+        eased = 0.3 * progress + 0.7 * smooth
         dolly = cfg["zoom_start"] + (cfg["zoom_end"] - cfg["zoom_start"]) * eased
 
+        # --- gait: the operator's footfalls ---
         step = 2.0 * math.pi * cfg["steps_per_second"] * t
-        # Body dips on every footfall, so rectify the sine.
-        dy = -cfg["bob_px"] * abs(math.sin(step))
+        # A carried camera rises and falls once per step. A plain cosine keeps
+        # that smooth; a rectified sine would put a velocity cusp on every
+        # footfall, which reads as a stutter.
+        dy = -cfg["bob_px"] * math.cos(step)
         # Weight shifts once per gait cycle = once per two steps.
         dx = cfg["sway_px"] * math.sin(step * 0.5)
         roll = cfg["tilt_deg"] * math.sin(step * 0.5 + math.pi / 2)
 
-        breath = 1.0 + cfg["breath_amp"] * math.sin(2.0 * math.pi * t / cfg["breath_period"])
-        return dolly * breath, dx, dy, roll
+        # --- drift: the aperiodic layer that makes it read as handheld ---
+        hand = cfg["handheld"]
+        dx += hand * cfg["drift_px"] * drift["x"](t)
+        dy += hand * cfg["drift_px"] * drift["y"](t)
+        roll += hand * cfg["drift_roll_deg"] * drift["roll"](t)
+        scale_wobble = 1.0 + hand * cfg["drift_scale"] * drift["scale"](t)
+
+        return dolly * scale_wobble, dx, dy, roll
 
     # ---- text layer ----
 
@@ -314,12 +392,25 @@ class PhotoMotion(BaseTool):
             "duration": duration,
             "zoom_start": float(inputs.get("zoom_start", 1.05)),
             "zoom_end": float(inputs.get("zoom_end", 1.22)),
-            "steps_per_second": float(inputs.get("steps_per_second", 0.9)),
-            "bob_px": float(inputs.get("bob_px", 9.0)),
-            "sway_px": float(inputs.get("sway_px", 7.0)),
-            "tilt_deg": float(inputs.get("tilt_deg", 0.35)),
-            "breath_amp": float(inputs.get("breath_amp", 0.004)),
-            "breath_period": float(inputs.get("breath_period", 5.0)),
+            "steps_per_second": float(inputs.get("steps_per_second", 1.6)),
+            "bob_px": float(inputs.get("bob_px", 4.0)),
+            "sway_px": float(inputs.get("sway_px", 3.0)),
+            "tilt_deg": float(inputs.get("tilt_deg", 0.18)),
+            "handheld": float(inputs.get("handheld", 1.0)),
+            "drift_px": float(inputs.get("drift_px", 12.0)),
+            "drift_roll_deg": float(inputs.get("drift_roll_deg", 0.22)),
+            "drift_scale": float(inputs.get("drift_scale", 0.010)),
+        }
+
+        # Independent noise channels; the offsets keep them uncorrelated so the
+        # frame wanders rather than sliding along one diagonal.
+        seed = int(inputs.get("seed", 7))
+        drift_freq = float(inputs.get("drift_freq", 0.28))
+        drift = {
+            "x": _Drift(seed, drift_freq),
+            "y": _Drift(seed + 101, drift_freq * 1.17),
+            "roll": _Drift(seed + 202, drift_freq * 0.83),
+            "scale": _Drift(seed + 303, drift_freq * 0.61),
         }
 
         base = _cover_crop(src, out_w / out_h)
@@ -345,7 +436,7 @@ class PhotoMotion(BaseTool):
         try:
             for i in range(n_frames):
                 t = i / fps
-                scale, dx, dy, roll = self._transform_at(t, cfg)
+                scale, dx, dy, roll = self._transform_at(t, cfg, drift)
 
                 matrix = cv2.getRotationMatrix2D(centre, roll, fit * scale)
                 matrix[0, 2] += out_w / 2.0 - centre[0] + dx
