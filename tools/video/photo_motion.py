@@ -1,0 +1,384 @@
+"""Turn a still photo into a short motion clip — locally, with no API cost.
+
+This is a *camera* simulator, not a subject animator. It does not generate
+limbs, gait, or cloth motion; it moves a virtual camera over a still frame so
+a standing/walking subject reads as being followed by a handheld shot.
+
+The motion model layers four signals:
+
+1. ``dolly``  — an eased zoom from ``zoom_start`` to ``zoom_end``. This is the
+   "camera approaching the subject" component, and it does most of the work of
+   selling forward movement.
+2. ``bob``    — a vertical dip at the footfall rate. A walking body drops
+   slightly each time a foot lands, so the dip is driven by ``|sin|`` at
+   ``steps_per_second`` rather than a plain sine.
+3. ``sway``   — a horizontal weight shift at *half* the footfall rate: one full
+   left/right cycle per gait cycle (two steps), plus a coupled micro-roll.
+4. ``breath`` — a slow scale oscillation so the shot never looks mechanically
+   linear.
+
+Everything runs through OpenCV + the bundled imageio-ffmpeg binary, so the tool
+needs no API key, no GPU, and no system ffmpeg on PATH.
+"""
+
+from __future__ import annotations
+
+import math
+import time
+import unicodedata
+from pathlib import Path
+from typing import Any, Optional
+
+from tools.base_tool import (
+    BaseTool,
+    Determinism,
+    ResourceProfile,
+    ToolResult,
+    ToolRuntime,
+    ToolStability,
+    ToolTier,
+)
+
+# Fonts that cover Latin, in preference order.
+_LATIN_FONTS = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+]
+
+# Fonts that cover Hangul / CJK, in preference order.
+_CJK_FONTS = [
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    "/usr/share/fonts/opentype/unifont/unifont.otf",
+]
+
+
+def _has_cjk(text: str) -> bool:
+    """True if the string contains Hangul or other CJK codepoints."""
+    for ch in text:
+        if unicodedata.category(ch).startswith("L") and ord(ch) > 0x2E80:
+            return True
+    return False
+
+
+def _pick_font(text: str, size: int):
+    """Load the best available font that can render ``text``."""
+    from PIL import ImageFont
+
+    candidates = (_CJK_FONTS + _LATIN_FONTS) if _has_cjk(text) else _LATIN_FONTS
+    for path in candidates:
+        if Path(path).is_file():
+            try:
+                return ImageFont.truetype(path, size)
+            except OSError:
+                continue
+    return ImageFont.load_default()
+
+
+def _cover_crop(img, aspect: float):
+    """Centre-crop ``img`` (H, W, 3) to the given width/height ratio."""
+    h, w = img.shape[:2]
+    if w / h > aspect:  # too wide -> trim sides
+        new_w = int(round(h * aspect))
+        x = (w - new_w) // 2
+        return img[:, x:x + new_w]
+    new_h = int(round(w / aspect))  # too tall -> trim top/bottom
+    y = (h - new_h) // 2
+    return img[y:y + new_h, :]
+
+
+def _wrap(draw, text: str, font, max_width: int) -> list[str]:
+    """Greedy word wrap; falls back to per-character for scripts without spaces."""
+    lines: list[str] = []
+    for paragraph in text.split("\n"):
+        words = paragraph.split(" ")
+        if len(words) == 1 and draw.textlength(paragraph, font=font) > max_width:
+            words = list(paragraph)
+            joiner = ""
+        else:
+            joiner = " "
+        current = ""
+        for word in words:
+            trial = f"{current}{joiner}{word}" if current else word
+            if current and draw.textlength(trial, font=font) > max_width:
+                lines.append(current)
+                current = word
+            else:
+                current = trial
+        lines.append(current)
+    return lines
+
+
+class PhotoMotion(BaseTool):
+    """Still image -> short vertical motion clip, rendered locally for free."""
+
+    name = "photo_motion"
+    version = "1.0.0"
+    tier = ToolTier.CORE
+    capability = "video_post"
+    provider = "openmontage"
+    stability = ToolStability.BETA
+    determinism = Determinism.DETERMINISTIC
+    runtime = ToolRuntime.LOCAL
+
+    dependencies = [
+        "python:cv2",
+        "python:numpy",
+        "python:PIL",
+        "python:imageio",
+        "python:imageio_ffmpeg",
+    ]
+    install_instructions = (
+        "pip install opencv-python-headless numpy pillow imageio 'imageio[ffmpeg]' "
+        "— all free, no API key, no GPU, and no system ffmpeg needed "
+        "(the ffmpeg binary ships inside imageio-ffmpeg)."
+    )
+
+    capabilities = ["image_to_video", "ken_burns", "text_overlay"]
+
+    best_for = [
+        "turning one illustration or photo into a social-ready vertical clip",
+        "quote / affirmation reels where the subject is already in frame",
+        "free b-roll when no video-generation budget exists",
+    ]
+    not_good_for = [
+        "real gait animation — arms, legs and cloth do not move",
+        "changing the subject's pose or expression",
+        "anything needing new content outside the source frame",
+    ]
+
+    supports = {
+        "aspect_ratios": ["9:16", "1:1", "16:9", "4:5"],
+        "max_duration_seconds": 60,
+        "audio": False,
+        "text_overlay": True,
+        "cost_usd": 0.0,
+    }
+
+    resource_profile = ResourceProfile(
+        cpu_cores=2, ram_mb=1024, vram_mb=0, disk_mb=200, network_required=False
+    )
+
+    input_schema = {
+        "type": "object",
+        "required": ["image_path", "output_path"],
+        "properties": {
+            "image_path": {"type": "string", "description": "Source still image."},
+            "output_path": {"type": "string", "description": "Destination .mp4."},
+            "duration": {"type": "number", "default": 8.0},
+            "fps": {"type": "integer", "default": 30},
+            "width": {"type": "integer", "default": 1080},
+            "height": {"type": "integer", "default": 1920},
+            "zoom_start": {"type": "number", "default": 1.05},
+            "zoom_end": {"type": "number", "default": 1.22},
+            "steps_per_second": {"type": "number", "default": 0.9},
+            "bob_px": {"type": "number", "default": 9.0},
+            "sway_px": {"type": "number", "default": 7.0},
+            "tilt_deg": {"type": "number", "default": 0.35},
+            "breath_amp": {"type": "number", "default": 0.004},
+            "breath_period": {"type": "number", "default": 5.0},
+            "text": {"type": "string", "default": ""},
+            "text_position": {"enum": ["top", "center", "bottom"], "default": "top"},
+            "text_size": {"type": "integer", "description": "Defaults to width/16."},
+            "text_color": {"type": "string", "default": "#2b2118"},
+            "text_stroke": {"type": "string", "default": ""},
+            "text_fade_in": {"type": "number", "default": 0.8},
+            "crf": {"type": "integer", "default": 18},
+        },
+    }
+
+    output_schema = {
+        "type": "object",
+        "properties": {
+            "output_path": {"type": "string"},
+            "duration": {"type": "number"},
+            "fps": {"type": "integer"},
+            "resolution": {"type": "string"},
+            "frames": {"type": "integer"},
+        },
+    }
+
+    user_visible_verification = [
+        "Open the mp4 — the subject should drift toward the camera, not jitter.",
+        "Motion should read as a handheld follow; limbs stay static by design.",
+    ]
+
+    idempotency_key_fields = ["image_path", "duration", "fps", "text"]
+
+    def estimate_cost(self, inputs: dict[str, Any]) -> float:
+        return 0.0
+
+    def estimate_runtime(self, inputs: dict[str, Any]) -> float:
+        frames = float(inputs.get("duration", 8.0)) * int(inputs.get("fps", 30))
+        return round(frames * 0.02, 1)
+
+    # ---- motion model ----
+
+    @staticmethod
+    def _transform_at(t: float, cfg: dict[str, float]) -> tuple[float, float, float, float]:
+        """Return (scale, dx, dy, roll_deg) for time ``t`` seconds."""
+        progress = min(max(t / cfg["duration"], 0.0), 1.0)
+        eased = progress * progress * (3.0 - 2.0 * progress)  # smoothstep
+        dolly = cfg["zoom_start"] + (cfg["zoom_end"] - cfg["zoom_start"]) * eased
+
+        step = 2.0 * math.pi * cfg["steps_per_second"] * t
+        # Body dips on every footfall, so rectify the sine.
+        dy = -cfg["bob_px"] * abs(math.sin(step))
+        # Weight shifts once per gait cycle = once per two steps.
+        dx = cfg["sway_px"] * math.sin(step * 0.5)
+        roll = cfg["tilt_deg"] * math.sin(step * 0.5 + math.pi / 2)
+
+        breath = 1.0 + cfg["breath_amp"] * math.sin(2.0 * math.pi * t / cfg["breath_period"])
+        return dolly * breath, dx, dy, roll
+
+    # ---- text layer ----
+
+    def _build_text_layer(self, size: tuple[int, int], inputs: dict[str, Any]):
+        """Pre-render the caption once as an RGBA overlay."""
+        import numpy as np
+        from PIL import Image, ImageDraw
+
+        text = str(inputs.get("text") or "").strip()
+        if not text:
+            return None
+
+        width, height = size
+        font_size = int(inputs.get("text_size") or max(24, width // 16))
+        font = _pick_font(text, font_size)
+
+        layer = Image.new("RGBA", size, (0, 0, 0, 0))
+        draw = ImageDraw.Draw(layer)
+
+        margin = int(width * 0.08)
+        lines = _wrap(draw, text, font, width - 2 * margin)
+        line_h = int(font_size * 1.32)
+        block_h = line_h * len(lines)
+
+        position = inputs.get("text_position", "top")
+        if position == "top":
+            y = int(height * 0.07)
+        elif position == "bottom":
+            y = height - block_h - int(height * 0.12)
+        else:
+            y = (height - block_h) // 2
+
+        fill = inputs.get("text_color", "#2b2118")
+        stroke = inputs.get("text_stroke") or None
+        stroke_w = max(1, font_size // 18) if stroke else 0
+
+        for line in lines:
+            w = draw.textlength(line, font=font)
+            draw.text(
+                ((width - w) / 2, y),
+                line,
+                font=font,
+                fill=fill,
+                stroke_width=stroke_w,
+                stroke_fill=stroke,
+            )
+            y += line_h
+
+        return np.asarray(layer).astype(np.float32)
+
+    # ---- execution ----
+
+    def execute(self, inputs: dict[str, Any]) -> ToolResult:
+        started = time.time()
+        try:
+            self.check_dependencies()
+        except Exception as exc:  # DependencyError
+            return ToolResult(success=False, error=str(exc))
+
+        import cv2
+        import imageio.v2 as imageio
+        import numpy as np
+
+        src_path = Path(str(inputs["image_path"])).expanduser()
+        if not src_path.is_file():
+            return ToolResult(success=False, error=f"Image not found: {src_path}")
+
+        out_path = Path(str(inputs["output_path"])).expanduser()
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        src = cv2.imread(str(src_path), cv2.IMREAD_COLOR)
+        if src is None:
+            return ToolResult(success=False, error=f"Unreadable image: {src_path}")
+
+        out_w = int(inputs.get("width", 1080))
+        out_h = int(inputs.get("height", 1920))
+        fps = int(inputs.get("fps", 30))
+        duration = float(inputs.get("duration", 8.0))
+        n_frames = max(1, int(round(duration * fps)))
+
+        cfg = {
+            "duration": duration,
+            "zoom_start": float(inputs.get("zoom_start", 1.05)),
+            "zoom_end": float(inputs.get("zoom_end", 1.22)),
+            "steps_per_second": float(inputs.get("steps_per_second", 0.9)),
+            "bob_px": float(inputs.get("bob_px", 9.0)),
+            "sway_px": float(inputs.get("sway_px", 7.0)),
+            "tilt_deg": float(inputs.get("tilt_deg", 0.35)),
+            "breath_amp": float(inputs.get("breath_amp", 0.004)),
+            "breath_period": float(inputs.get("breath_period", 5.0)),
+        }
+
+        base = _cover_crop(src, out_w / out_h)
+        base_h, base_w = base.shape[:2]
+        # Scale that maps the cropped source exactly onto the output frame.
+        fit = out_w / base_w
+        centre = (base_w / 2.0, base_h / 2.0)
+
+        text_layer = self._build_text_layer((out_w, out_h), inputs)
+        fade_in = float(inputs.get("text_fade_in", 0.8))
+
+        writer = imageio.get_writer(
+            str(out_path),
+            fps=fps,
+            codec="libx264",
+            macro_block_size=None,
+            pixelformat="yuv420p",
+            ffmpeg_params=[
+                "-crf", str(int(inputs.get("crf", 18))),
+                "-preset", "medium",
+            ],
+        )
+        try:
+            for i in range(n_frames):
+                t = i / fps
+                scale, dx, dy, roll = self._transform_at(t, cfg)
+
+                matrix = cv2.getRotationMatrix2D(centre, roll, fit * scale)
+                matrix[0, 2] += out_w / 2.0 - centre[0] + dx
+                matrix[1, 2] += out_h / 2.0 - centre[1] + dy
+
+                frame = cv2.warpAffine(
+                    base,
+                    matrix,
+                    (out_w, out_h),
+                    flags=cv2.INTER_CUBIC,
+                    borderMode=cv2.BORDER_REPLICATE,
+                )
+                rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
+
+                if text_layer is not None:
+                    opacity = min(t / fade_in, 1.0) if fade_in > 0 else 1.0
+                    alpha = (text_layer[:, :, 3:4] / 255.0) * opacity
+                    rgb = rgb * (1.0 - alpha) + text_layer[:, :, :3] * alpha
+
+                writer.append_data(np.clip(rgb, 0, 255).astype(np.uint8))
+        finally:
+            writer.close()
+
+        return ToolResult(
+            success=True,
+            data={
+                "output_path": str(out_path),
+                "duration": round(n_frames / fps, 3),
+                "fps": fps,
+                "resolution": f"{out_w}x{out_h}",
+                "frames": n_frames,
+            },
+            artifacts=[str(out_path)],
+            cost_usd=0.0,
+            duration_seconds=round(time.time() - started, 2),
+        )
