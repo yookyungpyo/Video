@@ -4,21 +4,27 @@ This is a *camera* simulator, not a subject animator. It does not generate
 limbs, gait, or cloth motion; it moves a virtual camera over a still frame so
 a standing/walking subject reads as being followed by a handheld shot.
 
-The motion model layers three signals:
+Given a ``subject_mask`` the frame is split into a subject layer and a
+background plate, which is what lets the two move independently. Without one
+the render is a single flat layer and the shot reads as a zoom on a
+photograph, because that is all it can be.
 
-1. ``dolly``  — an eased zoom from ``zoom_start`` to ``zoom_end``. This is the
-   "camera approaching the subject" component, and it does most of the work of
-   selling forward movement.
-2. ``gait``   — the operator's own footfalls. A carried camera rises and falls
-   once per step, so the vertical term is a plain cosine at
-   ``steps_per_second``; weight shifts side to side once per *gait cycle*
-   (two steps), so the lateral term and its coupled roll run at half that.
-   Both are deliberately small — on a still frame a strong periodic bounce
-   reads as a glitch rather than as walking.
-3. ``drift``  — band-limited noise on position, roll and scale. This is the
-   layer that actually sells "handheld". Real camera motion is never a pure
-   sine; without an aperiodic component the shot reads as a mechanical
-   wobble no matter how the gait terms are tuned.
+Signals divide by what they belong to. The camera carries:
+
+1. ``dolly``  — an eased zoom from ``zoom_start`` to ``zoom_end``. Dollying in
+   grows near things faster than far things, so the background takes only
+   ``bg_depth`` of it; that difference is the whole sense of depth.
+2. ``drift``  — band-limited noise on position, roll and scale. Real camera
+   motion is never a pure sine, and without an aperiodic component the shot
+   reads as a mechanical wobble no matter how the other terms are tuned.
+
+The subject carries one, and only in layered mode:
+
+3. ``gait``   — a walking body rises and falls once per step (a plain cosine
+   at ``steps_per_second``; a rectified sine would put a velocity cusp on
+   every footfall) and shifts its weight sideways once per gait cycle, so the
+   lateral term runs at half that. Applying this to the whole frame instead
+   shakes the world rather than the walker, which is what reads as fake.
 
 Noise is cubic-interpolated from a seeded value table, so output stays
 deterministic for a given ``seed``.
@@ -221,10 +227,17 @@ class PhotoMotion(BaseTool):
             "fps": {"type": "integer", "default": 30},
             "width": {"type": "integer", "default": 1080},
             "height": {"type": "integer", "default": 1920},
-            "zoom_start": {"type": "number", "default": 1.02},
+            "zoom_start": {
+                "type": "number",
+                "default": 1.0,
+                "description": (
+                    "Raised automatically if the drift settings need more "
+                    "margin than this leaves — see zoom_floor_applied."
+                ),
+            },
             "zoom_end": {
                 "type": "number",
-                "default": 1.09,
+                "default": 1.14,
                 "description": (
                     "Subject's zoom at the end. Kept gentle on purpose — a hard "
                     "push-in on a still only advertises that the pose is frozen."
@@ -246,11 +259,11 @@ class PhotoMotion(BaseTool):
                 ),
             },
             "steps_per_second": {"type": "number", "default": 1.7},
-            "bob_px": {"type": "number", "default": 5.0},
-            "sway_px": {"type": "number", "default": 2.5},
+            "bob_px": {"type": "number", "default": 7.0},
+            "sway_px": {"type": "number", "default": 3.5},
             "handheld": {
                 "type": "number",
-                "default": 0.35,
+                "default": 0.55,
                 "description": "Master amount for the drift layer. 0 disables it.",
             },
             "drift_px": {"type": "number", "default": 8.0},
@@ -421,12 +434,12 @@ class PhotoMotion(BaseTool):
 
         cfg = {
             "duration": duration,
-            "zoom_start": float(inputs.get("zoom_start", 1.02)),
-            "zoom_end": float(inputs.get("zoom_end", 1.09)),
+            "zoom_start": float(inputs.get("zoom_start", 1.0)),
+            "zoom_end": float(inputs.get("zoom_end", 1.14)),
             "steps_per_second": float(inputs.get("steps_per_second", 1.7)),
-            "bob_px": float(inputs.get("bob_px", 5.0)),
-            "sway_px": float(inputs.get("sway_px", 2.5)),
-            "handheld": float(inputs.get("handheld", 0.35)),
+            "bob_px": float(inputs.get("bob_px", 7.0)),
+            "sway_px": float(inputs.get("sway_px", 3.5)),
+            "handheld": float(inputs.get("handheld", 0.55)),
             "drift_px": float(inputs.get("drift_px", 8.0)),
             "drift_roll_deg": float(inputs.get("drift_roll_deg", 0.10)),
             "drift_scale": float(inputs.get("drift_scale", 0.004)),
