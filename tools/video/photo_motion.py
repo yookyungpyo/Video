@@ -221,20 +221,41 @@ class PhotoMotion(BaseTool):
             "fps": {"type": "integer", "default": 30},
             "width": {"type": "integer", "default": 1080},
             "height": {"type": "integer", "default": 1920},
-            "zoom_start": {"type": "number", "default": 1.05},
-            "zoom_end": {"type": "number", "default": 1.22},
-            "steps_per_second": {"type": "number", "default": 1.6},
-            "bob_px": {"type": "number", "default": 4.0},
-            "sway_px": {"type": "number", "default": 3.0},
-            "tilt_deg": {"type": "number", "default": 0.18},
+            "zoom_start": {"type": "number", "default": 1.02},
+            "zoom_end": {
+                "type": "number",
+                "default": 1.09,
+                "description": (
+                    "Subject's zoom at the end. Kept gentle on purpose — a hard "
+                    "push-in on a still only advertises that the pose is frozen."
+                ),
+            },
+            "subject_mask": {
+                "type": "string",
+                "description": (
+                    "Optional greyscale matte of the subject. Supplying one "
+                    "switches on layered parallax; without it the render is flat."
+                ),
+            },
+            "bg_depth": {
+                "type": "number",
+                "default": 0.45,
+                "description": (
+                    "Background's share of the dolly, 0-1. Lower reads as more "
+                    "depth. Layered mode only."
+                ),
+            },
+            "steps_per_second": {"type": "number", "default": 1.7},
+            "bob_px": {"type": "number", "default": 5.0},
+            "sway_px": {"type": "number", "default": 2.5},
             "handheld": {
                 "type": "number",
-                "default": 1.0,
+                "default": 0.35,
                 "description": "Master amount for the drift layer. 0 disables it.",
             },
-            "drift_px": {"type": "number", "default": 12.0},
-            "drift_roll_deg": {"type": "number", "default": 0.22},
-            "drift_scale": {"type": "number", "default": 0.010},
+            "drift_px": {"type": "number", "default": 8.0},
+            "drift_roll_deg": {"type": "number", "default": 0.10},
+            "drift_scale": {"type": "number", "default": 0.004},
             "drift_freq": {
                 "type": "number",
                 "default": 0.28,
@@ -279,10 +300,14 @@ class PhotoMotion(BaseTool):
     # ---- motion model ----
 
     @staticmethod
-    def _transform_at(
+    def _camera_at(
         t: float, cfg: dict[str, Any], drift: dict[str, "_Drift"]
     ) -> tuple[float, float, float, float]:
-        """Return (scale, dx, dy, roll_deg) for time ``t`` seconds."""
+        """Return the camera's (dolly, dx, dy, roll_deg) at time ``t``.
+
+        This is the whole rig moving. It applies identically to every layer —
+        anything that should move *within* the scene belongs in ``_gait_at``.
+        """
         progress = min(max(t / cfg["duration"], 0.0), 1.0)
         # Mostly smoothstep, but blended with a linear ramp so the push-in is
         # already moving in the first second instead of sitting still.
@@ -290,24 +315,30 @@ class PhotoMotion(BaseTool):
         eased = 0.3 * progress + 0.7 * smooth
         dolly = cfg["zoom_start"] + (cfg["zoom_end"] - cfg["zoom_start"]) * eased
 
-        # --- gait: the operator's footfalls ---
+        hand = cfg["handheld"]
+        dx = hand * cfg["drift_px"] * drift["x"](t)
+        dy = hand * cfg["drift_px"] * drift["y"](t)
+        roll = hand * cfg["drift_roll_deg"] * drift["roll"](t)
+        dolly *= 1.0 + hand * cfg["drift_scale"] * drift["scale"](t)
+
+        return dolly, dx, dy, roll
+
+    @staticmethod
+    def _gait_at(t: float, cfg: dict[str, Any]) -> tuple[float, float]:
+        """Return the subject's own (dx, dy) footfall offset at time ``t``.
+
+        Only meaningful in layered mode. A walking person rises and falls
+        against a background that stays put; applying this to the whole frame
+        instead — as a single-layer render must — shakes the world rather than
+        the walker, which is what reads as fake.
+        """
         step = 2.0 * math.pi * cfg["steps_per_second"] * t
-        # A carried camera rises and falls once per step. A plain cosine keeps
-        # that smooth; a rectified sine would put a velocity cusp on every
-        # footfall, which reads as a stutter.
+        # Body rises and falls once per step. A plain cosine keeps that smooth;
+        # a rectified sine would put a velocity cusp on every footfall.
         dy = -cfg["bob_px"] * math.cos(step)
         # Weight shifts once per gait cycle = once per two steps.
         dx = cfg["sway_px"] * math.sin(step * 0.5)
-        roll = cfg["tilt_deg"] * math.sin(step * 0.5 + math.pi / 2)
-
-        # --- drift: the aperiodic layer that makes it read as handheld ---
-        hand = cfg["handheld"]
-        dx += hand * cfg["drift_px"] * drift["x"](t)
-        dy += hand * cfg["drift_px"] * drift["y"](t)
-        roll += hand * cfg["drift_roll_deg"] * drift["roll"](t)
-        scale_wobble = 1.0 + hand * cfg["drift_scale"] * drift["scale"](t)
-
-        return dolly * scale_wobble, dx, dy, roll
+        return dx, dy
 
     # ---- text layer ----
 
@@ -390,16 +421,15 @@ class PhotoMotion(BaseTool):
 
         cfg = {
             "duration": duration,
-            "zoom_start": float(inputs.get("zoom_start", 1.05)),
-            "zoom_end": float(inputs.get("zoom_end", 1.22)),
-            "steps_per_second": float(inputs.get("steps_per_second", 1.6)),
-            "bob_px": float(inputs.get("bob_px", 4.0)),
-            "sway_px": float(inputs.get("sway_px", 3.0)),
-            "tilt_deg": float(inputs.get("tilt_deg", 0.18)),
-            "handheld": float(inputs.get("handheld", 1.0)),
-            "drift_px": float(inputs.get("drift_px", 12.0)),
-            "drift_roll_deg": float(inputs.get("drift_roll_deg", 0.22)),
-            "drift_scale": float(inputs.get("drift_scale", 0.010)),
+            "zoom_start": float(inputs.get("zoom_start", 1.02)),
+            "zoom_end": float(inputs.get("zoom_end", 1.09)),
+            "steps_per_second": float(inputs.get("steps_per_second", 1.7)),
+            "bob_px": float(inputs.get("bob_px", 5.0)),
+            "sway_px": float(inputs.get("sway_px", 2.5)),
+            "handheld": float(inputs.get("handheld", 0.35)),
+            "drift_px": float(inputs.get("drift_px", 8.0)),
+            "drift_roll_deg": float(inputs.get("drift_roll_deg", 0.10)),
+            "drift_scale": float(inputs.get("drift_scale", 0.004)),
         }
 
         # Independent noise channels; the offsets keep them uncorrelated so the
@@ -419,6 +449,38 @@ class PhotoMotion(BaseTool):
         fit = out_w / base_w
         centre = (base_w / 2.0, base_h / 2.0)
 
+        # --- optional depth separation ---
+        # With a mask the render becomes two layers moving at different rates,
+        # which is what gives a flat still any sense of depth. Without one,
+        # every pixel scales together and the push-in reads as a zoom on a
+        # photograph, because that is exactly what it is.
+        mask_path = inputs.get("subject_mask")
+        alpha = None
+        bg_plate = None
+        if mask_path:
+            mask_file = Path(str(mask_path)).expanduser()
+            if not mask_file.is_file():
+                return ToolResult(success=False, error=f"Mask not found: {mask_file}")
+            raw_mask = cv2.imread(str(mask_file), cv2.IMREAD_GRAYSCALE)
+            if raw_mask is None:
+                return ToolResult(success=False, error=f"Unreadable mask: {mask_file}")
+            if raw_mask.shape[:2] != src.shape[:2]:
+                raw_mask = cv2.resize(raw_mask, (src.shape[1], src.shape[0]))
+            mask = _cover_crop(raw_mask, out_w / out_h)
+
+            # Fill in what sits behind the subject. The layers separate by only
+            # a few pixels, so this is ever visible as a thin rim — but without
+            # it that rim smears a copy of the subject.
+            solid = (mask > 127).astype("uint8") * 255
+            hole = cv2.dilate(solid, np.ones((15, 15), np.uint8), iterations=1)
+            bg_plate = cv2.inpaint(base, hole, 5, cv2.INPAINT_TELEA)
+
+            alpha = (cv2.GaussianBlur(mask, (0, 0), 3.0).astype(np.float32) / 255.0)[
+                :, :, None
+            ]
+
+        bg_depth = float(inputs.get("bg_depth", 0.45))
+
         text_layer = self._build_text_layer((out_w, out_h), inputs)
         fade_in = float(inputs.get("text_fade_in", 0.8))
 
@@ -436,22 +498,40 @@ class PhotoMotion(BaseTool):
         try:
             for i in range(n_frames):
                 t = i / fps
-                scale, dx, dy, roll = self._transform_at(t, cfg, drift)
+                dolly, cam_dx, cam_dy, roll = self._camera_at(t, cfg, drift)
 
-                matrix = cv2.getRotationMatrix2D(centre, roll, fit * scale)
-                matrix[0, 2] += out_w / 2.0 - centre[0] + dx
-                matrix[1, 2] += out_h / 2.0 - centre[1] + dy
+                def warp(layer, scale: float, dx: float, dy: float):
+                    matrix = cv2.getRotationMatrix2D(centre, roll, fit * scale)
+                    matrix[0, 2] += out_w / 2.0 - centre[0] + dx
+                    matrix[1, 2] += out_h / 2.0 - centre[1] + dy
+                    return cv2.warpAffine(
+                        layer,
+                        matrix,
+                        (out_w, out_h),
+                        # Lanczos holds edge detail better than cubic, and the
+                        # dolly means most frames are a mild upscale.
+                        flags=cv2.INTER_LANCZOS4,
+                        borderMode=cv2.BORDER_REPLICATE,
+                    )
 
-                frame = cv2.warpAffine(
-                    base,
-                    matrix,
-                    (out_w, out_h),
-                    # Lanczos holds edge detail better than cubic, and the
-                    # dolly means most frames are a mild upscale.
-                    flags=cv2.INTER_LANCZOS4,
-                    borderMode=cv2.BORDER_REPLICATE,
-                )
-                rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
+                if alpha is None:
+                    frame = warp(base, dolly, cam_dx, cam_dy)
+                else:
+                    # Dollying in grows near things faster than far things.
+                    # Damping the background's share of the zoom is what makes
+                    # the subject read as standing in front of the street
+                    # rather than printed on it.
+                    bg_scale = 1.0 + (dolly - 1.0) * bg_depth
+                    gait_dx, gait_dy = self._gait_at(t, cfg)
+
+                    back = warp(bg_plate, bg_scale, cam_dx, cam_dy)
+                    front = warp(base, dolly, cam_dx + gait_dx, cam_dy + gait_dy)
+                    a = warp(alpha, dolly, cam_dx + gait_dx, cam_dy + gait_dy)
+                    if a.ndim == 2:
+                        a = a[:, :, None]
+                    frame = back.astype(np.float32) * (1.0 - a) + front.astype(np.float32) * a
+
+                rgb = cv2.cvtColor(frame.astype(np.uint8), cv2.COLOR_BGR2RGB).astype(np.float32)
 
                 if text_layer is not None:
                     opacity = min(t / fade_in, 1.0) if fade_in > 0 else 1.0
