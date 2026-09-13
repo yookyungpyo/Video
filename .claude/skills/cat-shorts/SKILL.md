@@ -15,15 +15,28 @@ Reference implementation: `remotion-composer/src/ai-standards/`.
 
 ## 0. MANDATORY WORKFLOW — Always Confirm Before Producing
 
-**Never start rendering without user confirmation on the scenario.**
+**Never start rendering without explicit production confirmation on the FINAL scenario.**
+
+### Full workflow
 
 1. Receive the topic from the user.
 2. Draft a **5-card scenario** (topic sentence, 5 bracket/punchline pairs).
-3. Present the scenario to the user in plain text. Stop and wait.
-4. Get explicit confirmation ("좋아", "ㄱ", "go", etc.).
-5. Then and only then: create the Remotion module and render.
+3. Present the scenario in the §10 format. **Stop and wait.**
+4. If the user requests changes (card content, bracket text, punchline, context label):
+   - Offer 2–3 options (A/B/C) for the element they want changed.
+   - Wait for their selection.
+   - Show the **full updated scenario table** with the change applied.
+   - Wait again.
+5. Repeat step 4 for each revision round until the user is satisfied.
+6. Only when the user explicitly says **"제작"** (or "go", "ㄱ", "produce") AFTER seeing the final scenario: create the Remotion module and render.
 
-Skipping step 3–4 is a process violation. The user cares deeply about this.
+### ⚠️ Critical rule — option selection ≠ production confirmation
+
+Choosing "B" or "C" from an A/B/C option set is **not** a production go-ahead. It means "apply this change and show me the updated scenario." You must always re-display the full scenario and wait for a separate explicit production command.
+
+This rule was violated in the leader-stop session when the user corrected: **"최종본 확정받고 제작해"** and **"바로 제작말고 최종 시나리오 보여줘"**. Never repeat this.
+
+Skipping steps 3–6 is a process violation. The user cares deeply about this.
 
 ## 1. Visual Tokens
 
@@ -55,6 +68,24 @@ Cat emoji anchor:
 ```tsx
 style={{ position: 'absolute', bottom: 480, width: '100%', textAlign: 'center', fontSize: 96 }}
 ```
+
+## 2-A. Card Narrative Design — Context Label Relationships
+
+The **context label** (small gray text above the bracket headline) is not just a topic tag — it's a narrative anchor that connects cards into a coherent arc. Adjacent cards should have a clear relationship between their context labels:
+
+| Relationship type | Example |
+|-------------------|---------|
+| **Direct contrast** | Card 1 "보통의 리더" → Card 2 "강한 리더" |
+| **Causation** | Card 2 "문제" → Card 3 "결과" |
+| **Escalation** | Card 3 "표면" → Card 4 "본질" |
+| **Resolution** | Card 4 "판단" → Card 5 (no context, closing statement) |
+
+**Proven pattern — opposition pair (Cards 1 & 2):**
+- Card 1 describes the common/flawed state (e.g., "보통의 리더", "대부분의 사람")
+- Card 2 names the ideal contrast (e.g., "강한 리더", "현명한 선택")
+- This creates immediate "before/after" framing the viewer feels in the first 8 seconds.
+
+When drafting the scenario, map out the context-label relationships first. If any two adjacent labels feel unrelated or redundant, revise before presenting to the user.
 
 ## 3. Card Structure (per card)
 
@@ -377,6 +408,7 @@ When presenting the scenario, use this format:
 
 ## 11. Working Reference
 
+### ai-standards (original reference)
 Full working example: `remotion-composer/src/ai-standards/`
 - `AiStandards.tsx` — 5 SVG icons + full Card component
 - `Root.tsx` — composition config
@@ -384,3 +416,37 @@ Full working example: `remotion-composer/src/ai-standards/`
 
 Audio generator: `/tmp/claude-0/-home-user/…/scratchpad/gen_ai_standards_audio.py`
 (copy pattern, adjust timings to match new topic's duration)
+
+### leader-stop (completed 2026-09-13)
+`remotion-composer/src/leader-stop/` — topic: "그만해도 된다 리더"
+
+Final card data (approved by user after multiple revision rounds):
+```tsx
+const cards: CardProps[] = [
+  { context: "보통의 리더", bracket: "더 해, 계속 해",
+    punchline: "채찍만 있는 리더 아래서\n팀은 조용히 무너진다",
+    icon: <IconCrumble />, bracketFontSize: 95 },
+  { context: "강한 리더", bracket: "그만해도 된다",
+    punchline: "이 말을 할 줄 아는 리더가\n진짜 강한 리더다",
+    icon: <IconPalm />, bracketFontSize: 95 },
+  { context: "왜 어려운가", bracket: "판단이 필요하다",
+    punchline: "충분하다고 말하려면\n기준과 용기가 있어야 한다",
+    icon: <IconBalance />, bracketFontSize: 95 },
+  { context: "진짜 강함", bracket: "약해 보이지 않는다",
+    punchline: "잠시 쉬자 라고 말해주는 리더는\n일을 할 줄 아는 리더",
+    icon: <IconShieldPause />, bracketFontSize: 88 },
+  { context: "", bracket: "그런 리더가 되자",
+    punchline: "쉬어도 된다\n쉼표를 찍어주는 그런 리더가 되자",
+    icon: <IconStairStar />, bracketFontSize: 95 },
+];
+```
+
+**Narrative structure note:** Cards 1 & 2 use direct opposition ("보통의 리더" vs "강한 리더") — this was the key revision that made the arc click. Initial draft had "드문 기술" for Card 2; user rejected multiple alternatives before landing on the contrast pair.
+
+**Revision history for Cards 2 & 4 (context labels):**
+- Card 2 context: "드문 기술" → rejected → multiple rounds → "강한 리더" ✅
+- Card 4 bracket: went through A/B options; "약해 보이지 않는다" (option B) approved
+- Card 4 punchline: "멈춰도 된다고 말하는 리더가 더 강해 보인다" → "잠시 쉬자 라고 말해주는 리더는 일을 할 줄 아는 리더" ✅
+- Card 5 punchline: "더 하라는 말만큼 그만해도 된다는 말도 배워라" → "쉬어도 된다 / 쉼표를 찍어주는 그런 리더가 되자" ✅ (user interrupted render to change this)
+
+Audio: BPM 128 upbeat style (§9-B). Render script: `scripts/render.sh`.
