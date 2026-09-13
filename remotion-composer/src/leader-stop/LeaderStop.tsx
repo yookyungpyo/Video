@@ -277,7 +277,7 @@ const cards: CardProps[] = [
     bracketFontSize: 95,
   },
   {
-    context: "드문 기술",
+    context: "강한 리더",
     bracket: "그만해도 된다",
     punchline: "이 말을 할 줄 아는 리더가\n진짜 강한 리더다",
     icon: <IconPalm />,
@@ -293,14 +293,14 @@ const cards: CardProps[] = [
   {
     context: "진짜 강함",
     bracket: "약해 보이지 않는다",
-    punchline: "멈춰도 된다고 말하는 리더가\n더 강해 보인다",
+    punchline: "잠시 쉬자 라고 말해주는 리더는\n일을 할 줄 아는 리더",
     icon: <IconShieldPause />,
     bracketFontSize: 88,
   },
   {
     context: "",
     bracket: "그런 리더가 되자",
-    punchline: "더 하라는 말만큼\n그만해도 된다는 말도 배워라",
+    punchline: "쉬어도 된다\n쉼표를 찍어주는 그런 리더가 되자",
     icon: <IconStairStar />,
     bracketFontSize: 95,
   },
