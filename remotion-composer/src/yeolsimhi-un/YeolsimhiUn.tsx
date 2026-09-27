@@ -171,7 +171,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, bracketF
           transform: `scale(${0.8 + t3 * 0.2})`, opacity: t3,
         }}>{bracket}</div>
         <div style={{
-          color: WHITE, fontSize: 52, fontWeight: 700,
+          color: WHITE, fontSize: 60, fontWeight: 700,
           textAlign: "center", whiteSpace: "pre-line",
           transform: `translateX(${(1 - t4) * 40}px)`, opacity: t4,
         }}>{punchline}</div>
