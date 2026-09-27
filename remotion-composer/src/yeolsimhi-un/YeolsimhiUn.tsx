@@ -16,7 +16,7 @@ const BG = "#060608";
 const YELLOW = "#FFD60A";
 const WHITE = "#FFFFFF";
 const GRAY = "#888899";
-const CARD_DUR = 130, OVERLAP = 14;
+const CARD_DUR = 160, OVERLAP = 16;
 
 const fontCss = `
 @font-face { font-family: '${FONT}'; font-weight: 400; font-style: normal;
@@ -159,7 +159,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, bracketF
           {icon}
         </div>
         {context ? (
-          <div style={{ color: GRAY, fontSize: 40, transform: `translateX(${(1 - t2) * -40}px)`, opacity: t2 }}>
+          <div style={{ color: GRAY, fontSize: 52, transform: `translateX(${(1 - t2) * -40}px)`, opacity: t2 }}>
             {context}
           </div>
         ) : null}
