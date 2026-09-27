@@ -159,7 +159,7 @@ const Card: React.FC<CardProps> = ({ context, bracket, punchline, icon, bracketF
           {icon}
         </div>
         {context ? (
-          <div style={{ color: GRAY, fontSize: 52, transform: `translateX(${(1 - t2) * -40}px)`, opacity: t2 }}>
+          <div style={{ color: GRAY, fontSize: 60, transform: `translateX(${(1 - t2) * -40}px)`, opacity: t2 }}>
             {context}
           </div>
         ) : null}
