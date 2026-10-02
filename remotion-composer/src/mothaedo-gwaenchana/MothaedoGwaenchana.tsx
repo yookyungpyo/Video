@@ -52,75 +52,125 @@ const draw = (p: number, k: number) => ({
   strokeDashoffset: 1 - seg(p, k),
 });
 
-type IconProps = { p: number };
+type IconProps = { p: number; t: number };
 
-// Card 1: 왜 이것도 못하지? — tangled thought ball above a person
-const IconTangled: React.FC<IconProps> = ({ p }) => (
-  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <path d="M30 55 C22 30 50 16 66 30 C70 10 104 14 102 36 C124 34 126 60 104 60 C116 76 92 86 80 72 C74 90 44 86 48 68 C28 72 22 58 36 52"
-      stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" {...draw(p, 0)} />
-    <path d="M58 40 C68 28 84 30 88 44" stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 2)} />
-    <circle cx={70} cy={100} r={15} stroke={GRAY} strokeWidth={4} {...draw(p, 3)} />
-    <path d="M38 138 Q70 114 102 138" stroke={GRAY} strokeWidth={4} strokeLinecap="round" {...draw(p, 4)} />
-  </svg>
-);
+// Card 1: 왜 이것도 못하지? — tangled thought ball wobbling above a bobbing person
+const IconTangled: React.FC<IconProps> = ({ p, t }) => {
+  const wobble = Math.sin(t * Math.PI * 2 * 0.6) * 7;
+  const bob = Math.sin(t * Math.PI * 2 * 0.9) * 3;
+  const shimmer = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * 1.4);
+  return (
+    <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
+      <g transform={`translate(0 ${bob}) rotate(${wobble} 70 45)`}>
+        <path d="M30 55 C22 30 50 16 66 30 C70 10 104 14 102 36 C124 34 126 60 104 60 C116 76 92 86 80 72 C74 90 44 86 48 68 C28 72 22 58 36 52"
+          stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" {...draw(p, 0)} />
+        <path d="M58 40 C68 28 84 30 88 44" stroke={YELLOW} strokeWidth={4} strokeLinecap="round"
+          opacity={0.4 + shimmer * 0.6} {...draw(p, 2)} />
+      </g>
+      <g transform={`translate(0 ${-bob * 0.6})`}>
+        <circle cx={70} cy={100} r={15} stroke={GRAY} strokeWidth={4} {...draw(p, 3)} />
+        <path d="M38 138 Q70 114 102 138" stroke={GRAY} strokeWidth={4} strokeLinecap="round" {...draw(p, 4)} />
+      </g>
+    </svg>
+  );
+};
 
-// Card 2: 일 vs 나 — balance scale, heart side heavier
-const IconBalance: React.FC<IconProps> = ({ p }) => (
-  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <polygon points="70,66 56,120 84,120" stroke={GRAY} strokeWidth={3.5} strokeLinejoin="round" {...draw(p, 0)} />
-    <line x1={38} y1={120} x2={102} y2={120} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" {...draw(p, 1)} />
-    <line x1={16} y1={54} x2={124} y2={76} stroke={GRAY} strokeWidth={4} strokeLinecap="round" {...draw(p, 2)} />
-    <line x1={16} y1={54} x2={16} y2={70} stroke={GRAY} strokeWidth={3} {...draw(p, 3)} />
-    <rect x={4} y={70} width={24} height={20} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 4)} />
-    <line x1={124} y1={76} x2={124} y2={90} stroke={YELLOW} strokeWidth={3} {...draw(p, 5)} />
-    <path d="M124 112 C110 102 112 86 124 93 C136 86 138 102 124 112 Z"
-      fill={YELLOW} opacity={seg(p, 6)} />
-  </svg>
-);
+// Card 2: 일 vs 나 — balance scale see-sawing, heart pulsing
+const IconBalance: React.FC<IconProps> = ({ p, t }) => {
+  const sway = Math.sin(t * Math.PI * 2 * 0.45) * 5;
+  const beat = 1 + 0.16 * Math.abs(Math.sin(t * Math.PI * 2 * 0.9));
+  return (
+    <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
+      <polygon points="70,66 56,120 84,120" stroke={GRAY} strokeWidth={3.5} strokeLinejoin="round" {...draw(p, 0)} />
+      <line x1={38} y1={120} x2={102} y2={120} stroke={GRAY} strokeWidth={3.5} strokeLinecap="round" {...draw(p, 1)} />
+      <g transform={`rotate(${sway} 70 65)`}>
+        <line x1={16} y1={54} x2={124} y2={76} stroke={GRAY} strokeWidth={4} strokeLinecap="round" {...draw(p, 2)} />
+        <line x1={16} y1={54} x2={16} y2={70} stroke={GRAY} strokeWidth={3} {...draw(p, 3)} />
+        <rect x={4} y={70} width={24} height={20} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 4)} />
+        <line x1={124} y1={76} x2={124} y2={90} stroke={YELLOW} strokeWidth={3} {...draw(p, 5)} />
+        <g transform={`translate(124 102) scale(${beat}) translate(-124 -102)`}>
+          <path d="M124 112 C110 102 112 86 124 93 C136 86 138 102 124 112 Z"
+            fill={YELLOW} opacity={seg(p, 6)} />
+        </g>
+      </g>
+    </svg>
+  );
+};
 
-// Card 3: 하다 보면 잘하게 되어있어 — rising bars + growth arrow
-const IconSteps: React.FC<IconProps> = ({ p }) => (
-  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <rect x={18} y={100} width={26} height={28} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 0)} />
-    <rect x={57} y={76} width={26} height={52} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 1)} />
-    <rect x={96} y={48} width={26} height={80} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 2)} />
-    <polyline points="14,90 70,58 120,28" stroke={YELLOW} strokeWidth={4.5}
-      strokeLinecap="round" strokeLinejoin="round" {...draw(p, 4)} />
-    <polyline points="104,24 121,27 118,43" stroke={YELLOW} strokeWidth={4.5}
-      strokeLinecap="round" strokeLinejoin="round" {...draw(p, 6)} />
-  </svg>
-);
+// Card 3: 하다 보면 잘하게 되어있어 — equalizer-bouncing bars + surging arrow
+const IconSteps: React.FC<IconProps> = ({ p, t }) => {
+  const sy = (ph: number) => 1 + 0.1 * Math.sin(t * Math.PI * 2 * 1.1 + ph);
+  const surge = Math.sin(t * Math.PI * 2 * 0.8);
+  const dx = surge * 5, dy = -surge * 3;
+  return (
+    <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
+      <g transform={`translate(31 128) scale(1 ${sy(0)}) translate(-31 -128)`}>
+        <rect x={18} y={100} width={26} height={28} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 0)} />
+      </g>
+      <g transform={`translate(70 128) scale(1 ${sy(1.6)}) translate(-70 -128)`}>
+        <rect x={57} y={76} width={26} height={52} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 1)} />
+      </g>
+      <g transform={`translate(109 128) scale(1 ${sy(3.2)}) translate(-109 -128)`}>
+        <rect x={96} y={48} width={26} height={80} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 2)} />
+      </g>
+      <g transform={`translate(${dx} ${dy})`}>
+        <polyline points="14,90 70,58 120,28" stroke={YELLOW} strokeWidth={4.5}
+          strokeLinecap="round" strokeLinejoin="round" {...draw(p, 4)} />
+        <polyline points="104,24 121,27 118,43" stroke={YELLOW} strokeWidth={4.5}
+          strokeLinecap="round" strokeLinejoin="round" {...draw(p, 6)} />
+      </g>
+    </svg>
+  );
+};
 
-// Card 4: 에너지는 오래 간다 — full battery
-const IconBattery: React.FC<IconProps> = ({ p }) => (
-  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <rect x={14} y={46} width={96} height={48} rx={8} stroke={GRAY} strokeWidth={4} {...draw(p, 0)} />
-    <rect x={112} y={58} width={12} height={24} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 1)} />
-    <rect x={24} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 2)} />
-    <rect x={52} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 3)} />
-    <rect x={80} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 4)} />
-    <path d="M64 104 L54 122 L66 120 L60 136 L78 116 L66 118 L74 104 Z"
-      stroke={YELLOW} strokeWidth={3} strokeLinejoin="round" {...draw(p, 5)} />
-  </svg>
-);
+// Card 4: 에너지는 오래 간다 — battery charging cycle + flickering bolt
+const IconBattery: React.FC<IconProps> = ({ p, t }) => {
+  const cycle = (t % 2.4) / 2.4; // 0..1 repeating charge
+  const bar = (i: number) => 0.18 + 0.82 * clamp01((cycle - i * 0.25) / 0.18);
+  const bolt = 1 + 0.14 * Math.sin(t * Math.PI * 2 * 1.8);
+  const flick = 0.65 + 0.35 * Math.sin(t * Math.PI * 2 * 3.1);
+  return (
+    <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
+      <rect x={14} y={46} width={96} height={48} rx={8} stroke={GRAY} strokeWidth={4} {...draw(p, 0)} />
+      <rect x={112} y={58} width={12} height={24} rx={3} stroke={GRAY} strokeWidth={3.5} {...draw(p, 1)} />
+      <rect x={24} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 2) * bar(0)} />
+      <rect x={52} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 3) * bar(1)} />
+      <rect x={80} y={56} width={20} height={28} rx={3} fill={YELLOW} opacity={seg(p, 4) * bar(2)} />
+      <g transform={`translate(66 120) scale(${bolt}) translate(-66 -120)`} opacity={flick}>
+        <path d="M64 104 L54 122 L66 120 L60 136 L78 116 L66 118 L74 104 Z"
+          stroke={YELLOW} strokeWidth={3} strokeLinejoin="round" {...draw(p, 5)} />
+      </g>
+    </svg>
+  );
+};
 
-// Card 5: 선하고 건강한 에너지 — radiant open-armed person
-const IconGlowPerson: React.FC<IconProps> = ({ p }) => (
-  <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
-    <circle cx={70} cy={46} r={16} stroke={YELLOW} strokeWidth={4} {...draw(p, 0)} />
-    <line x1={70} y1={62} x2={70} y2={104} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 1)} />
-    <line x1={70} y1={76} x2={42} y2={58} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 2)} />
-    <line x1={70} y1={76} x2={98} y2={58} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 3)} />
-    <line x1={70} y1={104} x2={54} y2={132} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 4)} />
-    <line x1={70} y1={104} x2={86} y2={132} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 5)} />
-    <line x1={70} y1={18} x2={70} y2={8} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
-    <line x1={32} y1={28} x2={24} y2={20} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
-    <line x1={108} y1={28} x2={116} y2={20} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
-    <line x1={22} y1={64} x2={12} y2={64} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
-    <line x1={118} y1={64} x2={128} y2={64} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
-  </svg>
-);
+// Card 5: 선하고 건강한 에너지 — radiant person, rays orbiting, arms waving
+const IconGlowPerson: React.FC<IconProps> = ({ p, t }) => {
+  const orbit = (t * 46) % 360;
+  const wave = Math.sin(t * Math.PI * 2 * 0.7) * 7;
+  const twinkle = 0.55 + 0.45 * Math.sin(t * Math.PI * 2 * 1.8);
+  return (
+    <svg width={280} height={280} viewBox="0 0 140 140" fill="none">
+      <g transform={`rotate(${orbit} 70 62)`} opacity={twinkle}>
+        <line x1={70} y1={16} x2={70} y2={4} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
+        <line x1={31} y1={29} x2={22} y2={21} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
+        <line x1={109} y1={29} x2={118} y2={21} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 6)} />
+        <line x1={24} y1={62} x2={12} y2={62} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
+        <line x1={116} y1={62} x2={128} y2={62} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
+        <line x1={31} y1={95} x2={22} y2={103} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
+        <line x1={109} y1={95} x2={118} y2={103} stroke={YELLOW} strokeWidth={3} strokeLinecap="round" {...draw(p, 7)} />
+      </g>
+      <circle cx={70} cy={46} r={16} stroke={YELLOW} strokeWidth={4} {...draw(p, 0)} />
+      <line x1={70} y1={62} x2={70} y2={104} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 1)} />
+      <g transform={`rotate(${wave} 70 76)`}>
+        <line x1={70} y1={76} x2={42} y2={58} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 2)} />
+        <line x1={70} y1={76} x2={98} y2={58} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 3)} />
+      </g>
+      <line x1={70} y1={104} x2={54} y2={132} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 4)} />
+      <line x1={70} y1={104} x2={86} y2={132} stroke={YELLOW} strokeWidth={4} strokeLinecap="round" {...draw(p, 5)} />
+    </svg>
+  );
+};
 
 type CardData = {
   context: string;
@@ -270,9 +320,10 @@ const Card: React.FC<CardData> = ({ context, bracket, punchline, Icon, bracketFo
   const lines = punchline.split("\n");
   let wordIdx = 0;
 
-  const iconIdle = t1 > 0.98 ? Math.sin(t * Math.PI * 2 * 0.6) * 6 : 0;
-  const iconRot = t1 > 0.98 ? Math.sin(t * Math.PI * 2 * 0.4) * 2 : 0;
-  const haloPulse = 1 + 0.08 * Math.sin(t * Math.PI * 2 * 0.7);
+  const iconIdle = Math.sin(t * Math.PI * 2 * 0.6) * 10 * t1;
+  const iconRot = Math.sin(t * Math.PI * 2 * 0.4) * 3.5 * t1;
+  const iconBeat = 1 + 0.04 * Math.sin(t * Math.PI * 2 * 0.75) * t1;
+  const haloPulse = 1 + 0.14 * Math.sin(t * Math.PI * 2 * 0.7);
   const catFloat = tCat > 0.95 ? Math.sin(t * Math.PI * 2 * 0.55) * 14 : 0;
   const catWiggle = tCat > 0.95 ? Math.sin(t * Math.PI * 2 * 1.1) * 3 : 0;
 
@@ -308,10 +359,10 @@ const Card: React.FC<CardData> = ({ context, bracket, punchline, Icon, bracketFo
             background: "radial-gradient(circle, rgba(255,214,10,0.10), transparent 60%)",
           }} />
           <div style={{
-            transform: `translateY(${-80 + t1 * 80}px) scale(${0.6 + t1 * 0.4}) translateY(${iconIdle}px) rotate(${iconRot}deg)`,
+            transform: `translateY(${-80 + t1 * 80}px) scale(${(0.6 + t1 * 0.4) * iconBeat}) translateY(${iconIdle}px) rotate(${iconRot}deg)`,
             opacity: t1,
           }}>
-            <Icon p={pIcon} />
+            <Icon p={pIcon} t={t} />
           </div>
         </div>
         {/* Context: tracking-in */}
