@@ -25,8 +25,11 @@ fi
 echo "Chrome:     $CH"
 echo "Mode flag:  ${MODE_FLAG:-(headless-shell default)}"
 
+# Parallel tabs in chrome-for-testing mode intermittently capture an all-black
+# frame (visible as a flicker), so default to one tab. Override: CONCURRENCY=4.
 env NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt \
   npx remotion render "$ENTRY" "$COMP" "$OUT" \
   $MODE_FLAG --browser-executable "$CH" \
-  --ignore-certificate-errors --codec h264
+  --ignore-certificate-errors --codec h264 \
+  --concurrency="${CONCURRENCY:-1}"
 echo "Rendered $OUT"

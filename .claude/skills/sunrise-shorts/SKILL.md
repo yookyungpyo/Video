@@ -184,6 +184,10 @@ const popIn = (p, k) => ({ opacity: seg(p, k), transform: `translate(0 ${(1 - se
 // p = interpolate(frame, [4, 44], [0, 1], clamp)
 ```
 
+⚠️ `popIn` returns a `transform`. Never spread it onto a `<g>` that already has its own
+`transform` (translate/scale) — the spread overrides it and the element jumps to the SVG
+origin. Nest instead: `<g transform="translate… scale…"><g {...popIn(p, k)}>…</g></g>`.
+
 Give each icon continuous internal motion (pass `t` seconds): see-saw sway, heartbeat
 scale on hearts, equalizer bar bounce, battery charge cycle, orbiting sun rays, waving arms.
 
@@ -204,6 +208,24 @@ Verify with frame extracts at 3s / 12s / 22s (`-ss <time>`, never `select=eq`):
 node_modules/@remotion/compositor-linux-x64-gnu/ffmpeg \
   -ss 00:00:03 -i /tmp/<topic>.mp4 -frames:v 1 -q:v 2 /tmp/frame_3s.jpg
 ```
+
+**Flicker check (always run before delivering).** `render.sh` defaults to
+`--concurrency=1` because parallel tabs intermittently capture an all-black frame, which
+viewers see as a flicker. Spot-check stills will miss it — scan every frame (needs
+`pip install pillow`; the bundled ffmpeg has no rawvideo/null muxers):
+
+```bash
+mkdir -p /tmp/fl && rm -f /tmp/fl/*.png
+node_modules/@remotion/compositor-linux-x64-gnu/ffmpeg -loglevel error \
+  -i /tmp/<topic>.mp4 -vf scale=54:96 /tmp/fl/%04d.png
+python3 -c "
+import glob, numpy as np; from PIL import Image
+m=np.array([np.asarray(Image.open(f).convert('L'),float).mean() for f in sorted(glob.glob('/tmp/fl/*.png'))])
+print('min', m[5:].min(), 'jumps', [i for i in range(1,len(m)) if abs(m[i]-m[i-1])>20])"
+```
+
+Healthy: min ≈ 200+ (light bg), `jumps []`. The card-transition white wipe ramps over
+~12 frames (Δ ≈ 2–4/frame), so it never trips the >20 threshold.
 
 ## 8. Headline Sizing (nowrap, container 960px)
 
