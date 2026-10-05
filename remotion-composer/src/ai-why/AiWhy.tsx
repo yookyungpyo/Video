@@ -62,7 +62,8 @@ const RobotHead: React.FC<IconProps & { cx: number; cy: number; s: number; k: nu
   const blink = (t % 2.6) > 2.45 ? 0.15 : 1;
   const bob = Math.sin(t * Math.PI * 2 * 1.2) * 3;
   return (
-    <g transform={`translate(${cx} ${cy}) scale(${s})`} {...popIn(p, k)}>
+    <g transform={`translate(${cx} ${cy}) scale(${s})`}>
+    <g {...popIn(p, k)}>
       <line x1={0} y1={-30} x2={0} y2={-44 + bob} stroke={CHARCOAL} strokeWidth={4} strokeLinecap="round" />
       <circle cx={0} cy={-46 + bob} r={6} fill={CORAL} />
       <rect x={-34} y={-30} width={68} height={58} rx={16} fill={CHARCOAL} />
@@ -71,6 +72,7 @@ const RobotHead: React.FC<IconProps & { cx: number; cy: number; s: number; k: nu
       <rect x={8} y={-12} width={12} height={16 * blink} rx={5} fill="#FFFFFF"
         transform={`translate(0 ${(1 - blink) * 7})`} />
       <rect x={-14} y={12} width={28} height={5} rx={2.5} fill="#FFFFFF" opacity={0.7} />
+    </g>
     </g>
   );
 };
