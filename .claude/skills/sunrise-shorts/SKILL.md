@@ -237,7 +237,7 @@ lineHeight 1.5).
 ## 9. Audio — Bright Bell Morning (BPM 128)
 
 Pure Python numpy+wave, DURATION = 736/30, output 44100Hz mono WAV. Recipe
-(reference: scratchpad `gen_sunrise_audio.py`):
+(reference: `.claude/skills/sunrise-shorts/scripts/gen_sunrise_audio.py`, writes `/tmp/mothaedo-sunrise_track.wav` — edit the output path per topic):
 
 - **Soft kick**: 112Hz, env k=24, every beat — gain 0.55
 - **Handclap**: DOUBLE noise burst (offsets 0 / 0.028s), k=44, beats 2&4 — gain 0.30 each
@@ -289,4 +289,4 @@ Full working example: `remotion-composer/src/mothaedo-sunrise/`
 - `MothaedoSunrise.tsx` — 5 blob icons, highlighter headline, sunrise background, particles, wipe
 - `Root.tsx` / `index.tsx` — composition config
 
-Audio generator pattern: scratchpad `gen_sunrise_audio.py` (copy, adjust key/mood per topic).
+Audio generator: `scripts/gen_sunrise_audio.py` in this skill (copy, adjust key/mood and output path per topic).
