@@ -8,11 +8,22 @@
 
 const FPS = 30000 / 1001;
 const CUTS = [0, 72, 101, 159, 187, 215, 245, 301, 1e9]; // S1..S8 start frames
-const ASSET_SLOTS = ["desktop", "mobile", "ia", "service", "logo"];
+const ASSET_SLOTS = ["desktop", "mobile", "service", "docs", "logo"];
+const PLACEHOLDER = { desktop: "desktop", mobile: "mobile", service: "service", docs: "mobile" };
+const LOGO_RATIO = 824 / 701; // supplied logo (background keyed out, otherwise untouched)
 const EXTS = ["png", "jpg", "jpeg", "webp", "svg"];
 const CONFIG = {
-  // focus ring inside the S1 window body (window-local px); adjust once real screenshot is in
-  ring: { x: 40, y: 150, w: 430, h: 150 },
+  // crops are in source-image pixels; screenshots are only scaled/cropped, never altered
+  crops: {
+    s1: { x: 190, w: 940 },                               // desktop main, content column
+    s4: { x: 200, w: 920 },
+    s4mob: { x: 0, w: 435 },                              // 스마트 서류제출
+    s5: { x: 0, y: 990, w: 718, h: 520, fit: "contain" }, // mobile 자주 찾는 업무 / 미리 계산해보세요
+    s6a: { x: 226, y: 40, w: 856 },                       // desktop header·통합검색·상품 카드
+    s6b: { x: 0, y: 420, w: 783 },                        // 진행현황 (핵심서비스)
+  },
+  // S1 focus ring = 통합검색 bar in desktop source pixels
+  ring: { x: 356, y: 848, w: 608, h: 58 },
 };
 
 /* ------------------------------------------------------------------ helpers */
@@ -92,7 +103,7 @@ async function resolveAsset(name) {
     if (u) return { url: u, real: true };
   }
   if (name === "logo") return { url: null, real: false };
-  return { url: await tryLoad(`assets/placeholder/${name}.svg`), real: false };
+  return { url: await tryLoad(`assets/placeholder/${PLACEHOLDER[name]}.svg`), real: false };
 }
 function naturalSize(url) {
   return new Promise(res => { const im = new Image(); im.onload = () => res([im.naturalWidth, im.naturalHeight]); im.src = url; });
@@ -101,23 +112,32 @@ function naturalSize(url) {
 /* -------------------------------------------------------------- DOM build */
 function buildLogos() {
   const L = resolved.logo;
-  const fill = (el, phSize) => {
+  const fill = (el, phSize, plate) => {
     el.innerHTML = "";
-    if (L.real) { const im = new Image(); im.src = L.url; im.alt = ""; el.appendChild(im); el.style.background = "transparent"; }
-    else { const s = document.createElement("span"); s.className = "ph"; s.textContent = "HF"; if (phSize) s.style.fontSize = phSize; el.appendChild(s); }
+    if (L.real) {
+      const im = new Image(); im.src = L.url; im.alt = "";
+      if (plate) { const p = document.createElement("div"); p.className = "plate"; p.appendChild(im); el.appendChild(p); }
+      else { el.appendChild(im); el.classList.add("real"); }
+    } else { const s = document.createElement("span"); s.className = "ph"; s.textContent = "HF"; if (phSize) s.style.fontSize = phSize; el.appendChild(s); }
   };
   document.querySelectorAll("[data-logo]").forEach(el => fill(el));
-  document.querySelectorAll("[data-logo-square]").forEach(el => fill(el));
+  document.querySelectorAll("[data-logo-square]").forEach(el => fill(el, null, true));
   document.querySelectorAll("[data-logo-mini]").forEach(el => fill(el, "11px"));
+  if (L.real) document.querySelectorAll(".s8mark, .s8ghost").forEach(el => {
+    el.textContent = ""; el.classList.add("logoMask");
+    el.style.webkitMaskImage = el.style.maskImage = `url(${L.url})`;
+  });
 }
 
 const FROST = [
-  { svg: "s6aSvg", num: "01", title: "정보구조 개선", asset: "ia" },
-  { svg: "s6bSvg", num: "02", title: "핵심서비스 개선", asset: "service" },
+  { svg: "s6aSvg", num: "01", title: "정보구조 개선", asset: "desktop", crop: "s6a" },
+  { svg: "s6bSvg", num: "02", title: "핵심서비스 개선", asset: "service", crop: "s6b" },
 ];
 function buildFrostCards() {
   FROST.forEach((c, i) => {
-    const s = $(c.svg), url = resolved[c.asset].url;
+    const s = $(c.svg), url = resolved[c.asset].url, [nw, nh] = resolved[c.asset].size;
+    const cr = resolved[c.asset].real ? CONFIG.crops[c.crop] : { x: 0, y: 0, w: nw };
+    const k = 538 / cr.w, im = `x="${(-cr.x * k).toFixed(2)}" y="${(-(cr.y || 0) * k).toFixed(2)}" width="${(nw * k).toFixed(2)}" height="${(nh * k).toFixed(2)}" preserveAspectRatio="none"`;
     s.innerHTML = `
       <defs>
         <filter id="frost${i}" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
@@ -129,27 +149,38 @@ function buildFrostCards() {
             0 0 0 1 0"/>
         </filter>
         <linearGradient id="scrim${i}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0.35" stop-color="#0B1D3F" stop-opacity="0"/>
-          <stop offset="1" stop-color="#0B1D3F" stop-opacity="0.55"/>
+          <stop offset="0.42" stop-color="#0B1D3F" stop-opacity="0"/>
+          <stop offset="1" stop-color="#0B1D3F" stop-opacity="0.66"/>
         </linearGradient>
         <clipPath id="tclip${i}"><text id="ttxt${i}" x="34" y="308" font-family="Pretendard" font-weight="700" font-size="74" letter-spacing="-2.4">${c.title}</text></clipPath>
         <filter id="tshadow${i}" x="-10%" y="-30%" width="120%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#06142E" flood-opacity="0.35"/></filter>
       </defs>
-      <image href="${url}" x="0" y="0" width="538" height="348" preserveAspectRatio="xMidYMin slice"/>
+      <image href="${url}" ${im}/>
       <rect x="0" y="0" width="538" height="348" fill="url(#scrim${i})"/>
       <use href="#ttxt${i}" fill="#0B1D3F" fill-opacity="0.35" filter="url(#tshadow${i})"/>
       <g clip-path="url(#tclip${i})">
-        <image href="${url}" x="0" y="0" width="538" height="348" preserveAspectRatio="xMidYMin slice" filter="url(#frost${i})"/>
+        <image href="${url}" ${im} filter="url(#frost${i})"/>
         <rect x="0" y="0" width="538" height="348" fill="#FFFFFF" fill-opacity="0.08"/>
       </g>
       <use href="#ttxt${i}" fill="none" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.3"/>
-      <rect x="30" y="28" width="78" height="46" rx="23" fill="#FFFFFF" fill-opacity="0.88"/>
-      <text x="69" y="58.5" text-anchor="middle" font-family="InterLatin" font-weight="600" font-size="22" fill="#0B1D3F" letter-spacing="-0.3">${c.num}</text>`;
+      <text x="501" y="226" text-anchor="end" font-family="InterLatin" font-weight="600" font-size="24" fill="#FFFFFF" fill-opacity="0.95" letter-spacing="0.5">${c.num}</text>
+      <rect x="473" y="234" width="28" height="2.5" rx="1.25" fill="#FFFFFF" fill-opacity="0.85"/>`;
     // responsive title: scale the whole lockup to fit rather than compressing glyphs
     const t = $("ttxt" + i), w = t.getComputedTextLength(), max = 538 - 68;
     if (w > max) t.setAttribute("font-size", (74 * max / w).toFixed(2));
   });
 }
+
+/** Fit a source-pixel crop of a screenshot into its box by scale + offset only. */
+function applyCrop(img, boxW, boxH, c) {
+  const nw = img.naturalWidth, nh = img.naturalHeight;
+  const s = c.fit === "contain" ? Math.min(boxW / c.w, boxH / c.h) : boxW / c.w;
+  Object.assign(img.style, { position: "absolute", width: nw * s + "px", height: nh * s + "px",
+    left: (boxW - c.w * s) / 2 - c.x * s + "px",
+    top: (c.fit === "contain" ? (boxH - c.h * s) / 2 : 0) - (c.y || 0) * s + "px" });
+  return s;
+}
+let S1K = 1; // desktop->window scale
 
 const GHOSTS = 24;
 function buildGhosts() {
@@ -183,7 +214,7 @@ const s1 = {
   camScale: f => 1 + 0.07 * (f / 66) + kf(f, [[62, 0], [72, 0.42, easeInExpo]]),
   camY: f => -0.35 * f,
   winY: f => kf(f, [[0, 640], [30, 0, easeOutExpo]]),
-  shotY: f => kf(f, [[0, 150], [36, 0, easeOutExpo]]) - Math.max(0, f - 10) * 0.85,
+  shotY: f => kf(f, [[0, 60], [46, -400, easeOutExpo]]) - Math.max(0, f - 8) * 0.5,
   titleY: f => kf(f, [[15, 78], [36, 0, easeOutExpo]]),
   logoY: f => kf(f, [[11, 120], [33, 0, easeOutExpo]]),
   pillX: f => kf(f, [[24, -46], [40, 0, easeOutExpo]]),
@@ -192,13 +223,17 @@ function screenOf(x, y, f) { // cam-local -> screen
   const s = s1.camScale(f);
   return [540 + (x - 540) * s, 540 + (y - 540) * s + s1.camY(f)];
 }
+function ringBox(f) { // ring in window-body px, rides on the scrolling screenshot
+  const r = CONFIG.ring, c = CONFIG.crops.s1;
+  return { x: (r.x - c.x) * S1K - 6, y: r.y * S1K + s1.shotY(f) - 6, w: r.w * S1K + 12, h: r.h * S1K + 12 };
+}
 function ringCenter(f) {
-  const r = CONFIG.ring;
+  const r = ringBox(f);
   return [118 + r.x + r.w / 2, 268 + 46 + r.y + r.h / 2 + s1.winY(f)];
 }
 function cursorPos1(f) {
   const [cx, cy] = ringCenter(f);
-  const [tx, ty] = screenOf(cx + 70, cy + 22, f);
+  const [tx, ty] = screenOf(cx + 150, cy + 14, f);
   const e = easeOutCubic(prog(f, 34, 62));
   const p0 = [1150, -40], p1 = [1010, 560];
   const u = 1 - e;
@@ -226,7 +261,7 @@ function S1(f) {
   const rev = 100 * (1 - easeOutExpo(prog(f, 5, 34)));
   body.style.clipPath = `inset(0 0 ${rev}% 0 round 0 0 30px 30px)`;
   const shot = $("s1shot");
-  T(shot, `translateY(${s1.shotY(f)}px) scale(${kf(f, [[0, 1.2], [40, 1.0, easeOutExpo]])})`);
+  T(shot, `translateY(${s1.shotY(f)}px) scale(${kf(f, [[0, 1.12], [32, 1.0, easeOutExpo]])})`);
   setBlur(shot, 0, velocityBlur(s1.shotY, f, 0.12, 6));
 
   // logo disc + title + pill
@@ -248,7 +283,7 @@ function S1(f) {
   setBlur(pill, velocityBlur(s1.pillX, f, 0.2, 8), 0);
 
   // focus ring answers the cursor
-  const r = CONFIG.ring, ring = $("s1ring");
+  const r = ringBox(f), ring = $("s1ring");
   Object.assign(ring.style, { left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px" });
   ring.style.opacity = kf(f, [[52, 0], [60, 1, easeOutCubic]]);
   T(ring, `scale(${kf(f, [[52, 1.08], [62, 1, easeOutExpo]])})`);
@@ -456,7 +491,7 @@ function S8(f) {
     ghosts[i].style.opacity = (0.11 * (1 - i / ghosts.length) * smear).toFixed(4);
   }
   const zb = clamp(speed * 30, 0, 8);
-  setBlur($("s8mark"), zb, zb);
+  setBlur($("s8mark"), zb, zb, "drop-shadow(0 0 26px rgba(243,243,245,.28))");
   const sub = $("s8sub"), syf = ff => kf(ff, [[313, 22], [325, 0, easeOutExpo]]);
   sub.style.opacity = kf(f, [[313, 0], [317, 1]]);
   T(sub, `translateY(${syf(f)}px)`);
@@ -484,15 +519,22 @@ async function init() {
   // inject S4 mobile layer (supplied mobile screenshot, no device mockup)
   const mob = document.createElement("div");
   mob.className = "s4mob"; mob.id = "s4mob";
-  mob.innerHTML = '<img class="shot" data-asset="mobile" alt="">';
+  mob.innerHTML = '<img class="shot" data-asset="docs" alt="">';
   $("s4").insertBefore(mob, $("s4copy"));
   // pale wash sits on the wallpaper, under the panel
   $("s3cam").insertBefore($("s3pale"), $("s3cam").querySelector(".menuStrip"));
 
   for (const n of ASSET_SLOTS) resolved[n] = await resolveAsset(n);
   document.querySelectorAll("img[data-asset]").forEach(im => { im.src = resolved[im.dataset.asset].url; });
-  buildLogos();
+  for (const n of ASSET_SLOTS) if (resolved[n].url) resolved[n].size = await naturalSize(resolved[n].url);
   buildGhosts();
+  buildLogos();
+  await Promise.all([...document.images].map(im => im.decode().catch(() => {})));
+  const crop = (sel, w, h, key) => { const im = document.querySelector(sel); return applyCrop(im, w, h, resolved[im.dataset.asset].real ? CONFIG.crops[key] : { x: 0, w: im.naturalWidth }); };
+  S1K = crop("#s1shot", 844, 594, "s1");
+  crop("#s4card .shot", 960, 1400, "s4");
+  crop("#s4mob .shot", 236, 9999, "s4mob");
+  crop(".s5img .shot", 828, 500, "s5");
 
   await Promise.all([400, 500, 600, 700].flatMap(w => [
     document.fonts.load(`${w} 40px Pretendard`, "가나다 짧게 크게"),

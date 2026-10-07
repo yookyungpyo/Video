@@ -7,11 +7,14 @@ Place files in `assets/hf/` (png / jpg / jpeg / webp / svg):
 
 | file | used in |
 |---|---|
-| `logo.*` | S1 disc, S2 icon, S3 tile/menu mark, S7 disc |
-| `desktop.*` | S1 window, S4 main screen, S5 background |
-| `mobile.*` | S4 parallax layer |
-| `ia.*` | S5 card, S6 card 01 (정보구조 개선) |
-| `service.*` | S6 card 02 (핵심서비스 개선) |
+| `logo.*` | S1 disc, S2 icon, S3 tile/menu mark, S7 disc, S8 white reverse wordmark |
+| `desktop.*` | S1 window (통합검색 focus), S4 main screen, S5 background, S6 card 01 (정보구조 개선) |
+| `mobile.*` | S5 card (자주 찾는 업무) |
+| `docs.*` | S4 parallax layer (스마트 서류제출) |
+| `service.*` | S6 card 02 (핵심서비스 개선 — 진행현황) |
+
+Crops (source pixels) live in `CONFIG.crops` in `animation.js`. Supplied logo had a baked-in checkerboard;
+only that achromatic background was keyed out (artwork untouched). Screenshots were only trimmed of their outer frame.
 
 Missing files fall back to neutral grey slot placeholders (`assets/placeholder/`, regenerate with
 `python3 tools_make_placeholders.py`) and a `PREVIEW · HF 에셋 슬롯` tag is shown. The S1 focus ring position is
