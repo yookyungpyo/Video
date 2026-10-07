@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>HF UI/UX Renewal</title>
+<meta name="viewport" content="width=1080, height=1080">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Shared SVG defs: directional blur filters (one per animated layer) + cursor symbol -->
+<svg id="defs" width="0" height="0" aria-hidden="true">
+  <defs id="filterDefs"></defs>
+  <defs>
+    <symbol id="cursorSym" viewBox="0 0 28 40">
+      <path d="M3 2 L3 31 L10.2 24.4 L14.7 35.2 L19.6 33.1 L15.1 22.6 L24.8 22.6 Z"
+            fill="#0A0A0C" stroke="#FFFFFF" stroke-width="2.2" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+
+  <!-- ============ S1 — INTRO / HF EXPERIENCE  f0–71 ============ -->
+  <section class="scene" id="s1">
+    <div class="haze" id="s1haze">
+      <div class="blob b1" id="s1b1"></div><div class="blob b2" id="s1b2"></div>
+    </div>
+    <div class="cam" id="s1cam">
+      <div class="s1head" id="s1head">
+        <div class="logoDisc sm" id="s1logo" data-logo></div>
+        <div class="s1titleWrap"><h1 class="s1title" id="s1title">HF 비대면채널 UI/UX 개선</h1></div>
+        <div class="pill" id="s1pill">Digital Renewal</div>
+      </div>
+      <div class="win" id="s1win">
+        <div class="winBar"><span></span><i></i></div>
+        <div class="winBody" id="s1winBody">
+          <img class="shot" id="s1shot" data-asset="desktop" alt="">
+          <div class="focusRing" id="s1ring"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cursor" id="s1cursor"><svg viewBox="0 0 28 40"><use href="#cursorSym"/></svg></div>
+  </section>
+
+  <!-- ============ S2 — UX SYSTEM  f72–100 ============ -->
+  <section class="scene" id="s2">
+    <div class="s2halo" id="s2halo"></div>
+    <div class="s2icon" id="s2icon" data-logo-square></div>
+    <div class="mod" id="m0"><div class="modCard"><svg viewBox="0 0 48 48"><!-- 핵심서비스: mobile screen -->
+      <rect x="14" y="5" width="20" height="38" rx="5" fill="none" stroke="currentColor" stroke-width="3"/>
+      <rect x="19" y="12" width="10" height="7" rx="2" fill="currentColor"/>
+      <line x1="19" y1="25" x2="29" y2="25" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="21" y1="37" x2="27" y2="37" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+      <div class="modLabel">핵심서비스</div></div>
+    <div class="mod" id="m1"><div class="modCard"><svg viewBox="0 0 48 48"><!-- 간편서류: document -->
+      <path d="M12 5 H29 L37 13 V43 H12 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M28 5 V14 H37" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M18 29 L22.5 33.5 L31 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="modLabel">간편서류</div></div>
+    <div class="mod" id="m2"><div class="modCard"><svg viewBox="0 0 48 48"><!-- 일관된 UI: component grid -->
+      <rect x="7" y="7" width="14" height="14" rx="4" fill="currentColor"/>
+      <rect x="27" y="7" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
+      <rect x="7" y="27" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
+      <rect x="27" y="27" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+      <div class="modLabel">일관된 UI</div></div>
+    <div class="mod" id="m3"><div class="modCard"><svg viewBox="0 0 48 48"><!-- 정보구조: navigation lines -->
+      <circle cx="10" cy="12" r="3.2" fill="currentColor"/><line x1="18" y1="12" x2="40" y2="12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="16" cy="24" r="3.2" fill="currentColor"/><line x1="24" y1="24" x2="40" y2="24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="16" cy="36" r="3.2" fill="currentColor"/><line x1="24" y1="36" x2="36" y2="36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="10" y1="16" x2="10" y2="36" stroke="currentColor" stroke-width="2" opacity=".5"/></svg></div>
+      <div class="modLabel">정보구조</div></div>
+  </section>
+
+  <!-- ============ S3 — USER JOURNEY  f101–158 ============ -->
+  <section class="scene" id="s3">
+    <div class="cam" id="s3cam">
+      <div class="wall" id="s3wall"><div class="wallGlow"></div></div>
+      <div class="menuStrip"><div class="msMark" data-logo-mini></div><span class="msDot"></span><span class="msDot"></span><span class="msDot"></span><div class="msRight"><i></i><i></i><i></i></div></div>
+      <div class="svcTile" id="s3tile" data-logo-square></div>
+      <div class="glass" id="s3panel">
+        <div class="glassBg" id="s3glassBg"><div class="wall"><div class="wallGlow"></div></div></div>
+        <div class="glassTint"></div>
+        <div class="glassBody">
+          <div class="typeLine" id="s3l1"></div>
+          <div class="typeLine" id="s3l2"></div>
+          <div class="glassCtl">
+            <span class="ctl"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="ctl"><svg viewBox="0 0 24 24"><path d="M5 8h14M5 16h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="8" r="2.2" fill="#fff" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="16" r="2.2" fill="#fff" stroke="currentColor" stroke-width="2"/></svg></span>
+            <span class="ctl"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+            <span class="go"><svg viewBox="0 0 24 24"><path d="M6 12h11M12.5 7l5 5-5 5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div class="paleWash" id="s3pale"></div>
+    </div>
+    <div class="cursor" id="s3cursor"><svg viewBox="0 0 28 40"><use href="#cursorSym"/></svg></div>
+  </section>
+
+  <!-- ============ S4 — REAL HF UI  f159–186 ============ -->
+  <section class="scene light" id="s4">
+    <div class="s4shotCard" id="s4card"><img class="shot" data-asset="desktop" alt=""></div>
+    <div class="s4copy" id="s4copy">
+      <div class="kicker" id="s4k">더 짧게, 더 쉽게</div>
+      <h2 id="s4h"><span class="ln" id="s4h1">사용자 중심으로 다시 설계한</span><span class="ln" id="s4h2">비대면 금융 경험</span></h2>
+      <p id="s4p">공급자 중심의 구조를<br>고객의 목적과 금융 여정을 기준으로 재구성했습니다.</p>
+    </div>
+    <div class="flash" id="s4flash"></div>
+  </section>
+
+  <!-- ============ S5 — IMPROVEMENT DETAIL  f187–214 ============ -->
+  <section class="scene light" id="s5">
+    <div class="s5back" id="s5back"><img class="shot" data-asset="desktop" alt=""></div>
+    <div class="s5card" id="s5card">
+      <div class="s5img"><img class="shot" data-asset="ia" alt=""></div>
+      <div class="s5cap" id="s5cap">
+        <div class="s5tag">정보구조 개선</div>
+        <h3>찾는 시간은 <b>짧게</b></h3>
+        <p>공급자 용어가 아닌 고객의 언어와 목적을 기준으로 정보를 재구성했습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ S6 — CORE IMPROVEMENTS  f215–244 ============ -->
+  <section class="scene" id="s6">
+    <div class="s6card" id="s6a"><svg viewBox="0 0 538 348" class="frostSvg" id="s6aSvg"></svg></div>
+    <div class="s6card" id="s6b"><svg viewBox="0 0 538 348" class="frostSvg" id="s6bSvg"></svg></div>
+  </section>
+
+  <!-- ============ S7 — HF IDENTITY  f245–300 ============ -->
+  <section class="scene" id="s7">
+    <div class="logoDisc lg" id="s7logo" data-logo></div>
+  </section>
+
+  <!-- ============ S8 — END CARD  f301–359 ============ -->
+  <section class="scene" id="s8">
+    <div class="s8grp" id="s8grp">
+      <div class="s8ghosts" id="s8ghosts"></div>
+      <div class="s8mark" id="s8mark">HF</div>
+      <div class="s8sub" id="s8sub">비대면채널 UI/UX 개선사업</div>
+      <div class="s8line" id="s8line">사용자의 여정을 짧게,<br>경험의 가치는 크게.</div>
+    </div>
+  </section>
+
+  <div class="slotTags" id="slotTags"></div>
+</div>
+<script src="animation.js"></script>
+</body>
+</html>
