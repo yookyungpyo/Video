@@ -3,12 +3,12 @@ import os, sys, numpy as np
 from PIL import Image
 D = os.path.join(os.path.dirname(__file__), "frames")
 files = sorted(os.listdir(D)); n = len(files)
-def load(i): return np.asarray(Image.open(os.path.join(D, files[i])).convert("L").resize((270, 270)), np.float32)
+def load(i): return np.asarray(Image.open(os.path.join(D, files[i])).convert("L"), np.float32)
 prev = load(0); frozen = []; blank = []
 for i in range(1, n):
     cur = load(i); f = i / 2
     d = np.abs(cur - prev).mean()
-    if d < 0.02 and not (269 <= f <= 288): frozen.append(f)
+    if d < 0.01 and not (269 <= f <= 288): frozen.append(f)
     if cur.std() < 2.0: blank.append(f)
     prev = cur
 hold = [i / 2 for i in range(n) if 269 <= i / 2 < 288]

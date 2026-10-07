@@ -303,16 +303,16 @@ function S1(f) {
 const MOD_BASE = [-90, 0, 90, 180]; // top 핵심서비스, right 간편서류, bottom 일관된 UI, left 정보구조
 const s2 = {
   ang: f => 235 * (1 - easeOutExpo(prog(f, 72, 86))),
-  rad: f => kf(f, [[72, 380], [86, 272, easeOutExpo], [89, 272], [101, 6, easeInExpo]]),
+  rad: f => kf(f, [[72, 380], [86, 272, easeOutExpo], [88.5, 280, easeInOutCubic], [101, 6, easeInExpo]]),
   modS: f => kf(f, [[72, 0.86], [84, 1, easeOutExpo], [89, 1], [101, 0.22, easeInExpo]]),
-  iconS: f => kf(f, [[72, 1.28], [81, 1, easeOutExpo], [88.5, 1], [101, 0.06, easeInExpo]]),
+  iconS: f => kf(f, [[72, 1.28], [81, 1, easeOutExpo], [88.5, 1.04, easeInOutCubic], [101, 0.06, easeInExpo]]),
 };
 function modPos(i, f) {
   const a = (MOD_BASE[i] + s2.ang(f)) * Math.PI / 180, r = s2.rad(f);
   return [540 + Math.cos(a) * r, 540 + Math.sin(a) * r];
 }
 function S2(f) {
-  const hs = kf(f, [[72, 0.82], [84, 1, easeOutExpo], [89, 1], [101, 0.25, easeInExpo]]);
+  const hs = kf(f, [[72, 0.82], [84, 1, easeOutExpo], [89, 1.06, easeInOutCubic], [101, 0.25, easeInExpo]]);
   T($("s2halo"), `scale(${hs})`);
   const icon = $("s2icon"), is = s2.iconS(f);
   T(icon, `scale(${is}) rotate(${kf(f, [[89, 0], [101, -18, easeInExpo]])}deg)`);
@@ -463,8 +463,8 @@ function S6(f) {
 
 /* ---------------- S7  f245–300 ---------------- */
 const s7 = {
-  y: f => kf(f, [[245, 560], [269, 0, easeOutExpo]]),
-  s: f => kf(f, [[245, 0.92], [269, 1, easeOutExpo], [288, 1], [300, 123 / 168, easeInCubic], [301, 0.66, linear]]),
+  y: f => kf(f, [[245, 430], [269, 0, easeOutCubic]]),
+  s: f => kf(f, [[245, 0.9], [269, 1, easeOutCubic], [288, 1], [300, 123 / 168, p => 0.45 * p + 0.55 * p * p * p], [301, 0.66, linear]]),
 };
 function S7(f) {
   const el = $("s7logo");
@@ -478,7 +478,7 @@ function S7(f) {
 
 /* ---------------- S8  f301–362 ---------------- */
 const s8 = {
-  s: f => kf(f, [[301, 7.5], [319, 1, easeOutExpo], [347, 0.93], [362.5, 0.4, easeInCubic]]),
+  s: f => kf(f, [[301, 7.5], [319, 1, easeOutExpo], [347, 0.93], [362.5, 0.4, p => 0.073 * p + 0.927 * p * p * p]]),
 };
 function S8(f) {
   const grp = $("s8grp"), s = s8.s(f);

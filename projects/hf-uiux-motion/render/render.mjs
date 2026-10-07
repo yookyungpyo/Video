@@ -38,7 +38,8 @@ if (mode === "stills") {
   // 59.94 fps master: evaluate f0, f0.5, f1 … through the same timeline (no frame duplication)
   const out = path.join(ROOT, "render", "frames"); fs.mkdirSync(out, { recursive: true });
   const N = Math.round(12.075 * 60000 / 1001);
-  for (let i = 0; i < N; i++) {
+  const [a0, a1] = mode === "range" ? args.map(Number) : [0, N - 1]; // range: master-frame indices
+  for (let i = a0; i <= Math.min(a1, N - 1); i++) {
     await shoot(i / 2, path.join(out, `${String(i).padStart(5, "0")}.png`));
     if (i % 60 === 0) console.log(`frame ${i}/${N} (f${i / 2})`);
   }
