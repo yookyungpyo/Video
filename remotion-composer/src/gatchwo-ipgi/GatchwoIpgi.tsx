@@ -11,7 +11,6 @@ import {
 } from "remotion";
 
 const SANS = "Noto Sans KR";
-const HAND = "Gaegu";
 const PAPER = "#F4F0E8";
 const PAPER_DEEP = "#E9E2D5";
 const INK = "#15161A";
@@ -47,8 +46,6 @@ const fontCss = `
   src: url('${staticFile("fonts/noto-sans-kr-korean-700-normal.woff2")}') format('woff2'); }
 @font-face { font-family: '${SANS}'; font-weight: 900; font-style: normal;
   src: url('${staticFile("fonts/noto-sans-kr-korean-900-normal.woff2")}') format('woff2'); }
-@font-face { font-family: '${HAND}'; font-weight: 700; font-style: normal;
-  src: url('${staticFile("fonts/gaegu-korean-700-normal.woff2")}') format('woff2'); }
 `;
 
 const FontLoader: React.FC = () => {
@@ -59,7 +56,6 @@ const FontLoader: React.FC = () => {
       (document as any).fonts.load(`400 64px "${SANS}"`, "가"),
       (document as any).fonts.load(`700 64px "${SANS}"`, "가"),
       (document as any).fonts.load(`900 64px "${SANS}"`, "가"),
-      (document as any).fonts.load(`700 64px "${HAND}"`, "가"),
     ])
       .then(() => (document as any).fonts.ready)
       .then(done)
@@ -113,52 +109,66 @@ const Clock: React.FC<{ f: number }> = ({ f }) => {
 
 // ---------- Opening: sloppy 대충 gets struck through ----------
 
-const Opening: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
+const Opening: React.FC<{ f: number }> = ({ f }) => {
   if (f > SCENE_IN + 14) return null;
-  const inS = spring({ frame: f - 12, fps, config: { stiffness: 90, damping: 14, mass: 0.9 } });
+  const ease = Easing.out(Easing.cubic);
+  const kicker = interpolate(f, [8, 26], [0, 1], { ...clamp, easing: ease });
+  const word = interpolate(f, [14, 36], [0, 1], { ...clamp, easing: ease });
+  const sub = interpolate(f, [28, 44], [0, 1], { ...clamp, easing: ease });
   const struck = f >= STRIKE_AT;
-  const strike = interpolate(f, [STRIKE_AT, STRIKE_AT + 11], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const snap = spring({ frame: f - (STRIKE_AT + 4), fps, config: { stiffness: 220, damping: 11, mass: 0.7 } });
+  const strike = interpolate(f, [STRIKE_AT, STRIKE_AT + 11], [0, 1], { ...clamp, easing: ease });
+  const align = interpolate(f, [STRIKE_AT + 4, STRIKE_AT + 20], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const out = interpolate(f, [SCENE_IN - 4, SCENE_IN + 12], [1, 0], clamp);
-  const wobble = struck ? 0 : Math.sin(f * 0.21) * 2.2;
-  const tilt = struck ? -7 * (1 - snap) : -7;
-  const faded = struck ? 1 - 0.65 * snap : 1;
+  const drift = (1 - align) * Math.sin(f * 0.06) * 3;
+  // Letters sit slightly out of line ("대충") until the thread pulls them straight.
+  const letters = [
+    { ch: "대", dy: -14, rot: -2.4 },
+    { ch: "충", dy: 12, rot: 1.8 },
+  ];
   return (
     <div style={{
       position: "absolute", inset: 0, opacity: out,
-      transform: `scale(${1 - (1 - out) * 0.06})`, transformOrigin: "50% 48%",
+      transform: `scale(${1 - (1 - out) * 0.04})`, transformOrigin: "50% 48%",
     }}>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: 560,
-        display: "flex", justifyContent: "center",
-        transform: `scale(${0.7 + inS * 0.3}) rotate(${tilt + wobble}deg)`,
-        transformOrigin: "50% 60%", opacity: inS,
+        position: "absolute", left: 0, right: 0, top: 540, textAlign: "center",
+        color: MUTE, fontSize: 28, fontWeight: 700, letterSpacing: 10,
+        opacity: kicker, transform: `translateY(${(1 - kicker) * 10}px)`,
       }}>
-        <div style={{ position: "relative", display: "inline-block" }}>
+        오늘 아침의 질문
+        <div style={{ width: 44 * kicker, height: 3, background: THREAD, margin: "18px auto 0" }} />
+      </div>
+      <div style={{
+        position: "absolute", left: 0, right: 0, top: 640,
+        display: "flex", justifyContent: "center",
+        opacity: word, transform: `translateY(${(1 - word) * 24}px)`,
+      }}>
+        <div style={{ position: "relative", display: "flex", gap: `${48 - 36 * align}px` }}>
+          {letters.map((l) => (
+            <span key={l.ch} style={{
+              display: "inline-block", fontSize: 300, lineHeight: 1, fontWeight: 900,
+              color: INK, opacity: 0.62 - 0.32 * align,
+              transform: `translateY(${l.dy * (1 - align) + drift}px) rotate(${l.rot * (1 - align)}deg)`,
+            }}>{l.ch}</span>
+          ))}
           <div style={{
-            fontFamily: `'${HAND}', '${SANS}', sans-serif`, fontWeight: 700,
-            fontSize: 360, lineHeight: 1, color: INK, opacity: faded,
-            letterSpacing: struck ? 6 * snap : 0,
-          }}>대충</div>
-          <div style={{
-            position: "absolute", left: -30, right: -30, top: "52%", height: 14, borderRadius: 7,
-            background: THREAD, transform: `scaleX(${strike}) rotate(-3deg)`,
+            position: "absolute", left: -36, right: -36, top: "50%", height: 12, borderRadius: 6,
+            background: THREAD, transform: `scaleX(${strike}) rotate(-1.5deg)`,
             transformOrigin: "left center",
-            boxShadow: `0 2px 0 rgba(0,0,0,0.12)`,
+            boxShadow: "0 2px 0 rgba(0,0,0,0.12)",
           }} />
         </div>
       </div>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: 1010, textAlign: "center",
-        fontSize: 48, fontWeight: 400, color: MUTE, letterSpacing: 2,
-        opacity: interpolate(f, [26, 40], [0, 1], clamp) * (struck ? 1 - snap : 1),
-        transform: `translateY(${(1 - interpolate(f, [26, 40], [0, 1], { ...clamp, easing: Easing.out(Easing.quad) })) * 14}px)`,
-      }}>오늘 하루, 이렇게 살 건가?</div>
+        position: "absolute", left: 0, right: 0, top: 1030, textAlign: "center",
+        fontSize: 46, fontWeight: 400, color: MUTE, letterSpacing: 2,
+        opacity: sub * (struck ? 1 - align : 1), transform: `translateY(${(1 - sub) * 14}px)`,
+      }}>오늘 하루를, 이렇게 보낼 것인가.</div>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: 1010, textAlign: "center",
+        position: "absolute", left: 0, right: 0, top: 1030, textAlign: "center",
         fontSize: 52, fontWeight: 900, color: INK, letterSpacing: 2,
-        opacity: struck ? snap : 0, transform: `translateY(${(1 - snap) * 18}px)`,
-      }}>아니. 오늘은 다르다.</div>
+        opacity: struck ? align : 0, transform: `translateY(${(1 - align) * 16}px)`,
+      }}>아니다. 오늘은 다르다.</div>
     </div>
   );
 };
@@ -328,7 +338,7 @@ export const GatchwoIpgi: React.FC = () => {
       <FontLoader />
       <Paper f={f} />
       <Clock f={f} />
-      <Opening f={f} fps={fps} />
+      <Opening f={f} />
       <div style={{
         position: "absolute", inset: 0, opacity: sceneIn,
         transform: `translateY(${(1 - sceneIn) * 40}px) scale(${scale})`, transformOrigin: "50% 46%",
