@@ -298,22 +298,27 @@ const Cat: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
   const enter = spring({ frame: f - CAT_AT, fps, config: { stiffness: 170, damping: 11, mass: 0.8 } });
   const tie = spring({ frame: f - TIE_AT, fps, config: { stiffness: 320, damping: 10, mass: 0.6 } });
   const tied = f >= TIE_AT;
-  const swing = tied ? Math.sin((f - TIE_AT) * 0.35) * 6 * Math.exp(-(f - TIE_AT) / 30) : 0;
+  // A brief settle wobble after the tie is pulled tight, ending dead straight.
+  const swing = tied ? Math.sin((f - TIE_AT) * 0.4) * 3 * Math.exp(-(f - TIE_AT) / 12) : 0;
   const bob = Math.sin(f * 0.12) * 4;
-  const knot = tied ? 1 - 0.35 * (1 - tie) : 0.65;
+  const knot = tied ? 1 - 0.3 * (1 - tie) : 0.7;
   return (
     <div style={{
-      position: "absolute", left: 870, top: 1350,
+      position: "absolute", left: 870, top: 1350, width: 160,
       transform: `translate(-50%, 0) translateY(${(1 - enter) * 160 + bob}px) scale(${enter})`,
     }}>
-      <div style={{ fontSize: 118, lineHeight: 1, textAlign: "center", transform: `rotate(${tied ? -swing * 0.3 : 0}deg)` }}>🐱</div>
-      <svg width={120} height={130} viewBox="0 0 120 130" fill="none"
-        style={{ position: "absolute", left: 0, top: 100, overflow: "visible" }}>
-        <g transform={`translate(60 0) rotate(${swing}) translate(-60 0)`}>
-          <path d="M60 22 L44 36 L52 96 L60 110 L68 96 L76 36 Z" fill={THREAD} opacity={0.95}
-            transform={`translate(60 22) scaleY(${0.9 + 0.1 * tie}) translate(-60 -22)`} />
-          <path d="M48 0 L72 0 L76 24 L44 24 Z" fill="#8E2730"
-            transform={`translate(60 12) scale(${knot}) translate(-60 -12)`} />
+      <div style={{ fontSize: 118, lineHeight: 1, textAlign: "center" }}>🐱</div>
+      <svg width={120} height={110} viewBox="0 0 120 110" fill="none"
+        style={{ position: "absolute", left: 20, top: 124, overflow: "visible" }}>
+        {/* shirt collar points */}
+        <path d="M60 4 L34 0 L44 20 Z" fill="#FFFFFF" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />
+        <path d="M60 4 L86 0 L76 20 Z" fill="#FFFFFF" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />
+        <g transform={`translate(60 4) rotate(${swing}) translate(-60 -4)`}>
+          <path d="M54 18 L66 18 L76 82 L60 100 L44 82 Z" fill={THREAD}
+            transform={`translate(60 18) scaleY(${0.9 + 0.1 * tie}) translate(-60 -18)`} />
+          <path d="M60 22 L60 92" stroke="#8E2730" strokeWidth={1.5} opacity={0.5} />
+          <path d="M48 2 L72 2 L67 19 L53 19 Z" fill="#8E2730"
+            transform={`translate(60 10) scale(${knot}) translate(-60 -10)`} />
         </g>
       </svg>
     </div>
