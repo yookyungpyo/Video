@@ -19,13 +19,14 @@ const MUTE = "#8A857C";
 const THREAD = "#B8323A";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
-export const TOTAL = 740;
-const STRIKE_AT = 50;
-const SCENE_IN = 74;
-const BUTTON_AT = [122, 212, 302, 392, 482];
-const CAT_AT = 598;
-const TIE_AT = 632;
-const ASK_AT = 664;
+// Opening holds: question readable ~2.5s before the strike, answer ~2s after.
+export const TOTAL = 861;
+const STRIKE_AT = 110;
+const SCENE_IN = 195;
+const BUTTON_AT = [243, 333, 423, 513, 603];
+const CAT_AT = 719;
+const TIE_AT = 753;
+const ASK_AT = 785;
 
 const PLACKET_X = 220;
 const PLACKET_TOP = 400;
