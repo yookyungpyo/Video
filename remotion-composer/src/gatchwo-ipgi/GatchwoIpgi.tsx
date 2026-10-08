@@ -11,6 +11,7 @@ import {
 } from "remotion";
 
 const SANS = "Noto Sans KR";
+const SERIF = "Noto Serif KR";
 const PAPER = "#F4F0E8";
 const PAPER_DEEP = "#E9E2D5";
 const INK = "#15161A";
@@ -46,6 +47,12 @@ const fontCss = `
   src: url('${staticFile("fonts/noto-sans-kr-korean-700-normal.woff2")}') format('woff2'); }
 @font-face { font-family: '${SANS}'; font-weight: 900; font-style: normal;
   src: url('${staticFile("fonts/noto-sans-kr-korean-900-normal.woff2")}') format('woff2'); }
+@font-face { font-family: '${SERIF}'; font-weight: 400; font-style: normal;
+  src: url('${staticFile("fonts/noto-serif-kr-korean-400-normal.woff2")}') format('woff2'); }
+@font-face { font-family: '${SERIF}'; font-weight: 700; font-style: normal;
+  src: url('${staticFile("fonts/noto-serif-kr-korean-700-normal.woff2")}') format('woff2'); }
+@font-face { font-family: '${SERIF}'; font-weight: 900; font-style: normal;
+  src: url('${staticFile("fonts/noto-serif-kr-korean-900-normal.woff2")}') format('woff2'); }
 `;
 
 const FontLoader: React.FC = () => {
@@ -56,6 +63,9 @@ const FontLoader: React.FC = () => {
       (document as any).fonts.load(`400 64px "${SANS}"`, "가"),
       (document as any).fonts.load(`700 64px "${SANS}"`, "가"),
       (document as any).fonts.load(`900 64px "${SANS}"`, "가"),
+      (document as any).fonts.load(`400 64px "${SERIF}"`, "가"),
+      (document as any).fonts.load(`700 64px "${SERIF}"`, "가"),
+      (document as any).fonts.load(`900 64px "${SERIF}"`, "가"),
     ])
       .then(() => (document as any).fonts.ready)
       .then(done)
@@ -99,6 +109,7 @@ const Clock: React.FC<{ f: number }> = ({ f }) => {
     <div style={{
       position: "absolute", right: 120, top: 268, display: "flex", alignItems: "baseline", gap: 14,
       color: MUTE, fontSize: 34, fontWeight: 700, letterSpacing: 6, opacity: op,
+      fontFamily: `'${SANS}', sans-serif`,
       fontVariantNumeric: "tabular-nums",
     }}>
       <span>AM</span>
@@ -261,6 +272,7 @@ const Segment: React.FC<{ i: number; f: number; fps: number }> = ({ i, f, fps })
     }}>
       <div style={{
         position: "absolute", left: 2, top: -30, color: THREAD, fontSize: 22, fontWeight: 700,
+        fontFamily: `'${SANS}', sans-serif`,
         letterSpacing: 5, opacity: idx, fontVariantNumeric: "tabular-nums",
       }}>0{i + 1}</div>
       <div style={{
@@ -333,7 +345,7 @@ export const GatchwoIpgi: React.FC = () => {
   return (
     <div style={{
       width: 1080, height: 1920, position: "relative", overflow: "hidden",
-      background: PAPER, fontFamily: `'${SANS}', sans-serif`,
+      background: PAPER, fontFamily: `'${SERIF}', serif`,
     }}>
       <FontLoader />
       <Paper f={f} />
