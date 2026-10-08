@@ -28,8 +28,8 @@ const TIE_AT = 632;
 const ASK_AT = 664;
 
 const PLACKET_X = 220;
-const PLACKET_TOP = 330;
-const BUTTON_Y = [430, 630, 830, 1030, 1230];
+const PLACKET_TOP = 400;
+const BUTTON_Y = [500, 680, 860, 1040, 1220];
 const TEXT_X = 380;
 
 const SEGMENTS = [
@@ -101,7 +101,7 @@ const Clock: React.FC<{ f: number }> = ({ f }) => {
   const op = interpolate(f, [6, 20], [0, 1], clamp);
   return (
     <div style={{
-      position: "absolute", left: 120, top: 268, display: "flex", alignItems: "baseline", gap: 14,
+      position: "absolute", right: 120, top: 268, display: "flex", alignItems: "baseline", gap: 14,
       color: MUTE, fontSize: 34, fontWeight: 700, letterSpacing: 6, opacity: op,
       fontVariantNumeric: "tabular-nums",
     }}>
@@ -276,7 +276,7 @@ const Cat: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
   const knot = tied ? 1 - 0.35 * (1 - tie) : 0.65;
   return (
     <div style={{
-      position: "absolute", left: 870, top: 1360,
+      position: "absolute", left: 870, top: 1350,
       transform: `translate(-50%, 0) translateY(${(1 - enter) * 160 + bob}px) scale(${enter})`,
     }}>
       <div style={{ fontSize: 118, lineHeight: 1, textAlign: "center", transform: `rotate(${tied ? -swing * 0.3 : 0}deg)` }}>🐱</div>
