@@ -19,7 +19,7 @@ const MUTE = "#8A857C";
 const THREAD = "#B8323A";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
-// Opening holds: question readable ~2.5s before the strike, answer ~2s after.
+// Opening holds: first line readable ~2.5s before the thread, resolution ~2s after.
 export const TOTAL = 861;
 const STRIKE_AT = 110;
 const SCENE_IN = 195;
@@ -119,7 +119,7 @@ const Clock: React.FC<{ f: number }> = ({ f }) => {
   );
 };
 
-// ---------- Opening: sloppy 대충 gets struck through ----------
+// ---------- Opening: a red thread is sewn under 단정 ----------
 
 const Opening: React.FC<{ f: number }> = ({ f }) => {
   if (f > SCENE_IN + 14) return null;
@@ -127,15 +127,17 @@ const Opening: React.FC<{ f: number }> = ({ f }) => {
   const kicker = interpolate(f, [8, 26], [0, 1], { ...clamp, easing: ease });
   const word = interpolate(f, [14, 36], [0, 1], { ...clamp, easing: ease });
   const sub = interpolate(f, [28, 44], [0, 1], { ...clamp, easing: ease });
-  const struck = f >= STRIKE_AT;
-  const strike = interpolate(f, [STRIKE_AT, STRIKE_AT + 11], [0, 1], { ...clamp, easing: ease });
+  const sewn = f >= STRIKE_AT;
+  const thread = interpolate(f, [STRIKE_AT, STRIKE_AT + 14], [0, 1], { ...clamp, easing: ease });
   const align = interpolate(f, [STRIKE_AT + 4, STRIKE_AT + 20], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const knot = interpolate(f, [STRIKE_AT + 12, STRIKE_AT + 20], [0, 1], { ...clamp, easing: Easing.out(Easing.back(2)) });
   const out = interpolate(f, [SCENE_IN - 4, SCENE_IN + 12], [1, 0], clamp);
   const drift = (1 - align) * Math.sin(f * 0.06) * 3;
-  // Letters sit slightly out of line ("대충") until the thread pulls them straight.
+  // Letters rest slightly loose until the thread is sewn beneath them, then
+  // settle into line and deepen to full ink.
   const letters = [
-    { ch: "대", dy: -14, rot: -2.4 },
-    { ch: "충", dy: 12, rot: 1.8 },
+    { ch: "단", dy: -10, rot: -1.8 },
+    { ch: "정", dy: 9, rot: 1.4 },
   ];
   return (
     <div style={{
@@ -147,7 +149,7 @@ const Opening: React.FC<{ f: number }> = ({ f }) => {
         color: MUTE, fontSize: 28, fontWeight: 700, letterSpacing: 10,
         opacity: kicker, transform: `translateY(${(1 - kicker) * 10}px)`,
       }}>
-        오늘 아침의 질문
+        오늘 아침의 다짐
         <div style={{ width: 44 * kicker, height: 3, background: THREAD, margin: "18px auto 0" }} />
       </div>
       <div style={{
@@ -159,28 +161,30 @@ const Opening: React.FC<{ f: number }> = ({ f }) => {
           {letters.map((l) => (
             <span key={l.ch} style={{
               display: "inline-block", fontSize: 300, lineHeight: 1, fontWeight: 900,
-              color: INK, opacity: 0.62 - 0.32 * align,
+              color: INK, opacity: 0.5 + 0.5 * align,
               transform: `translateY(${l.dy * (1 - align) + drift}px) rotate(${l.rot * (1 - align)}deg)`,
             }}>{l.ch}</span>
           ))}
           <div style={{
-            position: "absolute", left: -36, right: -36, top: "50%", height: 12, borderRadius: 6,
-            background: THREAD, transform: `scaleX(${strike}) rotate(-1.5deg)`,
-            transformOrigin: "left center",
-            boxShadow: "0 2px 0 rgba(0,0,0,0.12)",
+            position: "absolute", left: -20, right: -20, top: "calc(100% + 22px)", height: 10, borderRadius: 5,
+            background: THREAD, transform: `scaleX(${thread})`, transformOrigin: "left center",
+          }} />
+          <div style={{
+            position: "absolute", right: -34, top: "calc(100% + 17px)", width: 20, height: 20, borderRadius: 10,
+            background: THREAD, transform: `scale(${knot})`,
           }} />
         </div>
       </div>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: 1030, textAlign: "center",
+        position: "absolute", left: 0, right: 0, top: 1060, textAlign: "center",
         fontSize: 46, fontWeight: 400, color: MUTE, letterSpacing: 2,
-        opacity: sub * (struck ? 1 - align : 1), transform: `translateY(${(1 - sub) * 14}px)`,
-      }}>오늘 하루를, 이렇게 보낼 것인가.</div>
+        opacity: sub * (sewn ? clamp01(1 - align * 2) : 1), transform: `translateY(${(1 - sub) * 14}px)`,
+      }}>옷깃을 여미는 아침.</div>
       <div style={{
-        position: "absolute", left: 0, right: 0, top: 1030, textAlign: "center",
+        position: "absolute", left: 0, right: 0, top: 1060, textAlign: "center",
         fontSize: 52, fontWeight: 900, color: INK, letterSpacing: 2,
-        opacity: struck ? align : 0, transform: `translateY(${(1 - align) * 16}px)`,
-      }}>아니다. 오늘은 다르다.</div>
+        opacity: sewn ? clamp01(align * 2 - 1) : 0, transform: `translateY(${(1 - align) * 16}px)`,
+      }}>오늘을 정성껏 맞이한다.</div>
     </div>
   );
 };
