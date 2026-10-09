@@ -229,7 +229,7 @@ const Page: React.FC<{ f: number }> = ({ f }) => {
           const barColor = isKey
             ? interpolateColors(keyFocus, [0, 1], [BAR, "#DCE1E8"])
             : interpolateColors(keyFocus, [0, 1], [BAR, "#323843"]);
-          const hiOpacity = isKey ? 0.34 + 0.16 * keyFocus : 0.34;
+          const hiOpacity = isKey ? 0.42 + 0.14 * keyFocus : 0.42;
           let x = 180;
           return (
             <g key={i}>
@@ -391,16 +391,19 @@ export const EverythingShouts: React.FC = () => {
         position: "absolute", inset: 0,
         background: "radial-gradient(ellipse 80% 55% at 50% 44%, #18202B 0%, rgba(13,16,21,0) 70%)",
       }} />
-      <Shouting f={f} />
-      <Overline f={f} from={174} to={552} tag="CASE" text="시험 전날 교과서" />
-      <Overline f={f} from={558} to={760} tag="EVERYDAY" text="일상에서도" />
-      <Overline f={f} from={764} to={1032} tag="SUBTRACT" text="덜어내기" />
-      <Page f={f} />
-      <Search f={f} />
-      <Metric f={f} />
-      <Everyday f={f} />
-      <Calm f={f} />
-      <Captions f={f} caps={CAPTIONS} />
+      {/* Scenes are laid out top-down; this offset centers them in the Reels safe band. */}
+      <div style={{ position: "absolute", inset: 0, transform: "translateY(60px)" }}>
+        <Shouting f={f} />
+        <Overline f={f} from={174} to={552} tag="CASE" text="시험 전날 교과서" />
+        <Overline f={f} from={558} to={760} tag="EVERYDAY" text="일상에서도" />
+        <Overline f={f} from={764} to={1032} tag="SUBTRACT" text="덜어내기" />
+        <Page f={f} />
+        <Search f={f} />
+        <Metric f={f} />
+        <Everyday f={f} />
+        <Calm f={f} />
+        <Captions f={f} caps={CAPTIONS} />
+      </div>
       <Grain f={f} />
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
