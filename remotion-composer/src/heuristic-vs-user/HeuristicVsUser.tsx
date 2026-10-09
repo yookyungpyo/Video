@@ -3,40 +3,40 @@ import {
   Easing,
   interpolate,
   interpolateColors,
-  spring,
   staticFile,
   useCurrentFrame,
-  useVideoConfig,
   continueRender,
   delayRender,
 } from "remotion";
 
 const SANS = "Noto Sans KR";
-const BG = "#F3F4F6";
-const GRID = "#E2E5EA";
-const INK = "#1F2937";
-const SUB = "#6B7280";
-const BLUE = "#2563EB";
-const ORANGE = "#F97316";
-const RED = "#DC2626";
-const GREEN = "#16A34A";
-const METAL = "#E5E7EB";
+const BG = "#0D1015";
+const INK = "#F2F4F7";
+const SUB = "#8A93A3";
+const HAIR = "rgba(255,255,255,0.10)";
+const LINE = "#C9CED6";
+const DIM = "#3A414D";
+const HEU = "#8EA2FF";
+const USR = "#F2B45C";
+const PASS = "#6FD6A3";
+const FAIL = "#F07A7A";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
+const ease = Easing.out(Easing.cubic);
+const prog = (f: number, at: number, dur = 18) => interpolate(f, [at, at + dur], [0, 1], { ...clamp, easing: ease });
 
 // Scene ranges (frames @30fps). Every caption stays up 3.5–4s so it can be read.
 export const TOTAL = 1470;
-const S1 = [0, 215] as const;      // 공감: 열림 누르려다 닫힘
-const S2 = [215, 335] as const;    // 방법은 두 가지
-const S3 = [335, 700] as const;    // 휴리스틱 평가
-const S4 = [700, 1080] as const;   // 사용자 평가
-const S5 = [1080, 1250] as const;  // 한 줄 비교
-const S6 = [1250, TOTAL] as const; // 결론
+const S1 = [0, 215] as const;
+const S2 = [215, 335] as const;
+const S3 = [335, 700] as const;
+const S4 = [700, 1080] as const;
+const S5 = [1080, 1250] as const;
+const S6 = [1250, TOTAL] as const;
 
-const DOOR = { x: 250, y: 440, w: 580, h: 440 };
-const PANEL = { x: 340, y: 930, w: 400, h: 180 };
-const BTN_OPEN = { cx: 450, cy: 1020 };
-const BTN_CLOSE = { cx: 630, cy: 1020 };
+const MX = 100; // editorial left margin
+const DOOR = { x: 290, y: 430, w: 500, h: 470 };
+const BTN = { open: { cx: 480, cy: 1020 }, close: { cx: 600, cy: 1020 }, r: 46 };
 
 const fontCss = `
 @font-face { font-family: '${SANS}'; font-weight: 400; font-style: normal;
@@ -54,7 +54,6 @@ const FontLoader: React.FC = () => {
     Promise.all([
       (document as any).fonts.load(`400 64px "${SANS}"`, "가"),
       (document as any).fonts.load(`700 64px "${SANS}"`, "가"),
-      (document as any).fonts.load(`900 64px "${SANS}"`, "가"),
     ])
       .then(() => (document as any).fonts.ready)
       .then(done)
@@ -63,499 +62,470 @@ const FontLoader: React.FC = () => {
   return <style dangerouslySetInnerHTML={{ __html: fontCss }} />;
 };
 
-const sp = (f: number, fps: number, at: number, stiffness = 170, damping = 14) =>
-  spring({ frame: f - at, fps, config: { stiffness, damping, mass: 0.8 } });
-
-// ---------- Shared pieces ----------
+// ---------- Primitives ----------
 
 const Scene: React.FC<{
   f: number; range: readonly [number, number]; shake?: { x: number; y: number }; children: React.ReactNode;
 }> = ({ f, range: [a, b], shake, children }) => {
   if (f < a || f >= b) return null;
-  const fin = a === 0 ? 1 : interpolate(f, [a, a + 14], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const fout = interpolate(f, b === TOTAL ? [b - 15, b] : [b - 10, b], [1, 0], clamp);
+  const fin = a === 0 ? 1 : prog(f, a, 16);
+  const fout = interpolate(f, b === TOTAL ? [b - 18, b] : [b - 10, b], [1, 0], clamp);
   return (
     <div style={{
       position: "absolute", inset: 0, opacity: Math.min(fin, fout),
-      transform: `translateY(${(1 - fin) * 30}px) translate(${shake?.x ?? 0}px, ${shake?.y ?? 0}px)`,
+      transform: `translateY(${(1 - fin) * 24}px) translate(${shake?.x ?? 0}px, ${shake?.y ?? 0}px)`,
     }}>{children}</div>
   );
 };
 
-type Seg = { t: string; c?: string };
-type Cap = { from: number; to: number; lines: Seg[][]; size?: number };
+// Masked line reveal: text rises out of its own baseline.
+const Line: React.FC<{ f: number; at: number; style?: React.CSSProperties; children: React.ReactNode }> =
+  ({ f, at, style, children }) => {
+    const p = prog(f, at, 20);
+    return (
+      <div style={{ overflow: "hidden", paddingBottom: "0.12em" }}>
+        <div style={{ transform: `translateY(${(1 - p) * 110}%)`, opacity: 0.3 + 0.7 * p, whiteSpace: "nowrap", ...style }}>
+          {children}
+        </div>
+      </div>
+    );
+  };
 
-const Captions: React.FC<{ f: number; fps: number; caps: Cap[]; top: number }> = ({ f, fps, caps, top }) => {
+const Overline: React.FC<{ f: number; at: number; top: number; color: string; tag: string; text?: string }> =
+  ({ f, at, top, color, tag, text }) => {
+    const p = prog(f, at, 20);
+    return (
+      <div style={{ position: "absolute", left: MX, top, display: "flex", alignItems: "center", gap: 18, opacity: p }}>
+        <div style={{ width: 36 * p, height: 2, background: color }} />
+        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: 6, color }}>{tag}</span>
+        {text && <span style={{ fontSize: 24, fontWeight: 400, color: SUB, letterSpacing: 1 }}>{text}</span>}
+      </div>
+    );
+  };
+
+const SectionHead: React.FC<{ f: number; at: number; color: string; tag: string; title: string; sub: string }> =
+  ({ f, at, color, tag, title, sub }) => (
+    <>
+      <Overline f={f} at={at} top={320} color={color} tag={tag} />
+      <div style={{ position: "absolute", left: MX, top: 358 }}>
+        <Line f={f} at={at + 4} style={{ fontSize: 66, fontWeight: 700, color: INK, letterSpacing: -1.5 }}>{title}</Line>
+        <Line f={f} at={at + 10} style={{ fontSize: 32, fontWeight: 400, color: SUB, marginTop: 4 }}>{sub}</Line>
+      </div>
+    </>
+  );
+
+type Seg = { t: string; c?: string };
+type Cap = { from: number; to: number; lines: Seg[][] };
+
+const Captions: React.FC<{ f: number; caps: Cap[]; top: number; size?: number }> = ({ f, caps, top, size = 40 }) => {
   const c = caps.find((x) => f >= x.from && f < x.to);
   if (!c) return null;
-  const s = sp(f, fps, c.from, 160, 16);
   const out = clamp01((c.to - f) / 8);
   return (
-    <div style={{
-      position: "absolute", left: 50, right: 50, top, textAlign: "center",
-      opacity: Math.min(clamp01(s), out), transform: `translateY(${(1 - s) * 18}px)`,
-    }}>
+    <div style={{ position: "absolute", left: MX, right: MX, top, opacity: out }}>
+      <div style={{ width: 2, height: 22, background: HAIR, marginBottom: 18 }} />
       {c.lines.map((line, i) => (
-        <div key={i} style={{
-          fontSize: c.size ?? 46, fontWeight: 700, lineHeight: 1.45, color: INK, whiteSpace: "nowrap",
-        }}>
-          {line.map((seg, j) => (
-            <span key={j} style={{ color: seg.c ?? INK, fontWeight: seg.c ? 900 : 700 }}>{seg.t}</span>
+        <Line key={i} f={f} at={c.from + i * 5} style={{ fontSize: size, fontWeight: 400, lineHeight: 1.5, color: "#D5DAE1" }}>
+          {line.map((s, j) => (
+            <span key={j} style={{ color: s.c ?? undefined, fontWeight: s.c ? 700 : 400 }}>{s.t}</span>
           ))}
-        </div>
+        </Line>
       ))}
     </div>
   );
 };
 
-const Header: React.FC<{ f: number; fps: number; at: number; label: string; sub: string; color: string }> =
-  ({ f, fps, at, label, sub, color }) => {
-    const s = sp(f, fps, at, 180, 15);
-    return (
-      <div style={{
-        position: "absolute", left: 0, right: 0, top: 280,
-        display: "flex", justifyContent: "center", alignItems: "center", gap: 22,
-        opacity: clamp01(s), transform: `translateY(${(1 - s) * -20}px)`,
-      }}>
-        <div style={{
-          background: color, color: "#FFFFFF", fontSize: 46, fontWeight: 900,
-          padding: "12px 32px", borderRadius: 44, boxShadow: `0 8px 24px ${color}44`,
-        }}>{label}</div>
-        <div style={{ fontSize: 42, fontWeight: 700, color: INK }}>{sub}</div>
-      </div>
-    );
-  };
-
-const Bubble: React.FC<{
-  f: number; fps: number; from: number; to: number; x: number; y: number; text: string; color?: string;
-}> = ({ f, fps, from, to, x, y, text, color = INK }) => {
-  if (f < from || f >= to) return null;
-  const s = sp(f, fps, from, 260, 13);
-  const out = clamp01((to - f) / 6);
-  return (
-    <div style={{
-      position: "absolute", left: x, top: y, transform: `translate(-50%, -100%) scale(${s})`,
-      transformOrigin: "50% 100%", opacity: out,
-    }}>
-      <div style={{
-        position: "relative", background: "#FFFFFF", color, borderRadius: 22,
-        padding: "12px 22px", fontSize: 34, fontWeight: 900, whiteSpace: "nowrap",
-        boxShadow: "0 6px 18px rgba(0,0,0,0.12)", border: "3px solid #E5E7EB",
-      }}>
-        {text}
-        <div style={{
-          position: "absolute", left: "50%", bottom: -15, marginLeft: -12, width: 0, height: 0,
-          borderLeft: "12px solid transparent", borderRight: "12px solid transparent",
-          borderTop: "15px solid #FFFFFF",
-        }} />
-      </div>
-    </div>
-  );
-};
-
-const ElevButton: React.FC<{
+const Btn: React.FC<{
   cx: number; cy: number; r: number; kind: "open" | "close";
-  fill?: string; icon?: string; ring?: string; press?: number;
-}> = ({ cx, cy, r, kind, fill = METAL, icon = "#374151", ring = "#9CA3AF", press = 0 }) => {
+  fill?: string; stroke?: string; icon?: string; press?: number;
+}> = ({ cx, cy, r, kind, fill = "rgba(255,255,255,0.03)", stroke = LINE, icon = LINE, press = 0 }) => {
   const k = r / 70;
   const tri = kind === "open"
-    ? ["-9,-20 -9,20 -33,0", "9,-20 9,20 33,0"]
-    : ["-33,-20 -33,20 -9,0", "33,-20 33,20 9,0"];
+    ? ["-10,-17 -10,17 -31,0", "10,-17 10,17 31,0"]
+    : ["-31,-17 -31,17 -10,0", "31,-17 31,17 10,0"];
   return (
-    <g transform={`translate(${cx} ${cy}) scale(${1 - press * 0.08})`}>
-      <circle r={r + 7} fill="#CBD0D8" />
-      <circle r={r} fill={fill} stroke={ring} strokeWidth={4} />
+    <g transform={`translate(${cx} ${cy}) scale(${1 - press * 0.06})`}>
+      <circle r={r} fill={fill} stroke={stroke} strokeWidth={2} />
       <g transform={`scale(${k})`}>
         <polygon points={tri[0]} fill={icon} />
         <polygon points={tri[1]} fill={icon} />
-        <line x1={0} y1={-25} x2={0} y2={25} stroke={icon} strokeWidth={4} strokeLinecap="round" />
+        <line x1={0} y1={-22} x2={0} y2={22} stroke={icon} strokeWidth={3} strokeLinecap="round" />
       </g>
     </g>
   );
 };
 
-const Doors: React.FC<{ c: number }> = ({ c }) => {
+const Ripple: React.FC<{ f: number; at: number; cx: number; cy: number; r: number; color: string }> =
+  ({ f, at, cx, cy, r, color }) => {
+    const d = f - at;
+    if (d < 0 || d > 22) return null;
+    const p = d / 22;
+    return (
+      <>
+        <circle cx={cx} cy={cy} r={r * (1 + p * 0.9)} fill="none" stroke={color} strokeWidth={2} opacity={0.8 * (1 - p)} />
+        <circle cx={cx} cy={cy} r={r * (1 + p * 0.45)} fill="none" stroke={color} strokeWidth={1.5} opacity={0.5 * (1 - p)} />
+      </>
+    );
+  };
+
+const Elevator: React.FC<{ c: number; light?: number }> = ({ c, light = 0 }) => {
   const { x, y, w, h } = DOOR;
-  const ix = x + 26, iy = y + 72, iw = w - 52, ih = h - 72;
+  const ix = x + 22, iy = y + 66, iw = w - 44, ih = h - 66;
   const pw = (iw / 2) * c;
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} rx={16} fill="#D1D5DB" />
-      <rect x={x + w / 2 - 74} y={y + 16} width={148} height={42} rx={8} fill="#111827" />
-      <text x={x + w / 2} y={y + 47} textAnchor="middle" fontSize={28} fontWeight={700}
-        fill="#F59E0B" fontFamily={`'${SANS}', sans-serif`}>▲ 1F</text>
-      <rect x={ix} y={iy} width={iw} height={ih} fill="#4B5563" />
-      <rect x={ix} y={iy} width={iw} height={ih * 0.18} fill="#6B7280" opacity={0.6} />
-      <rect x={ix} y={iy} width={pw} height={ih} fill="#CBD5E1" stroke="#94A3B8" strokeWidth={3} />
-      <rect x={ix + iw - pw} y={iy} width={pw} height={ih} fill="#CBD5E1" stroke="#94A3B8" strokeWidth={3} />
-      <line x1={ix + pw - 18} y1={iy + ih * 0.45} x2={ix + pw - 18} y2={iy + ih * 0.6}
-        stroke="#94A3B8" strokeWidth={5} strokeLinecap="round" opacity={c > 0.2 ? 1 : 0} />
-      <line x1={ix + iw - pw + 18} y1={iy + ih * 0.45} x2={ix + iw - pw + 18} y2={iy + ih * 0.6}
-        stroke="#94A3B8" strokeWidth={5} strokeLinecap="round" opacity={c > 0.2 ? 1 : 0} />
+      <defs>
+        <linearGradient id="cabin" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#F6E7C8" stopOpacity={0.10 + 0.22 * light} />
+          <stop offset="0.6" stopColor="#F6E7C8" stopOpacity={0.02 + 0.05 * light} />
+          <stop offset="1" stopColor="#F6E7C8" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <rect x={x} y={y} width={w} height={h} rx={6} fill="rgba(255,255,255,0.025)" stroke={DIM} strokeWidth={2} />
+      <line x1={x} y1={y + 52} x2={x + w} y2={y + 52} stroke={DIM} strokeWidth={1.5} />
+      <text x={x + w / 2} y={y + 36} textAnchor="middle" fontSize={22} fontWeight={700} letterSpacing={6}
+        fill={USR} fontFamily={`'${SANS}', sans-serif`}>▲ 1</text>
+      <rect x={ix} y={iy} width={iw} height={ih} fill="#07090C" />
+      <rect x={ix} y={iy} width={iw} height={ih} fill="url(#cabin)" />
+      <rect x={ix} y={iy} width={pw} height={ih} fill="#171B22" stroke={DIM} strokeWidth={1.5} />
+      <rect x={ix + iw - pw} y={iy} width={pw} height={ih} fill="#171B22" stroke={DIM} strokeWidth={1.5} />
+      <line x1={x - 60} y1={y + h} x2={x + w + 60} y2={y + h} stroke={HAIR} strokeWidth={2} />
     </g>
   );
 };
 
-const Panel: React.FC = () => (
-  <rect x={PANEL.x} y={PANEL.y} width={PANEL.w} height={PANEL.h} rx={22}
-    fill="#EEF0F3" stroke="#B6BCC6" strokeWidth={4} />
+const ButtonHousing: React.FC<{ y?: number }> = ({ y = 960 }) => (
+  <rect x={390} y={y} width={300} height={120} rx={60} fill="rgba(255,255,255,0.025)" stroke={HAIR} strokeWidth={1.5} />
 );
 
-const Runner: React.FC<{ x: number; opacity?: number }> = ({ x, opacity = 1 }) => {
-  const feet = DOOR.y + DOOR.h;
-  return (
-    <g opacity={opacity}>
-      <circle cx={x} cy={feet - 168} r={28} fill="#9CA3AF" />
-      <rect x={x - 36} y={feet - 132} width={72} height={132} rx={30} fill="#9CA3AF" />
-    </g>
-  );
-};
-
-const Pointer: React.FC<{ x: number; y: number; opacity: number }> = ({ x, y, opacity }) => (
-  <div style={{
-    position: "absolute", left: x, top: y, fontSize: 96, lineHeight: 1,
-    transform: "translate(-50%, 0)", opacity, filter: "drop-shadow(0 6px 8px rgba(0,0,0,0.18))",
-  }}>👆</div>
+const Grain: React.FC<{ f: number }> = ({ f }) => (
+  <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 0.06, mixBlendMode: "soft-light", pointerEvents: "none" }}>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={2} seed={(Math.floor(f / 2) % 4) + 1} stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)" />
+  </svg>
 );
 
-const Cat: React.FC<{ f: number; fps: number; at: number }> = ({ f, fps, at }) => {
-  const s = sp(f, fps, at, 170, 11);
-  const bob = Math.sin(f * 0.13) * 5;
-  return (
-    <div style={{
-      position: "absolute", left: 200, top: 950, fontSize: 112, lineHeight: 1,
-      transform: `translate(-50%, ${(1 - s) * 80 + bob}px) scale(${s})`,
-    }}>🐱</div>
-  );
-};
+// ---------- S1: the moment ----------
 
-// ---------- S1: 열림 누르려다 닫힘 ----------
-
-const Scene1: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
+const Scene1: React.FC<{ f: number }> = ({ f }) => {
   const PRESS = 106;
   const c = f < 108
-    ? interpolate(f, [60, 105], [0.3, 0.5], clamp)
+    ? interpolate(f, [55, 105], [0.28, 0.5], clamp)
     : interpolate(f, [108, 124], [0.5, 1], { ...clamp, easing: Easing.in(Easing.quad) });
-  const runX = interpolate(f, [15, 100], [100, 205], { ...clamp, easing: Easing.out(Easing.quad) });
-  let px = BTN_CLOSE.cx;
-  if (f < 100) px = 540 + 90 * Math.sin((f - 50) * 0.2);
-  else if (f < PRESS) px = interpolate(f, [100, PRESS], [540 + 90 * Math.sin(50 * 0.2), BTN_CLOSE.cx], clamp);
+  const flash = interpolate(f, [PRESS, PRESS + 4, 126, 150], [0, 1, 1, 0], clamp);
   const press = f >= PRESS && f < PRESS + 8 ? Math.sin(((f - PRESS) / 8) * Math.PI) : 0;
-  const pOp = interpolate(f, [48, 56, 128, 140], [0, 1, 1, 0], clamp);
-  const glow = interpolate(f, [PRESS + 2, PRESS + 6, 128, 150], [0, 1, 1, 0], clamp);
   const d = f - 124;
-  const shake = d >= 0 && d < 14 ? { x: Math.sin(f * 2.1) * 10 * (1 - d / 14), y: Math.cos(f * 2.9) * 6 * (1 - d / 14) } : undefined;
+  const shake = d >= 0 && d < 12 ? { x: Math.sin(f * 2.3) * 4 * (1 - d / 12), y: Math.cos(f * 3.1) * 2.5 * (1 - d / 12) } : undefined;
   return (
     <Scene f={f} range={S1} shake={shake}>
+      <Overline f={f} at={6} top={330} color={SUB} tag="CASE" text="엘리베이터 열림 · 닫힘 버튼" />
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        <Doors c={c} />
-        <Runner x={runX} />
-        <Panel />
-        <ElevButton {...BTN_OPEN} r={70} kind="open" />
-        <ElevButton {...BTN_CLOSE} r={70} kind="close" press={press}
-          fill={interpolateColors(glow, [0, 1], [METAL, "#FDBA74"])} />
+        <Elevator c={c} light={1 - c} />
+        <ButtonHousing />
+        <Btn {...BTN.open} r={BTN.r} kind="open" />
+        <Btn {...BTN.close} r={BTN.r} kind="close" press={press}
+          stroke={interpolateColors(flash, [0, 1], [LINE, FAIL])}
+          icon={interpolateColors(flash, [0, 1], [LINE, FAIL])}
+          fill={interpolateColors(flash, [0, 1], ["rgba(255,255,255,0.03)", "rgba(240,122,122,0.14)"])} />
+        <Ripple f={f} at={PRESS} {...BTN.close} r={BTN.r} color={FAIL} />
       </svg>
-      <Bubble f={f} fps={fps} from={35} to={128} x={runX + 40} y={DOOR.y + DOOR.h - 220} text="잠깐만요!" />
-      <Bubble f={f} fps={fps} from={132} to={215} x={runX + 30} y={DOOR.y + DOOR.h - 220} text="아…" color={SUB} />
-      <Cat f={f} fps={fps} at={8} />
-      <Bubble f={f} fps={fps} from={55} to={110} x={200} y={940} text="어느 거지?!" color={RED} />
-      <Pointer x={px} y={BTN_CLOSE.cy + 4 + press * 14} opacity={pOp} />
-      <Captions f={f} fps={fps} top={1220} caps={[
-        { from: 136, to: 215, size: 52, lines: [[{ t: "열림" , c: GREEN }, { t: " 누르려다 " }, { t: "닫힘", c: RED }, { t: " 누른 적, 있죠?" }]] },
-      ]} />
+      <div style={{ position: "absolute", left: MX, top: 1170 }}>
+        <Line f={f} at={134} style={{ fontSize: 58, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>
+          <span style={{ color: PASS }}>열림</span> 누르려다
+        </Line>
+        <Line f={f} at={140} style={{ fontSize: 58, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>
+          <span style={{ color: FAIL }}>닫힘</span> 누른 적, 있죠?
+        </Line>
+      </div>
     </Scene>
   );
 };
 
-// ---------- S2: 방법은 두 가지 ----------
+// ---------- S2: two methods ----------
 
-const MethodCard: React.FC<{ f: number; fps: number; at: number; x: number; color: string; icon: string; lines: string[] }> =
-  ({ f, fps, at, x, color, icon, lines }) => {
-    const s = sp(f, fps, at, 180, 12);
+const IconChecklist: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={72} height={72} viewBox="0 0 72 72" fill="none">
+    <rect x={14} y={8} width={44} height={56} rx={6} stroke={color} strokeWidth={2.5} />
+    <path d="M24 26 l4 4 l8 -8" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+    <line x1={40} y1={27} x2={50} y2={27} stroke={color} strokeWidth={2.5} strokeLinecap="round" />
+    <path d="M24 44 l4 4 l8 -8" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+    <line x1={40} y1={45} x2={50} y2={45} stroke={color} strokeWidth={2.5} strokeLinecap="round" />
+  </svg>
+);
+
+const IconUser: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={72} height={72} viewBox="0 0 72 72" fill="none">
+    <circle cx={36} cy={24} r={11} stroke={color} strokeWidth={2.5} />
+    <path d="M14 62 c2 -14 12 -20 22 -20 s20 6 22 20" stroke={color} strokeWidth={2.5} strokeLinecap="round" />
+  </svg>
+);
+
+const MethodRow: React.FC<{ f: number; at: number; top: number; n: string; color: string; icon: React.ReactNode; title: string; desc: string }> =
+  ({ f, at, top, n, color, icon, title, desc }) => {
+    const p = prog(f, at, 22);
     return (
-      <div style={{
-        position: "absolute", left: x, top: 560, width: 440, height: 520, borderRadius: 36,
-        background: "#FFFFFF", border: `5px solid ${color}`, boxShadow: `0 14px 36px ${color}33`,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 30,
-        transform: `translateY(${(1 - s) * 60}px) scale(${0.85 + 0.15 * s})`, opacity: clamp01(s),
-      }}>
-        <div style={{ fontSize: 150, lineHeight: 1 }}>{icon}</div>
-        <div style={{ textAlign: "center" }}>
-          {lines.map((l, i) => (
-            <div key={i} style={{ fontSize: 50, fontWeight: 900, color: i === 0 ? color : INK, lineHeight: 1.3 }}>{l}</div>
-          ))}
+      <div style={{ position: "absolute", left: MX, right: MX, top, opacity: p, transform: `translateY(${(1 - p) * 18}px)` }}>
+        <div style={{ height: 1.5, background: HAIR, transform: `scaleX(${p})`, transformOrigin: "left" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 36, paddingTop: 44 }}>
+          <div style={{ fontSize: 26, fontWeight: 700, color, letterSpacing: 2, width: 40 }}>{n}</div>
+          {icon}
+          <div>
+            <div style={{ fontSize: 48, fontWeight: 700, color: INK, letterSpacing: -1 }}>{title}</div>
+            <div style={{ fontSize: 32, fontWeight: 400, color: SUB, marginTop: 6 }}>{desc}</div>
+          </div>
         </div>
       </div>
     );
   };
 
-const Scene2: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
-  const t = sp(f, fps, 222, 160, 16);
-  return (
-    <Scene f={f} range={S2}>
-      <div style={{
-        position: "absolute", left: 0, right: 0, top: 400, textAlign: "center",
-        fontSize: 54, fontWeight: 900, color: INK, opacity: clamp01(t), transform: `translateY(${(1 - t) * 20}px)`,
-      }}>버튼, 미리 검사하는 방법은 <span style={{ color: BLUE }}>두</span> <span style={{ color: ORANGE }}>가지</span></div>
-      <MethodCard f={f} fps={fps} at={242} x={80} color={BLUE} icon="🔍" lines={["전문가가", "살펴보기"]} />
-      <MethodCard f={f} fps={fps} at={262} x={560} color={ORANGE} icon="🐱" lines={["사람이 직접", "써보기"]} />
-    </Scene>
-  );
-};
+const Scene2: React.FC<{ f: number }> = ({ f }) => (
+  <Scene f={f} range={S2}>
+    <Overline f={f} at={219} top={410} color={SUB} tag="TWO METHODS" />
+    <div style={{ position: "absolute", left: MX, top: 450 }}>
+      <Line f={f} at={222} style={{ fontSize: 62, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>버튼을 미리 검증하는</Line>
+      <Line f={f} at={228} style={{ fontSize: 62, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>두 가지 방법</Line>
+    </div>
+    <MethodRow f={f} at={242} top={720} n="01" color={HEU} icon={<IconChecklist color={HEU} />}
+      title="휴리스틱 평가" desc="전문가가 원칙으로 살펴보기" />
+    <MethodRow f={f} at={262} top={960} n="02" color={USR} icon={<IconUser color={USR} />}
+      title="사용자 평가" desc="사람이 직접 써 보기" />
+  </Scene>
+);
 
-// ---------- S3: 휴리스틱 평가 ----------
+// ---------- S3: heuristic evaluation ----------
 
-const CHECKS = [
-  { q: "한눈에 구분되는가?", ok: false, r: "모양이 거의 같다" },
-  { q: "급할 때도 찾기 쉬운가?", ok: false, r: "크기도 색도 같다" },
-  { q: "누르면 반응이 보이는가?", ok: true, r: "불이 켜진다" },
+const AUDIT = [
+  { q: "한눈에 구분되는가", ok: false, r: "모양이 거의 같다" },
+  { q: "급할 때도 찾기 쉬운가", ok: false, r: "크기도 색도 같다" },
+  { q: "누르면 반응이 보이는가", ok: true, r: "불이 켜진다" },
 ];
-const CHECK_AT = [385, 445, 505];
+const AUDIT_AT = [385, 445, 505];
 
-const Scene3: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
-  const mx = interpolate(f, [355, 440], [330, 750], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const magOp = interpolate(f, [350, 360], [0, 1], clamp);
-  const near = (bx: number) => 1 + 0.28 * clamp01(1 - Math.abs(mx - bx) / 95) * magOp;
-  const failShown = f >= CHECK_AT[0] + 22;
-  const pulse = 0.55 + 0.45 * Math.sin(f * 0.25);
-  const cardS = sp(f, fps, 372, 170, 15);
+const Brackets: React.FC<{ cx: number; cy: number; w: number; h: number; color: string; opacity: number }> =
+  ({ cx, cy, w, h, color, opacity }) => {
+    const L = 22, x0 = cx - w / 2, x1 = cx + w / 2, y0 = cy - h / 2, y1 = cy + h / 2;
+    const s = { stroke: color, strokeWidth: 3, fill: "none", strokeLinecap: "round" as const };
+    return (
+      <g opacity={opacity}>
+        <polyline points={`${x0},${y0 + L} ${x0},${y0} ${x0 + L},${y0}`} {...s} />
+        <polyline points={`${x1 - L},${y0} ${x1},${y0} ${x1},${y0 + L}`} {...s} />
+        <polyline points={`${x0},${y1 - L} ${x0},${y1} ${x0 + L},${y1}`} {...s} />
+        <polyline points={`${x1 - L},${y1} ${x1},${y1} ${x1},${y1 - L}`} {...s} />
+      </g>
+    );
+  };
+
+const Scene3: React.FC<{ f: number }> = ({ f }) => {
+  const CY = 620;
+  const eio = Easing.inOut(Easing.cubic);
+  const toClose = interpolate(f, [398, 426], [0, 1], { ...clamp, easing: eio });
+  const toBoth = interpolate(f, [440, 470], [0, 1], { ...clamp, easing: eio });
+  const bx = 480 + 120 * toClose - 60 * toBoth;
+  const bw = 132 + 196 * toBoth;
+  const bh = 132 + 18 * toBoth;
+  const bOp = prog(f, 358, 14);
+  const failCount = AUDIT.filter((a, i) => !a.ok && f >= AUDIT_AT[i] + 22).length;
+  const pulse = 0.5 + 0.5 * Math.sin(f * 0.2);
   return (
     <Scene f={f} range={S3}>
-      <Header f={f} fps={fps} at={342} label="휴리스틱 평가" sub="= 전문가의 체크리스트" color={BLUE} />
+      <SectionHead f={f} at={340} color={HEU} tag="01 — HEURISTIC EVALUATION" title="휴리스틱 평가" sub="전문가의 체크리스트" />
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        <rect x={330} y={470} width={420} height={180} rx={22} fill="#EEF0F3" stroke="#B6BCC6" strokeWidth={4} />
-        <g transform={`translate(445 560) scale(${near(445)}) translate(-445 -560)`}>
-          <ElevButton cx={445} cy={560} r={56} kind="open" />
-        </g>
-        <g transform={`translate(635 560) scale(${near(635)}) translate(-635 -560)`}>
-          <ElevButton cx={635} cy={560} r={56} kind="close" />
-        </g>
-        {failShown && (
-          <rect x={312} y={452} width={456} height={216} rx={30} fill="none" stroke={RED}
-            strokeWidth={5} strokeDasharray="16 12" opacity={pulse} />
+        <ButtonHousing y={CY - 60} />
+        <Btn cx={480} cy={CY} r={BTN.r} kind="open" />
+        <Btn cx={600} cy={CY} r={BTN.r} kind="close" />
+        {failCount > 0 && (
+          <rect x={372} y={CY - 78} width={336} height={156} rx={78} fill="none" stroke={FAIL}
+            strokeWidth={1.5} strokeDasharray="6 8" opacity={0.35 + 0.35 * pulse} />
         )}
-        <g opacity={magOp}>
-          <circle cx={mx} cy={560} r={84} fill="rgba(37,99,235,0.07)" stroke={BLUE} strokeWidth={10} />
-          <line x1={mx + 60} y1={620} x2={mx + 112} y2={672} stroke={BLUE} strokeWidth={18} strokeLinecap="round" />
-        </g>
+        <Brackets cx={bx} cy={CY} w={bw} h={bh} color={HEU} opacity={bOp} />
       </svg>
-      <div style={{
-        position: "absolute", left: 110, top: 720, width: 860, height: 390, borderRadius: 28,
-        background: "#FFFFFF", border: `4px solid ${BLUE}55`, boxShadow: "0 12px 30px rgba(37,99,235,0.12)",
-        opacity: clamp01(cardS), transform: `translateY(${(1 - cardS) * 30}px)`,
-      }}>
-        {CHECKS.map((ck, i) => {
-          const qS = sp(f, fps, CHECK_AT[i], 200, 15);
-          const rS = sp(f, fps, CHECK_AT[i] + 22, 260, 12);
-          const shownR = f >= CHECK_AT[i] + 22;
-          const col = ck.ok ? GREEN : RED;
+      <div style={{ position: "absolute", left: MX, right: MX, top: 730, opacity: prog(f, 372, 16) }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, fontWeight: 700, letterSpacing: 4, color: SUB, paddingBottom: 14 }}>
+          <span>점검 기준</span><span>판정</span>
+        </div>
+        <div style={{ height: 1.5, background: HAIR }} />
+        {AUDIT.map((a, i) => {
+          const qp = prog(f, AUDIT_AT[i], 18);
+          const rp = prog(f, AUDIT_AT[i] + 22, 16);
+          const col = a.ok ? PASS : FAIL;
           return (
-            <div key={i} style={{
-              position: "absolute", left: 40, top: 34 + i * 116, display: "flex", gap: 24,
-              opacity: clamp01(qS), transform: `translateX(${(1 - qS) * -24}px)`,
-            }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 10, border: `4px solid ${shownR ? col : "#9CA3AF"}`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 36, fontWeight: 900, color: col, flexShrink: 0, marginTop: 2,
-              }}>
-                <span style={{ transform: `scale(${shownR ? rS : 0})`, display: "inline-block" }}>{ck.ok ? "✓" : "✗"}</span>
-              </div>
-              <div>
-                <div style={{ fontSize: 40, fontWeight: 700, color: INK, lineHeight: 1.25 }}>{ck.q}</div>
+            <div key={i} style={{ opacity: qp }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "22px 0", transform: `translateX(${(1 - qp) * -16}px)` }}>
+                <div>
+                  <div style={{ fontSize: 38, fontWeight: 700, color: INK, letterSpacing: -0.5 }}>{a.q}</div>
+                  <div style={{ fontSize: 30, fontWeight: 400, color: col, marginTop: 4, opacity: rp }}>{a.r}</div>
+                </div>
                 <div style={{
-                  fontSize: 34, fontWeight: 900, color: col, lineHeight: 1.3,
-                  opacity: shownR ? clamp01(rS) : 0, transform: `translateY(${(1 - rS) * 10}px)`,
-                }}>→ {ck.r}</div>
+                  fontSize: 26, fontWeight: 700, color: col, border: `1.5px solid ${col}`, borderRadius: 22,
+                  padding: "6px 20px", opacity: rp, transform: `scale(${0.92 + 0.08 * rp})`,
+                }}>{a.ok ? "충족" : "위반"}</div>
               </div>
+              <div style={{ height: 1.5, background: HAIR, transform: `scaleX(${qp})`, transformOrigin: "left" }} />
             </div>
           );
         })}
       </div>
-      <Captions f={f} fps={fps} top={1170} caps={[
-        { from: 360, to: 470, lines: [[{ t: "전문가가 정해진 " }, { t: "원칙(휴리스틱)", c: BLUE }, { t: "으로" }], [{ t: "꼼꼼히 살핀다" }]] },
-        { from: 470, to: 580, lines: [[{ t: "검증된 원칙으로," }], [{ t: "빠짐없이 ", c: BLUE }, { t: "점검할 수 있다" }]] },
-        { from: 580, to: 700, lines: [[{ t: "다만 전문가의 판단이라," }], [{ t: "실제 사용자가 겪는 문제와 " }, { t: "다를 수 있다", c: SUB }]] },
+      <Captions f={f} top={1200} caps={[
+        { from: 360, to: 470, lines: [[{ t: "전문가가 정해진 " }, { t: "원칙(휴리스틱)", c: HEU }, { t: "으로" }], [{ t: "꼼꼼히 살핀다" }]] },
+        { from: 470, to: 580, lines: [[{ t: "검증된 원칙으로," }], [{ t: "빠짐없이", c: HEU }, { t: " 점검할 수 있다" }]] },
+        { from: 580, to: 700, lines: [[{ t: "다만 전문가의 판단이라," }], [{ t: "실제 사용자가 겪는 문제와 " }, { t: "다를 수 있다", c: INK }]] },
       ]} />
     </Scene>
   );
 };
 
-// ---------- S4: 사용자 평가 ----------
+// ---------- S4: user testing ----------
 
-const PEOPLE = [
-  { e: "👩", ok: true }, { e: "🧑", ok: false }, { e: "🐱", ok: true }, { e: "👨", ok: false }, { e: "🧓", ok: true },
+const PARTICIPANTS = [
+  { ok: true, sec: 1.2 }, { ok: false, sec: 2.6 }, { ok: true, sec: 0.9 }, { ok: false, sec: 3.1 }, { ok: true, sec: 1.4 },
 ];
-const PX = [160, 350, 540, 730, 920];
 const PRESS_AT = [820, 845, 870, 895, 920];
+const TRACK = { x: 200, w: 470 };
 
-const Scene4: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
-  const mS = sp(f, fps, 722, 190, 13);
-  const sumS = sp(f, fps, 950, 170, 14);
+const Scene4: React.FC<{ f: number }> = ({ f }) => {
+  const taskP = prog(f, 722, 20);
+  const sumP = prog(f, 950, 22);
   return (
     <Scene f={f} range={S4}>
-      <Header f={f} fps={fps} at={707} label="사용자 평가" sub="= 직접 써보게 하기" color={ORANGE} />
+      <SectionHead f={f} at={705} color={USR} tag="02 — USER TESTING" title="사용자 평가" sub="직접 써 보게 하기" />
       <div style={{
-        position: "absolute", left: 160, top: 410, width: 760, height: 110, borderRadius: 26,
-        background: "#FFF7ED", border: `4px dashed ${ORANGE}`,
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 18,
-        opacity: clamp01(mS), transform: `scale(${0.9 + 0.1 * mS})`,
+        position: "absolute", left: MX, top: 530, display: "flex", alignItems: "baseline", gap: 22,
+        opacity: taskP, transform: `translateY(${(1 - taskP) * 12}px)`,
       }}>
-        <span style={{ fontSize: 36, fontWeight: 900, color: ORANGE }}>미션</span>
-        <span style={{ fontSize: 46, fontWeight: 900, color: INK }}>"빨리 문 열어주세요!"</span>
+        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: 6, color: USR }}>TASK</span>
+        <span style={{ fontSize: 40, fontWeight: 700, color: INK, letterSpacing: -0.5 }}>“빨리 문 열어주세요!”</span>
       </div>
-      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        {PEOPLE.map((p, i) => {
-          const s = sp(f, fps, 760 + i * 8, 200, 13);
-          const pressed = f >= PRESS_AT[i];
-          const ps = sp(f, fps, PRESS_AT[i], 300, 10);
-          const hit = p.ok ? "open" : "close";
-          const fillFor = (k: "open" | "close") =>
-            pressed && k === hit ? (p.ok ? "#86EFAC" : "#FCA5A5") : METAL;
-          return (
-            <g key={i} opacity={clamp01(s)} transform={`translate(0 ${(1 - s) * 20})`}>
-              <ElevButton cx={PX[i] - 30} cy={770} r={22} kind="open" fill={fillFor("open")}
-                press={pressed && hit === "open" ? clamp01(1 - (f - PRESS_AT[i]) / 8) : 0} />
-              <ElevButton cx={PX[i] + 30} cy={770} r={22} kind="close" fill={fillFor("close")}
-                press={pressed && hit === "close" ? clamp01(1 - (f - PRESS_AT[i]) / 8) : 0} />
-              {pressed && (
-                <g transform={`translate(${PX[i]} 860) scale(${ps})`}>
-                  <circle r={32} fill={p.ok ? GREEN : RED} />
-                  <text y={13} textAnchor="middle" fontSize={38} fontWeight={900} fill="#FFFFFF"
-                    fontFamily={`'${SANS}', sans-serif`}>{p.ok ? "✓" : "✗"}</text>
-                </g>
-              )}
-            </g>
-          );
-        })}
-      </svg>
-      {PEOPLE.map((p, i) => {
-        const s = sp(f, fps, 760 + i * 8, 200, 13);
-        const pressed = f >= PRESS_AT[i];
-        const nod = pressed ? Math.sin(clamp01((f - PRESS_AT[i]) / 10) * Math.PI) * -10 : 0;
+      <div style={{ position: "absolute", left: MX, right: MX, top: 620, opacity: prog(f, 750, 16) }}>
+        <div style={{ display: "flex", fontSize: 22, fontWeight: 700, letterSpacing: 4, color: SUB, paddingBottom: 14 }}>
+          <span style={{ width: TRACK.x - MX }}>참가자</span>
+          <span style={{ width: TRACK.w + 30 }}>누르기까지</span>
+          <span>누른 버튼</span>
+        </div>
+        <div style={{ height: 1.5, background: HAIR }} />
+      </div>
+      {PARTICIPANTS.map((p, i) => {
+        const top = 690 + i * 70;
+        const rowP = prog(f, 760 + i * 8, 16);
+        const barP = interpolate(f, [PRESS_AT[i], PRESS_AT[i] + 16], [0, 1], { ...clamp, easing: Easing.inOut(Easing.quad) });
+        const resP = prog(f, PRESS_AT[i] + 14, 14);
+        const col = p.ok ? PASS : FAIL;
+        const len = (p.sec / 3.5) * TRACK.w;
         return (
-          <div key={i} style={{
-            position: "absolute", left: PX[i], top: 590, fontSize: 92, lineHeight: 1,
-            transform: `translate(-50%, ${(1 - s) * 40 + nod}px) scale(${s})`, opacity: clamp01(s),
-          }}>{p.e}</div>
+          <div key={i} style={{ position: "absolute", left: 0, right: 0, top, height: 70, opacity: rowP }}>
+            <div style={{ position: "absolute", left: MX, top: 16, fontSize: 28, fontWeight: 700, color: SUB, letterSpacing: 2 }}>P{i + 1}</div>
+            <div style={{ position: "absolute", left: TRACK.x, top: 33, width: TRACK.w, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2 }} />
+            <div style={{ position: "absolute", left: TRACK.x, top: 32, width: len * barP, height: 5, background: col, opacity: 0.85, borderRadius: 3 }} />
+            <div style={{
+              position: "absolute", left: TRACK.x + len * barP - 7, top: 27, width: 14, height: 14, borderRadius: 7,
+              background: BG, border: `2.5px solid ${col}`, opacity: barP > 0 ? 1 : 0,
+            }} />
+            <div style={{
+              position: "absolute", left: TRACK.x + len + 22, top: 18, fontSize: 24, fontWeight: 400, color: SUB, opacity: resP,
+            }}>{p.sec.toFixed(1)}초</div>
+            <div style={{
+              position: "absolute", right: MX, top: 14, fontSize: 30, fontWeight: 700, color: col, opacity: resP,
+              transform: `translateX(${(1 - resP) * 12}px)`,
+            }}>{p.ok ? "열림" : "닫힘"}</div>
+            <div style={{ position: "absolute", left: MX, right: MX, bottom: 0, height: 1, background: "rgba(255,255,255,0.05)" }} />
+          </div>
         );
       })}
       <div style={{
-        position: "absolute", left: 160, top: 930, width: 760, textAlign: "center",
-        opacity: clamp01(sumS), transform: `translateY(${(1 - sumS) * 20}px)`,
+        position: "absolute", left: MX, top: 1050, display: "flex", alignItems: "baseline", gap: 6,
+        opacity: sumP, transform: `translateY(${(1 - sumP) * 14}px)`,
       }}>
-        <div style={{ fontSize: 48, fontWeight: 900, color: INK }}>
-          5명 중 <span style={{ color: RED }}>2명</span>이 닫힘을 눌렀다
-        </div>
-        <div style={{ marginTop: 20, display: "flex", gap: 8 }}>
-          {PEOPLE.map((p, i) => (
-            <div key={i} style={{
-              flex: 1, height: 30, borderRadius: 8, background: p.ok ? GREEN : RED,
-              transform: `scaleX(${clamp01((f - 955 - i * 4) / 8)})`, transformOrigin: "left center",
-            }} />
-          ))}
-        </div>
+        <span style={{ fontSize: 40, fontWeight: 400, color: "#D5DAE1" }}>5명 중</span>
+        <span style={{ fontSize: 76, fontWeight: 700, color: FAIL, letterSpacing: -2, margin: "0 6px" }}>2명</span>
+        <span style={{ fontSize: 40, fontWeight: 400, color: "#D5DAE1" }}>이 닫힘을 눌렀다</span>
       </div>
-      <Captions f={f} fps={fps} top={1120} caps={[
-        { from: 735, to: 850, lines: [[{ t: "실제 사람에게 시켜보고" }], [{ t: "지켜본다", c: ORANGE }]] },
-        { from: 850, to: 965, lines: [[{ t: "실제 사용자가 " }, { t: "어디서 막히는지", c: ORANGE }], [{ t: "직접 확인할 수 있다" }]] },
-        { from: 965, to: 1080, lines: [[{ t: "다만 참여할 사용자를 모으고" }], [{ t: "진행할 " }, { t: "준비가 필요하다", c: SUB }]] },
+      <Captions f={f} top={1200} caps={[
+        { from: 735, to: 850, lines: [[{ t: "실제 사람에게 시켜보고" }], [{ t: "지켜본다", c: USR }]] },
+        { from: 850, to: 965, lines: [[{ t: "실제 사용자가 " }, { t: "어디서 막히는지", c: USR }], [{ t: "직접 확인할 수 있다" }]] },
+        { from: 965, to: 1080, lines: [[{ t: "다만 참여할 사용자를 모으고" }], [{ t: "진행할 " }, { t: "준비가 필요하다", c: INK }]] },
       ]} />
     </Scene>
   );
 };
 
-// ---------- S5: 한 줄 비교 ----------
+// ---------- S5: one-line comparison ----------
 
-const CompareCard: React.FC<{ f: number; fps: number; at: number; top: number; color: string; icon: string; title: string; a: string; b: string }> =
-  ({ f, fps, at, top, color, icon, title, a, b }) => {
-    const s = sp(f, fps, at, 180, 14);
+const CompareCol: React.FC<{ f: number; at: number; left: number; color: string; label: string; a: string; b: string }> =
+  ({ f, at, left, color, label, a, b }) => {
+    const p = prog(f, at, 22);
     return (
-      <div style={{
-        position: "absolute", left: 90, top, width: 900, height: 300, borderRadius: 32,
-        background: "#FFFFFF", boxShadow: `0 14px 34px ${color}26`, overflow: "hidden",
-        opacity: clamp01(s), transform: `translateX(${(1 - s) * 80}px)`,
-      }}>
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 16, background: color }} />
-        <div style={{ position: "absolute", left: 60, top: 42 }}>
-          <div style={{ fontSize: 52, fontWeight: 900, color }}>{title}</div>
-          <div style={{ marginTop: 18, fontSize: 44, fontWeight: 900, color: INK }}>{a}</div>
-          <div style={{ marginTop: 6, fontSize: 40, fontWeight: 700, color: SUB }}>{b}</div>
-        </div>
-        <div style={{ position: "absolute", right: 50, top: 90, fontSize: 110, lineHeight: 1 }}>{icon}</div>
+      <div style={{ position: "absolute", left, top: 640, width: 400, opacity: p, transform: `translateY(${(1 - p) * 20}px)` }}>
+        <div style={{ width: 48 * p, height: 3, background: color, marginBottom: 28 }} />
+        <div style={{ fontSize: 30, fontWeight: 700, color, letterSpacing: 1 }}>{label}</div>
+        <div style={{ fontSize: 50, fontWeight: 700, color: INK, letterSpacing: -1.2, marginTop: 26, lineHeight: 1.25, whiteSpace: "pre-line" }}>{a}</div>
+        <div style={{ fontSize: 32, fontWeight: 400, color: SUB, marginTop: 16 }}>{b}</div>
       </div>
     );
   };
 
-const Scene5: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
-  const t = sp(f, fps, 1086, 170, 16);
-  return (
-    <Scene f={f} range={S5}>
-      <div style={{
-        position: "absolute", left: 0, right: 0, top: 380, textAlign: "center",
-        fontSize: 56, fontWeight: 900, color: INK, opacity: clamp01(t),
-      }}>한 줄 비교</div>
-      <CompareCard f={f} fps={fps} at={1098} top={520} color={BLUE} icon="🔍"
-        title="휴리스틱 평가" a="전문가의 눈으로" b="원칙에 따라 체계적으로" />
-      <CompareCard f={f} fps={fps} at={1128} top={870} color={ORANGE} icon="🐱"
-        title="사용자 평가" a="사용자의 손으로" b="실제 행동을 관찰" />
-    </Scene>
-  );
-};
+const Scene5: React.FC<{ f: number }> = ({ f }) => (
+  <Scene f={f} range={S5}>
+    <Overline f={f} at={1084} top={430} color={SUB} tag="SUMMARY" />
+    <div style={{ position: "absolute", left: MX, top: 470 }}>
+      <Line f={f} at={1088} style={{ fontSize: 62, fontWeight: 700, color: INK, letterSpacing: -1.5 }}>한 줄 비교</Line>
+    </div>
+    <div style={{
+      position: "absolute", left: 540, top: 640, width: 1.5, height: 330, background: HAIR,
+      transform: `scaleY(${prog(f, 1100, 24)})`, transformOrigin: "top",
+    }} />
+    <CompareCol f={f} at={1098} left={MX} color={HEU} label="휴리스틱 평가" a={"전문가의\n눈으로"} b="원칙에 따라 체계적으로" />
+    <CompareCol f={f} at={1128} left={590} color={USR} label="사용자 평가" a={"사용자의\n손으로"} b="실제 행동을 관찰" />
+  </Scene>
+);
 
-// ---------- S6: 결론 ----------
+// ---------- S6: resolution ----------
 
-const Scene6: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
+const Scene6: React.FC<{ f: number }> = ({ f }) => {
   const PRESS = 1316;
   const m = interpolate(f, [1265, 1295], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const c = f < 1320 ? 1 : interpolate(f, [1320, 1350], [1, 0.25], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const px = interpolate(f, [1295, 1312], [560, BTN_OPEN.cx], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const c = f < 1320 ? 1 : interpolate(f, [1320, 1352], [1, 0.18], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const press = f >= PRESS && f < PRESS + 8 ? Math.sin(((f - PRESS) / 8) * Math.PI) : 0;
-  const pOp = interpolate(f, [1292, 1300, 1345, 1360], [0, 1, 1, 0], clamp);
-  const glow = interpolate(f, [PRESS + 2, PRESS + 6, 1345, 1370], [0, 1, 1, 0], clamp);
-  const runX = interpolate(f, [1352, 1400], [205, 420], { ...clamp, easing: Easing.inOut(Easing.quad) });
-  const runOp = interpolate(f, [1385, 1405], [1, 0], clamp);
-  const tag = sp(f, fps, 1270, 220, 12);
-  const labelS = clamp01((m - 0.6) / 0.4);
-  const rOpen = 70 + 16 * m;
-  const rClose = 70 - 12 * m;
+  const labelP = clamp01((m - 0.5) / 0.5);
+  const rOpen = BTN.r + 12 * m;
+  const rClose = BTN.r - 6 * m;
+  const signP = prog(f, 1410, 24);
   return (
     <Scene f={f} range={S6}>
+      <Overline f={f} at={1256} top={330} color={PASS} tag="AFTER" text="개선된 버튼" />
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        <Doors c={c} />
-        <Runner x={runX} opacity={runOp} />
-        <Panel />
-        <ElevButton {...BTN_OPEN} r={rOpen} kind="open" press={press}
-          fill={interpolateColors(Math.max(m * 0.9, glow), [0, 0.9, 1], [METAL, "#22C55E", "#4ADE80"])}
-          icon={interpolateColors(m, [0, 1], ["#374151", "#FFFFFF"])}
-          ring={interpolateColors(m, [0, 1], ["#9CA3AF", "#15803D"])} />
-        <ElevButton {...BTN_CLOSE} r={rClose} kind="close"
-          fill={interpolateColors(m, [0, 1], [METAL, "#D1D5DB"])}
-          icon={interpolateColors(m, [0, 1], ["#374151", "#6B7280"])} />
+        <Elevator c={c} light={1 - c} />
+        <ButtonHousing />
+        <Btn {...BTN.open} r={rOpen} kind="open" press={press}
+          fill={interpolateColors(m, [0, 1], ["rgba(255,255,255,0.03)", PASS])}
+          stroke={interpolateColors(m, [0, 1], [LINE, PASS])}
+          icon={interpolateColors(m, [0, 1], [LINE, BG])} />
+        <Btn {...BTN.close} r={rClose} kind="close"
+          stroke={interpolateColors(m, [0, 1], [LINE, DIM])}
+          icon={interpolateColors(m, [0, 1], [LINE, "#5B6472"])} />
+        <Ripple f={f} at={PRESS} {...BTN.open} r={rOpen} color={PASS} />
       </svg>
       <div style={{
-        position: "absolute", left: BTN_OPEN.cx, top: BTN_OPEN.cy + 100, transform: "translateX(-50%)",
-        fontSize: 40, fontWeight: 900, color: GREEN, opacity: labelS,
+        position: "absolute", left: BTN.open.cx, top: BTN.open.cy + 72, transform: "translateX(-50%)",
+        fontSize: 28, fontWeight: 700, color: PASS, opacity: labelP, letterSpacing: 2,
       }}>열림</div>
       <div style={{
-        position: "absolute", left: BTN_CLOSE.cx, top: BTN_CLOSE.cy + 74, transform: "translateX(-50%)",
-        fontSize: 34, fontWeight: 700, color: SUB, opacity: labelS,
+        position: "absolute", left: BTN.close.cx, top: BTN.close.cy + 72, transform: "translateX(-50%)",
+        fontSize: 24, fontWeight: 400, color: SUB, opacity: labelP, letterSpacing: 2,
       }}>닫힘</div>
+      <div style={{ position: "absolute", left: MX, top: 1185 }}>
+        <Line f={f} at={1352} style={{ fontSize: 58, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>
+          <span style={{ color: HEU }}>전문가 눈</span>으로 거르고,
+        </Line>
+        <Line f={f} at={1360} style={{ fontSize: 58, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 }}>
+          <span style={{ color: USR }}>사용자 손</span>으로 확인한다
+        </Line>
+      </div>
       <div style={{
-        position: "absolute", left: 820, top: PANEL.y + 12, transform: `scale(${tag})`, transformOrigin: "0% 50%",
-        background: `linear-gradient(90deg, ${BLUE}, ${ORANGE})`, color: "#FFFFFF",
-        fontSize: 32, fontWeight: 900, padding: "8px 20px", borderRadius: 30, whiteSpace: "nowrap",
-      }}>개선 후</div>
-      <Cat f={f} fps={fps} at={1252} />
-      <Bubble f={f} fps={fps} from={1298} to={1345} x={200} y={940} text="이번엔 한 번에!" color={GREEN} />
-      <Bubble f={f} fps={fps} from={1352} to={1400} x={runX + 30} y={DOOR.y + DOOR.h - 220} text="고마워요!" color={GREEN} />
-      <Pointer x={px} y={BTN_OPEN.cy + 4 + press * 14} opacity={pOp} />
-      <Captions f={f} fps={fps} top={1230} caps={[
-        { from: 1352, to: TOTAL + 10, size: 54, lines: [
-          [{ t: "전문가 눈", c: BLUE }, { t: "으로 거르고," }],
-          [{ t: "사용자 손", c: ORANGE }, { t: "으로 확인한다" }],
-        ] },
-      ]} />
+        position: "absolute", left: MX, top: 1400, fontSize: 20, fontWeight: 700, letterSpacing: 6,
+        color: SUB, opacity: signP,
+      }}>HEURISTIC EVALUATION × USER TESTING</div>
     </Scene>
   );
 };
@@ -564,7 +534,6 @@ const Scene6: React.FC<{ f: number; fps: number }> = ({ f, fps }) => {
 
 export const HeuristicVsUser: React.FC = () => {
   const f = useCurrentFrame();
-  const { fps } = useVideoConfig();
   return (
     <div style={{
       width: 1080, height: 1920, position: "relative", overflow: "hidden",
@@ -573,22 +542,22 @@ export const HeuristicVsUser: React.FC = () => {
       <FontLoader />
       <div style={{
         position: "absolute", inset: 0,
-        backgroundImage: `linear-gradient(${GRID} 2px, transparent 2px), linear-gradient(90deg, ${GRID} 2px, transparent 2px)`,
-        backgroundSize: "60px 60px", backgroundPosition: "30px 30px",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(31,41,55,0.08) 100%)",
+        background: "radial-gradient(ellipse 80% 60% at 50% 42%, #18202B 0%, rgba(13,16,21,0) 70%)",
       }} />
       {/* Scenes are laid out top-down; this offset centers them in the Reels safe band. */}
       <div style={{ position: "absolute", inset: 0, transform: "translateY(100px)" }}>
-        <Scene1 f={f} fps={fps} />
-        <Scene2 f={f} fps={fps} />
-        <Scene3 f={f} fps={fps} />
-        <Scene4 f={f} fps={fps} />
-        <Scene5 f={f} fps={fps} />
-        <Scene6 f={f} fps={fps} />
+        <Scene1 f={f} />
+        <Scene2 f={f} />
+        <Scene3 f={f} />
+        <Scene4 f={f} />
+        <Scene5 f={f} />
+        <Scene6 f={f} />
       </div>
+      <Grain f={f} />
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: "radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.45) 100%)",
+      }} />
     </div>
   );
 };
