@@ -44,14 +44,14 @@ const REG: R[] = [
   [140, 650, 760, 1180],
   [140, 650, 580, 1180],
   [140, 810, 580, 1180],
-  [140, 810, 420, 1180],
+  [140, 810, 412, 1180],
 ];
 const RULES = [
   { text: "보고는\n3단계로", w: [760, 480, 760, 1180], lx: 780, ly: 506 },
   { text: "결재 전\n진행 금지", w: [140, 650, 760, 650], lx: 160, ly: 506 },
   { text: "정해진\n양식만", w: [580, 650, 580, 1180], lx: 598, ly: 676 },
   { text: "예외\n없음", w: [140, 810, 580, 810], lx: 160, ly: 668 },
-  { text: "실수하면\n경위서", w: [420, 810, 420, 1180], lx: 438, ly: 836 },
+  { text: "실수하면\n경위서", w: [412, 810, 412, 1180], lx: 430, ly: 836 },
 ];
 const LIGHT = [860, 560] as const;
 
@@ -394,6 +394,9 @@ export const RulesShrink: React.FC = () => {
         </defs>
         <g opacity={arenaOp}>
           <rect x={REG[0][0]} y={REG[0][1]} width={800} height={700} fill="url(#hatch)" opacity={hatchOp} />
+          {/* as the walls go, the blocked zone takes on the open-floor tone so no seam shows */}
+          <rect x={REG[0][0]} y={REG[0][1]} width={800} height={700} fill="#12161D"
+            opacity={interpolate(f, [735, 830], [0, 1], clamp)} />
           <rect x={region[0]} y={region[1]} width={region[2] - region[0]} height={region[3] - region[1]} fill="#12161D" />
           <rect x={REG[0][0]} y={REG[0][1]} width={800} height={700} fill="none" stroke={HAIR} strokeWidth={2} />
           <Walls f={f} />
