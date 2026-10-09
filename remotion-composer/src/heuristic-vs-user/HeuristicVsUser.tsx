@@ -580,12 +580,15 @@ export const HeuristicVsUser: React.FC = () => {
         position: "absolute", inset: 0,
         background: "radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(31,41,55,0.08) 100%)",
       }} />
-      <Scene1 f={f} fps={fps} />
-      <Scene2 f={f} fps={fps} />
-      <Scene3 f={f} fps={fps} />
-      <Scene4 f={f} fps={fps} />
-      <Scene5 f={f} fps={fps} />
-      <Scene6 f={f} fps={fps} />
+      {/* Scenes are laid out top-down; this offset centers them in the Reels safe band. */}
+      <div style={{ position: "absolute", inset: 0, transform: "translateY(100px)" }}>
+        <Scene1 f={f} fps={fps} />
+        <Scene2 f={f} fps={fps} />
+        <Scene3 f={f} fps={fps} />
+        <Scene4 f={f} fps={fps} />
+        <Scene5 f={f} fps={fps} />
+        <Scene6 f={f} fps={fps} />
+      </div>
     </div>
   );
 };
