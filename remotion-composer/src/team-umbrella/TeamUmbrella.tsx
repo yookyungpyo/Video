@@ -291,11 +291,11 @@ const Person: React.FC<{ x: number; y: number; r: number; glow: number; core: st
 
 const WetShoulder: React.FC<{ f: number }> = ({ f }) => (
   <>
-    {[[-14, -18], [10, -22], [-20, 4], [18, 0], [2, -28]].map(([dx, dy], k) => {
+    {[[-28, -14], [-12, -32], [-34, 8], [-2, -40], [-26, -36]].map(([dx, dy], k) => {
       const p = prog(f, 905 + k * 14, 12) * interpolate(f, [1150, 1190], [1, 0.5], clamp);
       if (p <= 0) return null;
       return (
-        <path key={k} d={`M ${ME.x + dx} ${ME.y + dy - 5} q 4 5 0 8 q -4 -3 0 -8 z`} fill={RAIN} opacity={0.85 * p} />
+        <path key={k} d={`M ${ME.x + dx} ${ME.y + dy - 8} q 7 8 0 13 q -7 -5 0 -13 z`} fill="#B5C6DA" opacity={0.9 * p} />
       );
     })}
   </>
