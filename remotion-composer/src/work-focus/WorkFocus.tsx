@@ -29,11 +29,12 @@ export const TOTAL = 1350;
 const MX = 100;
 
 // ---------- Timeline ----------
-// S1 hook 0–150 · S2 the case 150–420 · S3 diagnosis 420–570
+// S1 hook 0–150 (the line everyone dreads) · S2 the case 150–420 · S3 diagnosis 420–570
 // S4 three rings 570–990 · S5 result 990–1150 · S6 closing 1150–1350
 export const STACK = [200, 290]; // pages pile up 1 → 30
 export const GHOST_AT = 312; // what was actually needed
 const RINGS_AT = 440;
+const HOOK_AT = 8;
 export const TURNS = [585, 725, 865]; // WHY, WHEN, WHO
 const TURN_DUR = 40;
 const RESULT_AT = 1000;
@@ -130,10 +131,6 @@ const Captions: React.FC<{ f: number; caps: Cap[] }> = ({ f, caps }) => {
 };
 
 const CAPTIONS: Cap[] = [
-  { from: 20, to: 150, lines: [
-    { at: 20, segs: [{ t: "열심히 했는데," }] },
-    { at: 36, segs: [{ t: "'이게 아닌데'", c: INK }, { t: "라는 말을 들어본 적 있나요?" }] },
-  ] },
   { from: 168, to: 292, lines: [
     { at: 168, segs: [{ t: "'실적 좀 정리해 줘'", c: INK }, { t: " 한마디에," }] },
     { at: 196, segs: [{ t: "3일 동안 " }, { t: "30장", c: INK }, { t: "을 만들었다" }] },
@@ -179,6 +176,35 @@ const Overline: React.FC<{ f: number; from: number; to: number; tag: string; tex
     );
   };
 
+// Opening hook: the line nobody wants to hear, slammed in big
+const Hook: React.FC<{ f: number }> = ({ f }) => {
+  const out = 1 - prog(f, 138, 14);
+  if (f < HOOK_AT || out <= 0) return null;
+  const d = f - HOOK_AT;
+  const s = interpolate(d, [0, 9], [1.3, 1], { ...clamp, easing: easeOut });
+  const o = clamp01(d / 4);
+  const shake = d < 12 ? 9 * (1 - d / 12) : 0;
+  const glow = interpolate(d, [0, 6, 40], [0, 1, 0.35], clamp);
+  return (
+    <div style={{ position: "absolute", left: MX, right: MX, top: 640, opacity: out }}>
+      <div style={{
+        transform: `translate(${Math.sin(f * 2.4) * shake}px, ${Math.cos(f * 3.1) * shake * 0.6}px) scale(${s})`,
+        transformOrigin: "0% 60%", opacity: o,
+      }}>
+        <div style={{ fontSize: 150, fontWeight: 700, lineHeight: 0.6, color: AMBER, height: 70 }}>“</div>
+        <div style={{
+          fontSize: 128, fontWeight: 700, color: INK, letterSpacing: -4, lineHeight: 1.15, whiteSpace: "nowrap",
+          textShadow: `0 0 ${50 * glow}px rgba(242,244,247,${0.25 * glow})`,
+        }}>이게 아닌데?</div>
+      </div>
+      <div style={{ marginTop: 56 }}>
+        {f >= 40 && <Line f={f} at={40} style={{ fontSize: 42, color: BODY, lineHeight: 1.5 }}>3일 밤새 만든 보고서에</Line>}
+        {f >= 62 && <Line f={f} at={62} style={{ fontSize: 42, color: INK, fontWeight: 700, lineHeight: 1.5 }}>돌아온 한마디</Line>}
+      </div>
+    </div>
+  );
+};
+
 const RequestCard: React.FC<{ f: number }> = ({ f }) => {
   const op = interpolate(f, [150, 168, 425, 440], [0, 1, 1, 0], clamp);
   if (op <= 0) return null;
@@ -212,7 +238,7 @@ const PageFace: React.FC<{ f: number; top: boolean }> = ({ f, top }) => {
 };
 
 const Stack: React.FC<{ f: number }> = ({ f }) => {
-  const op = prog(f, 4, 20);
+  const op = prog(f, 150, 20);
   const n = pageCountF(f);
   const cx = interpolate(f, [GHOST_AT - 10, GHOST_AT + 20, RINGS_AT - 10, RINGS_AT + 20], [CX, 400, 400, CX], { ...clamp, easing: easeInOut });
   const blur = blurAt(f);
@@ -386,7 +412,8 @@ export const WorkFocus: React.FC = () => {
         background: "radial-gradient(ellipse 80% 55% at 50% 44%, #18202B 0%, rgba(13,16,21,0) 70%)",
       }} />
       <div style={{ position: "absolute", inset: 0, transform: "translateY(40px)" }}>
-        <Overline f={f} from={6} to={420} tag="CASE" text="흔한 장면" color={INK} />
+        <Hook f={f} />
+        <Overline f={f} from={152} to={420} tag="CASE" text="흔한 장면" color={INK} />
         <Overline f={f} from={428} to={992} tag="FOCUS" text="일의 초점 세 가지" color={AMBER} />
         <Overline f={f} from={998} to={1150} tag="RESULT" text="같은 시간, 다른 결과" color={AMBER} />
         <Overline f={f} from={1158} to={TOTAL + 10} tag="BEFORE YOU START" text="일하기 전에" color={AMBER} />
