@@ -29,12 +29,12 @@ export const TOTAL = 1350;
 const MX = 100;
 
 // ---------- Timeline ----------
-// S1 hook 0–150 (the line everyone dreads) · S2 the case 150–420 · S3 diagnosis 420–570
+// S1 hook 0–150 (answer first) · S2 the errand 150–420 · S3 diagnosis 420–570
 // S4 three rings 570–990 · S5 result 990–1150 · S6 closing 1150–1350
-export const STACK = [200, 290]; // pages pile up 1 → 30
+export const STACK = [200, 290]; // tofu options pile up 1 → 8
 export const GHOST_AT = 312; // what was actually needed
 const RINGS_AT = 440;
-const HOOK_AT = 8;
+const HOOK_AT = 30; // the big line lands
 export const TURNS = [585, 725, 865]; // WHY, WHEN, WHO
 const TURN_DUR = 40;
 const RESULT_AT = 1000;
@@ -52,18 +52,19 @@ const PAGE_W = 200;
 const PAGE_H = 260;
 const PAGE_CY = CY - 34; // page sits a little above the ring centre so its label clears the inner ring
 
-// page count: piles up to 30, then each ring turn trims it (30 → 12 → 5 → 1)
+// option count: piles up to 8, then each ring turn trims it (8 → 3 → 2 → 1)
+const MAX_N = 8;
 export const pageCountF = (f: number) => {
   if (f < TURNS[0] + 6) {
     if (f < STACK[0]) return 1;
     const t = clamp01((f - STACK[0]) / (STACK[1] - STACK[0]));
-    return 1 + 29 * t * t;
+    return 1 + (MAX_N - 1) * t * t;
   }
   const trim = (i: number, from: number, to: number) =>
     interpolate(f, [TURNS[i] + 6, TURNS[i] + TURN_DUR + 6], [from, to], { ...clamp, easing: easeInOut });
-  if (f < TURNS[1] + 6) return trim(0, 30, 12);
-  if (f < TURNS[2] + 6) return trim(1, 12, 5);
-  return trim(2, 5, 1);
+  if (f < TURNS[1] + 6) return trim(0, MAX_N, 3);
+  if (f < TURNS[2] + 6) return trim(1, 3, 2);
+  return trim(2, 2, 1);
 };
 const blurAt = (f: number) =>
   interpolate(f, [RINGS_AT, RINGS_AT + 40, TURNS[0] + 6, TURNS[0] + 46, TURNS[1] + 6, TURNS[1] + 46, TURNS[2] + 6, TURNS[2] + 46],
@@ -132,32 +133,32 @@ const Captions: React.FC<{ f: number; caps: Cap[] }> = ({ f, caps }) => {
 
 const CAPTIONS: Cap[] = [
   { from: 168, to: 292, lines: [
-    { at: 168, segs: [{ t: "'실적 좀 정리해 줘'", c: INK }, { t: " 한마디에," }] },
-    { at: 196, segs: [{ t: "3일 동안 " }, { t: "30장", c: INK }, { t: "을 만들었다" }] },
+    { at: 168, segs: [{ t: "'두부 좀 사 와'", c: INK }, { t: " 한마디에," }] },
+    { at: 196, segs: [{ t: "제일 먼저 보인 걸 집어 왔다" }] },
   ] },
   { from: 300, to: 420, lines: [
     { at: 300, segs: [{ t: "그런데 필요한 건," }] },
-    { at: 326, segs: [{ t: "내일 아침 회의에서 볼 " }, { t: "한 장", c: AMBER }, { t: "이었다" }] },
+    { at: 326, segs: [{ t: "된장찌개", c: AMBER }, { t: "에 넣을 두부였다" }] },
   ] },
   { from: 432, to: 570, lines: [
-    { at: 432, segs: [{ t: "실력의 문제가 아니라," }] },
+    { at: 432, segs: [{ t: "센스의 문제가 아니라," }] },
     { at: 458, segs: [{ t: "세 가지를 묻지 않았을 뿐", c: INK }, { t: "이다" }] },
   ] },
   { from: 578, to: 712, lines: [
-    { at: 578, segs: [{ t: "목적", c: AMBER }, { t: ": 왜 필요한가?" }] },
-    { at: 606, segs: [{ t: "→ 결정에 필요한 숫자만 남긴다", c: INK, w: 400 }] },
+    { at: 578, segs: [{ t: "목적", c: AMBER }, { t: ": 뭐 하려고?" }] },
+    { at: 606, segs: [{ t: "→ 된장찌개용이면, 찌개용 두부", c: INK, w: 400 }] },
   ] },
   { from: 718, to: 852, lines: [
-    { at: 718, segs: [{ t: "기간", c: AMBER }, { t: ": 언제까지 필요한가?" }] },
-    { at: 746, segs: [{ t: "→ 시간에 맞게 범위를 정한다", c: INK, w: 400 }] },
+    { at: 718, segs: [{ t: "기간", c: AMBER }, { t: ": 언제까지?" }] },
+    { at: 746, segs: [{ t: "→ 6시 전이면, 가까운 마트로", c: INK, w: 400 }] },
   ] },
   { from: 858, to: 992, lines: [
-    { at: 858, segs: [{ t: "관련자", c: AMBER }, { t: ": 누가 보고, 누가 쓰는가?" }] },
-    { at: 886, segs: [{ t: "→ 읽는 사람에 맞춰 만든다", c: INK, w: 400 }] },
+    { at: 858, segs: [{ t: "관련자", c: AMBER }, { t: ": 누가 먹지?" }] },
+    { at: 886, segs: [{ t: "→ 아이도 먹으니, 부드러운 걸로", c: INK, w: 400 }] },
   ] },
   { from: 1000, to: 1148, lines: [
-    { at: 1000, segs: [{ t: "같은 시간을 써도," }] },
-    { at: 1026, segs: [{ t: "방향이 맞아야", c: AMBER }, { t: " 일이 된다" }] },
+    { at: 1000, segs: [{ t: "일도 똑같다.", c: INK }] },
+    { at: 1026, segs: [{ t: "세 가지를 물으면, " }, { t: "한 번에", c: AMBER }, { t: " 끝난다" }] },
   ] },
 ];
 
@@ -176,31 +177,30 @@ const Overline: React.FC<{ f: number; from: number; to: number; tag: string; tex
     );
   };
 
-// Opening hook: the line nobody wants to hear, slammed in big
+// Opening hook: the answer first — who finishes an errand in one go
 const Hook: React.FC<{ f: number }> = ({ f }) => {
   const out = 1 - prog(f, 138, 14);
-  if (f < HOOK_AT || out <= 0) return null;
+  if (f < 8 || out <= 0) return null;
   const d = f - HOOK_AT;
-  const s = interpolate(d, [0, 9], [1.3, 1], { ...clamp, easing: easeOut });
+  const s = interpolate(d, [0, 9], [1.25, 1], { ...clamp, easing: easeOut });
   const o = clamp01(d / 4);
-  const shake = d < 12 ? 9 * (1 - d / 12) : 0;
+  const shake = d >= 0 && d < 12 ? 7 * (1 - d / 12) : 0;
   const glow = interpolate(d, [0, 6, 40], [0, 1, 0.35], clamp);
+  const big: React.CSSProperties = { fontSize: 112, fontWeight: 700, color: INK, letterSpacing: -3.5, lineHeight: 1.18, whiteSpace: "nowrap" };
   return (
-    <div style={{ position: "absolute", left: MX, right: MX, top: 640, opacity: out }}>
-      <div style={{
-        transform: `translate(${Math.sin(f * 2.4) * shake}px, ${Math.cos(f * 3.1) * shake * 0.6}px) scale(${s})`,
-        transformOrigin: "0% 60%", opacity: o,
-      }}>
-        <div style={{ fontSize: 150, fontWeight: 700, lineHeight: 0.6, color: AMBER, height: 70 }}>“</div>
+    <div style={{ position: "absolute", left: MX, right: MX, top: 680, opacity: out }}>
+      <Line f={f} at={8} style={{ fontSize: 48, color: BODY, lineHeight: 1.5 }}>심부름을 한 번에 끝내는 사람은</Line>
+      {d >= 0 && (
         <div style={{
-          fontSize: 128, fontWeight: 700, color: INK, letterSpacing: -4, lineHeight: 1.15, whiteSpace: "nowrap",
-          textShadow: `0 0 ${50 * glow}px rgba(242,244,247,${0.25 * glow})`,
-        }}>이게 아닌데?</div>
-      </div>
-      <div style={{ marginTop: 56 }}>
-        {f >= 40 && <Line f={f} at={40} style={{ fontSize: 42, color: BODY, lineHeight: 1.5 }}>3일 밤새 만든 보고서에</Line>}
-        {f >= 62 && <Line f={f} at={62} style={{ fontSize: 42, color: INK, fontWeight: 700, lineHeight: 1.5 }}>돌아온 한마디</Line>}
-      </div>
+          marginTop: 22, opacity: o, transformOrigin: "0% 60%",
+          transform: `translate(${Math.sin(f * 2.4) * shake}px, ${Math.cos(f * 3.1) * shake * 0.6}px) scale(${s})`,
+        }}>
+          <div style={{ ...big, textShadow: `0 0 ${50 * glow}px rgba(242,180,92,${0.3 * glow})` }}>
+            <span style={{ color: AMBER }}>세 가지</span>를
+          </div>
+          <div style={big}>먼저 묻는다</div>
+        </div>
+      )}
     </div>
   );
 };
@@ -212,26 +212,34 @@ const RequestCard: React.FC<{ f: number }> = ({ f }) => {
   return (
     <div style={{ position: "absolute", left: MX, top: 452, opacity: op, transform: `translateY(${(1 - p) * 20}px)` }}>
       <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: 6, color: SUB }}>REQUEST</div>
-      <div style={{ fontSize: 46, fontWeight: 700, color: INK, letterSpacing: -1, marginTop: 10 }}>"실적 좀 정리해 줘"</div>
+      <div style={{ fontSize: 46, fontWeight: 700, color: INK, letterSpacing: -1, marginTop: 10 }}>"두부 좀 사 와"</div>
     </div>
   );
 };
 
-// One page of the report: hairline "text" lines; the key number appears once the purpose is clear
-const PageFace: React.FC<{ f: number; top: boolean }> = ({ f, top }) => {
-  const why = top ? turnP(f, 0) : 0;
-  const who = top ? turnP(f, 2) : 0;
-  const dense = Math.round(8 - 5 * who);
+// Line-art tofu block
+const TofuIcon: React.FC<{ color: string }> = ({ color }) => (
+  <svg width={150} height={96} viewBox="0 0 150 96">
+    <path d="M15 28 L75 10 L135 28 L75 46 Z" fill="rgba(242,244,247,0.10)" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+    <path d="M15 28 L75 46 L75 86 L15 68 Z" fill="rgba(242,244,247,0.05)" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+    <path d="M75 46 L135 28 L135 68 L75 86 Z" fill="rgba(242,244,247,0.02)" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+  </svg>
+);
+
+// What the top card says as each question gets answered
+const FACES: [string, string][] = [["부침용 두부", "대용량"], ["찌개용 두부", "한 모"], ["찌개용 두부", "동네 마트 · 한 모"], ["찌개용 두부", "부드러운 · 한 모"]];
+
+const ProductFace: React.FC<{ f: number }> = ({ f }) => {
+  const done = [0, 1, 2].filter((i) => turnP(f, i) >= 0.5).length;
+  const dip = Math.max(...[0, 1, 2].map((i) => Math.sin(Math.PI * turnP(f, i))));
+  const final = turnP(f, 2);
+  const [name, sub] = FACES[done];
   return (
-    <div style={{ position: "absolute", inset: 0, padding: "26px 24px" }}>
-      <div style={{ width: 96, height: 8, borderRadius: 4, background: "rgba(242,244,247,0.55)" }} />
-      <div style={{ height: 44 * why, overflow: "hidden", marginTop: 14 * why }}>
-        <div style={{ fontSize: 40, fontWeight: 700, color: AMBER, lineHeight: 1, letterSpacing: -1, opacity: why }}>+12%</div>
-      </div>
-      <div style={{ marginTop: 16 }}>
-        {Array.from({ length: dense }, (_, i) => (
-          <div key={i} style={{ width: `${[100, 88, 94, 70, 96, 82, 90, 60][i]}%`, height: 5, borderRadius: 3, marginTop: 11, background: "rgba(242,244,247,0.18)" }} />
-        ))}
+    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 34 }}>
+      <TofuIcon color={mix(final)} />
+      <div style={{ marginTop: 26, textAlign: "center", opacity: 1 - 0.9 * dip, whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: 28, fontWeight: 700, color: INK }}>{name}</div>
+        <div style={{ fontSize: 20, color: done === 3 ? AMBER : SUB, marginTop: 6 }}>{sub}</div>
       </div>
     </div>
   );
@@ -243,13 +251,13 @@ const Stack: React.FC<{ f: number }> = ({ f }) => {
   const cx = interpolate(f, [GHOST_AT - 10, GHOST_AT + 20, RINGS_AT - 10, RINGS_AT + 20], [CX, 400, 400, CX], { ...clamp, easing: easeInOut });
   const blur = blurAt(f);
   const lit = clamp01(turnP(f, 2) * 0.6 + prog(f, RESULT_AT, 30) * 0.4);
-  const layers = 9;
+  const layers = MAX_N - 1;
   return (
     <div style={{ position: "absolute", left: cx - PAGE_W / 2, top: PAGE_CY - PAGE_H / 2, width: PAGE_W, height: PAGE_H, opacity: op }}>
       <div style={{ position: "absolute", inset: 0, filter: blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : undefined, opacity: 1 - blur * 0.05 }}>
         {Array.from({ length: layers }, (_, k) => {
           const i = layers - k; // draw back to front
-          const vis = clamp01(n - 1 - (i - 1) * (29 / layers));
+          const vis = clamp01(n - 1 - (i - 1));
           if (vis <= 0) return null;
           return (
             <div key={i} style={{
@@ -262,7 +270,7 @@ const Stack: React.FC<{ f: number }> = ({ f }) => {
           position: "absolute", inset: 0, borderRadius: 6, background: "#161C26",
           border: `1.5px solid ${mix(lit)}`, boxShadow: lit > 0 ? `0 0 ${40 * lit}px rgba(242,180,92,${0.25 * lit})` : undefined,
         }}>
-          <PageFace f={f} top />
+          <ProductFace f={f} />
         </div>
       </div>
     </div>
@@ -273,7 +281,6 @@ const Counter: React.FC<{ f: number }> = ({ f }) => {
   const op = prog(f, STACK[0], 14) * (1 - prog(f, RESULT_AT - 14, 12));
   const cx = interpolate(f, [GHOST_AT - 10, GHOST_AT + 20, RINGS_AT - 10, RINGS_AT + 20], [CX, 400, 400, CX], { ...clamp, easing: easeInOut });
   const n = Math.round(pageCountF(f));
-  const days = f < TURNS[0] ? (n <= 10 ? 1 : n <= 20 ? 2 : 3) : 0;
   const res = prog(f, RESULT_AT, 20);
   return (
     <>
@@ -282,13 +289,14 @@ const Counter: React.FC<{ f: number }> = ({ f }) => {
           position: "absolute", left: cx - 150, width: 300, top: PAGE_CY + PAGE_H / 2 + 22, textAlign: "center", opacity: op,
           fontSize: 30, fontWeight: 700, color: f < TURNS[0] ? INK : mix(turnP(f, 2)), fontVariantNumeric: "tabular-nums",
         }}>
-          {n}장{days ? <span style={{ color: SUB, fontWeight: 400 }}> · {days}일</span> : null}
+          {n}<span style={{ color: SUB, fontWeight: 400 }}>종</span>
         </div>
       )}
       {res > 0 && (
-        <div style={{ position: "absolute", left: CX - 200, width: 400, top: PAGE_CY + PAGE_H / 2 + 16, textAlign: "center", opacity: res }}>
-          <div style={{ fontSize: 24, color: SUB, textDecoration: "line-through", textDecorationColor: "rgba(138,147,163,0.8)" }}>30장 · 3일</div>
-          <div style={{ fontSize: 34, fontWeight: 700, color: AMBER, marginTop: 4 }}>1장 · 반나절</div>
+        <div style={{ position: "absolute", left: CX - 200, width: 400, top: PAGE_CY + PAGE_H / 2 + 14, textAlign: "center", opacity: res, whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: 22, color: SUB, textDecoration: "line-through", textDecorationColor: "rgba(138,147,163,0.7)", textDecorationThickness: "1.5px" }}>부침용 대용량 · 다시 다녀옴</div>
+          <div style={{ fontSize: 32, fontWeight: 700, color: AMBER, marginTop: 2 }}>찌개용 한 모</div>
+          <div style={{ fontSize: 22, color: INK, marginTop: 0 }}>5:40 도착</div>
         </div>
       )}
     </>
@@ -307,7 +315,7 @@ const Ghost: React.FC<{ f: number }> = ({ f }) => {
       </svg>
       <div style={{ position: "absolute", left: 0, width: PAGE_W, top: PAGE_H + 22, textAlign: "center", whiteSpace: "nowrap" }}>
         <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: 3, color: SUB }}>필요했던 것</div>
-        <div style={{ fontSize: 30, fontWeight: 700, color: AMBER, marginTop: 4 }}>1장 · 내일 09:00</div>
+        <div style={{ fontSize: 30, fontWeight: 700, color: AMBER, marginTop: 4 }}>찌개용 한 모 · 6시 전</div>
       </div>
     </div>
   );
@@ -413,9 +421,9 @@ export const WorkFocus: React.FC = () => {
       }} />
       <div style={{ position: "absolute", inset: 0, transform: "translateY(40px)" }}>
         <Hook f={f} />
-        <Overline f={f} from={152} to={420} tag="CASE" text="흔한 장면" color={INK} />
+        <Overline f={f} from={152} to={420} tag="CASE" text="심부름" color={INK} />
         <Overline f={f} from={428} to={992} tag="FOCUS" text="일의 초점 세 가지" color={AMBER} />
-        <Overline f={f} from={998} to={1150} tag="RESULT" text="같은 시간, 다른 결과" color={AMBER} />
+        <Overline f={f} from={998} to={1150} tag="RESULT" text="같은 심부름, 다른 결과" color={AMBER} />
         <Overline f={f} from={1158} to={TOTAL + 10} tag="BEFORE YOU START" text="일하기 전에" color={AMBER} />
         <RequestCard f={f} />
         <Rings f={f} />
