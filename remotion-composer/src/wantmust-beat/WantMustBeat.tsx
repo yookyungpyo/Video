@@ -167,7 +167,7 @@ const Flash: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Hook — 원하는 거 있어? / 10개, 빠르게 간다.
+// Hook — 원하는 거 있어? / 지금부터 알려줄게. [10가지]
 // ---------------------------------------------------------------------------
 const Big: React.FC<{ text: string; color: string; size: number; age: number }> = ({ text, color, size, age }) => {
   const sc = interpolate(age, [0, 5], [1.12, 1], outC);
@@ -203,8 +203,24 @@ const Hook: React.FC = () => {
         </div>
       ) : (
         <>
-          <Big text="10개," color={WHITE} size={200} age={age} />
-          <Big text="빠르게 간다." color={BLUE} size={166} age={age} />
+          <Big text="지금부터" color={WHITE} size={200} age={age} />
+          <Big text="알려줄게." color={BLUE} size={200} age={age} />
+          <div
+            style={{
+              marginTop: 44,
+              padding: "14px 56px",
+              border: `6px solid ${BLUE}`,
+              borderRadius: 999,
+              fontFamily: FONT,
+              fontWeight: 900,
+              fontSize: 92,
+              color: WHITE,
+              letterSpacing: -1,
+              transform: `scale(${interpolate(age, [3, 8], [0, 1], outC)})`,
+            }}
+          >
+            10가지
+          </div>
         </>
       )}
     </AbsoluteFill>
