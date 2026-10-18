@@ -4,13 +4,14 @@
 #  so we point it at a Chrome that already exists on the machine.)
 #
 # Usage:
-#   bash scripts/render.sh <entry> <CompId> <out.mp4>
+#   bash scripts/render.sh <entry> <CompId> <out.mp4> [extra remotion flags...]
 # Example:
 #   bash scripts/render.sh src/realphoto/index.tsx RealPhoto ../projects/cardnews/busy-realphoto.mp4
 set -euo pipefail
 ENTRY="${1:?entry, e.g. src/realphoto/index.tsx}"
 COMP="${2:?composition id, e.g. RealPhoto}"
 OUT="${3:?output mp4 path}"
+shift 3 # anything left is passed through (e.g. --concurrency=2)
 
 # Prefer the pre-installed Playwright Chromium (FULL Chrome → needs new headless,
 # selected via --chrome-mode=chrome-for-testing). Fall back to a headless-shell
@@ -28,5 +29,5 @@ echo "Mode flag:  ${MODE_FLAG:-(headless-shell default)}"
 env NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt \
   npx remotion render "$ENTRY" "$COMP" "$OUT" \
   $MODE_FLAG --browser-executable "$CH" \
-  --ignore-certificate-errors --codec h264
+  --ignore-certificate-errors --codec h264 "$@"
 echo "Rendered $OUT"

@@ -137,18 +137,22 @@ const isInvert = (frame: number) => {
 // ---------------------------------------------------------------------------
 // Stage: near-black + giant ghost number + grain + vignette
 // ---------------------------------------------------------------------------
+// pre-baked noise tile, jumped to a random offset every frame (a per-frame
+// feTurbulence was heavy enough that Chrome sometimes captured unrasterized tiles)
+const GRAIN = staticFile("wantmust/grain.png");
 const Grain: React.FC = () => {
   const frame = useCurrentFrame();
   return (
-    <AbsoluteFill style={{ opacity: 0.07, mixBlendMode: "screen", pointerEvents: "none" }}>
-      <svg width="100%" height="100%">
-        <filter id="grain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={2} seed={frame % 9} stitchTiles="stitch" />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#grain)" />
-      </svg>
-    </AbsoluteFill>
+    <AbsoluteFill
+      style={{
+        opacity: 0.07,
+        mixBlendMode: "screen",
+        pointerEvents: "none",
+        backgroundImage: `url(${GRAIN})`,
+        backgroundSize: "512px 512px",
+        backgroundPosition: `${Math.floor(rand(frame, 7) * 512)}px ${Math.floor(rand(frame, 8) * 512)}px`,
+      }}
+    />
   );
 };
 
