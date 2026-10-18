@@ -40,6 +40,15 @@ with a Chrome that already exists on the machine.
   if you have one under `~/.cache/hyperframes/chrome/...`, point `--browser-executable`
   at it and drop the mode flag — `scripts/render.sh` handles both.)
   Renders are CPU-heavy (~3–6 min / 500 frames) — use a long timeout, not the 2-min default.
+- **Glitch frames (check every render).** Under load Chrome sometimes captures a
+  frame with unrasterized black tiles. Heavy per-frame paints (an SVG
+  `feTurbulence` grain re-seeded every frame, big `filter: blur`) make it much
+  worse — use a pre-baked noise PNG instead, and pass `--concurrency=2` to
+  `scripts/render.sh` (extra args are forwarded). Then QA:
+  `python3 scripts/find-glitch-frames.py out.mp4`, or render twice and run
+  `scripts/compare-renders.py a.mp4 b.mp4`; fix the hits with
+  `scripts/repair-frames.py` (re-renders those frames as stills and splices
+  them in, colour-range matched).
 - `ffmpeg`/`ffprobe` are static binaries on PATH (installed via imageio-ffmpeg +
   a static ffprobe). Needed for frame extraction + audio.
 
