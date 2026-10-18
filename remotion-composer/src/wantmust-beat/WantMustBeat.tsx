@@ -15,8 +15,9 @@ import {
 
 // ---------------------------------------------------------------------------
 // "You want → You must" — 반말 팩폭 beat-cut kinetic typography (loopable).
-// 120 BPM: one beat = 15f. Each pair = 2 beats: question on the beat,
-// answer SLAMS on the next (on the clap). Black stage, white + electric blue.
+// Two parts of 10 pairs (PART 1: 01–10, PART 2: 11–20). 120 BPM, half-time:
+// each pair = one 2s bar — question on the kick (beat 1), answer SLAMS on the
+// snare (beat 3). Black stage, white + electric blue.
 // Ends on "다시 물을게." which cuts straight back into frame 0 (loop).
 // ---------------------------------------------------------------------------
 const FONT = "Pretendard";
@@ -30,10 +31,13 @@ const MASCOT = staticFile("brand/mascot.png");
 
 // timeline (frames @30fps, 120 BPM)
 const BEAT = 15;
-const PAIR = 2 * BEAT;
+const PER_PART = 10;
+const PAIR = 4 * BEAT; // one bar per pair
+const ANS = 2 * BEAT; // answer lands on beat 3
 const PAIRS_AT = 4 * BEAT; // 60 — after the 1-bar hook
-const DROP = PAIRS_AT + 20 * PAIR; // 660 — music cuts: 원하는 만큼, → 해.
-const OUTRO = DROP + PAIR * 2; // 720 — mascot + 몇 번?
+const DROP = PAIRS_AT + PER_PART * PAIR; // 660 — music cuts: 원하는 만큼, → 해.
+const HAE = 2 * BEAT; // 해. lands on beat 3 of the drop bar
+const OUTRO = DROP + 4 * BEAT; // 720 — mascot + 몇 번?
 const ASK = OUTRO + 4 * BEAT; // 780 — 다시 물을게.
 export const WANT_MUST_BEAT_FRAMES = ASK + 2 * BEAT; // 810 (27s)
 
@@ -107,11 +111,11 @@ const rgbSplit = (age: number, k = 1) => {
 // ---------------------------------------------------------------------------
 const SLAMS: { f: number; s: number }[] = [
   { f: 2 * BEAT, s: 0.9 },
-  ...PAIRS.flatMap((_, i) => [
-    { f: PAIRS_AT + i * PAIR, s: 0.3 },
-    { f: PAIRS_AT + i * PAIR + BEAT, s: i % 4 === 2 ? 1.4 : 1 },
+  ...Array.from({ length: PER_PART }).flatMap((_, j) => [
+    { f: PAIRS_AT + j * PAIR, s: 0.3 },
+    { f: PAIRS_AT + j * PAIR + ANS, s: j % 4 === 2 ? 1.4 : 1 },
   ]),
-  { f: DROP + PAIR, s: 2.4 },
+  { f: DROP + HAE, s: 2.4 },
   { f: OUTRO, s: 0.6 },
   { f: ASK, s: 0.4 },
 ].sort((a, b) => a.f - b.f);
@@ -127,7 +131,7 @@ const useSlam = () => {
 const isInvert = (frame: number) => {
   if (frame < PAIRS_AT || frame >= DROP) return false;
   const local = frame - PAIRS_AT;
-  return Math.floor(local / PAIR) % 4 === 2 && local % PAIR >= BEAT;
+  return Math.floor(local / PAIR) % 4 === 2 && local % PAIR >= ANS;
 };
 
 // ---------------------------------------------------------------------------
@@ -159,7 +163,7 @@ const Flash: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Hook — 원하는 거 있어? / 20개, 빠르게 간다.
+// Hook — 원하는 거 있어? / 10개, 빠르게 간다.
 // ---------------------------------------------------------------------------
 const Big: React.FC<{ text: string; color: string; size: number; age: number }> = ({ text, color, size, age }) => {
   const sc = interpolate(age, [0, 5], [1.12, 1], outC);
@@ -195,7 +199,7 @@ const Hook: React.FC = () => {
         </div>
       ) : (
         <>
-          <Big text="20개," color={WHITE} size={200} age={age} />
+          <Big text="10개," color={WHITE} size={200} age={age} />
           <Big text="빠르게 간다." color={BLUE} size={166} age={age} />
         </>
       )}
@@ -214,7 +218,7 @@ const AnswerChars: React.FC<{ text: string; size: number; age: number; color: st
       {text.split("\n").map((line, li) => (
         <div key={li} style={{ display: "flex", justifyContent: "inherit" }}>
           {[...line].map((c, ci) => {
-            const d = k++ * 0.6;
+            const d = k++ * 0.9;
             const p = interpolate(age, [d, d + 4], [0, 1], outC);
             return (
               <span
@@ -237,12 +241,13 @@ const AnswerChars: React.FC<{ text: string; size: number; age: number; color: st
   );
 };
 
-const PairScene: React.FC<{ i: number }> = ({ i }) => {
+const PairScene: React.FC<{ i: number; part: number }> = ({ i, part }) => {
   const f = useCurrentFrame();
   const pair = PAIRS[i];
-  const tpl = i % 4;
-  const aOn = f >= BEAT;
-  const aAge = f - BEAT;
+  const tpl = (i % PER_PART) % 4;
+  const aOn = f >= ANS;
+  const aAge = f - ANS;
+  const hold = 1 + f * 0.0007; // slow push-in while the pair holds
   const left = tpl === 1;
   const invert = tpl === 2 && aOn;
 
@@ -301,7 +306,9 @@ const PairScene: React.FC<{ i: number }> = ({ i }) => {
           <span style={{ fontWeight: 900, fontSize: 64, color: invert ? WHITE : BLUE }}>{pad2(i + 1)}</span>
           <span style={{ fontWeight: 800, fontSize: 34, color: invert ? "rgba(255,255,255,0.7)" : MUTED }}> / 20</span>
         </div>
-        <div style={{ fontWeight: 800, fontSize: 30, letterSpacing: 1, color: invert ? "rgba(255,255,255,0.75)" : MUTED }}>You want → You must</div>
+        <div style={{ fontWeight: 800, fontSize: 30, letterSpacing: 1, color: invert ? "rgba(255,255,255,0.75)" : MUTED }}>
+          <span style={{ fontWeight: 900, color: invert ? WHITE : BLUE }}>PART {part}</span> · You want → You must
+        </div>
       </div>
       {/* question + answer */}
       <AbsoluteFill
@@ -312,6 +319,7 @@ const PairScene: React.FC<{ i: number }> = ({ i }) => {
           padding: left ? "0 100px" : 0,
           fontFamily: FONT,
           fontWeight: 900,
+          transform: `scale(${hold})`,
         }}
       >
         <div
@@ -372,8 +380,8 @@ const Drop: React.FC = () => {
   const f = useCurrentFrame();
   const line = "원하는 만큼,";
   const typed = Math.min(line.length, Math.floor(f / 2) + 1);
-  const hae = f >= PAIR;
-  const age = f - PAIR;
+  const hae = f >= HAE;
+  const age = f - HAE;
   const hp = interpolate(age, [0, 6], [0, 1], outC);
   return (
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", flexDirection: "column", fontFamily: FONT, fontWeight: 900 }}>
@@ -411,7 +419,7 @@ const Drop: React.FC = () => {
 // ---------------------------------------------------------------------------
 // Outro — mascot + 너한테 제일 필요한 건 몇 번?  then 다시 물을게. (→ loop)
 // ---------------------------------------------------------------------------
-const Outro: React.FC = () => {
+const Outro: React.FC<{ part: number }> = ({ part }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const pop = spring({ frame: f - 2, fps, config: { damping: 9, stiffness: 160, mass: 0.8 } });
@@ -474,6 +482,9 @@ const Outro: React.FC = () => {
           <span style={{ color: BLUE }}>must</span>
         </div>
         <div style={{ marginTop: 10, fontWeight: 600, fontSize: 32, color: MUTED, letterSpacing: 1 }}>www.wylieax.com</div>
+        <div style={{ marginTop: 18, fontWeight: 800, fontSize: 34, color: BLUE, letterSpacing: 1 }}>
+          {part === 1 ? "PART 2 · 11–20 계속 ▶" : "◀ PART 1 · 01–10"}
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -490,7 +501,7 @@ const Ask: React.FC = () => {
   );
 };
 
-export const WantMustBeat: React.FC = () => {
+export const WantMustBeat: React.FC<{ part: number }> = ({ part }) => {
   const { age, s, frame } = useSlam();
   const amp = 16 * s * Math.exp(-age / 2.2);
   const dx = amp * (rand(frame, 1) * 2 - 1);
@@ -506,16 +517,16 @@ export const WantMustBeat: React.FC = () => {
           <Sequence from={0} durationInFrames={PAIRS_AT}>
             <Hook />
           </Sequence>
-          {PAIRS.map((_, i) => (
-            <Sequence key={i} from={PAIRS_AT + i * PAIR} durationInFrames={PAIR}>
-              <PairScene i={i} />
+          {Array.from({ length: PER_PART }).map((_, j) => (
+            <Sequence key={j} from={PAIRS_AT + j * PAIR} durationInFrames={PAIR}>
+              <PairScene i={(part - 1) * PER_PART + j} part={part} />
             </Sequence>
           ))}
           <Sequence from={DROP} durationInFrames={OUTRO - DROP}>
             <Drop />
           </Sequence>
           <Sequence from={OUTRO} durationInFrames={ASK - OUTRO}>
-            <Outro />
+            <Outro part={part} />
           </Sequence>
           <Sequence from={ASK} durationInFrames={WANT_MUST_BEAT_FRAMES - ASK}>
             <Ask />
