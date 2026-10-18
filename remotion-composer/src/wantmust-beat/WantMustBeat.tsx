@@ -172,7 +172,7 @@ const Flash: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Hook — 원하는 거 있어? / 지금부터 알려줄게. [10가지]
+// Hook — 원하는 거 있어? [2탄] / 지금부터 알려줄게. [10가지 | 나머지 10개]
 // ---------------------------------------------------------------------------
 const Big: React.FC<{ text: string; color: string; size: number; age: number }> = ({ text, color, size, age }) => {
   const sc = interpolate(age, [0, 5], [1.12, 1], outC);
@@ -195,37 +195,51 @@ const Big: React.FC<{ text: string; color: string; size: number; age: number }> 
   );
 };
 
-const Hook: React.FC = () => {
+// pill tag under the hook lines (outlined, or filled for the 2탄 badge)
+const Tag: React.FC<{ text: string; scale: number; filled?: boolean }> = ({ text, scale, filled = false }) => (
+  <div
+    style={{
+      marginTop: 44,
+      padding: "14px 56px",
+      border: `6px solid ${BLUE}`,
+      borderRadius: 999,
+      background: filled ? BLUE : "transparent",
+      fontFamily: FONT,
+      fontWeight: 900,
+      fontSize: 92,
+      color: WHITE,
+      letterSpacing: -1,
+      transform: `scale(${scale})`,
+    }}
+  >
+    {text}
+  </div>
+);
+
+// PART 2 opens as the sequel: "2탄" badge on the cover frame, "나머지 10개" tag
+const HOOK_TAGS: Record<number, { cover?: string; list: string }> = {
+  1: { list: "10가지" },
+  2: { cover: "2탄", list: "나머지 10개" },
+};
+
+const Hook: React.FC<{ part: number }> = ({ part }) => {
   const f = useCurrentFrame();
   const second = f >= 2 * BEAT;
   const age = second ? f - 2 * BEAT : f;
+  const tags = HOOK_TAGS[part];
   return (
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       {!second ? (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", transform: `scale(${1 + f * 0.0015})` }}>
           <Big text="원하는 거" color={WHITE} size={208} age={99} />
           <Big text="있어?" color={BLUE} size={250} age={99} />
+          {tags.cover && <Tag text={tags.cover} scale={1} filled />}
         </div>
       ) : (
         <>
           <Big text="지금부터" color={WHITE} size={200} age={age} />
           <Big text="알려줄게." color={BLUE} size={200} age={age} />
-          <div
-            style={{
-              marginTop: 44,
-              padding: "14px 56px",
-              border: `6px solid ${BLUE}`,
-              borderRadius: 999,
-              fontFamily: FONT,
-              fontWeight: 900,
-              fontSize: 92,
-              color: WHITE,
-              letterSpacing: -1,
-              transform: `scale(${interpolate(age, [3, 8], [0, 1], outC)})`,
-            }}
-          >
-            10가지
-          </div>
+          <Tag text={tags.list} scale={interpolate(age, [3, 8], [0, 1], outC)} />
         </>
       )}
     </AbsoluteFill>
@@ -586,7 +600,7 @@ export const WantMustBeat: React.FC<{ part: number }> = ({ part }) => {
         {/* Reels safe area */}
         <AbsoluteFill style={{ transform: "translateY(-15px) scale(0.85)", transformOrigin: "center center" }}>
           <Sequence from={0} durationInFrames={PAIRS_AT}>
-            <Hook />
+            <Hook part={part} />
           </Sequence>
           {Array.from({ length: PER_PART }).map((_, j) => (
             <Sequence key={j} from={PAIRS_AT + j * PAIR} durationInFrames={PAIR}>
