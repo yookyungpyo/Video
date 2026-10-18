@@ -213,7 +213,8 @@ const Hook: React.FC = () => {
 
 // ---------------------------------------------------------------------------
 // Pair — question on the beat, answer slams on the next. 4 rotating cut styles:
-// 0 punch-zoom · 1 whip (left-aligned) · 2 blue invert · 3 letter drop
+// 0 punch-zoom · 1 whip · 2 blue invert · 3 letter drop. Every pair lands in the
+// same place: centered, question at a fixed top, answer starting right below.
 // ---------------------------------------------------------------------------
 const AnswerChars: React.FC<{ text: string; size: number; age: number; color: string }> = ({ text, size, age, color }) => {
   let k = 0;
@@ -245,6 +246,8 @@ const AnswerChars: React.FC<{ text: string; size: number; age: number; color: st
   );
 };
 
+const Q_TOP = 660; // question top (safe-area coords) — identical for every pair
+
 const PairScene: React.FC<{ i: number; part: number }> = ({ i, part }) => {
   const f = useCurrentFrame();
   const pair = PAIRS[i];
@@ -252,7 +255,6 @@ const PairScene: React.FC<{ i: number; part: number }> = ({ i, part }) => {
   const aOn = f >= ANS;
   const aAge = f - ANS;
   const hold = 1 + f * 0.0007; // slow push-in while the pair holds
-  const left = tpl === 1;
   const invert = tpl === 2 && aOn;
 
   // question entrance
@@ -267,7 +269,7 @@ const PairScene: React.FC<{ i: number; part: number }> = ({ i, part }) => {
   const qSize = 128;
 
   // answer entrance
-  const aSize = fitSize(pair.a, left ? 860 : 900, 290);
+  const aSize = fitSize(pair.a, 900, 290);
   const ap = interpolate(aAge, [0, 5], [0, 1], outC);
   const aT =
     tpl === 1
@@ -314,63 +316,67 @@ const PairScene: React.FC<{ i: number; part: number }> = ({ i, part }) => {
           <span style={{ fontWeight: 900, color: invert ? WHITE : BLUE }}>PART {part}</span> · You want → You must
         </div>
       </div>
-      {/* question + answer */}
-      <AbsoluteFill
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: left ? "flex-start" : "center",
-          padding: left ? "0 100px" : 0,
-          fontFamily: FONT,
-          fontWeight: 900,
-          transform: `scale(${hold})`,
-        }}
-      >
+      {/* question + answer — fixed anchor, so 1- and 2-line answers start at the same spot */}
+      <AbsoluteFill style={{ transform: `scale(${hold})` }}>
         <div
           style={{
-            fontSize: qSize,
-            letterSpacing: -qSize * 0.035,
-            lineHeight: 1.1,
-            whiteSpace: "nowrap",
-            transform: qT,
-            filter: qBlur > 0.3 ? `blur(${qBlur}px)` : "none",
-            opacity: (aOn ? 0.78 : 1) * Math.min(1, qp * 3),
+            position: "absolute",
+            top: Q_TOP,
+            left: 0,
+            right: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontFamily: FONT,
+            fontWeight: 900,
           }}
         >
-          <span style={{ color: WHITE }}>{pair.q}</span>
-          <span style={{ color: invert ? "rgba(255,255,255,0.75)" : MUTED }}> 원해?</span>
-        </div>
-        <div
-          style={{
-            marginTop: 34,
-            fontSize: aSize,
-            letterSpacing: -aSize * 0.04,
-            lineHeight: 1.04,
-            color: aColor,
-            textAlign: left ? "left" : "center",
-            justifyContent: left ? "flex-start" : "center",
-            whiteSpace: "pre",
-            visibility: aOn ? "visible" : "hidden",
-            transform: aT,
-            transformOrigin: left ? "left center" : "center center",
-            filter: aBlur > 0.3 ? `blur(${aBlur}px)` : "none",
-            textShadow: tpl === 3 ? "none" : rgbSplit(aAge),
-          }}
-        >
-          {tpl === 3 ? <AnswerChars text={pair.a} size={aSize} age={aAge} color={aColor} /> : pair.a}
-        </div>
-        <div
-          style={{
-            marginTop: 40,
-            fontWeight: 800,
-            fontSize: 32,
-            letterSpacing: 6,
-            color: invert ? "rgba(255,255,255,0.8)" : MUTED,
-            opacity: aOn ? tagP : 0,
-            transform: `translateY(${(1 - tagP) * 14}px)`,
-          }}
-        >
-          {pair.en}
+          <div
+            style={{
+              fontSize: qSize,
+              letterSpacing: -qSize * 0.035,
+              lineHeight: 1.1,
+              whiteSpace: "nowrap",
+              transform: qT,
+              filter: qBlur > 0.3 ? `blur(${qBlur}px)` : "none",
+              opacity: (aOn ? 0.78 : 1) * Math.min(1, qp * 3),
+            }}
+          >
+            <span style={{ color: WHITE }}>{pair.q}</span>
+            <span style={{ color: invert ? "rgba(255,255,255,0.75)" : MUTED }}> 원해?</span>
+          </div>
+          <div
+            style={{
+              marginTop: 34,
+              fontSize: aSize,
+              letterSpacing: -aSize * 0.04,
+              lineHeight: 1.04,
+              color: aColor,
+              textAlign: "center",
+              justifyContent: "center",
+              whiteSpace: "pre",
+              visibility: aOn ? "visible" : "hidden",
+              transform: aT,
+              transformOrigin: "center center",
+              filter: aBlur > 0.3 ? `blur(${aBlur}px)` : "none",
+              textShadow: tpl === 3 ? "none" : rgbSplit(aAge),
+            }}
+          >
+            {tpl === 3 ? <AnswerChars text={pair.a} size={aSize} age={aAge} color={aColor} /> : pair.a}
+          </div>
+          <div
+            style={{
+              marginTop: 40,
+              fontWeight: 800,
+              fontSize: 32,
+              letterSpacing: 6,
+              color: invert ? "rgba(255,255,255,0.8)" : MUTED,
+              opacity: aOn ? tagP : 0,
+              transform: `translateY(${(1 - tagP) * 14}px)`,
+            }}
+          >
+            {pair.en}
+          </div>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
