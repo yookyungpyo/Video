@@ -12,13 +12,16 @@ import {
   continueRender,
   delayRender,
 } from "remotion";
+import type { LucideIcon } from "lucide-react";
+import { Bookmark, Heart } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // "You want → You must" — 반말 팩폭 beat-cut kinetic typography (loopable).
 // Two parts of 10 pairs (PART 1: 01–10, PART 2: 11–20). 120 BPM, half-time:
 // each pair = one 2s bar — question on the kick (beat 1), answer SLAMS on the
 // snare (beat 3). Black stage, white + electric blue.
-// Ends on "다시 물을게." which cuts straight back into frame 0 (loop).
+// Ends on a CTA — PART 1: 나머지 10개 듣고 싶어? ❤ 하트 눌러줘!
+//                PART 2: 저장해 두고 흔들릴 때 🔖 다시 봐!
 // ---------------------------------------------------------------------------
 const FONT = "Pretendard";
 const BG = "#07080B";
@@ -26,6 +29,7 @@ const WHITE = "#F4F6FB";
 const MUTED = "#8C95A8";
 const BLUE = "#2E6CFF";
 const BLUE_BG = "#1B5CFF";
+const HEART = "#FF3B5C"; // the like-button red, so the CTA reads instantly
 
 const MASCOT = staticFile("brand/mascot.png");
 
@@ -38,8 +42,8 @@ const PAIRS_AT = 4 * BEAT; // 60 — after the 1-bar hook
 const DROP = PAIRS_AT + PER_PART * PAIR; // 660 — music cuts: 원하는 만큼, → 해.
 const HAE = 2 * BEAT; // 해. lands on beat 3 of the drop bar
 const OUTRO = DROP + 4 * BEAT; // 720 — mascot + 몇 번?
-const ASK = OUTRO + 4 * BEAT; // 780 — 다시 물을게.
-export const WANT_MUST_BEAT_FRAMES = ASK + 2 * BEAT; // 810 (27s)
+const CTA = OUTRO + 4 * BEAT; // 780 — like / save CTA
+export const WANT_MUST_BEAT_FRAMES = CTA + 4 * BEAT; // 840 (28s)
 
 type Pair = { q: string; a: string; en: string };
 const PAIRS: Pair[] = [
@@ -117,7 +121,8 @@ const SLAMS: { f: number; s: number }[] = [
   ]),
   { f: DROP + HAE, s: 2.4 },
   { f: OUTRO, s: 0.6 },
-  { f: ASK, s: 0.4 },
+  { f: CTA, s: 0.6 },
+  { f: CTA + BEAT, s: 0.5 },
 ].sort((a, b) => a.f - b.f);
 
 const useSlam = () => {
@@ -516,13 +521,53 @@ const Outro: React.FC<{ part: number }> = ({ part }) => {
   );
 };
 
-const Ask: React.FC = () => {
+// ---------------------------------------------------------------------------
+// CTA — lines slam, then the icon pops and beats on every beat
+// ---------------------------------------------------------------------------
+type CtaSpec = { l1: string; l2: string; icon: LucideIcon; color: string; label: string };
+const CTAS: Record<number, CtaSpec> = {
+  1: { l1: "나머지 10개", l2: "듣고 싶어?", icon: Heart, color: HEART, label: "하트 눌러줘!" },
+  2: { l1: "저장해 두고", l2: "흔들릴 때", icon: Bookmark, color: WHITE, label: "다시 봐!" },
+};
+
+const Cta: React.FC<{ part: number }> = ({ part }) => {
   const f = useCurrentFrame();
-  const line = "다시 물을게.";
-  const typed = Math.min(line.length, Math.floor(f / 2) + 1);
+  const { fps } = useVideoConfig();
+  const { l1, l2, icon: Icon, color, label: text } = CTAS[part];
+  const heartPop = spring({ frame: f - BEAT, fps, config: { damping: 8, stiffness: 180, mass: 0.7 } });
+  const beatAge = f >= BEAT ? (f - BEAT) % BEAT : 99;
+  const pulse = 1 + 0.14 * Math.exp(-beatAge / 3);
+  const label = interpolate(f, [BEAT + 4, BEAT + 10], [0, 1], outC);
   return (
-    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: FONT, fontWeight: 900 }}>
-      <div style={{ fontSize: 170, letterSpacing: -6, color: WHITE, whiteSpace: "pre" }}>{line.slice(0, typed)}</div>
+    <AbsoluteFill style={{ alignItems: "center", fontFamily: FONT, fontWeight: 900 }}>
+      <div style={{ position: "absolute", top: 380, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Big text={l1} color={WHITE} size={150} age={f} />
+        <Big text={l2} color={BLUE} size={170} age={f} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 860,
+          transform: `scale(${heartPop * pulse})`,
+          filter: `drop-shadow(0 0 60px ${color === WHITE ? BLUE : color}88)`,
+          opacity: heartPop > 0.02 ? 1 : 0,
+        }}
+      >
+        <Icon size={340} color={color} fill={color} strokeWidth={1.5} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 1270,
+          fontSize: 120,
+          color: WHITE,
+          letterSpacing: -4,
+          opacity: label,
+          transform: `translateY(${(1 - label) * 30}px)`,
+        }}
+      >
+        {text}
+      </div>
     </AbsoluteFill>
   );
 };
@@ -551,11 +596,11 @@ export const WantMustBeat: React.FC<{ part: number }> = ({ part }) => {
           <Sequence from={DROP} durationInFrames={OUTRO - DROP}>
             <Drop />
           </Sequence>
-          <Sequence from={OUTRO} durationInFrames={ASK - OUTRO}>
+          <Sequence from={OUTRO} durationInFrames={CTA - OUTRO}>
             <Outro part={part} />
           </Sequence>
-          <Sequence from={ASK} durationInFrames={WANT_MUST_BEAT_FRAMES - ASK}>
-            <Ask />
+          <Sequence from={CTA} durationInFrames={WANT_MUST_BEAT_FRAMES - CTA}>
+            <Cta part={part} />
           </Sequence>
         </AbsoluteFill>
       </AbsoluteFill>
