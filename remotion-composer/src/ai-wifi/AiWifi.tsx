@@ -25,12 +25,13 @@ const easeInOut = Easing.inOut(Easing.cubic);
 const prog = (f: number, at: number, dur = 18) => interpolate(f, [at, at + dur], [0, 1], { ...clamp, easing: easeOut });
 const progIO = (f: number, at: number, dur: number) => interpolate(f, [at, at + dur], [0, 1], { ...clamp, easing: easeInOut });
 
-export const TOTAL = 1290;
+export const TOTAL = 1440;
 const MX = 100;
 
 // ---------- Timeline ----------
 // S1 slogan flood 0–180 · S2 every company, the same sentence 180–420
-// S3 the "FREE Wi-Fi" sticker 420–760 · S4 why you come back 760–1090 · S5 AI is Wi-Fi now 1090–1290
+// S3 the "FREE Wi-Fi" sticker 420–760 · S4 why you come back 760–1090
+// S5 it isn't AI that brings them back 1090–1236 · S6 so what is your company's reason? 1236–1440
 export const GRID_AT = 186;
 export const DOOR_AT = 440;
 export const STREET_AT = 540;
@@ -39,6 +40,7 @@ export const OPEN_AT = 770;
 const CORNER_AT = 880;
 const WARM_AT = 984;
 export const END_AT = 1096;
+export const ASK_AT = 1244;
 
 // ---------- Slogans (S1 → S2) ----------
 const SLOGANS = ["AX 전환", "AI 네이티브", "AI 퍼스트", "에이전트 도입", "AI 혁신", "AI 트랜스포메이션", "생성형 AI 도입", "AI 기반 성장"];
@@ -331,15 +333,27 @@ const Interior: React.FC<{ f: number }> = ({ f }) => {
 
 const Conclusion: React.FC<{ f: number }> = ({ f }) => {
   if (f < END_AT) return null;
+  const first = 1 - prog(f, ASK_AT - 14, 12);
+  const big: React.CSSProperties = { fontSize: 56, fontWeight: 700, color: INK, letterSpacing: -1.5, lineHeight: 1.3 };
   return (
-    <div style={{ position: "absolute", left: MX, right: MX, top: CAP_TOP - 12 }}>
-      <Line f={f} at={END_AT + 8} style={{ fontSize: 74, fontWeight: 700, color: INK, letterSpacing: -2, lineHeight: 1.25 }}>
-        AI는 이제, <span style={{ color: AMBER }}>와이파이다.</span>
-      </Line>
-      <div style={{ height: 18 }} />
-      <Line f={f} at={END_AT + 44} style={{ fontSize: 36, color: BODY, lineHeight: 1.5 }}>있어야 하지만,</Line>
-      <Line f={f} at={END_AT + 60} style={{ fontSize: 36, color: BODY, lineHeight: 1.5 }}>그것 때문에 선택받지는 않는다.</Line>
-    </div>
+    <>
+      {first > 0 && (
+        <div style={{ position: "absolute", left: MX, right: MX, top: CAP_TOP - 20, opacity: first }}>
+          <Line f={f} at={END_AT + 8} style={{ fontSize: 38, color: BODY, lineHeight: 1.5 }}>모두가 AI를 쓰는 시대,</Line>
+          <div style={{ height: 8 }} />
+          <Line f={f} at={END_AT + 34} style={big}>다시 찾게 만드는 건</Line>
+          <Line f={f} at={END_AT + 52} style={big}><span style={{ color: AMBER }}>AI가 아니다.</span></Line>
+        </div>
+      )}
+      {f >= ASK_AT && (
+        <div style={{ position: "absolute", left: MX, right: MX, top: CAP_TOP - 20 }}>
+          <Line f={f} at={ASK_AT} style={{ fontSize: 38, color: BODY, lineHeight: 1.5 }}>AI는 기본이 되었다.</Line>
+          <div style={{ height: 8 }} />
+          <Line f={f} at={ASK_AT + 30} style={big}>이제 묻는다,</Line>
+          <Line f={f} at={ASK_AT + 50} style={big}><span style={{ color: AMBER }}>당신 회사만의 이유</span>는 무엇인가.</Line>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -373,7 +387,8 @@ export const AiWifi: React.FC = () => {
         <Overline f={f} from={6} to={420} tag="EVERYONE SAYS IT" text="모두의 슬로건" color={INK} />
         <Overline f={f} from={DOOR_AT - 6} to={760} tag="ONCE A PERK" text="카페 문 앞의 스티커" color={AMBER} />
         <Overline f={f} from={OPEN_AT} to={END_AT} tag="WHY WE RETURN" text="다시 가는 이유" color={AMBER} />
-        <Overline f={f} from={END_AT + 4} to={TOTAL + 10} tag="NOW" text="AI는 기본이 되었다" color={AMBER} />
+        <Overline f={f} from={END_AT + 4} to={ASK_AT - 4} tag="EVERYONE HAS IT" text="모두가 쓰는 시대" color={AMBER} />
+        <Overline f={f} from={ASK_AT} to={TOTAL + 10} tag="THE QUESTION" text="당신 회사만의 이유" color={AMBER} />
         <Slogans f={f} />
         <Street f={f} />
         <div style={{ position: "absolute", inset: 0, opacity: interiorDim }}><Interior f={f} /></div>
