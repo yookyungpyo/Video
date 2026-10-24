@@ -25,17 +25,17 @@ const easeInOut = Easing.inOut(Easing.cubic);
 const prog = (f: number, at: number, dur = 18) => interpolate(f, [at, at + dur], [0, 1], { ...clamp, easing: easeOut });
 const progIO = (f: number, at: number, dur: number) => interpolate(f, [at, at + dur], [0, 1], { ...clamp, easing: easeInOut });
 
-export const TOTAL = 1460;
+export const TOTAL = 1380;
 const MX = 100;
 
 // ---------- Timeline ----------
 // S1 three circles, an empty centre 0–170 · S2 three pairs, 170 frames each 170–680
-// S3 the centre: does it exist? if so, nobody leaves 680–940 · S4 reality table 940–1210 · S5 if you choose: colleagues 1210–1460
+// S3 the centre: does it exist? if so? 680–860 · S4 reality table 860–1130 · S5 if you choose: colleagues 1130–1380
 export const PAIR_AT = [170, 340, 510];
 export const PAIR_LEN = 170;
 export const CENTER_AT = 680;
-export const TABLE_AT = 940;
-export const END_AT = 1210;
+export const TABLE_AT = 860;
+export const END_AT = 1130;
 export const PICK_AT = END_AT + 90; // "고른다면, 동료부터." — the colleague circle lights
 
 // ---------- Venn geometry ----------
@@ -371,11 +371,8 @@ const Statements: React.FC<{ f: number }> = ({ f }) => {
     <>
       {centre > 0 && (
         <div style={{ position: "absolute", left: MX, right: MX, top: CAP_TOP - 20, opacity: centre }}>
-          <Line f={f} at={CENTER_AT + 10} style={lead}>셋 다 좋은 회사는 있을까?</Line>
-          <Line f={f} at={CENTER_AT + 56} style={{ ...lead, color: INK, fontWeight: 700 }}>그렇다면?</Line>
-          <div style={{ height: 8 }} />
-          <Line f={f} at={CENTER_AT + 100} style={big}>채용 공고가 안 올라온다.</Line>
-          <Line f={f} at={CENTER_AT + 134} style={big}><span style={{ color: AMBER }}>아무도 안 나가니까.</span></Line>
+          <Line f={f} at={CENTER_AT + 10} style={big}>셋 다 좋은 회사는 있을까?</Line>
+          <Line f={f} at={CENTER_AT + 56} style={big}><span style={{ color: AMBER }}>그렇다면?</span></Line>
         </div>
       )}
       {f >= END_AT && (
