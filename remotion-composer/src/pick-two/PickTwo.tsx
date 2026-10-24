@@ -10,14 +10,14 @@ import {
 } from "remotion";
 
 const SANS = "Noto Sans KR";
-const BG = "#0D1015";
-const INK = "#F2F4F7";
-const SUB = "#8A93A3";
-const BODY = "#D5DAE1";
-const HAIR = "rgba(255,255,255,0.10)";
-const LINE = "#C9CED6";
-const DIM = "#3A414D";
-const AMBER = "#F2B45C";
+const BG = "#F6F4EF";
+const INK = "#1B1E24";
+const SUB = "#7C818A";
+const BODY = "#3D424B";
+const HAIR = "rgba(27,30,36,0.12)";
+const LINE = "#4A505A";
+const DIM = "#D5D8DD";
+const AMBER = "#DE8A1E";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 const easeOut = Easing.out(Easing.cubic);
@@ -211,8 +211,8 @@ const Venn: React.FC<{ f: number }> = ({ f }) => {
         {pick > 0 && (
           <g opacity={pick}>
             <circle cx={CIRCLES[2].x} cy={CIRCLES[2].y} r={R} fill="none" stroke={AMBER} strokeWidth={18}
-              opacity={0.3} filter="url(#pt-blur)" />
-            <circle cx={CIRCLES[2].x} cy={CIRCLES[2].y} r={R} fill={AMBER} fillOpacity={0.08} />
+              opacity={0.35} filter="url(#pt-blur)" />
+            <circle cx={CIRCLES[2].x} cy={CIRCLES[2].y} r={R} fill={AMBER} fillOpacity={0.1} />
           </g>
         )}
 
@@ -220,7 +220,7 @@ const Venn: React.FC<{ f: number }> = ({ f }) => {
         {PAIRS.map((p, k) => pairs[k] > 0 && (
           <g key={k} opacity={pairs[k]}>
             <g mask={`url(#pt-m${p.miss})`}>
-              <circle cx={CIRCLES[p.a].x} cy={CIRCLES[p.a].y} r={R} fill={AMBER} fillOpacity={0.22}
+              <circle cx={CIRCLES[p.a].x} cy={CIRCLES[p.a].y} r={R} fill={AMBER} fillOpacity={0.26}
                 clipPath={`url(#pt-c${p.b})`} />
             </g>
             <Arc i={p.a} clips={[p.b]} out={p.miss} color={AMBER} width={2.5} />
@@ -390,7 +390,7 @@ const Statements: React.FC<{ f: number }> = ({ f }) => {
 };
 
 const Grain: React.FC<{ f: number }> = ({ f }) => (
-  <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 0.06, mixBlendMode: "soft-light", pointerEvents: "none" }}>
+  <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: 0.05, mixBlendMode: "soft-light", pointerEvents: "none" }}>
     <filter id="grain" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={2} seed={(Math.floor(f / 2) % 4) + 1} stitchTiles="stitch" />
       <feColorMatrix type="saturate" values="0" />
@@ -407,14 +407,14 @@ export const PickTwo: React.FC = () => {
   return (
     <div style={{
       width: 1080, height: 1920, position: "relative", overflow: "hidden",
-      background: BG, fontFamily: `'${SANS}', sans-serif`, opacity: endFade,
+      background: BG, fontFamily: `'${SANS}', sans-serif`,
     }}>
       <FontLoader />
       <div style={{
         position: "absolute", inset: 0,
-        background: "radial-gradient(ellipse 80% 55% at 50% 44%, #18202B 0%, rgba(13,16,21,0) 70%)",
+        background: "radial-gradient(ellipse 80% 55% at 50% 44%, #FFFFFF 0%, rgba(246,244,239,0) 70%)",
       }} />
-      <div style={{ position: "absolute", inset: 0, transform: "translateY(40px)" }}>
+      <div style={{ position: "absolute", inset: 0, transform: "translateY(40px)", opacity: endFade }}>
         <Overline f={f} from={6} to={PAIR_AT[0]} tag="THREE THINGS" text="회사를 다니는 세 가지" color={INK} />
         {PAIRS.map((p, k) => (
           <Overline key={k} f={f} from={PAIR_AT[k] + 4} to={PAIR_AT[k] + PAIR_LEN - 2}
@@ -431,7 +431,7 @@ export const PickTwo: React.FC = () => {
       <Grain f={f} />
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: "radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.45) 100%)",
+        background: "radial-gradient(ellipse at 50% 50%, transparent 62%, rgba(120,108,88,0.14) 100%)",
       }} />
     </div>
   );
