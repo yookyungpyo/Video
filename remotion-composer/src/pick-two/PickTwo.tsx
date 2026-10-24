@@ -137,7 +137,7 @@ const CAPTIONS: Cap[] = [
   ] },
   { from: PAIR_AT[1] + 8, to: PAIR_AT[1] + PAIR_LEN - 4, lines: [
     { at: PAIR_AT[1] + 10, segs: [{ t: "일도 편하고 사람도 좋은데," }] },
-    { at: PAIR_AT[1] + 42, segs: [{ t: "월급날마다 " }, { t: "채용 공고", c: INK }, { t: "를 연다" }] },
+    { at: PAIR_AT[1] + 42, segs: [{ t: "친구 " }, { t: "연봉 얘기", c: INK }, { t: "에 말수가 줄어든다" }] },
   ] },
   { from: PAIR_AT[2] + 8, to: PAIR_AT[2] + PAIR_LEN - 4, lines: [
     { at: PAIR_AT[2] + 10, segs: [{ t: "연봉도 좋고 동료도 좋은데," }] },
