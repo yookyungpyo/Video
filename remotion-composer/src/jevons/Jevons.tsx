@@ -386,19 +386,21 @@ const AppScreen: React.FC<{ f: number }> = ({ f }) => {
 const PhoneScenes: React.FC<{ f: number }> = ({ f }) => {
   const op = progIO(f, VO[1] - 10, 22) * (1 - progIO(f, VO[3] - 16, 20));
   if (op <= 0) return null;
-  const chat = f < VO[2] - 8;
+  // crossfade between the two examples so the screen never jumps from light to dark
+  const second = progIO(f, VO[2] - 24, 22);
   return (
     <Phone op={op}>
-      {chat ? (
-        <>
+      {second < 1 && (
+        <div style={{ position: "absolute", inset: 0, opacity: 1 - second }}>
           <Screen op={1 - prog(f, KAKAO - 2, 12)} bg="#FFFFFF"><SmsScreen f={f} /></Screen>
           <Screen op={prog(f, KAKAO - 2, 12)} bg="#BACEE0"><ChatScreen f={f} /></Screen>
-        </>
-      ) : (
-        <>
-          <Screen op={1 - prog(f, APP - 6, 12)} bg="#1F2730"><CallScreen f={f} /></Screen>
-          <Screen op={prog(f, APP - 6, 12)} bg="#FFFFFF"><AppScreen f={f} /></Screen>
-        </>
+        </div>
+      )}
+      {second > 0 && (
+        <div style={{ position: "absolute", inset: 0, opacity: second }}>
+          <Screen op={1 - progIO(f, APP - 18, 30)} bg="#1F2730"><CallScreen f={f} /></Screen>
+          <Screen op={progIO(f, APP - 18, 30)} bg="#FFFFFF"><AppScreen f={f} /></Screen>
+        </div>
       )}
     </Phone>
   );
