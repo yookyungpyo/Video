@@ -162,8 +162,8 @@ const Overline: React.FC<{ f: number; from: number; to: number; tag: string; tex
     );
   };
 
-// ---------- S0–S3: two bars ----------
-const BAR = { base: 1120, max: 360, w: 150, lx: 380, rx: 700 };
+// ---------- S0–S3: two bars (they step aside while a phone shows each example) ----------
+const BAR = { base: 1110, max: 340 };
 const EXAMPLES = [{ s: VO[1], t: KAKAO }, { s: VO[2], t: APP }];
 const barVals = (f: number) => {
   let effort = 0.55;
@@ -178,34 +178,232 @@ const barVals = (f: number) => {
   }
   return { effort, amount };
 };
+const sideAt = (f: number) => progIO(f, VO[1] - 14, 26) * (1 - progIO(f, VO[3] - 16, 26));
 
 const Bars: React.FC<{ f: number }> = ({ f }) => {
   const vis = prog(f, 10, 20) * (1 - progIO(f, VO[4] - 16, 20));
   if (vis <= 0) return null;
   const { effort, amount } = barVals(f);
+  const side = sideAt(f);
+  const w = lerp(150, 116, side);
+  const lx = lerp(380, 700, side);
+  const rx = lerp(700, 900, side);
   const arrows = prog(f, VO[3] + 10, 20);
-  const bar = (x: number, v: number, color: string, label: string) => (
+  const bar = (x: number, v: number, color: string, full: string, short: string) => (
     <g>
-      <rect x={x - BAR.w / 2} y={BAR.base - BAR.max} width={BAR.w} height={BAR.max} rx={14} fill="#FFFFFF" stroke={HAIR} strokeWidth={2} />
-      <rect x={x - BAR.w / 2} y={BAR.base - BAR.max * v} width={BAR.w} height={BAR.max * v} rx={14} fill={color} />
-      <text x={x} y={BAR.base + 44} fontSize={26} fontWeight={700} fill={BODY} textAnchor="middle" fontFamily={`'${SANS}', sans-serif`}>{label}</text>
+      <rect x={x - w / 2} y={BAR.base - BAR.max} width={w} height={BAR.max} rx={14} fill="#FFFFFF" stroke={HAIR} strokeWidth={2} />
+      <rect x={x - w / 2} y={BAR.base - BAR.max * v} width={w} height={BAR.max * v} rx={14} fill={color} />
+      <text x={x} y={BAR.base + 44} fontSize={26} fontWeight={700} fill={BODY} textAnchor="middle" opacity={1 - side} fontFamily={`'${SANS}', sans-serif`}>{full}</text>
+      <text x={x} y={BAR.base + 44} fontSize={28} fontWeight={700} fill={BODY} textAnchor="middle" opacity={side} fontFamily={`'${SANS}', sans-serif`}>{short}</text>
     </g>
   );
   return (
     <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, opacity: vis }}>
-      {bar(BAR.lx, effort, EFFORT, "한 번 하는 수고")}
-      {bar(BAR.rx, amount, AMBER, "하는 횟수")}
+      {bar(lx, effort, EFFORT, "한 번 하는 수고", "수고")}
+      {bar(rx, amount, AMBER, "하는 횟수", "횟수")}
       {arrows > 0 && (
         <g opacity={arrows} fontFamily={`'${SANS}', sans-serif`} fontWeight={700}>
-          <text x={BAR.lx} y={BAR.base - BAR.max * effort - 22} fontSize={44} fill={EFFORT} textAnchor="middle">↓</text>
-          <text x={BAR.rx} y={BAR.base - BAR.max * amount - 22} fontSize={44} fill={AMBER} textAnchor="middle">↑</text>
+          <text x={lx} y={BAR.base - BAR.max * effort - 22} fontSize={44} fill={EFFORT} textAnchor="middle">↓</text>
+          <text x={rx} y={BAR.base - BAR.max * amount - 22} fontSize={44} fill={AMBER} textAnchor="middle">↑</text>
         </g>
       )}
     </svg>
   );
 };
 
-// icon area above the bars
+// ---------- the phone ----------
+const PH = { x: 100, y: 450, w: 420, h: 720 };
+const SW = PH.w - 28;
+const SH = PH.h - 28;
+const Phone: React.FC<{ op: number; children: React.ReactNode }> = ({ op, children }) =>
+  op > 0 ? (
+    <div style={{
+      position: "absolute", left: PH.x, top: PH.y, width: PH.w, height: PH.h, borderRadius: 56, background: "#1B1E24",
+      boxShadow: "0 24px 60px rgba(30,30,30,0.18)", opacity: op, transform: `translateY(${(1 - op) * 30}px)`,
+    }}>
+      <div style={{ position: "absolute", left: 14, top: 14, width: SW, height: SH, borderRadius: 44, overflow: "hidden", background: "#FFFFFF" }}>
+        {children}
+        <div style={{ position: "absolute", left: SW / 2 - 60, top: 10, width: 120, height: 30, borderRadius: 15, background: "#1B1E24" }} />
+      </div>
+    </div>
+  ) : null;
+
+const StatusBar: React.FC<{ dark?: boolean }> = ({ dark }) => (
+  <div style={{ position: "absolute", left: 30, right: 30, top: 14, display: "flex", justifyContent: "space-between",
+    fontSize: 18, fontWeight: 700, color: dark ? "#FFFFFF" : INK }}>
+    <span>9:41</span><span>●●● ▮</span>
+  </div>
+);
+
+const Screen: React.FC<{ op: number; bg: string; children: React.ReactNode }> = ({ op, bg, children }) =>
+  op > 0 ? <div style={{ position: "absolute", inset: 0, background: bg, opacity: op }}>{children}</div> : null;
+
+// text message screen: one careful message, 20 won each
+const SmsScreen: React.FC<{ f: number }> = ({ f }) => (
+  <>
+    <StatusBar />
+    <div style={{ position: "absolute", left: 0, right: 0, top: 50, height: 70, borderBottom: "1.5px solid #E6E8EB", textAlign: "center" }}>
+      <div style={{ width: 40, height: 40, borderRadius: 20, background: "#D9DDE2", margin: "0 auto" }} />
+      <div style={{ fontSize: 18, fontWeight: 700, color: BODY, marginTop: 4 }}>엄마</div>
+    </div>
+    <div style={{ position: "absolute", left: 22, top: 170, maxWidth: 240, padding: "12px 18px", borderRadius: 22, background: "#E9EBEE", fontSize: 24, color: INK,
+      opacity: prog(f, VO[1] + 6, 12) }}>밥은 먹었니?</div>
+    <div style={{ position: "absolute", right: 22, top: 250, padding: "12px 18px", borderRadius: 22, background: "#3B82F6", fontSize: 24, color: "#FFFFFF",
+      opacity: prog(f, VO[1] + 40, 12) }}>응</div>
+    <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 110, background: "#F4F5F7", borderTop: "1.5px solid #E6E8EB" }}>
+      <div style={{ position: "absolute", left: 20, right: 20, top: 18, height: 50, borderRadius: 25, background: "#FFFFFF", border: "1.5px solid #E1E4E8",
+        fontSize: 22, color: "#A0A6AF", padding: "11px 20px", boxSizing: "border-box" }}>문자 메시지</div>
+    </div>
+    <div style={{ position: "absolute", left: SW / 2, top: SH - 190, transform: "translateX(-50%)", padding: "8px 18px", borderRadius: 18,
+      background: "#FCE8E3", color: "#B4563F", fontSize: 22, fontWeight: 700, whiteSpace: "nowrap", opacity: prog(f, VO[1] + 30, 14) }}>문자 1건 · 20원</div>
+  </>
+);
+
+// group chat screen in a familiar messenger look: messages pour in
+const CHAT = ["점심 뭐 먹어?", "국밥 ㄱㄱ", "ㅋㅋㅋㅋ", "ㅇㅇ", "회의 몇 시예요?", "3시요", "넵!", "이거 봐봐", "대박ㅋㅋ", "오키", "저녁은?", "치킨!!", "콜", "ㅎㅎ", "굿굿", "퇴근각", "ㅋㅋㅋㅋㅋ", "사진 보냄", "좋아요", "ㄱㄱ"];
+const ChatScreen: React.FC<{ f: number }> = ({ f }) => {
+  const count = Math.floor(interpolate(f, [KAKAO + 4, VO[2] - 10], [2, 44], clamp));
+  const today = Math.floor(interpolate(f, [KAKAO + 4, VO[2] - 10], [12, 324], clamp));
+  const ROW = 62;
+  const bottom = SH - 104;
+  return (
+    <>
+      <StatusBar />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 46, height: 64, background: "#A9BDCE", display: "flex", alignItems: "center", padding: "0 22px", gap: 10 }}>
+        <span style={{ fontSize: 24, fontWeight: 700, color: INK }}>‹ 우리 단톡방</span>
+        <span style={{ fontSize: 20, fontWeight: 700, color: "#56687A" }}>6</span>
+        <span style={{ marginLeft: "auto", padding: "4px 12px", borderRadius: 14, background: "#FF5A3C", color: "#FFFFFF", fontSize: 18, fontWeight: 700,
+          fontVariantNumeric: "tabular-nums" }}>오늘 {today}</span>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 110, bottom: 104, overflow: "hidden" }}>
+        {Array.from({ length: count }, (_, i) => {
+          const mine = i % 3 === 1;
+          const y = bottom - 110 - (count - 1 - i) * ROW;
+          if (y < -ROW) return null;
+          const fresh = i === count - 1 ? prog(f, 0, 1) : 1;
+          return (
+            <div key={i} style={{ position: "absolute", top: y, left: mine ? undefined : 18, right: mine ? 18 : undefined, display: "flex", alignItems: "center", gap: 10, opacity: fresh }}>
+              {!mine && <div style={{ width: 40, height: 40, borderRadius: 14, background: ["#F2D7C9", "#D3E3D1", "#D6DBF0", "#F0E2B8"][i % 4] }} />}
+              <div style={{ padding: "9px 16px", borderRadius: 16, background: mine ? "#FEE500" : "#FFFFFF", fontSize: 22, color: INK, whiteSpace: "nowrap" }}>
+                {CHAT[i % CHAT.length]}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 104, background: "#FFFFFF", display: "flex", alignItems: "center", padding: "0 18px", gap: 12 }}>
+        <div style={{ flex: 1, height: 48, borderRadius: 24, background: "#F2F3F5" }} />
+        <div style={{ width: 54, height: 40, borderRadius: 12, background: "#FEE500", fontSize: 18, fontWeight: 700, color: INK, textAlign: "center", lineHeight: "40px" }}>전송</div>
+      </div>
+    </>
+  );
+};
+
+// a phone call to order: occasional
+const CallScreen: React.FC<{ f: number }> = ({ f }) => {
+  const sec = Math.floor(Math.max(0, f - VO[2]) / 30) + 38;
+  return (
+    <>
+      <StatusBar dark />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 140, textAlign: "center", color: "#FFFFFF" }}>
+        <div style={{ width: 120, height: 120, borderRadius: 60, background: "#3A4552", margin: "0 auto 26px" }} />
+        <div style={{ fontSize: 38, fontWeight: 700 }}>동네치킨</div>
+        <div style={{ fontSize: 24, color: "#B9C2CC", marginTop: 10, fontVariantNumeric: "tabular-nums" }}>통화 중 00:{String(sec).padStart(2, "0")}</div>
+      </div>
+      <div style={{ position: "absolute", left: SW / 2 - 44, bottom: 80, width: 88, height: 88, borderRadius: 44, background: "#E5484D" }} />
+      <div style={{ position: "absolute", left: SW / 2, top: SH - 300, transform: "translateX(-50%)", padding: "8px 18px", borderRadius: 18,
+        background: "rgba(255,255,255,0.14)", color: "#FFFFFF", fontSize: 22, fontWeight: 700, whiteSpace: "nowrap", opacity: prog(f, VO[2] + 30, 14) }}>
+        "후라이드 한 마리요…"
+      </div>
+    </>
+  );
+};
+
+// a delivery app: tap, tap, ordered — and the order history keeps growing
+const CATS = ["치킨", "피자", "분식", "한식", "중식", "카페", "족발", "야식"];
+const CAT_C = ["#F8DCC8", "#F6D3D3", "#F9E7B5", "#D7E8D3", "#F3D6C2", "#E3DCD0", "#E2D7EE", "#D5E2F0"];
+const ORDERS = [
+  ["동네치킨", "후라이드 1"], ["화덕피자", "콤비네이션 L"], ["엄마분식", "떡볶이 · 순대"], ["든든국밥", "순대국밥"],
+  ["골목카페", "아메리카노 2"], ["홍반점", "짜장 · 탕수육"], ["마라탕집", "마라탕 1"], ["수제버거", "치즈버거 세트"],
+  ["동네치킨", "양념 반 반"], ["샐러드가게", "닭가슴살 샐러드"], ["떡볶이집", "로제떡볶이"], ["야식왕", "족발 중"],
+];
+const AppScreen: React.FC<{ f: number }> = ({ f }) => {
+  const tap1 = APP + 4;
+  const tap2 = APP + 18;
+  const list = prog(f, APP + 30, 14);
+  const n = Math.floor(interpolate(f, [APP + 40, VO[3] - 10], [1, ORDERS.length], clamp));
+  const ripple = (at: number) => {
+    const p = clamp01((f - at) / 16);
+    return p > 0 && p < 1 ? { r: 20 + 50 * p, o: 0.5 * (1 - p) } : null;
+  };
+  const r1 = ripple(tap1);
+  const r2 = ripple(tap2);
+  return (
+    <>
+      <StatusBar />
+      {/* home: search + categories + order button */}
+      <div style={{ position: "absolute", inset: 0, opacity: 1 - list }}>
+        <div style={{ position: "absolute", left: 22, top: 56, fontSize: 26, fontWeight: 700, color: INK }}>우리동네 배달 ▾</div>
+        <div style={{ position: "absolute", left: 22, right: 22, top: 104, height: 52, borderRadius: 26, background: "#F2F3F5", fontSize: 21, color: "#9AA0A8", padding: "13px 22px", boxSizing: "border-box" }}>치킨, 피자, 분식 검색</div>
+        {CATS.map((c, i) => (
+          <div key={i} style={{ position: "absolute", left: 24 + (i % 4) * 88, top: 186 + Math.floor(i / 4) * 116, width: 76, textAlign: "center" }}>
+            <div style={{ width: 66, height: 66, borderRadius: 22, background: CAT_C[i], margin: "0 auto", outline: i === 0 && f >= tap1 ? `3px solid ${AMBER}` : undefined }} />
+            <div style={{ fontSize: 19, fontWeight: 700, color: BODY, marginTop: 6 }}>{c}</div>
+          </div>
+        ))}
+        <div style={{ position: "absolute", left: 22, right: 22, bottom: 40, height: 76, borderRadius: 20, background: AMBER, color: "#FFFFFF",
+          fontSize: 28, fontWeight: 700, textAlign: "center", lineHeight: "76px", transform: `scale(${f >= tap2 && f < tap2 + 8 ? 0.97 : 1})` }}>주문하기</div>
+        {r1 && <div style={{ position: "absolute", left: 24 + 38 - r1.r, top: 186 + 33 - r1.r, width: r1.r * 2, height: r1.r * 2, borderRadius: r1.r, background: AMBER, opacity: r1.o }} />}
+        {r2 && <div style={{ position: "absolute", left: SW / 2 - r2.r, top: SH - 78 - r2.r, width: r2.r * 2, height: r2.r * 2, borderRadius: r2.r, background: "#FFFFFF", opacity: r2.o }} />}
+      </div>
+      {/* order history */}
+      <div style={{ position: "absolute", inset: 0, opacity: list }}>
+        <div style={{ position: "absolute", left: 22, top: 56, fontSize: 28, fontWeight: 700, color: INK }}>주문내역</div>
+        <div style={{ position: "absolute", right: 22, top: 60, padding: "4px 14px", borderRadius: 14, background: AMBER_SOFT, color: AMBER, fontSize: 20, fontWeight: 700,
+          fontVariantNumeric: "tabular-nums" }}>이번 달 {n + 14}건</div>
+        {Array.from({ length: n }, (_, i) => {
+          const k = n - 1 - i; // newest on top
+          const o = ORDERS[k];
+          const y = 112 + i * 76;
+          if (y > SH - 40) return null;
+          return (
+            <div key={k} style={{ position: "absolute", left: 18, right: 18, top: y, height: 66, display: "flex", alignItems: "center", gap: 14,
+              borderBottom: "1.5px solid #EEF0F3", opacity: i === 0 ? prog(f, 0, 1) : 1 }}>
+              <div style={{ width: 52, height: 52, borderRadius: 14, background: CAT_C[k % CAT_C.length] }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 21, fontWeight: 700, color: INK }}>{o[0]}</div>
+                <div style={{ fontSize: 17, color: SUB }}>{o[1]}</div>
+              </div>
+              <div style={{ fontSize: 16, color: "#A0A6AF" }}>{i === 0 ? "방금" : i < 3 ? "오늘" : `${Math.floor(i / 2)}일 전`}</div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+const PhoneScenes: React.FC<{ f: number }> = ({ f }) => {
+  const op = progIO(f, VO[1] - 10, 22) * (1 - progIO(f, VO[3] - 16, 20));
+  if (op <= 0) return null;
+  const chat = f < VO[2] - 8;
+  return (
+    <Phone op={op}>
+      {chat ? (
+        <>
+          <Screen op={1 - prog(f, KAKAO - 2, 12)} bg="#FFFFFF"><SmsScreen f={f} /></Screen>
+          <Screen op={prog(f, KAKAO - 2, 12)} bg="#BACEE0"><ChatScreen f={f} /></Screen>
+        </>
+      ) : (
+        <>
+          <Screen op={1 - prog(f, APP - 6, 12)} bg="#1F2730"><CallScreen f={f} /></Screen>
+          <Screen op={prog(f, APP - 6, 12)} bg="#FFFFFF"><AppScreen f={f} /></Screen>
+        </>
+      )}
+    </Phone>
+  );
+};
+
 const ICON_Y = 470;
 const Pill: React.FC<{ x: number; y: number; op: number; color: string; bg: string; children: React.ReactNode; size?: number }> =
   ({ x, y, op, color, bg, children, size = 30 }) =>
@@ -215,80 +413,6 @@ const Pill: React.FC<{ x: number; y: number; op: number; color: string; bg: stri
         padding: "10px 24px", borderRadius: 28, background: bg, fontSize: size, fontWeight: 700, color, whiteSpace: "nowrap",
       }}>{children}</div>
     ) : null;
-
-const ChatScene: React.FC<{ f: number }> = ({ f }) => {
-  const vis = prog(f, VO[1], 18) * (1 - prog(f, VO[2] - 12, 12));
-  if (vis <= 0) return null;
-  const before = 1 - prog(f, KAKAO, 14);
-  const after = prog(f, KAKAO, 14);
-  const n = Math.floor(interpolate(f, [KAKAO + 6, KAKAO + 90], [0, 28], clamp));
-  return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: ICON_Y, height: 250, opacity: vis }}>
-      {before > 0 && (
-        <div style={{ position: "absolute", left: 540, top: 110, transform: "translate(-50%, -50%)", opacity: before, display: "flex", alignItems: "center", gap: 20 }}>
-          <div style={{ padding: "18px 30px", borderRadius: 26, background: "#FFFFFF", border: `2px solid ${HAIR}`, fontSize: 34, fontWeight: 700, color: BODY }}>문자</div>
-          <div style={{ padding: "10px 20px", borderRadius: 20, background: "#EEF0F3", fontSize: 30, fontWeight: 700, color: SUB }}>한 통 20원</div>
-        </div>
-      )}
-      {after > 0 && (
-        <div style={{ position: "absolute", inset: 0, opacity: after }}>
-          {Array.from({ length: n }, (_, i) => {
-            const col = i % 7;
-            const row = Math.floor(i / 7);
-            const right = (i * 7) % 3 === 0;
-            return (
-              <div key={i} style={{
-                position: "absolute", left: 150 + col * 112 + (right ? 18 : 0), top: 10 + row * 58,
-                width: 84 + ((i * 13) % 3) * 8, height: 40, borderRadius: 20,
-                background: right ? AMBER_SOFT : "#FFFFFF", border: `2px solid ${right ? "#EFCB97" : HAIR}`,
-              }} />
-            );
-          })}
-          <Pill x={540} y={250} op={prog(f, KAKAO + 20, 16)} color={AMBER} bg="#FFFFFF" size={28}>카톡 · 무료</Pill>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const OrderScene: React.FC<{ f: number }> = ({ f }) => {
-  const vis = prog(f, VO[2], 18) * (1 - prog(f, VO[3] - 12, 12));
-  if (vis <= 0) return null;
-  const before = 1 - prog(f, APP, 14);
-  const after = prog(f, APP, 14);
-  const n = Math.floor(interpolate(f, [APP + 10, APP + 90], [0, 12], clamp));
-  return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: ICON_Y, height: 250, opacity: vis }}>
-      {before > 0 && (
-        <div style={{ position: "absolute", left: 540, top: 110, transform: "translate(-50%, -50%)", opacity: before, display: "flex", alignItems: "center", gap: 20 }}>
-          <div style={{ padding: "18px 30px", borderRadius: 26, background: "#FFFFFF", border: `2px solid ${HAIR}`, fontSize: 34, fontWeight: 700, color: BODY }}>전화 주문</div>
-          <div style={{ padding: "10px 20px", borderRadius: 20, background: "#EEF0F3", fontSize: 30, fontWeight: 700, color: SUB }}>가끔</div>
-        </div>
-      )}
-      {after > 0 && (
-        <div style={{ position: "absolute", inset: 0, opacity: after }}>
-          <div style={{ position: "absolute", left: 170, top: 0, width: 130, height: 230, borderRadius: 24, border: `3px solid ${BODY}`, background: "#FFFFFF" }}>
-            {[0, 1, 2].map((k) => (
-              <div key={k} style={{ position: "absolute", left: 18, top: 30 + k * 62, width: 94, height: 44, borderRadius: 12, background: k === 1 ? AMBER : AMBER_SOFT }} />
-            ))}
-          </div>
-          {Array.from({ length: n }, (_, i) => (
-            <div key={i} style={{
-              position: "absolute", left: 360 + (i % 6) * 95, top: 20 + Math.floor(i / 6) * 115,
-              width: 70, height: 96, borderRadius: 8, background: "#FFFFFF", border: `2px solid ${HAIR}`,
-              boxShadow: "0 4px 10px rgba(0,0,0,0.04)",
-            }}>
-              <div style={{ margin: "14px 12px 0", height: 8, borderRadius: 4, background: "#D5D8DD" }} />
-              <div style={{ margin: "10px 12px 0", height: 8, borderRadius: 4, background: "#D5D8DD", width: 30 }} />
-              <div style={{ margin: "18px 12px 0", height: 10, borderRadius: 5, background: AMBER_SOFT }} />
-            </div>
-          ))}
-          <Pill x={720} y={262} op={prog(f, APP + 20, 16)} color={AMBER} bg="#FFFFFF" size={28}>배달앱 · 몇 번 터치</Pill>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const ParadoxName: React.FC<{ f: number }> = ({ f }) => {
   const a = prog(f, NAME + 10, 20) * (1 - prog(f, VO[4] - 14, 14));
@@ -419,8 +543,7 @@ export const Jevons: React.FC = () => {
         <Overline f={f} from={VO[4] - 2} to={VO[8] - 6} tag="OUR COMPANY" text="우리 회사" color={INK} />
         <Overline f={f} from={VO[8] - 2} to={TOTAL + 10} tag="AI ERA" text="AI 시대" color={AMBER} />
         <Bars f={f} />
-        <ChatScene f={f} />
-        <OrderScene f={f} />
+        <PhoneScenes f={f} />
         <ParadoxName f={f} />
         <Company f={f} />
         <Captions f={f} caps={CAPTIONS} />
