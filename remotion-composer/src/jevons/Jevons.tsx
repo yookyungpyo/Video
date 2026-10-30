@@ -181,7 +181,7 @@ const barVals = (f: number) => {
 const sideAt = (f: number) => progIO(f, VO[1] - 14, 26) * (1 - progIO(f, VO[3] - 16, 26));
 
 const Bars: React.FC<{ f: number }> = ({ f }) => {
-  const vis = prog(f, 10, 20) * (1 - progIO(f, VO[4] - 16, 20));
+  const vis = prog(f, 10, 20) * (1 - progIO(f, VO[3] - 16, 20));
   if (vis <= 0) return null;
   const { effort, amount } = barVals(f);
   const side = sideAt(f);
@@ -416,17 +416,46 @@ const Pill: React.FC<{ x: number; y: number; op: number; color: string; bg: stri
       }}>{children}</div>
     ) : null;
 
+// S3: the two examples side by side, in plain words, then the name
+const SUMMARY = [
+  { from: "문자 · 한 통 20원", to: "카톡 · 무료", result: "보내는 메시지 하루 수백 개", at: VO[3] + 4 },
+  { from: "전화로 주문", to: "앱에서 몇 번 터치", result: "시켜 먹는 횟수 훨씬 자주", at: VO[3] + 34 },
+];
 const ParadoxName: React.FC<{ f: number }> = ({ f }) => {
-  const a = prog(f, NAME + 10, 20) * (1 - prog(f, VO[4] - 14, 14));
-  const lead = prog(f, VO[3], 18) * (1 - prog(f, VO[4] - 14, 14));
+  const out = 1 - prog(f, VO[4] - 14, 14);
+  const lead = prog(f, VO[3] - 6, 18) * out;
+  const name = prog(f, NAME + 10, 20) * out;
   if (lead <= 0) return null;
+  const box = (text: string, hot: boolean): React.CSSProperties => ({
+    padding: "14px 20px", borderRadius: 18, fontSize: 28, fontWeight: 700, whiteSpace: "nowrap",
+    background: hot ? AMBER_SOFT : "#FFFFFF", color: hot ? AMBER : BODY, border: `2px solid ${hot ? "#EFCB97" : HAIR}`,
+  });
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: ICON_Y - 20, textAlign: "center", opacity: lead }}>
-      <div style={{ fontSize: 46, fontWeight: 700, color: INK, letterSpacing: -1 }}>
-        편해지면 <span style={{ color: EFFORT }}>↓</span> &nbsp;→&nbsp; 더 쓴다 <span style={{ color: AMBER }}>↑</span>
+    <div style={{ position: "absolute", left: MX, right: MX, top: ICON_Y - 10, opacity: lead }}>
+      <div style={{ fontSize: 50, fontWeight: 700, color: INK, letterSpacing: -1.5, textAlign: "center", marginBottom: 40 }}>
+        쉬워지면, <span style={{ color: AMBER }}>더 많이</span> 합니다
       </div>
-      <div style={{ display: "inline-block", marginTop: 22, padding: "12px 32px", borderRadius: 36, background: AMBER, color: "#FFFFFF",
-        fontSize: 48, fontWeight: 700, opacity: a, transform: `scale(${0.9 + 0.1 * a})` }}>제본스의 역설</div>
+      {SUMMARY.map((c, i) => {
+        const a = prog(f, c.at, 18);
+        const r = prog(f, c.at + 22, 18);
+        return (
+          <div key={i} style={{ marginBottom: 34, padding: "26px 28px", borderRadius: 26, background: "rgba(255,255,255,0.75)",
+            border: `2px solid ${HAIR}`, opacity: a, transform: `translateY(${(1 - a) * 20}px)` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+              <span style={box(c.from, false)}>{c.from}</span>
+              <span style={{ fontSize: 36, color: SUB, fontWeight: 700 }}>→</span>
+              <span style={box(c.to, true)}>{c.to}</span>
+            </div>
+            <div style={{ marginTop: 18, fontSize: 34, fontWeight: 700, color: INK, opacity: r }}>
+              그러자 → <span style={{ color: AMBER }}>{c.result}</span>
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ textAlign: "center", marginTop: 6 }}>
+        <span style={{ display: "inline-block", padding: "12px 34px", borderRadius: 36, background: AMBER, color: "#FFFFFF",
+          fontSize: 46, fontWeight: 700, opacity: name, transform: `scale(${0.9 + 0.1 * name})` }}>이게 제본스의 역설</span>
+      </div>
     </div>
   );
 };
