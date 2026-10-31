@@ -239,7 +239,7 @@ const Stairs: React.FC<{ f: number }> = ({ f }) => {
 };
 
 // ---------- the card for each level (top-left, above the low steps) ----------
-const CARD = { x: MX, y: 450, w: 470, h: 300 };
+const CARD = { x: MX, y: 430, w: 470, h: 250 };
 const Card: React.FC<{ op: number; title: string; children: React.ReactNode }> = ({ op, title, children }) =>
   op > 0 ? (
     <div style={{
@@ -261,37 +261,37 @@ const Cards: React.FC<{ f: number }> = ({ f }) => {
   return (
     <>
       <Card op={span(VO[1] + 10, VO[2])} title="1단계 · 지위">
-        <div style={{ position: "absolute", left: 60, top: 92, width: 230, height: 92, borderRadius: 12, background: "#2F3540",
-          color: "#FFFFFF", fontSize: 40, fontWeight: 700, textAlign: "center", lineHeight: "92px", transform: "perspective(400px) rotateX(14deg)" }}>팀장</div>
-        <div style={{ position: "absolute", left: 50, top: 186, width: 250, height: 18, borderRadius: 4, background: "#C9CED6" }} />
-        <div style={{ position: "absolute", left: 28, top: 236, fontSize: 24, color: BODY }}>직함을 보고 따른다</div>
-        <div style={{ position: "absolute", right: 26, top: 96, padding: "10px 16px", borderRadius: 16, border: `3px solid ${AMBER}`, color: AMBER,
+        <div style={{ position: "absolute", left: 60, top: 70, width: 230, height: 84, borderRadius: 12, background: "#2F3540",
+          color: "#FFFFFF", fontSize: 40, fontWeight: 700, textAlign: "center", lineHeight: "84px", transform: "perspective(400px) rotateX(14deg)" }}>팀장</div>
+        <div style={{ position: "absolute", left: 50, top: 156, width: 250, height: 16, borderRadius: 4, background: "#C9CED6" }} />
+        <div style={{ position: "absolute", left: 28, top: 200, fontSize: 24, color: BODY }}>직함을 보고 따른다</div>
+        <div style={{ position: "absolute", right: 26, top: 78, padding: "10px 16px", borderRadius: 16, border: `3px solid ${AMBER}`, color: AMBER,
           fontSize: 24, fontWeight: 700, transform: `rotate(-8deg) scale(${1.3 - 0.3 * stamp})`, opacity: stamp }}>능력 인정</div>
       </Card>
       <Card op={span(VO[2] + 10, VO[3])} title="2단계 · 관계">
-        <div style={{ position: "absolute", left: 30, top: 80, padding: "14px 22px", borderRadius: "22px 22px 22px 6px", background: AMBER_SOFT,
+        <div style={{ position: "absolute", left: 30, top: 62, padding: "12px 22px", borderRadius: "22px 22px 22px 6px", background: AMBER_SOFT,
           fontSize: 28, fontWeight: 700, color: INK, opacity: talk1 }}>요즘 어때요?</div>
-        <div style={{ position: "absolute", right: 30, top: 150, padding: "14px 22px", borderRadius: "22px 22px 6px 22px", background: "#EEF0F3",
+        <div style={{ position: "absolute", right: 30, top: 122, padding: "12px 22px", borderRadius: "22px 22px 6px 22px", background: "#EEF0F3",
           fontSize: 28, fontWeight: 700, color: INK, opacity: talk2 }}>사실 고민이 있어요</div>
-        <div style={{ position: "absolute", left: 28, top: 236, fontSize: 24, color: BODY }}>좋아서 따른다</div>
+        <div style={{ position: "absolute", left: 28, top: 200, fontSize: 24, color: BODY }}>좋아서 따른다</div>
       </Card>
       <Card op={span(VO[3] + 10, VO[4])} title="3단계 · 성과">
         <svg width={CARD.w} height={CARD.h} style={{ position: "absolute", inset: 0 }}>
-          <line x1={40} y1={210} x2={CARD.w - 40} y2={210} stroke={HAIR} strokeWidth={2} />
+          <line x1={40} y1={180} x2={CARD.w - 40} y2={180} stroke={HAIR} strokeWidth={2} />
           {bars.map((b, k) => (
-            <rect key={k} x={70 + k * 120} y={210 - (50 + k * 45) * b} width={70} height={(50 + k * 45) * b} rx={8} fill={k === 2 ? AMBER : "#E7C79A"} />
+            <rect key={k} x={70 + k * 120} y={180 - (40 + k * 40) * b} width={70} height={(40 + k * 40) * b} rx={8} fill={k === 2 ? AMBER : "#E7C79A"} />
           ))}
         </svg>
-        <div style={{ position: "absolute", left: 28, top: 236, fontSize: 24, color: BODY }}>함께 결과를 낸다</div>
+        <div style={{ position: "absolute", left: 28, top: 200, fontSize: 24, color: BODY }}>함께 결과를 낸다</div>
       </Card>
       <Card op={span(VO[4] + 10, VO[5] + 40)} title="4단계 · 완성">
         <svg width={CARD.w} height={CARD.h} style={{ position: "absolute", inset: 0 }}>
           {[0, 1, 2].map((k) => {
             const grown = progIO(f, L4_GROW + 20 + k * 14, 24);
-            return <Person key={k} x={110 + k * 125} y={210} color={grown > 0.5 ? AMBER : FOLLOW} s={0.72 + 0.12 * grown} />;
+            return <Person key={k} x={110 + k * 125} y={182} color={grown > 0.5 ? AMBER : FOLLOW} s={0.72 + 0.12 * grown} />;
           })}
         </svg>
-        <div style={{ position: "absolute", left: 28, top: 236, fontSize: 24, color: BODY }}>사람을 리더로 키운다</div>
+        <div style={{ position: "absolute", left: 28, top: 200, fontSize: 24, color: BODY }}>사람을 리더로 키운다</div>
       </Card>
     </>
   );
