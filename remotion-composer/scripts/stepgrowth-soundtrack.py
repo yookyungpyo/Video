@@ -10,6 +10,7 @@ SR, FPS = 48000, 30
 ev = json.load(open(sys.argv[1]))
 DUR = ev.get("duration", 600) / FPS
 VO = sys.argv[4] if len(sys.argv) > 4 else None
+SCRATCH = os.environ.get("SCRATCH", "0") == "1"  # pen-scratch noise under drawing (off by default)
 rng = np.random.default_rng(11)
 L = np.zeros(int(SR * DUR)); R = np.zeros_like(L)
 
@@ -74,8 +75,9 @@ def swell(d):
 # --- timeline ---
 place(pop(), ev["pop"], 0.6)
 g0, g1 = ev["glide"]; place(glide(fr(g1 - g0)), g0)
-for a, b in ev["draws"]: place(scratch(fr(b - a)), a)
-for a, b in ev["icons"]: place(scratch(fr(b - a), 0.07), a, pan=0.3)
+if SCRATCH:
+    for a, b in ev["draws"]: place(scratch(fr(b - a)), a)
+    for a, b in ev["icons"]: place(scratch(fr(b - a), 0.07), a, pan=0.3)
 hmax = max(x["h"] for x in ev["tries"])
 for i, tr in enumerate(ev["tries"]):
     rise = 0.38
