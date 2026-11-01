@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Offline-synthesized SFX for the STEP GROWTH video, synced to geometry EVENTS.
-Usage: python3 scripts/stepgrowth-soundtrack.py <events.json> <silent.mp4> <out.mp4>
+Usage: python3 scripts/stepgrowth-soundtrack.py <events.json> <silent.mp4> <out.mp4> [voiceover.mp3]
+With a voiceover, SFX are ducked under the voice and the voice sits on top.
 """
 import json, os, subprocess, sys, tempfile, wave
 import numpy as np
 
-SR, FPS, DUR = 48000, 30, 20.0
+SR, FPS = 48000, 30
 ev = json.load(open(sys.argv[1]))
+DUR = ev.get("duration", 600) / FPS
+VO = sys.argv[4] if len(sys.argv) > 4 else None
 rng = np.random.default_rng(11)
 L = np.zeros(int(SR * DUR)); R = np.zeros_like(L)
 
@@ -99,6 +102,21 @@ L += pad * env; R += pad * env
 mix = np.stack([L, R], 1)
 mix /= max(1e-9, np.abs(mix).max())
 mix = np.tanh(mix * 2.2) / np.tanh(2.2) * 0.8
+if VO:
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", VO, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"],
+                         check=True, capture_output=True).stdout
+    vo = np.frombuffer(raw, dtype=np.float32).astype(float)
+    vo = vo[: len(L)]
+    v = np.zeros(len(L)); v[: len(vo)] = vo
+    v /= max(1e-9, np.abs(v).max())
+    # envelope follower -> duck SFX ~7 dB while the voice speaks
+    win = int(0.12 * SR)
+    env = np.sqrt(np.convolve(v * v, np.ones(win) / win, mode="same"))
+    env = np.clip(env / (env.max() * 0.25), 0, 1)
+    env = np.convolve(env, np.ones(int(0.2 * SR)) / int(0.2 * SR), mode="same")
+    duck = 1 - 0.55 * env
+    mix = mix * 0.75 * duck[:, None] + (v * 0.92)[:, None]
+    mix /= max(1e-9, np.abs(mix).max() / 0.89)
 tmp = tempfile.mkdtemp(); wav = os.path.join(tmp, "sfx.wav")
 with wave.open(wav, "wb") as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
