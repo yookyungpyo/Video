@@ -2,13 +2,31 @@ import "@fontsource/nanum-myeongjo/700.css";
 import "@fontsource/noto-sans-kr/400.css";
 import "@fontsource/noto-sans-kr/500.css";
 import React, { useEffect, useState } from "react";
-import { AbsoluteFill, continueRender, delayRender, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, continueRender, delayRender, interpolate, staticFile, useCurrentFrame } from "remotion";
 import {
   CAM, CAPTIONS, GHOST, ICONS, MAIN, S, SHAKES, T, TAGLINE, TITLE,
   X_END, X_J1, X_J2, Y1, Y2, Y3, ghostLen, iconLen, mainLen,
 } from "./geometry";
 
-const PAPER = "#F2EFE9", GRID = "#D9D4CA", INK = "#3557D6", GLOW = "#9FB4FF";
+const PALETTES = {
+  paper: { PAPER: "#F2EFE9", GRID: "#D9D4CA", INK: "#3557D6", GLOW: "#9FB4FF", TEXT: "#3557D6" },
+  photo: { PAPER: "#111", GRID: "rgba(255,255,255,0.07)", INK: "#E4ECFF", GLOW: "#5B8CFF", TEXT: "#FFFFFF" },
+};
+export type StepGrowthProps = { variant?: "paper" | "photo" };
+
+// photo variant: user's pull-up frames, cut to the story beats (fade = 0 → hard cut)
+const PHOTOS: { f: number; src: string; fade: number }[] = [
+  { f: 0, src: "hang", fade: 0 },
+  { f: 112, src: "mid", fade: 8 },
+  { f: 150, src: "strain_a", fade: 8 },
+  { f: 190, src: "strain_b", fade: 8 },
+  { f: 232, src: "hang", fade: 6 },
+  { f: 249, src: "top_b", fade: 0 },
+  { f: 282, src: "drop", fade: 8 },
+  { f: 335, src: "mid", fade: 8 },
+  { f: 390, src: "hang", fade: 6 },
+  { f: 405, src: "top_a", fade: 0 },
+];
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, t)));
 
@@ -24,8 +42,10 @@ const camera = (f: number) => {
   return { cx: l.c[0], cy: l.c[1], z: l.z };
 };
 
-export const StepGrowth: React.FC = () => {
+export const StepGrowth: React.FC<StepGrowthProps> = ({ variant = "paper" }) => {
   const f = useCurrentFrame();
+  const { PAPER, GRID, INK, GLOW, TEXT } = PALETTES[variant];
+  const photo = variant === "photo";
   const [handle] = useState(() => delayRender("fonts"));
   useEffect(() => {
     Promise.all([
@@ -56,7 +76,7 @@ export const StepGrowth: React.FC = () => {
   const glowR = (drawing ? 26 : 22 * (1 + 0.1 * Math.sin(f / 4))) * land + antic * 18 + burst * 60;
 
   const ghostOp = interpolate(f, [0, 90, 110, T.zoomOut[0], T.zoomOut[1]], [0.85, 0.85, 0.28, 0.28, 0.7], clamp);
-  const sceneOp = interpolate(f, T.endFade, [1, 0.13], clamp);
+  const sceneOp = interpolate(f, T.endFade, [1, photo ? 0.2 : 0.13], clamp);
   const titleOp = interpolate(f, [T.title[0], T.title[0] + 12], [0, 1], clamp);
   const titleY = interpolate(f, [T.title[0], T.title[0] + 18], [18, 0], clamp);
   const ul = ease((f - T.title[0] - 6) / (T.title[1] - T.title[0]));
@@ -67,7 +87,26 @@ export const StepGrowth: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: PAPER }}>
-      <svg width={1920} height={1080} viewBox="0 0 1920 1080">
+      {photo && (() => {
+        const endDim = interpolate(f, T.endFade, [0, 1], clamp);
+        const kb = 1.04 + 0.06 * (f / 600);
+        return (
+          <AbsoluteFill style={{ transform: `scale(${kb})`, filter: `blur(${endDim * 6}px)` }}>
+            {PHOTOS.map((p, i) => {
+              const next = PHOTOS[i + 1];
+              if (f < p.f || (next && f >= next.f + next.fade)) return null;
+              const op = p.fade ? interpolate(f, [p.f, p.f + p.fade], [0, 1], clamp) : 1;
+              return (
+                <Img key={i} src={staticFile(`stepgrowth-photo/${p.src}.jpg`)}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: op,
+                    filter: `brightness(${0.62 - 0.3 * endDim}) saturate(0.55) contrast(1.08)` }} />
+              );
+            })}
+            <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(10,14,30,0.55) 0%, rgba(10,14,30,0.15) 35%, rgba(10,14,30,0.35) 100%)" }} />
+          </AbsoluteFill>
+        );
+      })()}
+      <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0 }}>
         <defs>
           <pattern id="grid" width={36} height={36} patternUnits="userSpaceOnUse">
             <path d="M36 0 H0 V36" fill="none" stroke={GRID} strokeWidth={1.1} />
@@ -132,11 +171,11 @@ export const StepGrowth: React.FC = () => {
           if (op <= 0) return null;
           const dy = interpolate(f, [c.f0, c.f0 + 12], [10, 0], clamp);
           return (
-            <g key={i} opacity={op} transform={`translate(0 ${dy})`}>
-              <text x={130} y={118} fontFamily="Noto Sans KR" fontWeight={400} fontSize={20} letterSpacing={6} fill={INK} opacity={0.6}>
+            <g key={i} opacity={op} transform={`translate(0 ${dy})`} style={photo ? { filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))" } : undefined}>
+              <text x={130} y={118} fontFamily="Noto Sans KR" fontWeight={400} fontSize={20} letterSpacing={6} fill={TEXT} opacity={0.6}>
                 {String(i + 1).padStart(2, "0")} / 06
               </text>
-              <text x={130} y={170} fontFamily="Noto Sans KR" fontWeight={500} fontSize={44} letterSpacing={3} fill={INK}>{c.text}</text>
+              <text x={130} y={170} fontFamily="Noto Sans KR" fontWeight={500} fontSize={44} letterSpacing={3} fill={TEXT}>{c.text}</text>
             </g>
           );
         })}
@@ -144,17 +183,18 @@ export const StepGrowth: React.FC = () => {
         {/* end card */}
         {f >= T.title[0] && (
           <g>
-            <text x={960} y={520 + titleY} textAnchor="middle" fontFamily="Nanum Myeongjo" fontWeight={700} fontSize={132} fill={INK} opacity={titleOp}>
+            <text x={960} y={520 + titleY} textAnchor="middle" fontFamily="Nanum Myeongjo" fontWeight={700} fontSize={132} fill={TEXT} opacity={titleOp}>
               {TITLE}
             </text>
-            <line x1={960 - 360 * ul} y1={590} x2={960 + 360 * ul} y2={590} stroke={INK} strokeWidth={4} strokeLinecap="round" />
-            <text x={960} y={672} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={400} fontSize={34} letterSpacing={5} fill={INK} opacity={0.9}>
+            <line x1={960 - 360 * ul} y1={590} x2={960 + 360 * ul} y2={590} stroke={TEXT} strokeWidth={4} strokeLinecap="round" />
+            <text x={960} y={672} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={400} fontSize={34} letterSpacing={5} fill={TEXT} opacity={0.9}>
               {TAGLINE.slice(0, typed)}
               <tspan opacity={f < T.cap && Math.floor(f / 8) % 2 === 0 ? 1 : 0}>▍</tspan>
             </text>
           </g>
         )}
-        <rect width={1920} height={1080} fill="url(#vig)" />
+        {photo && burst > 0.02 && <rect width={1920} height={1080} fill="#fff" opacity={Math.min(0.45, burst * 0.45)} />}
+        {!photo && <rect width={1920} height={1080} fill="url(#vig)" />}
       </svg>
     </AbsoluteFill>
   );
