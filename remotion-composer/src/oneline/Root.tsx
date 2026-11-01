@@ -1,0 +1,7 @@
+import { Composition } from "remotion";
+import { OneLine } from "./OneLine";
+import { DURATION, FPS } from "./geometry";
+
+export const Root: React.FC = () => (
+  <Composition id="OneLine" component={OneLine} durationInFrames={DURATION} fps={FPS} width={1920} height={1080} />
+);
