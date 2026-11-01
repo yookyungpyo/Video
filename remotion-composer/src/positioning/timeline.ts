@@ -98,6 +98,53 @@ export const drawn = (f: number) => {
   return total;
 };
 
+// ---------- intro: one-stroke bottle outline ----------
+export const INTRO = { draw: [6, 48] as const, tag: 52, card: [58, 80] as const };
+export const BOTTLE = (() => {
+  const cx = 540, top = 500, bottom = 1060;
+  const b: P[] = [];
+  const L = (p: P) => {
+    const q = b[b.length - 1];
+    if (!q) { b.push(p); return; }
+    const n = Math.max(2, Math.ceil(Math.hypot(p[0] - q[0], p[1] - q[1]) / 5));
+    for (let i = 1; i <= n; i++) b.push([q[0] + ((p[0] - q[0]) * i) / n, q[1] + ((p[1] - q[1]) * i) / n]);
+  };
+  const C = (p1: P, p2: P, p3: P, n = 30) => {
+    const a = b[b.length - 1];
+    for (let i = 1; i <= n; i++) {
+      const t = i / n, u = 1 - t;
+      b.push([u*u*u*a[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0], u*u*u*a[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]]);
+    }
+  };
+  const bw = 115, nw = 42, cw = 52;
+  // left side going up: body with ribs
+  L([cx - bw + 10, bottom]);
+  C([cx - bw, bottom - 4], [cx - bw, bottom - 20], [cx - bw, bottom - 40]);
+  const ribs = [960, 900, 840, 780, 720];
+  for (const y of ribs) { L([cx - bw, y + 18]); C([cx - bw + 14, y + 12], [cx - bw + 14, y - 12], [cx - bw, y - 18], 16); }
+  L([cx - bw, 690]);
+  C([cx - bw, 610], [cx - nw, 640], [cx - nw, 575]);   // shoulder
+  L([cx - nw, top + 40]);                               // neck
+  L([cx - cw, top + 40]); L([cx - cw, top]); L([cx + cw, top]); L([cx + cw, top + 40]); L([cx + nw, top + 40]); // cap
+  L([cx + nw, 575]);
+  C([cx + nw, 640], [cx + bw, 610], [cx + bw, 690]);
+  for (const y of [...ribs].reverse()) { L([cx + bw, y - 18]); C([cx + bw - 14, y - 12], [cx + bw - 14, y + 12], [cx + bw, y + 18], 16); }
+  L([cx + bw, bottom - 40]);
+  C([cx + bw, bottom - 20], [cx + bw, bottom - 4], [cx + bw - 10, bottom]);
+  C([cx + 40, bottom + 8], [cx - 40, bottom + 8], [cx - bw + 10, bottom]);   // base
+  const cum = [0];
+  for (let i = 1; i < b.length; i++) cum.push(cum[i - 1] + Math.hypot(b[i][0] - b[i - 1][0], b[i][1] - b[i - 1][1]));
+  const total = cum[cum.length - 1];
+  const at = (len: number): P => {
+    let lo = 0, hi = cum.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] < len) lo = m; else hi = m; }
+    const sg = cum[hi] - cum[lo] || 1, tt = Math.min(1, Math.max(0, (len - cum[lo]) / sg));
+    return [b[lo][0] + (b[hi][0] - b[lo][0]) * tt, b[lo][1] + (b[hi][1] - b[lo][1]) * tt];
+  };
+  return { d: "M" + b.map((p) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(" L"), total, at, tagY: bottom + 90 };
+})();
+export const bottleLen = (f: number) => BOTTLE.total * io((f - INTRO.draw[0]) / (INTRO.draw[1] - INTRO.draw[0]));
+
 // photo schedule: [frame, key, fade]
 export const PHOTOS: [number, string, number][] = [
   [0, "store", 0],
@@ -121,6 +168,9 @@ export const CAPTIONS: { f0: number; f1: number; kicker: string; text: string }[
 export const SFX = {
   duration: DURATION,
   pop: 6,
+  bottle: INTRO.draw,
+  tag: INTRO.tag,
+  card: INTRO.card[0],
   labels: PLACES.map((_, i) => T.teaser[0] + 6 + i * 18),
   swaps: [...[1, 2, 3].map((i) => PLACES[i].speak), T.same[0], T.value[0]],
   locks: PLACES.map((p) => p.lock),

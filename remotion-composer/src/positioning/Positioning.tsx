@@ -5,9 +5,10 @@ import "@fontsource/noto-sans-kr/900.css";
 import "@fontsource/jetbrains-mono/400.css";
 import React, { useEffect, useState } from "react";
 import { AbsoluteFill, Img, continueRender, delayRender, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { CAPTIONS, CARD, CHART, LINE, PHOTOS, PLACES, RING, T, drawn, levelY, pointAt } from "./timeline";
+import { BOTTLE, CAPTIONS, CARD, CHART, INTRO, LINE, PHOTOS, PLACES, RING, T, bottleLen, drawn, levelY, pointAt } from "./timeline";
 
-const PAPER = "#F2EFE9", GRID = "#DDD8CE", INK = "#3557D6", GLOW = "#9FB4FF";
+const INK = "#E4ECFF", GLOW = "#5B8CFF", BRAND = "#3557D6", TEXT = "#FFFFFF";
+const BG_KEY: Record<string, string> = { quad: "plane" };
 const W = 1080, H = 1920;
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const POS: Record<string, string> = { store: "50% 62%", gym: "50% 62%", hotel: "45% 62%", plane: "55% 62%", peak: "25% 50%" };
@@ -23,7 +24,7 @@ const Photo: React.FC<{ k: string; op: number }> = ({ k, op }) => {
           <div key={kk} style={{ position: "absolute", left: (i % 2) * (w + g), top: Math.floor(i / 2) * (h + g), width: w, height: h, overflow: "hidden" }}>
             <Img src={staticFile(`positioning/${kk}.jpg`)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 60%" }} />
             <div style={{ position: "absolute", left: 14, bottom: 14, padding: "6px 16px", borderRadius: 999, background: "rgba(255,255,255,0.92)",
-              fontFamily: "Noto Sans KR", fontWeight: 900, fontSize: 38, color: INK }}>{won(PLACES[i].price)}</div>
+              fontFamily: "Noto Sans KR", fontWeight: 900, fontSize: 38, color: BRAND }}>{won(PLACES[i].price)}</div>
           </div>
         ))}
       </div>
@@ -49,14 +50,22 @@ export const Positioning: React.FC = () => {
   }, [handle]);
 
   const len = drawn(f);
-  const [hx, hy] = pointAt(len);
-  const moving = Math.abs(drawn(f + 1) - len) > 0.3;
-  const land = interpolate(f, [2, 8, 14], [0, 1.4, 1], clamp);
+  const bl = bottleLen(f);
+  const inBottle = f < INTRO.card[0] + 4;
+  const [hx, hy] = inBottle ? BOTTLE.at(bl) : pointAt(len);
+  const moving = inBottle ? Math.abs(bottleLen(f + 1) - bl) > 0.3 : Math.abs(drawn(f + 1) - len) > 0.3;
+  const land = inBottle
+    ? interpolate(f, [2, 8, 14, INTRO.card[0], INTRO.card[0] + 4], [0, 1.4, 1, 1, 0], clamp)
+    : interpolate(f, [INTRO.card[0] + 6, INTRO.card[0] + 14], [0, 1], clamp);
+  const bottleOp = interpolate(f, [INTRO.card[0], INTRO.card[0] + 14], [1, 0], clamp);
+  const tagS = interpolate(f, [INTRO.tag, INTRO.tag + 5, INTRO.tag + 10], [0, 1.15, 1], clamp);
+  const tagOp = interpolate(f, [INTRO.card[0] + 2, INTRO.card[0] + 12], [1, 0], clamp);
   const glowR = (moving ? 26 : 20 * (1 + 0.1 * Math.sin(f / 4))) * land;
 
   // card entrance + slight breathing
-  const cardIn = interpolate(f, [0, 14], [0, 1], clamp);
-  const cardScale = 0.94 + 0.06 * cardIn;
+  const cardIn = interpolate(f, [INTRO.card[0], INTRO.card[1]], [0, 1], clamp);
+  const cardE = 1 - Math.pow(1 - cardIn, 3);
+  const cardScale = 0.28 + 0.72 * cardE;
 
   // current price pill
   let price = 0, prev = 0, lockF = -1, idx = -1;
@@ -73,19 +82,23 @@ export const Positioning: React.FC = () => {
   const line2F = T.position[0] + 51;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: PAPER }}>
-      <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
-        <defs>
-          <pattern id="grid" width={36} height={36} patternUnits="userSpaceOnUse">
-            <path d="M36 0 H0 V36" fill="none" stroke={GRID} strokeWidth={1.1} />
-          </pattern>
-        </defs>
-        <rect width={W} height={H} fill="url(#grid)" />
-      </svg>
+    <AbsoluteFill style={{ backgroundColor: "#0B0E1C" }}>
+      {/* background: the current scene photo, big, blurred and dimmed */}
+      <AbsoluteFill style={{ transform: `scale(${1.25 + 0.05 * (f / 750)})`, filter: "blur(38px) brightness(0.42) saturate(1.15)" }}>
+        {PHOTOS.map(([pf, k, fade], i) => {
+          const next = PHOTOS[i + 1];
+          if (f < pf || (next && f >= next[0] + Math.max(next[2], 10))) return null;
+          const op = interpolate(f, [pf, pf + Math.max(fade, 10)], [i === 0 ? 1 : 0, 1], clamp);
+          const kk = BG_KEY[k] ?? k;
+          return <Img key={i} src={staticFile(`positioning/${kk}.jpg`)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: POS[kk], opacity: op }} />;
+        })}
+      </AbsoluteFill>
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(8,10,24,0.55) 0%, rgba(8,10,24,0.1) 22%, rgba(8,10,24,0.1) 62%, rgba(8,10,24,0.55) 100%)" }} />
 
       {/* photo card */}
       <div style={{ position: "absolute", left: CARD.x - 12, top: CARD.y - 12, width: CARD.w + 24, height: CARD.h + 24, borderRadius: CARD.r + 10,
-        background: "#fff", boxShadow: "0 18px 50px rgba(40,40,70,0.18), 0 3px 10px rgba(40,40,70,0.10)",
+        background: "#fff", boxShadow: "0 24px 60px rgba(0,0,0,0.45), 0 4px 14px rgba(0,0,0,0.3)",
         transform: `scale(${cardScale})`, opacity: cardIn }}>
         <div style={{ position: "absolute", left: 12, top: 12, width: CARD.w, height: CARD.h, borderRadius: CARD.r, overflow: "hidden", background: "#ddd" }}>
           {PHOTOS.map(([pf, k, fade], i) => {
@@ -101,9 +114,9 @@ export const Positioning: React.FC = () => {
             <div style={{ position: "absolute", left: 36, bottom: 36, display: "flex", alignItems: "center", gap: 18, opacity: pillOp,
               transform: `scale(${pillPop})`, transformOrigin: "left bottom" }}>
               <div style={{ padding: "8px 30px 14px", borderRadius: 999, background: "rgba(255,255,255,0.95)", fontFamily: "Noto Sans KR",
-                fontWeight: 900, fontSize: 104, color: INK, letterSpacing: -2, lineHeight: 1.1 }}>{won(shownPrice)}</div>
+                fontWeight: 900, fontSize: 104, color: BRAND, letterSpacing: -2, lineHeight: 1.1 }}>{won(shownPrice)}</div>
               {idx > 0 && f >= lockF && (
-                <div style={{ padding: "10px 22px", borderRadius: 999, background: INK, color: "#fff", fontFamily: "Noto Sans KR",
+                <div style={{ padding: "10px 22px", borderRadius: 999, background: BRAND, color: "#fff", fontFamily: "Noto Sans KR",
                   fontWeight: 900, fontSize: 52, opacity: interpolate(f, [lockF, lockF + 6], [0, 1], clamp) }}>×{price / 1000}</div>
               )}
             </div>
@@ -120,7 +133,7 @@ export const Positioning: React.FC = () => {
         </defs>
 
         {/* axis + place labels */}
-        <line x1={CHART.x0} y1={CHART.base} x2={CHART.x0 + 4 * CHART.seg * axis} y2={CHART.base} stroke={INK} strokeWidth={2} opacity={0.35} />
+        <line x1={CHART.x0} y1={CHART.base} x2={CHART.x0 + 4 * CHART.seg * axis} y2={CHART.base} stroke={TEXT} strokeWidth={2} opacity={0.45} />
         {PLACES.map((pl, i) => {
           const a = T.teaser[0] + 6 + i * 18;
           const op = interpolate(f, [a, a + 8], [0, 1], clamp);
@@ -129,15 +142,31 @@ export const Positioning: React.FC = () => {
           const pOp = interpolate(f, [pl.lock, pl.lock + 8], [0, 1], clamp);
           return (
             <g key={pl.key}>
-              <line x1={CHART.x0 + CHART.seg * (i + 1)} y1={CHART.base - 8} x2={CHART.x0 + CHART.seg * (i + 1)} y2={CHART.base + 8} stroke={INK} strokeWidth={2} opacity={0.35 * op} />
+              <line x1={CHART.x0 + CHART.seg * (i + 1)} y1={CHART.base - 8} x2={CHART.x0 + CHART.seg * (i + 1)} y2={CHART.base + 8} stroke={TEXT} strokeWidth={2} opacity={0.45 * op} />
               <text x={cx} y={CHART.base + 50} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={active ? 700 : 400} fontSize={32}
-                fill={INK} opacity={op * (active ? 1 : 0.6)}>{pl.name}</text>
-              <text x={cx} y={levelY(pl.price) - 20} textAnchor="middle" fontFamily="JetBrains Mono" fontSize={26} fill={INK} opacity={pOp * 0.85}>
+                fill={TEXT} opacity={op * (active ? 1 : 0.6)} filter="url(#shadow)">{pl.name}</text>
+              <text x={cx} y={levelY(pl.price) - 20} textAnchor="middle" fontFamily="JetBrains Mono" fontSize={26} fill={TEXT} opacity={pOp * 0.9} filter="url(#shadow)">
                 {pl.price.toLocaleString("en-US")}
               </text>
             </g>
           );
         })}
+
+        {/* intro bottle */}
+        {bottleOp > 0 && (
+          <g opacity={bottleOp}>
+            <path d={BOTTLE.d} fill="none" stroke={GLOW} strokeWidth={11} strokeLinecap="round" strokeLinejoin="round"
+              strokeDasharray={`${BOTTLE.total} ${BOTTLE.total * 2}`} strokeDashoffset={BOTTLE.total - bl} opacity={0.5} filter="url(#soft)" />
+            <path d={BOTTLE.d} fill="none" stroke={INK} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round"
+              strokeDasharray={`${BOTTLE.total} ${BOTTLE.total * 2}`} strokeDashoffset={BOTTLE.total - bl} />
+          </g>
+        )}
+        {tagS > 0 && tagOp > 0 && (
+          <g opacity={tagOp} transform={`translate(540 ${BOTTLE.tagY}) scale(${tagS})`}>
+            <rect x={-170} y={-58} width={340} height={104} rx={52} fill="#fff" />
+            <text x={0} y={22} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={900} fontSize={64} fill={BRAND}>1,000원</text>
+          </g>
+        )}
 
         {/* the line */}
         <path d={LINE.d} fill="none" stroke={GLOW} strokeWidth={11} strokeLinecap="round" strokeLinejoin="round"
@@ -156,7 +185,7 @@ export const Positioning: React.FC = () => {
         )}
 
         {/* pen tip */}
-        {land > 0 && (
+        {land > 0.01 && (
           <g>
             <circle cx={hx} cy={hy} r={glowR} fill={GLOW} filter="url(#blur)" opacity={0.95} />
             <circle cx={hx} cy={hy} r={8.5 * land} fill={INK} />
@@ -170,16 +199,16 @@ export const Positioning: React.FC = () => {
           if (op <= 0) return null;
           const dy = interpolate(f, [c.f0, c.f0 + 12], [12, 0], clamp);
           return (
-            <g key={i} opacity={op} transform={`translate(0 ${dy})`}>
-              <text x={90} y={215} fontFamily="JetBrains Mono" fontSize={26} letterSpacing={8} fill={INK} opacity={0.6}>{c.kicker}</text>
-              <text x={90} y={298} fontFamily="Noto Sans KR" fontWeight={700} fontSize={68} letterSpacing={1} fill={INK}>{c.text}</text>
+            <g key={i} opacity={op} transform={`translate(0 ${dy})`} filter="url(#shadow)">
+              <text x={90} y={215} fontFamily="JetBrains Mono" fontSize={26} letterSpacing={8} fill={TEXT} opacity={0.7}>{c.kicker}</text>
+              <text x={90} y={298} fontFamily="Noto Sans KR" fontWeight={700} fontSize={68} letterSpacing={1} fill={TEXT}>{c.text}</text>
             </g>
           );
         })}
 
         {/* end headline */}
         {endOp > 0 && (
-          <g fontFamily="Nanum Myeongjo" fontWeight={700} fill={INK}>
+          <g fontFamily="Nanum Myeongjo" fontWeight={700} fill={TEXT} filter="url(#shadow)">
             <text x={90} y={222} fontSize={58} opacity={endOp}
               transform={`translate(0 ${interpolate(f, [T.position[0], T.position[0] + 16], [14, 0], clamp)})`}>자신을 최적의 위치에</text>
             <text x={90} y={318} fontSize={86} opacity={interpolate(f, [line2F, line2F + 12], [0, 1], clamp)}

@@ -44,6 +44,10 @@ def swell(d):
     return s * np.sin(np.pi * t / d) ** 2 * 0.06
 
 place(pop(), ev["pop"])
+if "bottle" in ev:  # intro: soft rising tone while the bottle is drawn, bell on the price tag, swipe as the card opens
+    b0, b1 = ev["bottle"]; place(glide((b1 - b0) / FPS), b0, 0.8)
+    place(chaching(1046.5), ev["tag"], 0.9)
+    place(whoop(), ev["card"], 0.9)
 for k, f in enumerate(ev["labels"]): place(tick(k), f, pan=-0.45 + 0.3 * k)
 for f in ev["swaps"]: place(whoop(), f - 3, 0.9)
 notes = [1046.5, 1318.5, 1568.0, 2093.0]
