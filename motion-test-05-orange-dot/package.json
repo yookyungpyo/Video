@@ -1,0 +1,17 @@
+{
+  "name": "motion-test-05-orange-dot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "THE ORANGE DOT — 20s minimal brand motion (vanilla HTML/Canvas, 60fps)",
+  "type": "module",
+  "scripts": {
+    "preview": "npx --yes http-server -p 8080 -c-1 .",
+    "render": "node scripts/capture.mjs",
+    "stills": "node scripts/capture.mjs --stills",
+    "determinism": "node scripts/capture.mjs --determinism",
+    "verify": "node scripts/verify.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

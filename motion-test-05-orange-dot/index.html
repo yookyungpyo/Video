@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Orange Dot</title>
+<style>
+  @font-face { font-family: "Inter"; font-weight: 400; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 600; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 800; src: url("fonts/inter-latin-800-normal.woff2") format("woff2"); }
+  :root { --bg: #0A0A0A; --orange: #FF6A00; --white: #FFFFFF; --gray: #888888; }
+  html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
+  body { display: grid; place-items: center; font-family: Inter, "Helvetica Neue", Arial, sans-serif; }
+  /* 1920×1080 stage, letterboxed to the window in preview */
+  canvas { display: block; width: min(100vw, calc(100vh * 16 / 9)); height: auto; aspect-ratio: 16 / 9; }
+  body.capture canvas { width: 1920px; height: 1080px; }
+  #ui { position: fixed; left: 16px; right: 16px; bottom: 14px; display: flex; gap: 12px; align-items: center;
+        color: var(--gray); font: 500 13px Inter, sans-serif; opacity: .85; }
+  #ui button { background: #1A1A1A; color: #fff; border: 1px solid #2A2A2A; border-radius: 8px; padding: 6px 12px; font: inherit; cursor: pointer; }
+  #ui input { flex: 1; accent-color: var(--orange); }
+  #ui .tc { font-variant-numeric: tabular-nums; min-width: 128px; text-align: right; }
+  body.capture #ui { display: none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<div id="ui">
+  <button id="play">Pause</button>
+  <input id="scrub" type="range" min="0" max="20" step="0.001" value="0" />
+  <span class="tc" id="tc">00:00.00 · f0</span>
+</div>
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   THE ORANGE DOT — 20s brand motion (1920×1080, 60fps, 1200 frames)
+
+   Engine contract
+   • renderAt(t) draws the frame for time t (seconds). It is a pure function
+     of t: no Math.random, no Date, no accumulated state. The same t always
+     produces the same pixels, in any order.
+   • window.renderAt / window.renderFrame(f) / window.DURATION / window.FPS
+     are exposed for capture tools (Playwright).
+   • URL: ?t=7.5 seek and pause · ?capture=1 hides UI, no autoplay.
+   ════════════════════════════════════════════════════════════════════════ */
+const W = 1920, H = 1080, FPS = 60, DURATION = 20;
+const COL = { bg: "#0A0A0A", orange: "#FF6A00", white: "#FFFFFF", gray: "#888888" };
+const CX = W / 2, CY = H / 2, R = 18; // the dot's resting radius
+const FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+
+const cv = document.getElementById("c");
+const ctx = cv.getContext("2d");
+
+/* ── math & easing ──────────────────────────────────────────────────────── */
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = {
+  linear: (t) => t,
+  inOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2), // cubic
+  inOutQuint: (t) => (t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2),
+  out: (t) => 1 - Math.pow(1 - t, 4), // quart
+  outExpo: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+  in: (t) => t * t * t,
+  inExpo: (t) => (t === 0 ? 0 : Math.pow(2, 10 * t - 10)),
+  // soft overshoot ("약한 bounce")
+  outBack: (t, s = 1.45) => 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2),
+};
+/** eased progress of t through [a, b] */
+const seg = (t, a, b, e = ease.inOut) => e(clamp((t - a) / (b - a)));
+const mixHex = (h1, h2, p) => {
+  const a = parseInt(h1.slice(1), 16), b = parseInt(h2.slice(1), 16);
+  const r = Math.round(lerp(a >> 16, b >> 16, p)), g = Math.round(lerp((a >> 8) & 255, (b >> 8) & 255, p)), bl = Math.round(lerp(a & 255, b & 255, p));
+  return `rgb(${r},${g},${bl})`;
+};
+const alpha = (hex, a) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+};
+
+/* ── drawing primitives ─────────────────────────────────────────────────── */
+function circle(x, y, r, fill) {
+  if (r <= 0.01) return;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill();
+}
+function ellipse(x, y, rx, ry, fill) {
+  if (rx <= 0.01 || ry <= 0.01) return;
+  ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill();
+}
+function pill(x, y, w, h, fill, stroke, lw = 2) {
+  const r = Math.min(h / 2, w / 2);
+  ctx.beginPath(); ctx.roundRect(x, y, Math.max(w, 0.01), Math.max(h, 0.01), r);
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke(); }
+}
+function ring(x, y, r, lw, color, a = 1) {
+  if (r <= 0 || a <= 0) return;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.lineWidth = lw; ctx.strokeStyle = alpha(color, a); ctx.stroke();
+}
+function hline(x1, x2, y, color, lw = 1) {
+  ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.lineWidth = lw; ctx.strokeStyle = color; ctx.stroke();
+}
+function vline(x, y1, y2, color, lw = 1) {
+  ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.lineWidth = lw; ctx.strokeStyle = color; ctx.stroke();
+}
+function text(str, x, y, size, weight, color, align = "left", tracking = 0) {
+  ctx.font = `${weight} ${size}px ${FONT}`;
+  ctx.letterSpacing = `${tracking}px`;
+  ctx.textAlign = align; ctx.textBaseline = "alphabetic"; ctx.fillStyle = color;
+  ctx.fillText(str, x, y);
+  ctx.letterSpacing = "0px";
+}
+
+/**
+ * Masked kinetic type: each word rises out of a clip box (in) and exits
+ * upward (out). Deterministic per-word stagger.
+ */
+function maskText(str, x, y, size, weight, color, tIn, tOut, t, opts = {}) {
+  const { align = "left", tracking = 0, stagger = 0.045, dur = 0.5 } = opts;
+  if (t < tIn || t > tOut + dur + 0.3) return;
+  ctx.font = `${weight} ${size}px ${FONT}`;
+  ctx.letterSpacing = `${tracking}px`;
+  const words = str.split(" ");
+  const space = ctx.measureText(" ").width;
+  const widths = words.map((w) => ctx.measureText(w).width);
+  const total = widths.reduce((a, b) => a + b, 0) + space * (words.length - 1);
+  let cx = align === "center" ? x - total / 2 : x;
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(cx - 20, y - size * 1.05, total + 40, size * 1.35);
+  ctx.clip();
+  words.forEach((w, i) => {
+    const pin = seg(t, tIn + i * stagger, tIn + i * stagger + dur, ease.outExpo);
+    const pout = seg(t, tOut + i * stagger * 0.6, tOut + i * stagger * 0.6 + dur * 0.8, ease.in);
+    const dy = (1 - pin) * size * 1.15 - pout * size * 1.5; // exit clears descenders
+    ctx.fillStyle = color; ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    ctx.fillText(w, cx, y + dy);
+    cx += widths[i] + space;
+  });
+  ctx.restore();
+  ctx.letterSpacing = "0px";
+}
+
+/* ── storyboard ─────────────────────────────────────────────────────────── */
+const SCENES = [
+  { from: 0, to: 3, name: "THE DOT", line: "Everything starts somewhere." },
+  { from: 3, to: 6, name: "THE TOGGLE", line: "Make it happen." },
+  { from: 6, to: 10, name: "THE DATA", line: "Turn signals into progress." },
+  { from: 10, to: 14, name: "THE SYSTEM", line: "One idea. Infinite possibilities." },
+  { from: 14, to: 17, name: "THE TRANSFORMATION", line: "Designed to move." },
+  { from: 17, to: 20, name: "THE ENDING", line: "" },
+];
+
+/* Swiss frame: hairline, labels, scene index, timecode, caption. */
+function chrome(t) {
+  const a = seg(t, 0.15, 0.7) * (1 - seg(t, 16.75, 17.1));
+  if (a <= 0) return;
+  ctx.globalAlpha = a;
+  const si = SCENES.findIndex((s) => t >= s.from && t < s.to);
+  const sc = SCENES[Math.max(0, si)];
+  text("THE ORANGE DOT", 120, 96, 17, 600, COL.white, "left", 3);
+  text(`${String(si + 1).padStart(2, "0")} / 06`, W - 120, 96, 17, 600, COL.white, "right", 3);
+  text(sc.name, W - 260, 96, 17, 400, COL.gray, "right", 3);
+  hline(120, W - 120, 124, "rgba(255,255,255,0.14)");
+  hline(120, W - 120, 1000, "rgba(255,255,255,0.08)");
+  const tc = `${String(Math.floor(t)).padStart(2, "0")}:${String(Math.floor((t % 1) * 100)).padStart(2, "0")}`;
+  text(tc, W - 120, 1036, 16, 400, COL.gray, "right", 2);
+  text("1920 × 1080 / 60", 120, 1036, 16, 400, COL.gray, "left", 2);
+  ctx.globalAlpha = 1;
+  // captions
+  SCENES.forEach((s, i) => {
+    if (!s.line) return;
+    maskText(s.line, 120, 948, 58, 600, COL.white, s.from + 0.35, s.to - 0.55, t, { tracking: -1.2 });
+    // small orange index chip above caption
+    const ca = seg(t, s.from + 0.3, s.from + 0.6) * (1 - seg(t, s.to - 0.45, s.to - 0.2));
+    if (ca > 0) {
+      ctx.globalAlpha = ca * a;
+      circle(126, 868, 6, COL.orange);
+      text(String(i + 1).padStart(2, "0"), 144, 874, 16, 600, COL.gray, "left", 2);
+      ctx.globalAlpha = 1;
+    }
+  });
+}
+
+/* ── SCENE 01 · THE DOT (0–3s) ─────────────────────────────────────────── */
+const KNOB_L = 896, KNOB_R = 1024; // toggle knob positions (scene 02)
+function scene1(t) {
+  if (t >= 3) return;
+  const s = seg(t, 0.25, 0.95, (p) => ease.outBack(p, 1.6));
+  let x = CX;
+  x = lerp(x, 1360, seg(t, 1.55, 2.15, ease.inOutQuint));
+  x = lerp(x, KNOB_L, seg(t, 2.25, 2.95, ease.inOutQuint));
+  circle(x, CY, R * s, COL.orange);
+  // minimal measure marks under the dot while it rests
+  const m = seg(t, 0.9, 1.2) * (1 - seg(t, 1.45, 1.6));
+  if (m > 0) {
+    ctx.globalAlpha = m;
+    vline(CX, CY + 44, CY + 60, COL.gray);
+    text("Ø 36", CX, CY + 86, 15, 400, COL.gray, "center", 2);
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ── SCENE 02 · THE TOGGLE (3–6s) ──────────────────────────────────────── */
+const TRACK = { x: 844, y: 488, w: 232, h: 104 };
+const GRAPH = { x0: 260, x1: 1660, base: 800, top: 300 };
+function scene2(t) {
+  if (t < 3 || t >= 6.02) return;
+  const grow = seg(t, 3.0, 3.4, ease.out);
+  const open = seg(t, 3.15, 3.7, ease.inOutQuint);
+  const mv = seg(t, 3.95, 4.45, ease.inOutQuint);
+  const morph = seg(t, 5.2, 6.0, ease.inOutQuint);
+  const on = t >= 4.45 - 0.08;
+
+  // background reaction at ON: ripple rings + brief tone lift
+  const hit = 4.45;
+  if (t >= hit && t < hit + 1.1) {
+    const p1 = seg(t, hit, hit + 1.0, ease.out);
+    const p2 = seg(t, hit + 0.12, hit + 1.1, ease.out);
+    ring(KNOB_R, CY, lerp(60, 980, p1), 1.5, COL.gray, 0.5 * (1 - p1));
+    ring(KNOB_R, CY, lerp(60, 760, p2), 1, COL.orange, 0.45 * (1 - p2));
+    const lift = Math.sin(clamp((t - hit) / 0.5) * Math.PI) * 0.035;
+    ctx.fillStyle = `rgba(255,255,255,${lift})`; ctx.fillRect(0, 0, W, H);
+  }
+  // vertical rhythm lines that appear when switched on
+  const vl = seg(t, 4.45, 4.8) * (1 - morph);
+  if (vl > 0) {
+    for (let i = 0; i < 11; i++) {
+      const x = 160 + i * 160;
+      const h = 60 * seg(t, 4.45 + Math.abs(i - 5) * 0.03, 4.75 + Math.abs(i - 5) * 0.03, ease.out);
+      vline(x, 300 - h / 2, 300 + h / 2, `rgba(255,255,255,${0.16 * vl})`);
+      vline(x, 780 - h / 2, 780 + h / 2, `rgba(255,255,255,${0.16 * vl})`);
+    }
+  }
+
+  // track (capsule) → becomes the graph axis
+  const tw = lerp(TRACK.h, TRACK.w, open);
+  const tx = lerp(TRACK.x, GRAPH.x0, morph);
+  const tww = lerp(tw, GRAPH.x1 - GRAPH.x0, morph);
+  const th = lerp(TRACK.h, 2, morph);
+  const ty = lerp(CY, GRAPH.base, morph) - th / 2;
+  if (open > 0) {
+    pill(tx, ty, tww, th, mixHex("#151515", "#3A3A3A", morph), morph < 0.6 ? alpha(COL.gray, 0.9 * (1 - morph)) : null, 2);
+    // ON fill (white) wipes behind the knob
+    const kx = lerp(KNOB_L, KNOB_R, mv);
+    const fw = (kx + TRACK.h / 2 - TRACK.x) * (1 - morph) + tww * morph;
+    if (mv > 0) {
+      ctx.save();
+      ctx.beginPath(); ctx.roundRect(tx, ty, Math.max(tww, 0.01), Math.max(th, 0.01), Math.min(th / 2, tww / 2)); ctx.clip();
+      pill(tx, ty, Math.min(fw, tww), th, mixHex("#FFFFFF", "#3A3A3A", morph));
+      ctx.restore();
+    }
+  }
+  // state labels
+  const la = seg(t, 3.5, 3.8) * (1 - seg(t, 5.0, 5.25));
+  if (la > 0) {
+    ctx.globalAlpha = la;
+    const sw = seg(t, 4.35, 4.6, ease.out);
+    ctx.save(); ctx.beginPath(); ctx.rect(TRACK.x - 10, 410, 300, 50); ctx.clip();
+    text("OFF", TRACK.x, 446 - sw * 40, 18, 600, COL.gray, "left", 3);
+    text("ON", TRACK.x, 486 - sw * 40, 18, 600, COL.orange, "left", 3);
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+  // knob = the dot (squash & stretch while travelling)
+  const kr = lerp(R, 40, grow);
+  const st = Math.sin(mv * Math.PI);
+  let kx = lerp(KNOB_L, KNOB_R, mv);
+  let ky = CY;
+  let r = kr;
+  // morph: shrink to a data point at the graph start
+  kx = lerp(kx, GRAPH.x0, morph);
+  ky = lerp(ky, 760, morph);
+  r = lerp(kr, 14, morph);
+  ellipse(kx, ky, r * (1 + 0.16 * st), r * (1 - 0.09 * st), COL.orange);
+}
+
+/* ── SCENE 03 · THE DATA (6–10s) ───────────────────────────────────────── */
+const VALS = [0.08, 0.2, 0.15, 0.36, 0.3, 0.52, 0.6, 0.9];
+const PTS = VALS.map((v, i) => ({ x: GRAPH.x0 + i * 200, y: GRAPH.base - v * 500, v }));
+const SEG0 = 6.2, SEGD = 0.38; // dot travel: one segment per SEGD seconds
+function dotOnGraph(t) {
+  const k = Math.floor(clamp((t - SEG0) / SEGD, 0, PTS.length - 1 - 1e-9));
+  if (t < SEG0) return { ...PTS[0], k: 0, p: 0 };
+  if (t >= SEG0 + SEGD * (PTS.length - 1)) return { ...PTS[PTS.length - 1], k: PTS.length - 1, p: 1 };
+  const p = ease.inOut(clamp((t - SEG0 - k * SEGD) / SEGD));
+  return { x: lerp(PTS[k].x, PTS[k + 1].x, p), y: lerp(PTS[k].y, PTS[k + 1].y, p), k, p };
+}
+function scene3(t) {
+  if (t < 6 || t >= 10.02) return;
+  const out = seg(t, 9.4, 10.0, ease.inOutQuint);
+  const arrive = SEG0 + SEGD * (PTS.length - 1); // ≈ 8.86s
+
+  // axis (continues from the toggle) — collapses to centre on exit
+  const ax0 = lerp(GRAPH.x0, CX, out), ax1 = lerp(GRAPH.x1, CX, out);
+  if (ax1 - ax0 > 1) hline(ax0, ax1, GRAPH.base, "#3A3A3A", 2);
+  // grid lines + labels
+  for (let k = 1; k <= 4; k++) {
+    const y = GRAPH.base - k * 125;
+    const d = seg(t, 6.0 + k * 0.06, 6.6 + k * 0.06, ease.out) * (1 - out);
+    if (d > 0) {
+      hline(GRAPH.x0, lerp(GRAPH.x0, GRAPH.x1, d), y, "rgba(255,255,255,0.08)");
+      ctx.globalAlpha = d; text(String(k * 25), GRAPH.x0 - 24, y + 5, 14, 400, COL.gray, "right", 1); ctx.globalAlpha = 1;
+    }
+  }
+  // the line follows the dot's path
+  const d = dotOnGraph(t);
+  const path = PTS.slice(0, d.k + 1).map((p) => [p.x, p.y]);
+  if (d.p > 0 && d.k < PTS.length - 1) path.push([d.x, d.y]);
+  // exit: un-draw from the start
+  let startCut = out * (path.length - 1);
+  ctx.beginPath();
+  let started = false;
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i], b = path[i + 1];
+    const s0 = clamp(startCut - i);
+    if (s0 >= 1) continue;
+    const ax = lerp(a[0], b[0], s0), ay = lerp(a[1], b[1], s0);
+    if (!started) { ctx.moveTo(ax, ay); started = true; }
+    ctx.lineTo(b[0], b[1]);
+  }
+  ctx.lineWidth = 3; ctx.strokeStyle = COL.white; ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.stroke();
+  // markers pop in as the dot leaves each point
+  PTS.forEach((p, i) => {
+    if (i === PTS.length - 1) return;
+    const born = SEG0 + i * SEGD;
+    const s = seg(t, born, born + 0.28, (q) => ease.outBack(q, 2)) * (1 - seg(t, 9.4 + i * 0.03, 9.7 + i * 0.03, ease.in));
+    if (s <= 0) return;
+    circle(p.x, p.y, 6 * s, COL.white);
+    const la = seg(t, born + 0.1, born + 0.35) * (1 - out);
+    if (la > 0) {
+      ctx.globalAlpha = la;
+      vline(p.x, p.y + 14, GRAPH.base - 4, "rgba(255,255,255,0.10)");
+      text(String(Math.round(p.v * 100)), p.x, p.y - 22, 15, 600, COL.gray, "center", 1);
+      ctx.globalAlpha = 1;
+    }
+  });
+  // arrival at the peak
+  const pk = PTS[PTS.length - 1];
+  const pulse = seg(t, arrive, arrive + 0.6, ease.out);
+  if (t >= arrive && pulse < 1) ring(pk.x, pk.y, lerp(16, 70, pulse), 2, COL.orange, 1 - pulse);
+  const lab = seg(t, arrive + 0.05, arrive + 0.35, ease.outExpo) * (1 - seg(t, 9.35, 9.55));
+  if (lab > 0) {
+    ctx.globalAlpha = lab;
+    text("+90%", pk.x - 30, pk.y - 40 + (1 - lab) * 12, 34, 800, COL.orange, "right", -1);
+    ctx.globalAlpha = 1;
+  }
+  // the dot itself; exits to the centre for scene 04
+  const r = lerp(14, 18, seg(t, arrive, arrive + 0.3, ease.out));
+  const dx = lerp(d.x, CX, seg(t, 9.45, 10.0, ease.inOutQuint));
+  const dy = lerp(d.y, CY, seg(t, 9.45, 10.0, ease.inOutQuint));
+  circle(dx, dy, r, COL.orange);
+}
+
+/* ── SCENE 04 · THE SYSTEM (10–14s) ────────────────────────────────────── */
+function scene4(t) {
+  if (t < 10 || t >= 14.02) return;
+  const a = seg(t, 10.05, 10.6, (p) => ease.outBack(p, 1.3)); // 1 → 4
+  const b = seg(t, 10.7, 11.25, (p) => ease.outBack(p, 1.3)); // 4 → 16
+  const spread = seg(t, 11.35, 11.9, ease.inOutQuint); // spacing 120 → 150
+  const S = lerp(120, 150, spread);
+  const conv = (d) => seg(t, 13.3 + d * 0.18, 13.85 + d * 0.18, ease.inOutQuint);
+  const env = seg(t, 12.35, 12.6) * (1 - seg(t, 13.15, 13.35));
+
+  // Swiss grid hairlines through the dot centres
+  const gl = seg(t, 11.4, 11.9, ease.out) * (1 - seg(t, 13.2, 13.5));
+  if (gl > 0) {
+    for (let i = 0; i < 4; i++) {
+      const o = (i - 1.5) * S;
+      const len = 330 * gl;
+      vline(CX + o, CY - len, CY + len, "rgba(255,255,255,0.09)");
+      hline(CX - len, CX + len, CY + o, "rgba(255,255,255,0.09)");
+    }
+    ctx.globalAlpha = gl;
+    text("4 × 4", CX + 2 * S + 40, CY - 1.5 * S + 5, 15, 600, COL.gray, "left", 2);
+    text(`${Math.round(S)} px`, CX + 2 * S + 40, CY - 1.5 * S + 30, 15, 400, COL.gray, "left", 2);
+    ctx.globalAlpha = 1;
+  }
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 4; col++) {
+      const qx = col < 2 ? -1 : 1, qy = row < 2 ? -1 : 1; // parent quadrant
+      // phase a: the dot splits into 4 parents at (±120, ±120);
+      // phase b: each parent splits into 4 children → 4×4 grid (col-1.5)·S.
+      // (children of one parent overlap exactly until phase b starts)
+      let x = lerp(qx * 120 * a, (col - 1.5) * S, b);
+      let y = lerp(qy * 120 * a, (row - 1.5) * S, b);
+      // sequential reaction (row-major)
+      const idx = row * 4 + col;
+      const rx = 11.95 + idx * 0.032;
+      const react = Math.sin(clamp((t - rx) / 0.22) * Math.PI);
+      // diagonal wave
+      const ph = (t - 12.35) * 7.0 - (col + row) * 0.75;
+      const wave = Math.sin(ph) * env;
+      let r = lerp(R, 14, a) * (1 + 0.6 * react) * (1 + 0.45 * wave);
+      y += -22 * wave;
+      // converge back to one dot (inner first)
+      const dist = Math.hypot(col - 1.5, row - 1.5) / Math.hypot(1.5, 1.5);
+      const c = conv(dist);
+      x = lerp(x, 0, c); y = lerp(y, 0, c); r = lerp(r, R, c);
+      const color = react > 0.05 ? mixHex(COL.orange, COL.white, react * 0.9) : COL.orange;
+      circle(CX + x, CY + y, r, color);
+    }
+  }
+}
+
+/* ── SCENE 05 · THE TRANSFORMATION (14–17s) ────────────────────────────── */
+function scene5(t) {
+  if (t < 14 || t >= 17.06) return;
+  // morph timeline (centre is always CX, CY until the bar retracts)
+  const g0 = seg(t, 14.0, 14.25, ease.out); // grow circle
+  const toBtn = seg(t, 14.25, 14.7, ease.inOutQuint);
+  const press = Math.sin(clamp((t - 14.95) / 0.2) * Math.PI);
+  const toCirc = seg(t, 15.2, 15.55, ease.inOutQuint);
+  const toRing = seg(t, 15.55, 15.8, ease.inOut);
+  const toDot = seg(t, 16.2, 16.4, ease.inOutQuint);
+  const track = seg(t, 16.38, 16.62, ease.inOutQuint);
+  const fill = seg(t, 16.55, 16.85, ease.inOut);
+  const retract = seg(t, 16.86, 17.05, ease.inOutQuint);
+
+  // labels for the current form (gray, under the shape)
+  const forms = [["CIRCLE", 14.05, 14.3], ["BUTTON", 14.55, 15.15], ["LOADING", 15.65, 16.2], ["PROGRESS", 16.5, 16.9]];
+  forms.forEach(([n, a, b]) => {
+    const o = seg(t, a, a + 0.12) * (1 - seg(t, b, b + 0.1));
+    if (o > 0) { ctx.globalAlpha = o; text(n, CX, CY + 130, 15, 600, COL.gray, "center", 4); ctx.globalAlpha = 1; }
+  });
+
+  if (t < 15.55) {
+    // circle ↔ button (rounded rect morph, centre locked)
+    let w = lerp(R * 2, 80, g0), h = w;
+    w = lerp(w, 340, toBtn); h = lerp(h, 92, toBtn);
+    w = lerp(w, 96, toCirc); h = lerp(h, 96, toCirc);
+    const sc = 1 - 0.05 * press;
+    w *= sc; h *= sc;
+    pill(CX - w / 2, CY - h / 2, w, h, COL.orange);
+    const lo = seg(t, 14.55, 14.75) * (1 - seg(t, 15.12, 15.24));
+    if (lo > 0) {
+      ctx.globalAlpha = lo;
+      text("Get started  →", CX, CY + 10, 28 * sc, 600, COL.bg, "center", -0.3);
+      ctx.globalAlpha = 1;
+    }
+    return;
+  }
+  if (t < 16.38) {
+    // circle → ring → spinning loader → collapses to a small dot
+    const outer = lerp(48, 7, toDot);
+    const inner = lerp(lerp(0, 36, toRing), 0, toDot);
+    const spin = (t - 15.7) * 9.5 + seg(t, 15.75, 16.3, ease.in) * 3;
+    const arc = lerp(Math.PI * 2, Math.PI * 1.35, seg(t, 15.8, 16.0, ease.inOut));
+    if (toDot < 1 && inner > 0.5) {
+      const lw = outer - inner, rr = (outer + inner) / 2;
+      ctx.beginPath();
+      ctx.arc(CX, CY, rr, spin, spin + arc);
+      ctx.lineWidth = lw; ctx.lineCap = arc < Math.PI * 2 - 0.01 ? "round" : "butt"; ctx.strokeStyle = COL.orange; ctx.stroke();
+      ring(CX, CY, rr, lw, "#FFFFFF", 0.08 * seg(t, 15.8, 16.0));
+    } else {
+      circle(CX, CY, outer, COL.orange);
+    }
+    return;
+  }
+  // progress bar: track draws out from centre, fill grows from the left end
+  const TW = 560, TH = 14;
+  const x0 = CX - TW / 2;
+  const tw = TW * track;
+  let fx0 = lerp(CX - 7, x0, track);
+  let fw = lerp(14, TW, fill);
+  // retract into the right end → a dot at (x0+TW, CY)
+  const endX = x0 + TW;
+  let tx0 = CX - tw / 2, twr = tw;
+  if (retract > 0) {
+    fx0 = lerp(x0, endX - R, retract); fw = lerp(TW, R * 2, retract);
+    tx0 = lerp(x0, endX - R, retract); twr = lerp(TW, R * 2, retract);
+  }
+  const th = lerp(TH, R * 2, retract);
+  if (twr > 1) pill(tx0, CY - TH / 2, twr, TH, alpha("#FFFFFF", 0.14 * (1 - retract)));
+  pill(fx0, CY - th / 2, fw, th, COL.orange);
+  const pct = seg(t, 16.55, 16.85, ease.inOut);
+  const po = seg(t, 16.5, 16.6) * (1 - retract);
+  if (po > 0) {
+    ctx.globalAlpha = po;
+    text(`${Math.round(pct * 100)}%`, x0 + TW, CY - 32, 22, 800, COL.white, "right", 0);
+    text("Uploading assets", x0, CY - 32, 18, 400, COL.gray, "left", 0.5);
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ── SCENE 06 · THE ENDING (17–20s) ────────────────────────────────────── */
+function scene6(t) {
+  if (t < 17.0) return;
+  const endX = CX + 280; // where scene 05 left the dot
+  const mv = seg(t, 17.05, 17.55, ease.inOutQuint);
+  const fillP = seg(t, 17.6, 18.25, ease.inExpo);
+  const black = seg(t, 18.4, 18.95, ease.inOutQuint);
+  const up = seg(t, 19.0, 19.45, ease.inOutQuint);
+  const bigR = Math.hypot(CX, CY) + 20;
+
+  if (black <= 0) {
+    // dot travels to centre, then floods the frame
+    const x = lerp(endX, CX, mv);
+    circle(x, CY, lerp(R, bigR, fillP), COL.orange);
+    return;
+  }
+  // orange field, black returns from the centre outward, the dot remains
+  ctx.fillStyle = COL.orange; ctx.fillRect(0, 0, W, H);
+  circle(CX, CY, bigR * black, COL.bg);
+  const dy = lerp(CY, 430, up);
+  circle(CX, dy, R * lerp(1, 1.35, up), COL.orange);
+  // title + subtitle
+  maskText("THE ORANGE DOT", CX, 610, 112, 800, COL.white, 19.05, 99, t, { align: "center", tracking: 4, stagger: 0.07, dur: 0.6 });
+  maskText("Small idea. Big impact.", CX, 690, 34, 400, COL.gray, 19.35, 99, t, { align: "center", tracking: 0.5, stagger: 0.05, dur: 0.5 });
+  const rule = seg(t, 19.5, 19.9, ease.out);
+  if (rule > 0) hline(CX - 60 * rule, CX + 60 * rule, 740, COL.orange, 2);
+}
+
+/* ── frame ─────────────────────────────────────────────────────────────── */
+function renderAt(tIn) {
+  const t = clamp(tIn, 0, DURATION - 1 / FPS);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = COL.bg;
+  ctx.fillRect(0, 0, W, H);
+  scene2(t); // toggle draws its background reaction first
+  scene1(t);
+  scene3(t);
+  scene4(t);
+  scene5(t);
+  scene6(t);
+  chrome(t);
+}
+const renderFrame = (f) => renderAt(f / FPS);
+Object.assign(window, { renderAt, renderFrame, DURATION, FPS, SCENES });
+
+/* ── preview player (UI only; never affects what renderAt draws) ───────── */
+const params = new URLSearchParams(location.search);
+const capture = params.has("capture");
+if (capture) document.body.classList.add("capture");
+const playBtn = document.getElementById("play"), scrub = document.getElementById("scrub"), tcEl = document.getElementById("tc");
+let playing = !capture && !params.has("t");
+let t0 = performance.now(), offset = Number(params.get("t") || 0);
+function show(t) {
+  renderAt(t);
+  scrub.value = t;
+  tcEl.textContent = `${t.toFixed(2).padStart(5, "0")}s · f${Math.floor(t * FPS)}`;
+}
+function tick(now) {
+  if (playing) show((offset + (now - t0) / 1000) % DURATION);
+  requestAnimationFrame(tick);
+}
+function setPlaying(p) {
+  if (p === playing) return;
+  if (p) { t0 = performance.now(); offset = Number(scrub.value); }
+  else offset = Number(scrub.value);
+  playing = p; playBtn.textContent = p ? "Pause" : "Play";
+}
+playBtn.onclick = () => setPlaying(!playing);
+scrub.oninput = () => { setPlaying(false); show(Number(scrub.value)); };
+addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); setPlaying(!playing); }
+  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+    setPlaying(false);
+    show(clamp(Number(scrub.value) + (e.code === "ArrowRight" ? 1 : -1) / FPS, 0, DURATION));
+  }
+});
+window.ready = document.fonts.ready.then(() => Promise.all([400, 600, 800].map((w) => document.fonts.load(`${w} 40px Inter`)))).then(() => {
+  playBtn.textContent = playing ? "Pause" : "Play";
+  show(offset);
+  if (!capture) requestAnimationFrame(tick);
+  return true;
+});
+</script>
+</body>
+</html>
