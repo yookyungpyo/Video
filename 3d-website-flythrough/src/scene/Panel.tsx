@@ -1,7 +1,7 @@
 import { RoundedBox } from "@react-three/drei";
 import { AdditiveBlending, type Texture } from "three";
 import { ACCENT } from "../lib/timeline";
-import { PANEL_H, PANEL_W, type PanelPose } from "./choreography";
+import { PANEL_H as DEFAULT_H, PANEL_W as DEFAULT_W, type PanelPose } from "./choreography";
 
 type Props = {
   pose: PanelPose;
@@ -10,9 +10,28 @@ type Props = {
   glow: Texture;
   glowAmount?: number;
   order: number;
+  w?: number;
+  h?: number;
+  radius?: number;
+  depth?: number;
+  accent?: string;
+  shadowOpacity?: number;
 };
 
-export const Panel: React.FC<Props> = ({ pose, screen, shadow, glow, glowAmount = 0, order }) => {
+export const Panel: React.FC<Props> = ({
+  pose,
+  screen,
+  shadow,
+  glow,
+  glowAmount = 0,
+  order,
+  w: PANEL_W = DEFAULT_W,
+  h: PANEL_H = DEFAULT_H,
+  radius = 0.035,
+  depth = 0.07,
+  accent = ACCENT,
+  shadowOpacity = 0.75,
+}) => {
   const o = pose.opacity;
   if (o <= 0.001) return null;
   return (
@@ -23,7 +42,7 @@ export const Panel: React.FC<Props> = ({ pose, screen, shadow, glow, glowAmount 
           <planeGeometry args={[PANEL_W * 2.3, PANEL_H * 2.6]} />
           <meshBasicMaterial
             map={glow}
-            color={ACCENT}
+            color={accent}
             transparent
             opacity={glowAmount * o}
             blending={AdditiveBlending}
@@ -35,14 +54,14 @@ export const Panel: React.FC<Props> = ({ pose, screen, shadow, glow, glowAmount 
       {/* soft drop shadow, offset down/back */}
       <mesh position={[0.12, -0.32, -0.22]} renderOrder={order * 10 + 1}>
         <planeGeometry args={[PANEL_W * 1.5, PANEL_H * 1.62]} />
-        <meshBasicMaterial map={shadow} transparent opacity={0.75 * o} depthWrite={false} />
+        <meshBasicMaterial map={shadow} transparent opacity={shadowOpacity * o} depthWrite={false} />
       </mesh>
       {/* device slab: thin lit bezel */}
       <RoundedBox
-        args={[PANEL_W + 0.07, PANEL_H + 0.07, 0.07]}
-        radius={0.035}
+        args={[PANEL_W + depth, PANEL_H + depth, depth]}
+        radius={radius}
         smoothness={4}
-        position={[0, 0, -0.04]}
+        position={[0, 0, -depth / 2 - 0.005]}
         renderOrder={order * 10 + 2}
       >
         <meshStandardMaterial

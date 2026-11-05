@@ -73,3 +73,15 @@ GL=swangle npm run stills            # CPU (PowerShell: $env:GL="swangle"; npm r
 - **WebGL 호환성**: 기본은 `--gl=angle`(Windows에서 가장 안정적). GPU가 없으면 `--gl=swangle`.
   포스트프로세싱(bloom 등)은 SwiftShader에서 느리고 불안정해서 쓰지 않고, 글로우는 additive 텍스처로 처리했습니다.
 - 수정 포인트: 카메라 → `src/scene/camera.ts`의 `CAM_KEYS`, 패널 배치 → `choreography.ts`, 페이지 디자인 → `pages/pages.ts`.
+
+## HF 앱 세로형 버전 (FlythroughHF · 1080×1920 · 9:16)
+
+HF 앱 실제 화면 4장(`public/hf/`, 상태바를 잘라낸 1320×2560)을 폰 패널로 띄운 세로형 버전입니다.
+코드는 `src/hf/`에 있고(레이아웃·카메라 `layout.ts`, 타이틀 `HfOverlay.tsx`), 포인트 컬러는 #3366FF, 폰트는 Noto Sans KR입니다.
+
+```bash
+npm run render:hf        # → output/flythrough-hf.mp4 (GPU)
+npm run render:hf:cpu    # GPU 없는 환경
+COMP=FlythroughHF npm run stills -- screenshots/hf   # 대표 프레임 5장
+```
+Studio에서는 왼쪽 목록에서 `FlythroughHF`를 고르면 됩니다.
