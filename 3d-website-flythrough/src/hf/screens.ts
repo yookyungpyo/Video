@@ -1,7 +1,7 @@
 import { CanvasTexture, LinearMipmapLinearFilter, SRGBColorSpace, type Texture } from "three";
 import { staticFile } from "remotion";
 
-export const HF_SCREENS = ["hf/01-home.png", "hf/02-bogeumjari.png", "hf/03-pension.png", "hf/04-jeonse.png"];
+export const HF_SCREENS = ["hf/01-home.png", "hf/02-bogeumjari.png", "hf/03-pension.png", "hf/04-jeonse.png", "hf/05-repayment.png"];
 
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement>((res, rej) => {

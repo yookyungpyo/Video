@@ -18,16 +18,17 @@ const st = (i: number, d: Vec3 = [0, 0, 0]): Vec3 => [
 ];
 const add = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 
-// Overview 2×2 grid centre and slots (home TL, 보금자리론 TR, 주택연금 BL, 전세ON BR)
-export const C: Vec3 = [1.4, -6.4, -4.6];
+// Overview: home front-centre, the other four fanned behind at the corners.
+export const C: Vec3 = [2.0, -9.4, -6.4];
 const GRID: { off: Vec3; rot: Vec3 }[] = [
-  { off: [-1.26, 2.3, 0.15], rot: [3 * DEG, 11 * DEG, 0] },
-  { off: [1.26, 2.36, -0.45], rot: [3 * DEG, -11 * DEG, 0] },
-  { off: [-1.26, -2.36, -0.45], rot: [-3 * DEG, 11 * DEG, 0] },
-  { off: [1.26, -2.3, 0.15], rot: [-3 * DEG, -11 * DEG, 0] },
+  { off: [0, 0, 1.5], rot: [0, 0, 0] }, // home
+  { off: [-1.5, 2.45, -1.1], rot: [3 * DEG, 15 * DEG, 0] },
+  { off: [1.5, 2.45, -1.1], rot: [3 * DEG, -15 * DEG, 0] },
+  { off: [-1.5, -2.45, -1.1], rot: [-3 * DEG, 15 * DEG, 0] },
+  { off: [1.5, -2.45, -1.1], rot: [-3 * DEG, -15 * DEG, 0] },
 ];
-// Ending: the home screen comes to the centre, slightly forward.
-export const END: Vec3 = add(C, [0, 0, 1.2]);
+// Ending: the home screen stays front-centre.
+export const END: Vec3 = add(C, [0, 0, 1.5]);
 
 const STAIR_ROT: Vec3 = [0, -9 * DEG, 0];
 
@@ -60,10 +61,10 @@ function keysFor(i: number): Key<PanelPose>[] {
   }
   const target = st(i);
   const hidden: PanelPose = { pos: [0.15, -0.3, -0.6], rot: STAIR_ROT, scale: 0.84, opacity: 0 };
-  const start = s(3.05) + (i - 1) * 12;
+  const start = s(3.05) + (i - 1) * 10;
   const settled: PanelPose = { pos: target, rot: STAIR_ROT, scale: 1, opacity: 1 };
   const away: PanelPose = {
-    pos: add(ov.pos, [Math.sign(g.off[0]) * 1.1, Math.sign(g.off[1]) * 0.8, -2.6]),
+    pos: add(ov.pos, [Math.sign(g.off[0]) * 1.2, Math.sign(g.off[1]) * 1.0, -2.8]),
     rot: ov.rot,
     scale: 0.95,
     opacity: 0,
@@ -78,7 +79,7 @@ function keysFor(i: number): Key<PanelPose>[] {
   ];
 }
 
-const KEYS = [0, 1, 2, 3].map(keysFor);
+const KEYS = [0, 1, 2, 3, 4].map(keysFor);
 
 export function phonePose(i: number, frame: number): PanelPose {
   const p = track(frame, KEYS[i], mixPose);
@@ -108,13 +109,14 @@ export const CAM_KEYS: CamKey[] = [
   { f: s(4.4), pos: [-1.6, 0.6, 12.6], look: [0.9, -3.6, -2.6], roll: 0.012, fov: 46 },
   { f: s(6), pos: [2.6, -2.2, 12.2], look: [1.8, -7.4, -4.8], roll: -0.012, fov: 46 },
   // 03 FLYTHROUGH — descend past each page, close enough to read the cards
-  { f: s(7.1), pos: st(1, [-0.9, 0.2, 6.6]), look: st(1, [0.15, -0.1, 0]), roll: 0.025, fov: 46 },
-  { f: s(8.1), pos: st(2, [-0.9, 0.2, 6.6]), look: st(2, [0.15, -0.1, 0]), roll: -0.03, fov: 46 },
-  { f: s(9.1), pos: st(3, [-0.9, 0.2, 6.6]), look: st(3, [0.15, -0.1, 0]), roll: 0.025, fov: 46 },
-  { f: s(10), pos: st(3, [-2.0, 2.2, 9.0]), look: st(2, [0.6, -1.6, -1.0]), roll: 0, fov: 46 },
-  // 04 OVERVIEW — pull back to the 2×2 grid
-  { f: s(11.3), pos: G([1.1, 0.4, 12.8]), look: G([0.15, -0.5, 0]), fov: 46 },
-  { f: s(13), pos: G([0, 0.0, 14.0]), look: G([0, -0.55, 0]), fov: 46 },
+  { f: s(6.9), pos: st(1, [-0.9, 0.2, 6.6]), look: st(1, [0.15, -0.1, 0]), roll: 0.025, fov: 46 },
+  { f: s(7.7), pos: st(2, [-0.9, 0.2, 6.6]), look: st(2, [0.15, -0.1, 0]), roll: -0.03, fov: 46 },
+  { f: s(8.5), pos: st(3, [-0.9, 0.2, 6.6]), look: st(3, [0.15, -0.1, 0]), roll: 0.025, fov: 46 },
+  { f: s(9.3), pos: st(4, [-0.9, 0.2, 6.6]), look: st(4, [0.15, -0.1, 0]), roll: -0.02, fov: 46 },
+  { f: s(10.05), pos: st(4, [-2.2, 3.4, 9.6]), look: st(3, [0.8, -2.4, -1.0]), roll: 0, fov: 46 },
+  // 04 OVERVIEW — pull back to the 5-screen fan
+  { f: s(11.3), pos: G([1.1, 0.4, 14.0]), look: G([0.15, -0.5, 0]), fov: 46 },
+  { f: s(13), pos: G([0, 0.0, 15.4]), look: G([0, -0.55, 0]), fov: 46 },
   // 05 ENDING — head-on to the home screen
   { f: s(14.25), pos: E([0, -0.3, 9.2]), look: E([0, -1.05, 0]), fov: 44 },
   { f: s(15) - 1, pos: E([0, -0.3, 8.8]), look: E([0, -1.05, 0]), fov: 44 },

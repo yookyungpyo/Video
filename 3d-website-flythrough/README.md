@@ -76,7 +76,7 @@ GL=swangle npm run stills            # CPU (PowerShell: $env:GL="swangle"; npm r
 
 ## HF 앱 세로형 버전 (FlythroughHF · 1080×1920 · 9:16)
 
-HF 앱 실제 화면 4장(`public/hf/`, 상태바를 잘라낸 1320×2560)을 폰 패널로 띄운 세로형 버전입니다.
+HF 앱 실제 화면 5장(`public/hf/`, 홈·보금자리론·주택연금·전세ON·상환원리금 조회, 상태바를 잘라낸 1320×2560)을 폰 패널로 띄운 세로형 버전입니다.
 코드는 `src/hf/`에 있고(레이아웃·카메라 `layout.ts`, 타이틀 `HfOverlay.tsx`), 포인트 컬러는 #3366FF, 폰트는 Noto Sans KR입니다.
 
 ```bash
