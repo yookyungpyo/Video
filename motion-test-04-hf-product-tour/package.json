@@ -1,0 +1,26 @@
+{
+  "name": "motion-test-04-hf-product-tour",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HF Financial Product Tour — 20s product tour built from HF mobile app screenshots (Remotion)",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "preview": "remotion studio src/index.ts --port 3000",
+    "render": "remotion render src/index.ts HFProductTour output/hf-product-tour.mp4 --codec=h264 --crf=16",
+    "stills": "node scripts/stills.mjs",
+    "verify": "node scripts/verify.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-kr": "^5.2.9",
+    "@remotion/cli": "^4.0.441",
+    "lucide-react": "^0.460.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.6.3"
+  }
+}
