@@ -5,7 +5,7 @@ import "@fontsource/jetbrains-mono/400.css";
 import React, { useEffect, useState } from "react";
 import { AbsoluteFill, Img, continueRender, delayRender, interpolate, staticFile, useCurrentFrame } from "remotion";
 import {
-  ARROW_STRAIGHT, CAPTIONS, CARD, CHECK, CY, DOC, END_LINES, PHOTOS, Q_POS, SUBS, T, TANGLE, TARGET, io, lerpPts, toD,
+  ARROW_STRAIGHT, CAPTIONS, CARD, CHECK, CY, DOC, END_LINES, END_REVEAL, PHOTOS, Q_POS, SUBS, T, TANGLE, TARGET, io, lerpPts, toD,
 } from "./timeline";
 
 const W = 1080, H = 1920;
@@ -175,7 +175,7 @@ export const Proposal: React.FC = () => {
           <g fontFamily="Nanum Myeongjo" fontWeight={700} fill={TEXT} textAnchor="middle" filter="url(#shadow)">
             {END_LINES.map((l, j) => (
               <text key={j} x={540} y={860 + j * 100} fontSize={j === 2 ? 64 : 54} fill={j === 2 ? ACCENT : TEXT}
-                opacity={interpolate(f, [T.card + 4 + j * 8, T.card + 16 + j * 8], [0, 1], clamp)}>{l}</text>
+                opacity={interpolate(f, [END_REVEAL[j], END_REVEAL[j] + 12], [0, 1], clamp)}>{l}</text>
             ))}
           </g>
         )}

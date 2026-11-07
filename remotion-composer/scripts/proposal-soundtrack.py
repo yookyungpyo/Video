@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tonal SFX (no noise, no voice) for the PROPOSAL PRINCIPLES text-only Reels.
-Usage: python3 scripts/proposal-soundtrack.py <events.json> <silent.mp4> <out.mp4>
+Usage: python3 scripts/proposal-soundtrack.py <events.json> <silent.mp4> <out.mp4> [voiceover.mp3]
+With a voiceover, SFX are ducked under the voice (voice starts 0.3s in).
 """
 import json, os, subprocess, sys, tempfile, wave
 import numpy as np
@@ -58,10 +59,22 @@ L += pad; R += pad
 mix = np.stack([L, R], 1)
 mix /= max(1e-9, np.abs(mix).max())
 mix = np.tanh(mix * 2.2) / np.tanh(2.2) * 0.85
+VO = sys.argv[4] if len(sys.argv) > 4 else None
+if VO:
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", VO, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], check=True, capture_output=True).stdout
+    vo = np.frombuffer(raw, dtype=np.float32).astype(float)
+    v = np.zeros(len(L)); o = int(0.3 * SR); n = min(len(vo), len(L) - o); v[o:o+n] = vo[:n]
+    v /= max(1e-9, np.abs(v).max())
+    win = int(0.12 * SR)
+    env = np.sqrt(np.convolve(v * v, np.ones(win) / win, mode="same"))
+    env = np.clip(env / (env.max() * 0.25), 0, 1)
+    env = np.convolve(env, np.ones(int(0.2 * SR)) / int(0.2 * SR), mode="same")
+    mix = mix * 0.75 * (1 - 0.5 * env)[:, None] + (v * 0.92)[:, None]
+    mix /= max(1e-9, np.abs(mix).max() / 0.89)
 tmp = tempfile.mkdtemp(); wav = os.path.join(tmp, "mix.wav")
 with wave.open(wav, "wb") as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((mix * 32767).astype(np.int16).tobytes())
 subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", sys.argv[2], "-i", wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy",
-                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-shortest", sys.argv[3]], check=True)
+                "-af", ("loudnorm=I=-14:TP=-1.5:LRA=11" if VO else "loudnorm=I=-16:TP=-1.5:LRA=11"), "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-shortest", sys.argv[3]], check=True)
 print("Wrote", sys.argv[3])

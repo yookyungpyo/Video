@@ -3,14 +3,18 @@ export const FPS = 30;
 export const DURATION = 960; // 32s
 export type P = [number, number];
 
+// Beats are timed to the ElevenLabs voiceover (sentence starts via silencedetect, +0.3s lead-in).
+const v = (sec: number) => Math.round((sec + 0.3) * FPS);
 export const T = {
-  intro: [0, 105] as const,
-  split: [105, 225] as const,
-  q1: [225, 480] as const, q1Answer: 345, tilt: 345,
-  q2: [480, 735] as const, q2Answer: 600, release: [600, 645] as const,
-  end: [735, 885] as const,
-  card: 885,
+  intro: [0, v(2.82)] as const,
+  split: [v(2.82), v(6.94)] as const,
+  q1: [v(6.94), v(15.69)] as const, q1Answer: v(11.93), tilt: v(11.93),
+  q2: [v(15.69), v(24.56)] as const, q2Answer: v(20.19), release: [v(20.19), v(20.19) + 45] as const,
+  end: [v(24.56), v(27.0)] as const,
+  card: v(27.0),
 };
+export const END_REVEAL = [v(27.0), v(27.0) + 8, v(27.39)];
+export const VO_OFFSET_SEC = 0.3;
 
 export const CARD = { x: 90, y: 360, w: 900, h: 820, r: 26 };
 export const CY = 1460;
