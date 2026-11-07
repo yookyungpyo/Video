@@ -1,6 +1,6 @@
 # 첫인상보다 끝인상 — 30초 세로 릴스 (Remotion)
 
-1080×1920 · 30fps · 900프레임(30초) · H.264 / yuv420p · 자막 중심(내레이션·BGM 없음)
+1080×1920 · 30fps · 900프레임(30초) · H.264 / yuv420p · 내레이션(일레븐랩스 TaeHyeon) + 고객 목소리(Jisun) + 자막, BGM 없음
 출력: `output/last-impression.mp4`
 
 ## Windows PowerShell에서 실행하기
@@ -37,6 +37,7 @@
 | 전환 | `transitionIn`: `fade`(경계 직전 8프레임 크로스페이드, 총 길이 유지) / `cut` |
 | 색상 | `COLORS` (따뜻한 흰색 자막, 주황 강조) |
 | 자막 크기·영역 | `TYPE` (58–72px, 넘치면 자동 축소), `TEXT_BOX` (x 100–900, 상단 y 368 — 릴스·틱톡 UI 밖) |
+| 음성 | `VOICE.lines` (`file` 안의 `src` 초 구간을 `at` 프레임에 재생), 끄려면 `VOICE.enabled = false` |
 | BGM | 제공된 파일을 `public/bgm.mp3`로 넣고 `BGM.enabled = true` |
 
 ## 장면

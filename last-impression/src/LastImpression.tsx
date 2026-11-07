@@ -2,8 +2,8 @@ import "@fontsource/noto-sans-kr/700.css";
 import "@fontsource/noto-sans-kr/900.css";
 import React, { useEffect, useState } from "react";
 import { fitText } from "@remotion/layout-utils";
-import { AbsoluteFill, Audio, Easing, Img, continueRender, delayRender, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { BGM, COLORS, Caption, MOTION, SCENES, Scene, TEXT_BOX, TYPE, VIDEO } from "./config";
+import { AbsoluteFill, Audio, Easing, Img, Sequence, continueRender, delayRender, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { BGM, VOICE, COLORS, Caption, MOTION, SCENES, Scene, TEXT_BOX, TYPE, VIDEO } from "./config";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -102,6 +102,14 @@ export const LastImpression: React.FC = () => {
       {SCENES.map((s, i) => <SceneImage key={s.id} s={s} i={i} />)}
       {ready && <div style={{ position: "absolute", inset: 0, zIndex: 100 }}><Captions /></div>}
       {BGM.enabled && <Audio src={staticFile(BGM.file)} volume={BGM.volume} />}
+      {VOICE.enabled && VOICE.lines.map((l, i) => {
+        const a = Math.round(l.src[0] * VIDEO.fps), b = Math.round(l.src[1] * VIDEO.fps);
+        return (
+          <Sequence key={i} from={l.at} durationInFrames={b - a + 3} layout="none">
+            <Audio src={staticFile(l.file)} trimBefore={a} trimAfter={b + 3} volume={VOICE.volume} />
+          </Sequence>
+        );
+      })}
     </AbsoluteFill>
   );
 };

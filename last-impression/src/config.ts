@@ -75,11 +75,11 @@ export const SCENES: Scene[] = [
     id: "obstacle", image: "images/02-obstacle.png", from: 150, to: 270, fit: "fit", fitTop: 200, transitionIn: "cut",
     shots: [
       { from: 150, zoom: [1.0, 1.01], origin: "50% 55%" }, // 전체: 문제 화면 + 두 사람
-      { from: 210, zoom: [1.06, 1.06], origin: "62% 52%" }, // 짧은 컷: 노트북 경고와 담당자 표정 쪽으로
+      { from: 220, zoom: [1.06, 1.06], origin: "62% 52%" }, // 짧은 컷: 노트북 경고와 담당자 표정 쪽으로
     ],
     captions: [
-      { text: "‘잘하겠습니다.’\n자신 있게 시작했지만,", from: 150, to: 210 },
-      { text: "예상하지 못한\n문제가 생겼습니다.", from: 210, to: 265 },
+      { text: "‘잘하겠습니다.’\n자신 있게 시작했지만,", from: 150, to: 220 },
+      { text: "예상하지 못한\n문제가 생겼습니다.", from: 220, to: 265 },
     ],
   },
   {
@@ -102,8 +102,8 @@ export const SCENES: Scene[] = [
     id: "delivery", image: "images/05-delivery.png", from: 570, to: 720, fit: "cover", transitionIn: "fade",
     shots: [{ from: 570, zoom: [1.0, 1.05], origin: "62% 58%" }], // 고객의 표정과 완성된 결과물 쪽으로
     captions: [
-      { text: "“끝까지 책임져 주셔서\n감사합니다.”", from: 572, to: 645 },
-      { text: "“다음에도\n함께하고 싶습니다.”", from: 645, to: 714, color: "accent" },
+      { text: "“끝까지 책임져 주셔서\n감사합니다.”", from: 572, to: 650 },
+      { text: "“다음에도\n함께하고 싶습니다.”", from: 650, to: 714, color: "accent" },
     ],
   },
   {
@@ -115,6 +115,32 @@ export const SCENES: Scene[] = [
     ],
   },
 ];
+
+// ─────────────────────────────────────────────────────────────
+// 음성 (일레븐랩스): 내레이터 TaeHyeon(narr.mp3), 고객 Jisun(client.mp3) — 원본 *_raw.mp3를 +6dB 맞춘 파일.
+// 장면 2는 4초 안에 맞추려고 1.12배속본(narr_scene2_fast.mp3)을 씁니다.
+// file 안의 [시작, 끝] 초 구간을 잘라 at 프레임에 재생. 자막 등장 시점도 음성에 맞췄습니다.
+// 음성을 빼려면 VOICE.enabled = false
+// ─────────────────────────────────────────────────────────────
+export const VOICE = {
+  enabled: true,
+  volume: 1,
+  lines: [
+    { text: "아는 대표님이 말씀하셨습니다.", file: "audio/narr.mp3", src: [0.0, 1.82], at: 0 },
+    { text: "첫인상보다, 끝인상이 중요해요.", file: "audio/narr.mp3", src: [2.24, 4.58], at: 62 },
+    { text: "잘하겠습니다.", file: "audio/narr_scene2_fast.mp3", src: [0.05, 0.85], at: 151 },
+    { text: "자신 있게 시작했지만,", file: "audio/narr_scene2_fast.mp3", src: [1.26, 2.64], at: 178 },
+    { text: "예상하지 못한 문제가 생겼습니다.", file: "audio/narr_scene2_fast.mp3", src: [2.64, 4.45], at: 220 },
+    { text: "문제를 숨기지 않았습니다.", file: "audio/narr.mp3", src: [10.43, 12.12], at: 280 },
+    { text: "해결할 방법을 찾았습니다.", file: "audio/narr.mp3", src: [12.52, 14.1], at: 345 },
+    { text: "함께 고치고, 다시 확인하며,", file: "audio/narr.mp3", src: [14.54, 16.67], at: 425 },
+    { text: "끝까지 책임졌습니다.", file: "audio/narr.mp3", src: [16.92, 18.35], at: 495 },
+    { text: "(고객) 끝까지 책임져 주셔서, 감사합니다.", file: "audio/client.mp3", src: [0.0, 2.37], at: 575 },
+    { text: "(고객) 다음에도 함께하고 싶습니다.", file: "audio/client.mp3", src: [2.84, 4.83], at: 650 },
+    { text: "첫인상은, 잘하겠다는 약속으로.", file: "audio/narr.mp3", src: [18.86, 21.15], at: 725 },
+    { text: "끝인상은, 그 약속을 지킨 모습으로.", file: "audio/narr.mp3", src: [21.6, 24.3], at: 810 },
+  ] as { text: string; file: string; src: [number, number]; at: number }[],
+};
 
 /** BGM: 사용자가 제공한 파일이 있을 때만 public/bgm.mp3로 넣고 enabled: true */
 export const BGM = { enabled: false, file: "bgm.mp3", volume: 0.15 };
