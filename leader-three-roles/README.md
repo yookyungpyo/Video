@@ -1,6 +1,6 @@
 # AI 시대, 리더가 책임져야 할 세 가지 — 24초 세로 릴스 (Remotion)
 
-1080×1920 · 30fps · 720프레임(24초) · H.264 / yuv420p · 자막 전용(내레이션·BGM 없음)
+1080×1920 · 30fps · 720프레임(24초) · H.264 / yuv420p · 내레이션(일레븐랩스 TaeHyeon) + 자막, BGM 없음
 출력: `output/leader-three-roles.mp4`
 
 ## Windows PowerShell에서 실행하기
@@ -38,6 +38,7 @@
 | 글자 크기 | `TYPE` (제목 110–140, 본문 58–68). 상자 폭을 넘으면 자동으로 줄어듭니다 |
 | 글자 영역 | `TEXT_BOX` (x 100–900, y 360–1450 — 릴스·틱톡 UI에 가리지 않는 범위) |
 | 전환·자막 모션 | `MOTION` (크로스페이드 6프레임, 등장 9프레임 + 16px 상승) |
+| 음성 | `VOICE.lines` (`file` 안의 `src` 초 구간을 `at` 프레임에 재생), 끄려면 `VOICE.enabled = false` |
 | BGM | 제공된 파일을 `public/bgm.mp3`로 넣고 `BGM.enabled = true` |
 
 ## 장면

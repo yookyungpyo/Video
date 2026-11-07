@@ -69,8 +69,8 @@ export const SCENES: Scene[] = [
     id: "intro", kind: "question", image: "images/intro.png",
     from: 0, to: 90, zoom: [1.0, 1.03], origin: "50% 70%",
     lines: [
-      { text: "AI가 답을\n만드는 시대.", from: 0, to: 39 },
-      { text: "**리더**에게 남는\n역할은?", from: 39, to: 83 },
+      { text: "AI가 답을\n만드는 시대.", from: 0, to: 57 },
+      { text: "**리더**에게 남는\n역할은?", from: 57, to: 88 },
     ],
   },
   {
@@ -78,8 +78,8 @@ export const SCENES: Scene[] = [
     from: 90, to: 270, zoom: [1.0, 1.05], origin: "45% 62%", // 구겨진 종이와 받쳐주는 곡선 쪽으로
     align: "left", number: "01", title: "공감", titleFrom: 92, titleTo: 263,
     body: [
-      { text: "마음을 이해하고,", from: 105, to: 180 },
-      { text: "곁을 지킵니다.", from: 180, to: 263 },
+      { text: "마음을 이해하고,", from: 105, to: 177 },
+      { text: "곁을 지킵니다.", from: 177, to: 263 },
     ],
   },
   {
@@ -88,8 +88,8 @@ export const SCENES: Scene[] = [
     pan: { from: [16, -14], to: [-16, 6] }, // 엉킨 실(왼쪽 아래) → 가위·주황 선(오른쪽)으로 시선 이동
     align: "right", number: "02", title: "판단", titleFrom: 272, titleTo: 443,
     body: [
-      { text: "복잡할수록,", from: 285, to: 360 },
-      { text: "리더는\n선택해야 합니다.", from: 360, to: 443, underline: "선택" },
+      { text: "복잡할수록,", from: 285, to: 340 },
+      { text: "리더는\n선택해야 합니다.", from: 340, to: 443, underline: "선택" },
     ],
   },
   {
@@ -97,8 +97,8 @@ export const SCENES: Scene[] = [
     from: 450, to: 630, zoom: [1.0, 1.07], origin: "50% 64%", // 열린 문을 향해
     align: "left", number: "03", title: "비전", titleFrom: 452, titleTo: 623,
     body: [
-      { text: "함께 나아갈", from: 465, to: 540 },
-      { text: "**방향**을 보여줍니다.", from: 540, to: 623 },
+      { text: "함께 나아갈", from: 465, to: 514 },
+      { text: "**방향**을 보여줍니다.", from: 514, to: 623 },
     ],
   },
   {
@@ -108,6 +108,27 @@ export const SCENES: Scene[] = [
     final: { text: "AI 시대,\n리더가 책임져야 할 세 가지.", from: 657 }, // 22.5초(675) 전에 등장 완료 → 끝까지 유지
   },
 ];
+
+// ─────────────────────────────────────────────────────────────
+// 음성 (일레븐랩스 TaeHyeon). 원본 vo_raw.mp3 → vo.mp3(+6dB), 도입 두 문장은 intro_fast.mp3(1.15배속, 3초 장면에 맞춤)
+// file 안의 [시작, 끝] 초 구간을 잘라 at 프레임에 재생합니다. 자막 등장 시점은 음성에 맞춰 조정했습니다.
+// 음성을 빼려면 VOICE.enabled = false
+// ─────────────────────────────────────────────────────────────
+export const VOICE = {
+  enabled: true,
+  volume: 1,
+  lines: [
+    { text: "AI가 답을 만드는 시대.", file: "audio/intro_fast.mp3", src: [0.0, 1.8], at: 2 },
+    { text: "리더에게 남는 역할은?", file: "audio/intro_fast.mp3", src: [2.2, 3.5], at: 58 },
+    { text: "첫째, 공감.", file: "audio/vo.mp3", src: [4.39, 5.56], at: 100 },
+    { text: "마음을 이해하고, 곁을 지킵니다.", file: "audio/vo.mp3", src: [5.9, 8.1], at: 140 },
+    { text: "둘째, 판단.", file: "audio/vo.mp3", src: [8.44, 9.6], at: 270 },
+    { text: "복잡할수록, 리더는 선택해야 합니다.", file: "audio/vo.mp3", src: [9.93, 12.35], at: 310 },
+    { text: "셋째, 비전.", file: "audio/vo.mp3", src: [12.69, 13.86], at: 450 },
+    { text: "함께 나아갈 방향을 보여줍니다.", file: "audio/vo.mp3", src: [14.14, 16.08], at: 490 },
+    { text: "AI 시대, 리더가 책임져야 할 세 가지.", file: "audio/vo.mp3", src: [16.44, 19.21], at: 630 },
+  ] as { text: string; file: string; src: [number, number]; at: number }[],
+};
 
 /** BGM: 사용자가 제공한 파일이 있을 때만 public/bgm.mp3로 넣고 enabled: true */
 export const BGM = { enabled: false, file: "bgm.mp3", volume: 0.15 };
