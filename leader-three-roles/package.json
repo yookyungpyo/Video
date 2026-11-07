@@ -1,0 +1,24 @@
+{
+  "name": "leader-three-roles",
+  "version": "1.0.0",
+  "private": true,
+  "description": "24s 9:16 Reels: AI 시대, 리더가 책임져야 할 세 가지 (Remotion)",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts LeaderThreeRoles output/leader-three-roles.mp4",
+    "still": "remotion still src/index.ts LeaderThreeRoles output/still.png",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-kr": "5.2.9",
+    "@remotion/cli": "4.0.441",
+    "@remotion/layout-utils": "4.0.441",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}
