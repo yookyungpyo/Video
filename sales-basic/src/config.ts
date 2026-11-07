@@ -60,8 +60,8 @@ export const SCENES: Scene[] = [
     origin: "52% 62%", // 트럭 쪽으로 천천히 확대
     transitionIn: "none",
     captions: [
-      { text: "트럭을 **‘회사의 얼굴’**로 여기는", from: 10, to: 144 },
-      { text: "일본의 한 운송회사.", from: 52, to: 144 },
+      { text: "일본에서 트럭은", from: 10, to: 144 },
+      { text: "운송회사의 **‘얼굴’**입니다.", from: 52, to: 144 },
     ],
   },
   {
