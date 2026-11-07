@@ -74,7 +74,7 @@ export const SCENES: Scene[] = [
     transitionIn: "fade",
     captions: [
       { text: "깨끗하게 관리하는 이유.", from: 160, to: 294 },
-      { text: "**고객의 신뢰**와 연결되기 때문입니다.", from: 202, to: 294 },
+      { text: "**고객의 신뢰**와 연결되기 때문입니다.", from: 214, to: 294 },
     ],
   },
   {
@@ -88,7 +88,7 @@ export const SCENES: Scene[] = [
     transitionIn: "cut",
     captions: [
       { text: "고객을 만나는 우리도 같습니다.", from: 310, to: 444 },
-      { text: "**단정한 옷차림**부터 준비합니다.", from: 352, to: 444 },
+      { text: "**단정한 옷차림**부터 준비합니다.", from: 376, to: 444 },
     ],
   },
   {
@@ -105,3 +105,23 @@ export const SCENES: Scene[] = [
     ],
   },
 ];
+
+// ─────────────────────────────────────────────────────────────
+// 음성 (일레븐랩스 TaeHyeon) — public/audio/vo.mp3 한 파일에서 문장별로 잘라 배치합니다.
+// src: 원본 음성 안의 [시작, 끝] 초 / at: 영상에서 재생을 시작할 프레임 (자막 등장 시점에 맞춤)
+// 음성을 빼려면 VOICE.enabled = false
+// ─────────────────────────────────────────────────────────────
+export const VOICE = {
+  enabled: true,
+  file: "audio/vo.mp3", // vo_raw.mp3(원본)을 +6dB 맞춘 파일
+  volume: 1,
+  lines: [
+    { text: "일본에서 트럭은, 운송회사의 얼굴입니다.", src: [0.0, 3.08], at: 10 },
+    { text: "깨끗하게 관리하는 이유.", src: [3.7, 5.3], at: 160 },
+    { text: "고객의 신뢰와 연결되기 때문입니다.", src: [5.88, 8.29], at: 217 },
+    { text: "고객을 만나는 우리도 같습니다.", src: [8.91, 10.88], at: 310 },
+    { text: "단정한 옷차림부터 준비합니다.", src: [11.43, 13.56], at: 379 },
+    { text: "당신이 회사의 첫인상입니다.", src: [14.1, 16.03], at: 460 },
+    { text: "세일즈의 기본입니다.", src: [16.55, 18.21], at: 540 },
+  ] as { text: string; src: [number, number]; at: number }[],
+};

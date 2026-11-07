@@ -3,9 +3,9 @@ import "@fontsource/noto-sans-kr/800.css";
 import React, { useEffect, useState } from "react";
 import { fitText } from "@remotion/layout-utils";
 import {
-  AbsoluteFill, Easing, Img, continueRender, delayRender, interpolate, staticFile, useCurrentFrame,
+  AbsoluteFill, Audio, Easing, Img, Sequence, continueRender, delayRender, interpolate, staticFile, useCurrentFrame,
 } from "remotion";
-import { Caption, SAFE, SCENES, STYLE, Scene, VIDEO } from "./config";
+import { Caption, SAFE, SCENES, STYLE, Scene, VIDEO, VOICE } from "./config";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -118,6 +118,14 @@ export const SalesBasic: React.FC = () => {
     <AbsoluteFill style={{ backgroundColor: "#E9DFD2" }}>
       {SCENES.map((s, i) => <SceneImage key={s.id} scene={s} index={i} />)}
       {fontsReady && <Captions />}
+      {VOICE.enabled && VOICE.lines.map((l, i) => {
+        const a = Math.round(l.src[0] * VIDEO.fps), b = Math.round(l.src[1] * VIDEO.fps);
+        return (
+          <Sequence key={i} from={l.at} durationInFrames={b - a + 6} layout="none">
+            <Audio src={staticFile(VOICE.file)} trimBefore={a} trimAfter={b + 6} volume={VOICE.volume} />
+          </Sequence>
+        );
+      })}
     </AbsoluteFill>
   );
 };
