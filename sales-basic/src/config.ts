@@ -8,7 +8,7 @@ export const VIDEO = {
   width: 1080,
   height: 1920,
   fps: 30,
-  durationInFrames: 681, // 22.7초 (도입 질문 2.7초 + 본편 20초)
+  durationInFrames: 705, // 23.5초 (도입 질문 3.5초 + 본편 20초)
 };
 
 /** 주요 자막을 두지 않는 여백(px) — 릴스/틱톡 UI(상단 헤더·계정명, 하단 캡션, 우측 버튼)를 피하는 세이프존 */
@@ -55,56 +55,56 @@ export const SCENES: Scene[] = [
     id: "truck",
     image: "images/01-truck.png",
     from: 0,
-    to: 231,
+    to: 255,
     zoom: [1.0, 1.06],
     origin: "52% 62%", // 트럭 쪽으로 천천히 확대
     transitionIn: "none",
     captions: [
       // 도입 질문 (궁금증 유발)
-      { text: "일본 트럭은 왜", from: 6, to: 78, size: 72 },
-      { text: "**유난히 깨끗할까요?**", from: 16, to: 78, size: 72 },
-      { text: "일본에서 트럭은", from: 91, to: 225 },
-      { text: "운송회사의 **‘얼굴’**입니다.", from: 133, to: 225 },
+      { text: "일본 트럭은 왜", from: 6, to: 102, size: 72 },
+      { text: "**유난히 깨끗할까요?**", from: 16, to: 102, size: 72 },
+      { text: "일본에서 트럭은", from: 115, to: 249 },
+      { text: "운송회사의 **‘얼굴’**입니다.", from: 157, to: 249 },
     ],
   },
   {
     id: "wipe",
     image: "images/02-wipe.png",
-    from: 231,
-    to: 381,
+    from: 255,
+    to: 405,
     zoom: [1.0, 1.06],
     origin: "30% 78%", // 손과 천을 중심으로 확대 (손이 화면 왼쪽 아래에 머묾)
     transitionIn: "fade",
     captions: [
-      { text: "깨끗하게 관리하는 이유.", from: 241, to: 375 },
-      { text: "**고객의 신뢰**와 연결되기 때문입니다.", from: 295, to: 375 },
+      { text: "깨끗하게 관리하는 이유.", from: 265, to: 399 },
+      { text: "**고객의 신뢰**와 연결되기 때문입니다.", from: 319, to: 399 },
     ],
   },
   {
     id: "cuff",
     image: "images/03-cuff.png",
-    from: 381,
-    to: 531,
+    from: 405,
+    to: 555,
     // 손 위치 맞춤 컷: 확대된 상태로 시작해 소매를 잡은 손이 직전 장면의 손 위치 쪽에 오도록 함
     zoom: [1.06, 1.02],
     origin: "100% 79%",
     transitionIn: "cut",
     captions: [
-      { text: "고객을 만나는 우리도 같습니다.", from: 391, to: 525 },
-      { text: "**단정한 옷차림**부터 준비합니다.", from: 457, to: 525 },
+      { text: "고객을 만나는 우리도 같습니다.", from: 415, to: 549 },
+      { text: "**단정한 옷차림**부터 준비합니다.", from: 481, to: 549 },
     ],
   },
   {
     id: "greeting",
     image: "images/04-greeting.png",
-    from: 531,
-    to: 681,
+    from: 555,
+    to: 705,
     zoom: [1.06, 1.0], // 두 사람을 함께 보여주며 천천히 축소
     origin: "45% 62%",
     transitionIn: "fade",
     captions: [
-      { text: "당신이 **회사의 첫인상**입니다.", from: 541, to: 617 },
-      { text: "**세일즈의 기본입니다.**", from: 621, size: 88 }, // 끝까지 유지
+      { text: "당신이 **회사의 첫인상**입니다.", from: 565, to: 641 },
+      { text: "**세일즈의 기본입니다.**", from: 645, size: 88 }, // 끝까지 유지
     ],
   },
 ];
@@ -120,15 +120,15 @@ export const VOICE = {
   volume: 1,
   lines: [
     // 도입 질문은 hook.mp3에서 재생 (아래 HOOK_VOICE)
-    { text: "일본에서 트럭은, 운송회사의 얼굴입니다.", src: [0.0, 3.08], at: 91 },
-    { text: "깨끗하게 관리하는 이유.", src: [3.7, 5.3], at: 241 },
-    { text: "고객의 신뢰와 연결되기 때문입니다.", src: [5.88, 8.29], at: 298 },
-    { text: "고객을 만나는 우리도 같습니다.", src: [8.91, 10.88], at: 391 },
-    { text: "단정한 옷차림부터 준비합니다.", src: [11.43, 13.56], at: 460 },
-    { text: "당신이 회사의 첫인상입니다.", src: [14.1, 16.03], at: 541 },
-    { text: "세일즈의 기본입니다.", src: [16.55, 18.21], at: 621 },
+    { text: "일본에서 트럭은, 운송회사의 얼굴입니다.", src: [0.0, 3.08], at: 115 },
+    { text: "깨끗하게 관리하는 이유.", src: [3.7, 5.3], at: 265 },
+    { text: "고객의 신뢰와 연결되기 때문입니다.", src: [5.88, 8.29], at: 322 },
+    { text: "고객을 만나는 우리도 같습니다.", src: [8.91, 10.88], at: 415 },
+    { text: "단정한 옷차림부터 준비합니다.", src: [11.43, 13.56], at: 484 },
+    { text: "당신이 회사의 첫인상입니다.", src: [14.1, 16.03], at: 565 },
+    { text: "세일즈의 기본입니다.", src: [16.55, 18.21], at: 645 },
   ] as { text: string; src: [number, number]; at: number }[],
 };
 
 /** 도입 질문 음성 (별도 파일). 파일이 준비되면 enabled: true */
-export const HOOK_VOICE = { enabled: false, file: "audio/hook.mp3", at: 8, volume: 1 };
+export const HOOK_VOICE = { enabled: true, file: "audio/hook.mp3", at: 8, volume: 1 }; // hook_raw.mp3(원본)을 +6dB 맞춘 파일
