@@ -1,0 +1,24 @@
+{
+  "name": "last-impression",
+  "version": "1.0.0",
+  "private": true,
+  "description": "30s 9:16 Reels: 첫인상보다 끝인상 (Remotion)",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts LastImpression output/last-impression.mp4",
+    "still": "remotion still src/index.ts LastImpression output/still.png",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-kr": "5.2.9",
+    "@remotion/cli": "4.0.441",
+    "@remotion/layout-utils": "4.0.441",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "typescript": "5.6.3"
+  }
+}
