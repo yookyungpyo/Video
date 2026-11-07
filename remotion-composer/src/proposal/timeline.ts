@@ -16,7 +16,8 @@ export const T = {
 export const END_REVEAL = [v(27.0), v(27.0) + 8, v(27.39)];
 export const VO_OFFSET_SEC = 0.3;
 
-export const CARD = { x: 90, y: 360, w: 900, h: 820, r: 26 };
+// Layout respects the Reels/TikTok safe zone (src/shared/safeZone.ts): text only between y=320 and y=1470.
+export const CARD = { x: 150, y: 560, w: 780, h: 640, r: 24 };
 export const CY = 1460;
 
 export const PHOTOS: [number, string, number][] = [

@@ -103,7 +103,7 @@ export const Proposal: React.FC = () => {
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.4" /></filter>
         </defs>
 
-        <g opacity={mOp}>
+        <g opacity={mOp} transform="translate(540 1384) scale(0.68) translate(-540 -1462)">
           {/* intro document + ? */}
           <Stroke d={DOC} p={docP} op={docOp} />
           {q1s > 0 && f < T.split[0] + 20 && (
@@ -156,8 +156,8 @@ export const Proposal: React.FC = () => {
           const dy = interpolate(f, [c.f0, c.f0 + 12], [12, 0], clamp);
           return (
             <g key={i} opacity={op} transform={`translate(0 ${dy})`} filter="url(#shadow)">
-              <text x={90} y={150} fontFamily="JetBrains Mono, Noto Sans KR" fontSize={26} letterSpacing={6} fill={TEXT} opacity={0.75}>{c.kicker}</text>
-              {c.lines.map((l, j) => <text key={j} x={90} y={228 + j * 76} fontFamily="Noto Sans KR" fontWeight={700} fontSize={c.lines.length === 1 ? 76 : 62} fill={TEXT}>{l}</text>)}
+              <text x={100} y={372} fontFamily="JetBrains Mono, Noto Sans KR" fontSize={26} letterSpacing={6} fill={TEXT} opacity={0.75}>{c.kicker}</text>
+              {c.lines.map((l, j) => <text key={j} x={100} y={440 + j * 70} fontFamily="Noto Sans KR" fontWeight={700} fontSize={c.lines.length === 1 ? 72 : 58} fill={TEXT}>{l}</text>)}
             </g>
           );
         })}
@@ -165,7 +165,7 @@ export const Proposal: React.FC = () => {
         {SUBS.map((s, i) => {
           const op = interpolate(f, [s.f0, s.f0 + 10, s.f1 - 6, s.f1], [0, 1, 1, 0], clamp);
           return op <= 0 ? null : (
-            <text key={i} x={540} y={1266} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={s.strong ? 700 : 400}
+            <text key={i} x={540} y={1262} textAnchor="middle" fontFamily="Noto Sans KR" fontWeight={s.strong ? 700 : 400}
               fontSize={s.text.length > 22 ? 34 : 38} fill={s.strong ? ACCENT : TEXT} opacity={op} filter="url(#shadow)"
               transform={`translate(0 ${interpolate(f, [s.f0, s.f0 + 12], [10, 0], clamp)})`}>{s.strong ? "→ " : ""}{s.text}</text>
           );
@@ -174,7 +174,7 @@ export const Proposal: React.FC = () => {
         {endDim > 0 && (
           <g fontFamily="Nanum Myeongjo" fontWeight={700} fill={TEXT} textAnchor="middle" filter="url(#shadow)">
             {END_LINES.map((l, j) => (
-              <text key={j} x={540} y={860 + j * 100} fontSize={j === 2 ? 64 : 54} fill={j === 2 ? ACCENT : TEXT}
+              <text key={j} x={540} y={860 + j * 100} fontSize={j === 2 ? 58 : 50} fill={j === 2 ? ACCENT : TEXT}
                 opacity={interpolate(f, [END_REVEAL[j], END_REVEAL[j] + 12], [0, 1], clamp)}>{l}</text>
             ))}
           </g>

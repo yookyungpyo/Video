@@ -11,8 +11,8 @@ export const VIDEO = {
   durationInFrames: 600, // 20초
 };
 
-/** 주요 자막을 두지 않는 여백(px) */
-export const SAFE = { left: 100, right: 100, top: 250, bottom: 350 };
+/** 주요 자막을 두지 않는 여백(px) — 릴스/틱톡 UI(상단 헤더·계정명, 하단 캡션, 우측 버튼)를 피하는 세이프존 */
+export const SAFE = { left: 100, right: 100, top: 320, bottom: 450 };
 
 export const STYLE = {
   fontFamily: "Noto Sans KR",
@@ -22,7 +22,7 @@ export const STYLE = {
   captionSize: 64, // 기본 자막
   endingSize: 88, // 엔딩 문구
   lineHeight: 1.4,
-  captionTop: 270, // 자막 블록 시작 y (SAFE.top 이상)
+  captionTop: 340, // 자막 블록 시작 y (SAFE.top 이상)
   fadeIn: 12, // 등장 페이드 프레임
   fadeOut: 10, // 퇴장 페이드 프레임
   rise: 18, // 등장 시 아래→위 이동(px)
