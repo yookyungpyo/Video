@@ -5,7 +5,7 @@ import { fitText } from "@remotion/layout-utils";
 import {
   AbsoluteFill, Audio, Easing, Img, Sequence, continueRender, delayRender, interpolate, staticFile, useCurrentFrame,
 } from "remotion";
-import { Caption, SAFE, SCENES, STYLE, Scene, VIDEO, VOICE } from "./config";
+import { Caption, HOOK_VOICE, SAFE, SCENES, STYLE, Scene, VIDEO, VOICE } from "./config";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const ease = Easing.bezier(0.33, 0, 0.2, 1);
@@ -118,6 +118,11 @@ export const SalesBasic: React.FC = () => {
     <AbsoluteFill style={{ backgroundColor: "#E9DFD2" }}>
       {SCENES.map((s, i) => <SceneImage key={s.id} scene={s} index={i} />)}
       {fontsReady && <Captions />}
+      {HOOK_VOICE.enabled && (
+        <Sequence from={HOOK_VOICE.at} layout="none">
+          <Audio src={staticFile(HOOK_VOICE.file)} volume={HOOK_VOICE.volume} />
+        </Sequence>
+      )}
       {VOICE.enabled && VOICE.lines.map((l, i) => {
         const a = Math.round(l.src[0] * VIDEO.fps), b = Math.round(l.src[1] * VIDEO.fps);
         return (
