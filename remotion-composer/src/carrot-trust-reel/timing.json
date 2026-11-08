@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "totalFrames": 3911,
+ "totalFrames": 3834,
  "sections": [
   {
    "id": "s1",
@@ -510,87 +510,87 @@
   },
   {
    "id": "s6",
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "id": "notProve",
      "kind": "normal",
      "start": 3039,
-     "end": 3149,
+     "end": 3134,
      "cues": [
       {
        "start": 3039,
-       "end": 3149,
+       "end": 3134,
        "text": "이런 행동 하나가\n내 실력을 증명하지는 않는다.",
-       "show": 3163
+       "show": 3152
       }
      ]
     },
     {
      "id": "start",
      "kind": "normal",
-     "start": 3165,
-     "end": 3348,
+     "start": 3157,
+     "end": 3317,
      "cues": [
       {
-       "start": 3165,
-       "end": 3242,
+       "start": 3157,
+       "end": 3228,
        "text": "하지만 내 이야기를\n더 들어보고,",
-       "show": 3240
+       "show": 3226
       },
       {
-       "start": 3242,
-       "end": 3348,
+       "start": 3228,
+       "end": 3317,
        "text": "함께 일해보고 싶게 만드는\n{시작}은 될 수 있다.",
-       "show": 3362
+       "show": 3335
       }
      ]
     },
     {
      "id": "groom",
      "kind": "normal",
-     "start": 3364,
-     "end": 3534,
+     "start": 3339,
+     "end": 3492,
      "cues": [
       {
-       "start": 3364,
-       "end": 3427,
+       "start": 3339,
+       "end": 3408,
        "text": "나를 가꾸고 정돈하는 일도,",
-       "show": 3425
+       "show": 3406
       },
       {
-       "start": 3427,
-       "end": 3534,
+       "start": 3408,
+       "end": 3492,
        "text": "내가 가진 실력을\n제대로 전달하기 위한 준비다.",
-       "show": 3552
+       "show": 3510
       }
      ]
     },
     {
      "id": "skill",
      "kind": "final",
-     "start": 3566,
-     "end": 3638,
+     "start": 3530,
+     "end": 3586,
      "cues": [
       {
-       "start": 3566,
-       "end": 3638,
+       "start": 3530,
+       "end": 3586,
        "text": "실력이 기회를 잡게 해준다면,",
-       "show": 3656
+       "show": 3604
       }
      ]
     },
     {
      "id": "trust",
      "kind": "final",
-     "start": 3670,
-     "end": 3791,
+     "start": 3613,
+     "end": 3714,
      "cues": [
       {
-       "start": 3670,
-       "end": 3791,
+       "start": 3613,
+       "end": 3714,
        "text": "신뢰를 주는 모습은\n그 실력을 보여줄 기회를 만든다.",
-       "show": 3896
+       "show": 3819
       }
      ]
     }
