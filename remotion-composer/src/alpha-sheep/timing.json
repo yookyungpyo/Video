@@ -628,59 +628,59 @@
    "id": "09",
    "start": 4740,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 4762,
-     "end": 4844,
+     "end": 4835,
      "added": false,
      "cues": [
       {
        "start": 4762,
-       "end": 4844,
+       "end": 4835,
        "text": "인생의 중간에도 변화가 찾아옵니다.",
-       "show": 4857
+       "show": 4850
       }
      ]
     },
     {
-     "start": 4859,
-     "end": 5080,
+     "start": 4852,
+     "end": 5050,
      "added": false,
      "cues": [
       {
-       "start": 4859,
-       "end": 4970,
+       "start": 4852,
+       "end": 4966,
        "text": "갱년기와 중년의 변화를,\n단순한 쇠퇴가 아니라,",
-       "show": 4968
+       "show": 4964
       },
       {
-       "start": 4970,
-       "end": 5080,
+       "start": 4966,
+       "end": 5050,
        "text": "새로운 삶을 설계하는\n전환점으로 바라봅니다.",
-       "show": 5095
+       "show": 5065
       }
      ]
     },
     {
-     "start": 5108,
-     "end": 5180,
+     "start": 5080,
+     "end": 5147,
      "added": true,
      "cues": [
       {
-       "start": 5108,
-       "end": 5180,
+       "start": 5080,
+       "end": 5147,
        "text": "아홉 번째 트렌드, 하프시그널",
-       "show": 5195
+       "show": 5162
       }
      ]
     }
    ],
    "stage": {
     "A": 4740,
-    "B": 4969,
-    "C": 5104,
-    "D": 5188,
+    "B": 4951,
+    "C": 5076,
+    "D": 5155,
     "E": 5256
    }
   },
