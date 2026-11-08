@@ -8,7 +8,7 @@ export const AUDIO_TRACK = "audio/carrot-trust-track.mp4"; // copied from assets
 const DIS = 10; // dissolve length (frames)
 
 type Pos = "top" | "bottom" | "none";
-type Shot = { from: number; to: number; cut?: boolean; pos: Pos; render: (f: number, s: Shot) => React.ReactNode };
+type Shot = { from: number; to: number; cut?: boolean; dis?: number; pos: Pos; render: (f: number, s: Shot) => React.ReactNode };
 
 const at = (id: string) => S(id).start;
 const cue = (id: string, k = 0) => S(id).cues[k];
@@ -108,7 +108,7 @@ const buildShots = (): Shot[] => {
       return <>{full(IMG.hesitate, 0.53, 0.37, { shade: "top" })(f, s)}<Thought f={f} text={c.text} start={c.start} show={c.show} label="구매자의 속마음" /></>;
     } },
     // 6 · re-shoot: match cut, same framing, the laptop never moves
-    { from: at("reshoot") - 4, cut: true, pos: "top", render: (f, s) => {
+    { from: at("reshoot") - 8, dis: 16, pos: "top", render: (f, s) => {
       const cam = camera(push(f, s, 1, 1.03), L.laptop.x, L.laptop.y);
       const w = prog(f, at("reshoot") + 12, 30, sinInOut);
       const X = w * W;
@@ -258,10 +258,10 @@ export const Reel: React.FC<{ withAudio?: boolean }> = ({ withAudio = true }) =>
       <FontLoader />
       {withAudio && <Audio src={staticFile(AUDIO_TRACK)} />}
       {SHOTS.map((s, i) => {
-        const nextCut = SHOTS[i + 1]?.cut;
-        const visTo = s.to + (nextCut ? 0 : DIS);
+        const nxt = SHOTS[i + 1];
+        const visTo = s.to + (nxt?.cut ? 0 : nxt?.dis ?? DIS);
         if (f < s.from || f >= visTo) return null;
-        const op = s.cut || i === 0 ? 1 : prog(f, s.from, DIS, sinInOut);
+        const op = s.cut || i === 0 ? 1 : prog(f, s.from, s.dis ?? DIS, sinInOut);
         return <AbsoluteFill key={i} style={{ opacity: op }}>{s.render(f, s)}</AbsoluteFill>;
       })}
       {SENTENCES.filter((x) => !HIDDEN.has(x.kind)).flatMap((x) => x.cues).map((c, i) => {
