@@ -7,7 +7,10 @@
     "build": "npx remotion render src/index.tsx Explainer out/video.mp4",
     "upgrade": "npx remotion upgrade",
     "clay:preview": "npx remotion studio src/no-persuade-clay/index.tsx",
-    "clay:render": "node scripts/render-no-persuade-clay.mjs"
+    "clay:render": "node scripts/render-no-persuade-clay.mjs",
+    "as:audio": "python scripts/alpha-sheep/build_audio.py",
+    "as:preview": "node scripts/alpha-sheep/prepare.mjs && npx remotion studio src/alpha-sheep/index.tsx",
+    "as:render": "node scripts/alpha-sheep/render.mjs"
   },
   "dependencies": {
     "@fontsource/anton": "^5.2.7",
@@ -22,6 +25,7 @@
     "@remotion/media": "^4.0.441",
     "@remotion/player": "^4.0.441",
     "@remotion/transitions": "^4.0.441",
+    "lucide-react": "^0.460.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remotion": "^4.0.441"

@@ -1,0 +1,834 @@
+{
+ "fps": 30,
+ "totalFrames": 6360,
+ "sections": [
+  {
+   "id": "opening",
+   "start": 0,
+   "frames": 420,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 6,
+     "end": 84,
+     "added": false,
+     "cues": [
+      {
+       "start": 6,
+       "end": 84,
+       "text": "혹시 요즘, 이런 생각 해보셨나요?",
+       "show": 97
+      }
+     ]
+    },
+    {
+     "start": 99,
+     "end": 160,
+     "added": false,
+     "cues": [
+      {
+       "start": 99,
+       "end": 160,
+       "text": "볼 건 많은데 재미가 없고,",
+       "show": 173
+      }
+     ]
+    },
+    {
+     "start": 175,
+     "end": 219,
+     "added": false,
+     "cues": [
+      {
+       "start": 175,
+       "end": 219,
+       "text": "시간은 부족하고,",
+       "show": 232
+      }
+     ]
+    },
+    {
+     "start": 234,
+     "end": 302,
+     "added": false,
+     "cues": [
+      {
+       "start": 234,
+       "end": 302,
+       "text": "AI는 하루가 다르게 바뀝니다.",
+       "show": 315
+      }
+     ]
+    },
+    {
+     "start": 317,
+     "end": 433,
+     "added": false,
+     "cues": [
+      {
+       "start": 317,
+       "end": 433,
+       "text": "2027년, 우리의 일상은\n어떻게 달라질까요?",
+       "show": 440
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "01",
+   "start": 420,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 442,
+     "end": 515,
+     "added": false,
+     "cues": [
+      {
+       "start": 442,
+       "end": 515,
+       "text": "볼 것도, 즐길 것도 넘쳐납니다.",
+       "show": 528
+      }
+     ]
+    },
+    {
+     "start": 530,
+     "end": 595,
+     "added": false,
+     "cues": [
+      {
+       "start": 530,
+       "end": 595,
+       "text": "그런데 왜 이렇게 지루할까요?",
+       "show": 608
+      }
+     ]
+    },
+    {
+     "start": 610,
+     "end": 741,
+     "added": false,
+     "cues": [
+      {
+       "start": 610,
+       "end": 741,
+       "text": "풍요 속에서 진짜 새로운 경험을\n찾는 사람들이 늘어납니다.",
+       "show": 756
+      }
+     ]
+    },
+    {
+     "start": 769,
+     "end": 831,
+     "added": true,
+     "cues": [
+      {
+       "start": 769,
+       "end": 831,
+       "text": "첫 번째 트렌드, 권태사회",
+       "show": 846
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 420,
+    "B": 604,
+    "C": 765,
+    "D": 839,
+    "E": 936
+   }
+  },
+  {
+   "id": "02",
+   "start": 960,
+   "frames": 540,
+   "audio": true,
+   "sentences": [
+    {
+     "start": 982,
+     "end": 1056,
+     "added": false,
+     "cues": [
+      {
+       "start": 982,
+       "end": 1056,
+       "text": "이제 사람들은 돈만 계산하지 않습니다.",
+       "show": 1071
+      }
+     ]
+    },
+    {
+     "start": 1073,
+     "end": 1143,
+     "added": false,
+     "cues": [
+      {
+       "start": 1073,
+       "end": 1143,
+       "text": "시간과 노력도 소중한 투자입니다.",
+       "show": 1158
+      }
+     ]
+    },
+    {
+     "start": 1160,
+     "end": 1300,
+     "added": false,
+     "cues": [
+      {
+       "start": 1160,
+       "end": 1300,
+       "text": "내가 쓴 만큼 만족과 의미를 얻는지,\n삶 전체의 효율을 따집니다.",
+       "show": 1315
+      }
+     ]
+    },
+    {
+     "start": 1330,
+     "end": 1406,
+     "added": true,
+     "cues": [
+      {
+       "start": 1330,
+       "end": 1406,
+       "text": "두 번째 트렌드, 라이프 ROI",
+       "show": 1421
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 960,
+    "B": 1154,
+    "C": 1326,
+    "D": 1414,
+    "E": 1476
+   }
+  },
+  {
+   "id": "03",
+   "start": 1500,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 1522,
+     "end": 1621,
+     "added": false,
+     "cues": [
+      {
+       "start": 1522,
+       "end": 1621,
+       "text": "우리가 기술을 사용하는 모습도 달라집니다.",
+       "show": 1634
+      }
+     ]
+    },
+    {
+     "start": 1636,
+     "end": 1770,
+     "added": false,
+     "cues": [
+      {
+       "start": 1636,
+       "end": 1770,
+       "text": "스마트폰을 넘어 안경과 웨어러블,\nAI 기기로 확장됩니다.",
+       "show": 1783
+      }
+     ]
+    },
+    {
+     "start": 1785,
+     "end": 1856,
+     "added": false,
+     "cues": [
+      {
+       "start": 1785,
+       "end": 1856,
+       "text": "형태가 바뀌면 경험도 바뀝니다.",
+       "show": 1871
+      }
+     ]
+    },
+    {
+     "start": 1884,
+     "end": 1956,
+     "added": true,
+     "cues": [
+      {
+       "start": 1884,
+       "end": 1956,
+       "text": "세 번째 트렌드, 폼팩터 시프트",
+       "show": 1971
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 1500,
+    "B": 1779,
+    "C": 1880,
+    "D": 1964,
+    "E": 2016
+   }
+  },
+  {
+   "id": "04",
+   "start": 2040,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 2062,
+     "end": 2144,
+     "added": false,
+     "cues": [
+      {
+       "start": 2062,
+       "end": 2144,
+       "text": "완벽하게 준비될 때까지 기다릴까요?",
+       "show": 2157
+      }
+     ]
+    },
+    {
+     "start": 2159,
+     "end": 2208,
+     "added": false,
+     "cues": [
+      {
+       "start": 2159,
+       "end": 2208,
+       "text": "이제는 일단 해봅니다.",
+       "show": 2221
+      }
+     ]
+    },
+    {
+     "start": 2223,
+     "end": 2366,
+     "added": false,
+     "cues": [
+      {
+       "start": 2223,
+       "end": 2366,
+       "text": "작은 시도에서 배우고, 경험을 통해\n새로운 기회를 발견합니다.",
+       "show": 2381
+      }
+     ]
+    },
+    {
+     "start": 2395,
+     "end": 2456,
+     "added": true,
+     "cues": [
+      {
+       "start": 2395,
+       "end": 2456,
+       "text": "네 번째 트렌드, 해봄경제",
+       "show": 2471
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 2040,
+    "B": 2217,
+    "C": 2391,
+    "D": 2464,
+    "E": 2556
+   }
+  },
+  {
+   "id": "05",
+   "start": 2580,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 2602,
+     "end": 2684,
+     "added": false,
+     "cues": [
+      {
+       "start": 2602,
+       "end": 2684,
+       "text": "우리는 매일 수많은 것을 저장합니다.",
+       "show": 2697
+      }
+     ]
+    },
+    {
+     "start": 2699,
+     "end": 2771,
+     "added": false,
+     "cues": [
+      {
+       "start": 2699,
+       "end": 2771,
+       "text": "사진과 메모, 링크와 경험까지.",
+       "show": 2784
+      }
+     ]
+    },
+    {
+     "start": 2786,
+     "end": 2917,
+     "added": false,
+     "cues": [
+      {
+       "start": 2786,
+       "end": 2917,
+       "text": "이 기록들은 필요할 때 다시 꺼내 쓰는\n나만의 자산이 됩니다.",
+       "show": 2932
+      }
+     ]
+    },
+    {
+     "start": 2946,
+     "end": 3012,
+     "added": true,
+     "cues": [
+      {
+       "start": 2946,
+       "end": 3012,
+       "text": "다섯 번째 트렌드, 저장인류",
+       "show": 3027
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 2580,
+    "B": 2780,
+    "C": 2942,
+    "D": 3020,
+    "E": 3096
+   }
+  },
+  {
+   "id": "06",
+   "start": 3120,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 3142,
+     "end": 3202,
+     "added": false,
+     "cues": [
+      {
+       "start": 3142,
+       "end": 3202,
+       "text": "일하는 방식도 달라집니다.",
+       "show": 3216
+      }
+     ]
+    },
+    {
+     "start": 3218,
+     "end": 3312,
+     "added": false,
+     "cues": [
+      {
+       "start": 3218,
+       "end": 3312,
+       "text": "AI가 조사하고 정리하고\n제작을 돕습니다.",
+       "show": 3325
+      }
+     ]
+    },
+    {
+     "start": 3327,
+     "end": 3420,
+     "added": false,
+     "cues": [
+      {
+       "start": 3327,
+       "end": 3420,
+       "text": "사람은 방향을 정하고\n결과를 판단합니다.",
+       "show": 3433
+      }
+     ]
+    },
+    {
+     "start": 3435,
+     "end": 3525,
+     "added": false,
+     "cues": [
+      {
+       "start": 3435,
+       "end": 3525,
+       "text": "AI와 자연스럽게 협업하는 시대입니다.",
+       "show": 3540
+      }
+     ]
+    },
+    {
+     "start": 3553,
+     "end": 3625,
+     "added": true,
+     "cues": [
+      {
+       "start": 3553,
+       "end": 3625,
+       "text": "여섯 번째 트렌드, 바이브 워킹",
+       "show": 3640
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 3120,
+    "B": 3429,
+    "C": 3549,
+    "D": 3596,
+    "E": 3636
+   }
+  },
+  {
+   "id": "07",
+   "start": 3660,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 3682,
+     "end": 3764,
+     "added": false,
+     "cues": [
+      {
+       "start": 3682,
+       "end": 3764,
+       "text": "기업은 새로운 고객만 찾지 않습니다.",
+       "show": 3777
+      }
+     ]
+    },
+    {
+     "start": 3779,
+     "end": 3933,
+     "added": false,
+     "cues": [
+      {
+       "start": 3779,
+       "end": 3933,
+       "text": "이미 만난 고객이 다시 찾아오도록,\n더 좋은 경험과 신뢰를 쌓습니다.",
+       "show": 3946
+      }
+     ]
+    },
+    {
+     "start": 3948,
+     "end": 4025,
+     "added": false,
+     "cues": [
+      {
+       "start": 3948,
+       "end": 4025,
+       "text": "오래가는 관계가 경쟁력이 됩니다.",
+       "show": 4040
+      }
+     ]
+    },
+    {
+     "start": 4053,
+     "end": 4125,
+     "added": true,
+     "cues": [
+      {
+       "start": 4053,
+       "end": 4125,
+       "text": "일곱 번째 트렌드, 리:텐션 전략",
+       "show": 4140
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 3660,
+    "B": 3942,
+    "C": 4049,
+    "D": 4133,
+    "E": 4176
+   }
+  },
+  {
+   "id": "08",
+   "start": 4200,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 4222,
+     "end": 4373,
+     "added": false,
+     "cues": [
+      {
+       "start": 4222,
+       "end": 4373,
+       "text": "그런데 AI가 똑똑해질수록,\n오히려 사람의 가치가 중요해집니다.",
+       "show": 4386
+      }
+     ]
+    },
+    {
+     "start": 4388,
+     "end": 4460,
+     "added": false,
+     "cues": [
+      {
+       "start": 4388,
+       "end": 4460,
+       "text": "공감과 창의성, 책임 있는 판단.",
+       "show": 4473
+      }
+     ]
+    },
+    {
+     "start": 4475,
+     "end": 4546,
+     "added": false,
+     "cues": [
+      {
+       "start": 4475,
+       "end": 4546,
+       "text": "이것이 인간만의 차별화입니다.",
+       "show": 4561
+      }
+     ]
+    },
+    {
+     "start": 4575,
+     "end": 4641,
+     "added": true,
+     "cues": [
+      {
+       "start": 4575,
+       "end": 4641,
+       "text": "여덟 번째 트렌드, 휴먼엣지",
+       "show": 4656
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 4200,
+    "B": 4469,
+    "C": 4571,
+    "D": 4649,
+    "E": 4716
+   }
+  },
+  {
+   "id": "09",
+   "start": 4740,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 4762,
+     "end": 4844,
+     "added": false,
+     "cues": [
+      {
+       "start": 4762,
+       "end": 4844,
+       "text": "인생의 중간에도 변화가 찾아옵니다.",
+       "show": 4857
+      }
+     ]
+    },
+    {
+     "start": 4859,
+     "end": 5080,
+     "added": false,
+     "cues": [
+      {
+       "start": 4859,
+       "end": 4970,
+       "text": "갱년기와 중년의 변화를,\n단순한 쇠퇴가 아니라,",
+       "show": 4968
+      },
+      {
+       "start": 4970,
+       "end": 5080,
+       "text": "새로운 삶을 설계하는\n전환점으로 바라봅니다.",
+       "show": 5095
+      }
+     ]
+    },
+    {
+     "start": 5108,
+     "end": 5180,
+     "added": true,
+     "cues": [
+      {
+       "start": 5108,
+       "end": 5180,
+       "text": "아홉 번째 트렌드, 하프시그널",
+       "show": 5195
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 4740,
+    "B": 4969,
+    "C": 5104,
+    "D": 5188,
+    "E": 5256
+   }
+  },
+  {
+   "id": "10",
+   "start": 5280,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 5302,
+     "end": 5376,
+     "added": false,
+     "cues": [
+      {
+       "start": 5302,
+       "end": 5376,
+       "text": "AI는 수많은 답을 만들어냅니다.",
+       "show": 5389
+      }
+     ]
+    },
+    {
+     "start": 5391,
+     "end": 5572,
+     "added": false,
+     "cues": [
+      {
+       "start": 5391,
+       "end": 5481,
+       "text": "하지만 무엇이 좋은지,\n무엇이 나에게 맞는지",
+       "show": 5479
+      },
+      {
+       "start": 5481,
+       "end": 5572,
+       "text": "판단하는 것은\n또 다른 능력입니다.",
+       "show": 5585
+      }
+     ]
+    },
+    {
+     "start": 5587,
+     "end": 5658,
+     "added": false,
+     "cues": [
+      {
+       "start": 5587,
+       "end": 5658,
+       "text": "이제 안목 자체가 자본이 됩니다.",
+       "show": 5673
+      }
+     ]
+    },
+    {
+     "start": 5686,
+     "end": 5747,
+     "added": true,
+     "cues": [
+      {
+       "start": 5686,
+       "end": 5747,
+       "text": "열 번째 트렌드, 안목자본",
+       "show": 5762
+      }
+     ]
+    }
+   ],
+   "stage": {
+    "A": 5280,
+    "B": 5581,
+    "C": 5682,
+    "D": 5755,
+    "E": 5796
+   }
+  },
+  {
+   "id": "ending",
+   "start": 5820,
+   "frames": 540,
+   "audio": false,
+   "sentences": [
+    {
+     "start": 5841,
+     "end": 5945,
+     "added": false,
+     "cues": [
+      {
+       "start": 5841,
+       "end": 5945,
+       "text": "이 열 가지 변화는\n하나의 질문으로 이어집니다.",
+       "show": 5958
+      }
+     ]
+    },
+    {
+     "start": 5960,
+     "end": 6020,
+     "added": false,
+     "cues": [
+      {
+       "start": 5960,
+       "end": 6020,
+       "text": "우리는 변화를 기다릴까요?",
+       "show": 6033
+      }
+     ]
+    },
+    {
+     "start": 6035,
+     "end": 6096,
+     "added": false,
+     "cues": [
+      {
+       "start": 6035,
+       "end": 6096,
+       "text": "아니면, 먼저 시도할까요?",
+       "show": 6109
+      }
+     ]
+    },
+    {
+     "start": 6111,
+     "end": 6127,
+     "added": false,
+     "cues": [
+      {
+       "start": 6111,
+       "end": 6127,
+       "text": "ALPHA SHEEP",
+       "show": 6140
+      }
+     ]
+    },
+    {
+     "start": 6142,
+     "end": 6285,
+     "added": false,
+     "cues": [
+      {
+       "start": 6142,
+       "end": 6285,
+       "text": "이제 전미영 박사님의 강연에서,\n그 답을 함께 찾아보겠습니다.",
+       "show": 6300
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
