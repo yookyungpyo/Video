@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HyperFrames vs Remotion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap">
+<style>
+  /* Layout: a video-editor desk. Two tracks (HF = cue sheet, Remotion = frame function) run side by side; one shared playhead scrubs both. */
+  :root {
+    --bg: #fafafa;
+    --panel: #ffffff;
+    --fg: #111111;
+    --muted: #6b6b6b;
+    --line: #e4e4e4;
+    --hf: #111111;
+    --hf-soft: #efefef;
+    --rm: #7a7a7a;
+    --rm-soft: #f4f4f4;
+    --head: #ececec;
+    --display: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e0e0e; --panel: #161616; --fg: #f2f2f2; --muted: #9a9a9a; --line: #2a2a2a;
+      --hf: #f2f2f2; --hf-soft: #242424; --rm: #8c8c8c; --rm-soft: #1d1d1d; --head: #2c2c2c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e0e0e; --panel: #161616; --fg: #f2f2f2; --muted: #9a9a9a; --line: #2a2a2a;
+    --hf: #f2f2f2; --hf-soft: #242424; --rm: #8c8c8c; --rm-soft: #1d1d1d; --head: #2c2c2c;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.65;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 64px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.15; letter-spacing: -0.01em; }
+  h2 { font-size: 24px; line-height: 1.3; }
+  h3 { font-size: 18px; }
+  p { margin: 0; max-width: 65ch; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .hf { color: var(--hf); }
+  .rm { color: var(--rm); }
+  section { display: flex; flex-direction: column; gap: 18px; }
+  .lead { color: var(--muted); font-size: 17px; }
+
+  /* tool badges */
+  .tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; padding: 2px 8px; border-radius: 4px; }
+  .tag.hf { background: var(--fg); color: var(--panel); }
+  .tag.rm { border: 1px solid var(--rm); color: var(--rm); }
+
+  /* two-up */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .two > * { min-width: 0; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+  .panel.hfp { border-top: 2px solid var(--hf); }
+  .panel.rmp { border-top: 2px solid var(--rm); }
+  .metaphor { font-size: 20px; font-weight: 700; font-family: var(--display); }
+  .panel ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+
+  pre { margin: 0; overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; font-family: var(--mono); font-size: 13px; line-height: 1.6; }
+  code { font-family: var(--mono); font-size: 0.92em; }
+  .hl-line { background: var(--head); display: inline-block; min-width: 100%; border-radius: 3px; }
+
+  /* scrubber demo */
+  .scrub { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+  .scrub-top { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .scrub-top label { font-weight: 600; }
+  #t { flex: 1 1 260px; accent-color: var(--fg); min-width: 0; }
+  .readout { font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .readout b { color: var(--fg); }
+  .stage-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stage-row > * { min-width: 0; }
+  .lane { display: flex; flex-direction: column; gap: 10px; }
+  .stage { position: relative; height: 170px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+  .card { position: absolute; left: 50%; top: 100px; width: 150px; margin-left: -75px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--fg); background: var(--panel); border: 1px solid var(--fg); }
+  .floor { position: absolute; left: 12%; right: 12%; top: 140px; height: 2px; background: var(--line); }
+  .timeline { position: relative; height: 34px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); }
+  .tween { position: absolute; top: 5px; bottom: 5px; border-radius: 4px; background: var(--hf-soft); border: 1px solid var(--fg); font-family: var(--mono); font-size: 11px; color: var(--fg); display: flex; align-items: center; padding-left: 6px; white-space: nowrap; overflow: hidden; }
+  .playhead { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--fg); }
+  .ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .formula { font-family: var(--mono); font-size: 13px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .formula .v { color: var(--fg); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .note { font-size: 14px; color: var(--muted); }
+
+  /* table */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  thead th { font-size: 14px; background: var(--bg); }
+  tbody th { font-weight: 600; width: 18%; color: var(--muted); font-size: 14px; }
+
+  /* measured numbers */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .stat h3 { font-size: 15px; color: var(--muted); font-weight: 600; }
+  .bar-row { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 10px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .bar { height: 10px; border-radius: 5px; background: var(--bg); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 5px; }
+  .bar i.hf { background: var(--hf); }
+  .bar i.rm { background: var(--rm); }
+  .num { font-family: var(--mono); font-weight: 600; }
+
+  .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pick > * { min-width: 0; }
+  .pick .panel h3 { font-size: 19px; }
+  footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+
+  @media (max-width: 760px) {
+    .two, .stage-row, .pick, .stats { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <span class="eyebrow">같은 21초 클레이 릴스, 두 번 만들기</span>
+    <h1>HyperFrames와 Remotion은 무엇이 다른가</h1>
+    <p class="lead">둘 다 웹 화면(HTML)을 한 프레임씩 찍어 영상으로 만듭니다. 결과물은 거의 같았습니다. 차이는 움직임을 <b>어떻게 적느냐</b>에 있습니다.</p>
+  </header>
+
+  <section>
+    <h2>한 줄로 말하면</h2>
+    <div class="two">
+      <div class="panel hfp">
+        <span class="tag hf">HyperFrames</span>
+        <div class="metaphor">큐시트 방식</div>
+        <p>무대(HTML)에 소품을 먼저 배치하고, “2.75초에 카드를 위에서 떨어뜨려라” 같은 지시를 타임라인에 적습니다. 애니메이션은 GSAP가 맡습니다.</p>
+        <pre><code><span class="hl-line">tl.from("#p1", { y: -760, duration: 0.5,
+         ease: "bounce.out" }, 2.75);</span></code></pre>
+      </div>
+      <div class="panel rmp">
+        <span class="tag rm">Remotion</span>
+        <div class="metaphor">프레임 함수 방식</div>
+        <p>React 컴포넌트가 “지금 몇 번째 프레임인가”를 받아서, 그 순간 카드의 위치를 직접 계산합니다. 매 프레임 그림을 새로 그립니다.</p>
+        <pre><code><span class="hl-line">const y = interpolate(frame, [83, 98],
+  [-760, 0], { easing: Easing.bounce });</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>같은 순간을 두 방식으로 재생해 보기</h2>
+    <p class="lead">릴스 2.75초에 “메일 47통 답장” 카드가 떨어지는 장면입니다. 슬라이더로 시간을 옮기면 두 방식이 같은 위치를 내는 걸 볼 수 있습니다.</p>
+    <div class="scrub">
+      <div class="scrub-top">
+        <label for="t">재생 위치</label>
+        <input id="t" type="range" min="2.5" max="3.5" step="0.0333" value="2.9">
+        <span class="readout"><b id="sec">2.90s</b> · 프레임 <b id="frm">87</b></span>
+      </div>
+      <div class="stage-row">
+        <div class="lane">
+          <span class="tag hf">HyperFrames · 타임라인에서 구간을 찾음</span>
+          <div class="stage" aria-hidden="true"><div class="floor"></div><div class="card" id="cardHF">메일 47통 답장</div></div>
+          <div class="timeline" aria-hidden="true">
+            <div class="tween" style="left:25%;width:50%">tl.from #p1 · 0.5s</div>
+            <div class="playhead" id="phHF"></div>
+          </div>
+          <div class="ticks"><span>2.50</span><span>2.75</span><span>3.00</span><span>3.25</span><span>3.50</span></div>
+          <p class="note" id="noteHF"></p>
+        </div>
+        <div class="lane">
+          <span class="tag rm">Remotion · 프레임 번호로 계산</span>
+          <div class="stage" aria-hidden="true"><div class="floor"></div><div class="card" id="cardRM">메일 47통 답장</div></div>
+          <div class="formula" id="formula"></div>
+          <p class="note">프레임 83 전에는 −760(화면 밖), 98 이후에는 0(착지)으로 고정됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>항목별 비교</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>HyperFrames</th><th>Remotion</th></tr></thead>
+        <tbody>
+          <tr><th>작성 언어</th><td>HTML · CSS · GSAP 타임라인</td><td>React(TypeScript) 컴포넌트</td></tr>
+          <tr><th>문구·색 수정</th><td>HTML 안의 글자를 바로 고침. 데스크톱 앱에서 화면을 보며 편집 가능</td><td>코드 안의 글자를 고침. Remotion Studio로 미리보기</td></tr>
+          <tr><th>움직임 연출</th><td>순차 등장(stagger), 반복, 튕김 같은 연출을 한 줄로 적어서 빠름</td><td>움직임마다 계산식을 적어야 해서 손이 더 감</td></tr>
+          <tr><th>대량 제작</th><td>템플릿 변수로 가능하지만 주력은 한 편짜리</td><td>데이터(props)만 바꿔 같은 틀로 여러 편 찍기 좋음</td></tr>
+          <tr><th>자동 검사</th><td>내장 <code>check</code>: 글자 대비, 겹침, 빈 첫 프레임까지 잡음</td><td>내장 검사 없음. 저장소의 세이프존 스크립트로 따로 확인</td></tr>
+          <tr><th>이 저장소 자산</th><td>이번에 처음 사용</td><td>클레이·콜라주·실사 템플릿과 <code>SAFE_ZONE</code> 상수가 모두 있음</td></tr>
+          <tr><th>생태계</th><td>비교적 새 도구</td><td>오래되고 사용자가 많아 자료가 풍부</td></tr>
+          <tr><th>라이선스</th><td>오픈소스(HeyGen)</td><td>개인·3인 이하 회사 무료, 그보다 큰 회사는 유료</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>이번 클레이 릴스 실측</h2>
+    <p class="lead">같은 시놉시스, 같은 사운드트랙, 1080×1920 · 30fps · 21초로 맞춰 렌더했습니다.</p>
+    <div class="stats">
+      <div class="stat">
+        <h3>렌더 시간</h3>
+        <div class="bar-row"><span class="hf">HyperFrames</span><span class="bar"><i class="hf" style="width:100%"></i></span><span class="num">1분 43초</span></div>
+        <div class="bar-row"><span class="rm">Remotion</span><span class="bar"><i class="rm" style="width:58%"></i></span><span class="num">약 1분</span></div>
+      </div>
+      <div class="stat">
+        <h3>파일 크기</h3>
+        <div class="bar-row"><span class="hf">HyperFrames</span><span class="bar"><i class="hf" style="width:100%"></i></span><span class="num">9.8 MB</span></div>
+        <div class="bar-row"><span class="rm">Remotion</span><span class="bar"><i class="rm" style="width:76%"></i></span><span class="num">7.4 MB</span></div>
+      </div>
+      <div class="stat">
+        <h3>소스 코드 길이</h3>
+        <div class="bar-row"><span class="hf">HyperFrames</span><span class="bar"><i class="hf" style="width:71%"></i></span><span class="num">306줄</span></div>
+        <div class="bar-row"><span class="rm">Remotion</span><span class="bar"><i class="rm" style="width:100%"></i></span><span class="num">430줄</span></div>
+      </div>
+    </div>
+    <p class="note">파일 크기 차이는 화질이 아니라 인코딩 설정 차이입니다. 화면 결과는 두 버전이 거의 같습니다.</p>
+  </section>
+
+  <section>
+    <h2>만들면서 겪은 일</h2>
+    <div class="two">
+      <div class="panel hfp">
+        <span class="tag hf">HyperFrames</span>
+        <ul>
+          <li>내장 검사가 숫자 “23”의 글자 대비 부족, 저장 버튼 문구 줄바꿈, 비어 있는 첫 화면을 잡아줬습니다.</li>
+          <li>GSAP를 인터넷(CDN)에서 불러오는 기본 방식이 이 환경에서 막혀, 파일을 프로젝트에 직접 넣었습니다.</li>
+          <li>반복문 안의 타이밍을 겹침으로 잘못 읽은 경고가 몇 개 있었습니다.</li>
+        </ul>
+      </div>
+      <div class="panel rmp">
+        <span class="tag rm">Remotion</span>
+        <ul>
+          <li>기존 클레이 템플릿과 공용 세이프존 상수를 그대로 가져다 썼습니다.</li>
+          <li>튕김·스프링·출렁임을 모두 프레임 계산식으로 적어 코드가 더 길어졌습니다.</li>
+          <li>렌더는 더 빨랐고, 세이프존은 저장소 스크립트로 직접 검사했습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>언제 무엇을 쓸까</h2>
+    <div class="pick">
+      <div class="panel rmp">
+        <span class="tag rm">Remotion</span>
+        <h3>시리즈로 계속 찍는 영상</h3>
+        <p>카드뉴스, 마스코트 릴스처럼 틀은 같고 문구만 바뀌는 영상. 템플릿과 세이프존 설정이 이미 갖춰져 있습니다.</p>
+      </div>
+      <div class="panel hfp">
+        <span class="tag hf">HyperFrames</span>
+        <h3>한 편짜리 디자인 영상</h3>
+        <p>빠르게 만들고, 화면을 보며 직접 문구를 고치고 싶을 때. 자동 검사와 데스크톱 편집 앱이 편합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>비교 대상: <code>clay-not-todo-reel/</code>(HyperFrames)와 <code>remotion-composer/src/claytodo/</code>(Remotion). 두 결과물은 <code>renders/</code> 폴더에 있습니다.</footer>
+</div>
+
+<script>
+  // Robert Penner bounce-out — the same curve as GSAP "bounce.out" and Remotion Easing.bounce
+  function bounceOut(t) {
+    const n = 7.5625, d = 2.75;
+    if (t < 1 / d) return n * t * t;
+    if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75;
+    if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;
+    return n * (t -= 2.625 / d) * t + 0.984375;
+  }
+  const FPS = 30, START = 2.75, DUR = 0.5, FROM = -760;
+  const el = (id) => document.getElementById(id);
+  const slider = el("t");
+
+  function render() {
+    const sec = parseFloat(slider.value);
+    const frame = Math.round(sec * FPS);
+    const f0 = Math.round(START * FPS), f1 = Math.round((START + DUR) * FPS);
+
+    // HyperFrames: find the tween that covers this time, progress inside it
+    const pHF = Math.min(1, Math.max(0, (sec - START) / DUR));
+    const yHF = FROM * (1 - bounceOut(pHF));
+    // Remotion: interpolate(frame, [f0, f1], [-760, 0], { easing: bounce, clamp })
+    const pRM = Math.min(1, Math.max(0, (frame - f0) / (f1 - f0)));
+    const yRM = FROM + (0 - FROM) * bounceOut(pRM);
+
+    // stage: map -760..0 to a visible drop of ~150px
+    const k = 150 / 760;
+    el("cardHF").style.transform = `translateY(${yHF * k}px)`;
+    el("cardRM").style.transform = `translateY(${yRM * k}px)`;
+    el("phHF").style.left = `${((sec - 2.5) / 1.0) * 100}%`;
+
+    el("sec").textContent = sec.toFixed(2) + "s";
+    el("frm").textContent = frame;
+
+    let state;
+    if (sec < START) state = `아직 구간 시작 전 → 시작값 y = ${FROM}`;
+    else if (pHF >= 1) state = `구간이 끝남 → 최종값 y = 0`;
+    else state = `구간 진행률 ${(pHF * 100).toFixed(0)}% → y = ${yHF.toFixed(0)}`;
+    el("noteHF").textContent = state;
+
+    el("formula").innerHTML =
+      `interpolate(<span class="v">${frame}</span>, [${f0}, ${f1}], [−760, 0]) = <span class="v">${yRM.toFixed(0)}</span>`;
+  }
+  slider.addEventListener("input", render);
+  render();
+</script>
+
+</body>
+</html>
