@@ -494,66 +494,66 @@
    "id": "07",
    "start": 3660,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 3682,
-     "end": 3764,
+     "end": 3752,
      "added": false,
      "cues": [
       {
        "start": 3682,
-       "end": 3764,
+       "end": 3752,
        "text": "기업은 새로운 고객만 찾지 않습니다.",
-       "show": 3777
+       "show": 3767
       }
      ]
     },
     {
-     "start": 3779,
-     "end": 3933,
+     "start": 3769,
+     "end": 3909,
      "added": false,
      "cues": [
       {
-       "start": 3779,
-       "end": 3933,
+       "start": 3769,
+       "end": 3909,
        "text": "이미 만난 고객이 다시 찾아오도록,\n더 좋은 경험과 신뢰를 쌓습니다.",
-       "show": 3946
+       "show": 3924
       }
      ]
     },
     {
-     "start": 3948,
-     "end": 4025,
+     "start": 3926,
+     "end": 3989,
      "added": false,
      "cues": [
       {
-       "start": 3948,
-       "end": 4025,
+       "start": 3926,
+       "end": 3989,
        "text": "오래가는 관계가 경쟁력이 됩니다.",
-       "show": 4040
+       "show": 4004
       }
      ]
     },
     {
-     "start": 4053,
-     "end": 4125,
+     "start": 4019,
+     "end": 4092,
      "added": true,
      "cues": [
       {
-       "start": 4053,
-       "end": 4125,
+       "start": 4019,
+       "end": 4092,
        "text": "일곱 번째 트렌드, 리:텐션 전략",
-       "show": 4140
+       "show": 4107
       }
      ]
     }
    ],
    "stage": {
     "A": 3660,
-    "B": 3942,
-    "C": 4049,
-    "D": 4133,
+    "B": 3920,
+    "C": 4015,
+    "D": 4100,
     "E": 4176
    }
   },
