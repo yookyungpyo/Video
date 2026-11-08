@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Jua"; font-weight: 400; src: url("assets/fonts/jua-korean-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NotoSansKR"; font-weight: 700; src: url("assets/fonts/noto-sans-kr-korean-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NotoSansKR"; font-weight: 900; src: url("assets/fonts/noto-sans-kr-korean-900-normal.woff2") format("woff2"); }
+      :root {
+        --ink: #403c52;
+        --soft: #6e6985;
+        --blue: #6fa8dc;
+        --coral: #ff8e72;
+        --coralText: #e0613f;
+        --mint: #54c7a3;
+        --lav: #a98fe0;
+        --yellow: #ffc95c;
+        --pink: #f58fb0;
+        --clay: 16px 18px 34px rgba(120, 110, 160, 0.3), -8px -10px 22px rgba(255, 255, 255, 0.85);
+        --claySm: 8px 10px 18px rgba(120, 110, 160, 0.28), -5px -6px 14px rgba(255, 255, 255, 0.85);
+        --display: "Jua", sans-serif;
+        --body: "NotoSansKR", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f5f0f6; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+      /* ---------- background: pastel gradient + drifting blobs ---------- */
+      #bg { position: absolute; inset: 0; z-index: 0; background: linear-gradient(160deg, #f3eefb 0%, #f7efea 50%, #eaf3fb 100%); overflow: hidden; }
+      .blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+      #b1 { width: 620px; height: 620px; left: -160px; top: 180px; background: #d9c9f5; }
+      #b2 { width: 560px; height: 560px; left: 600px; top: 760px; background: #ffd3c4; }
+      #b3 { width: 680px; height: 680px; left: 120px; top: 1350px; background: #c9e2f7; }
+
+      /* ---------- scenes (transparent: share the background) ---------- */
+      .scene { position: absolute; inset: 0; }
+      /* Reels safe zone → content y 360–1470, x 100–910 */
+      .scene-content {
+        width: 100%; height: 100%; padding: 360px 170px 450px 100px;
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 40px;
+      }
+
+      .card { background: #fff; border-radius: 48px; box-shadow: var(--clay); }
+      .title-card { width: 100%; padding: 40px 44px; text-align: center; }
+      .t-xl { font-family: var(--display); font-size: 104px; line-height: 1.16; color: var(--ink); }
+      .t-lg { font-family: var(--display); font-size: 92px; line-height: 1.16; color: var(--ink); }
+      .coral { color: var(--coralText); }
+      .hl { position: relative; display: inline-block; isolation: isolate; }
+      .hl .u { position: absolute; left: -8px; right: -8px; bottom: 8px; height: 30px; border-radius: 15px; background: #ffd0c2; z-index: -1; transform-origin: left center; }
+
+      .pill {
+        display: inline-flex; align-items: center; gap: 16px; padding: 18px 36px; border-radius: 999px;
+        background: #fff; box-shadow: var(--claySm);
+        font-family: var(--body); font-weight: 900; font-size: 40px; color: var(--ink);
+      }
+      .bubble {
+        flex: none; display: flex; align-items: center; justify-content: center; border-radius: 50%;
+        color: #fff; font-family: var(--display); box-shadow: var(--claySm);
+        background-image: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 45%);
+      }
+
+      /* ---------- pile ---------- */
+      .head { position: relative; width: 100%; height: 190px; }
+      .head > div { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: center; gap: 40px; }
+      .head .lbl { font-family: var(--display); font-size: 92px; color: var(--ink); }
+      #cnt { width: 170px; height: 170px; font-size: 96px; background-color: #d9573a; }
+      #pile { position: relative; width: 810px; height: 590px; }
+      .todo {
+        position: absolute; width: 390px; height: 92px; border-radius: 30px;
+        display: flex; align-items: center; gap: 18px; padding: 0 26px;
+        font-family: var(--body); font-weight: 900; font-size: 38px; color: var(--ink); white-space: nowrap;
+        box-shadow: var(--claySm);
+      }
+      .todo i { flex: none; width: 26px; height: 26px; border-radius: 50%; }
+      .keep-ring { opacity: 0; position: absolute; inset: -9px; border-radius: 38px; border: 7px solid var(--mint); }
+
+      #trash { position: absolute; left: 720px; top: 1250px; width: 180px; height: 200px; z-index: 6; }
+      #trash .can {
+        transform-origin: 50% 100%; position: absolute; left: 14px; right: 14px; top: 46px; bottom: 0; border-radius: 26px 26px 46px 46px;
+        background: var(--lav); box-shadow: var(--claySm);
+        background-image: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.5) 0, rgba(255, 255, 255, 0) 50%);
+      }
+      #trash .can::after { content: ""; position: absolute; left: 30%; right: 30%; top: 34px; bottom: 30px; border-left: 8px solid rgba(255,255,255,.55); border-right: 8px solid rgba(255,255,255,.55); border-radius: 4px; }
+      #lid { position: absolute; left: 0; right: 0; top: 18px; height: 34px; border-radius: 18px; background: #8f72d1; box-shadow: var(--claySm); transform-origin: 10% 100%; }
+      #lid::before { content: ""; position: absolute; left: 66px; width: 48px; top: -16px; height: 22px; border-radius: 12px 12px 0 0; background: #8f72d1; }
+
+      /* ---------- three ---------- */
+      .rows3 { width: 100%; display: flex; flex-direction: column; gap: 34px; }
+      .r3 { display: flex; align-items: center; gap: 34px; padding: 30px 40px; }
+      .r3 .bubble { width: 110px; height: 110px; font-size: 64px; }
+      .r3 .txt { font-family: var(--body); font-weight: 900; font-size: 54px; color: var(--ink); }
+
+      /* ---------- bars ---------- */
+      .bars { width: 100%; padding: 46px 44px; display: flex; flex-direction: column; gap: 46px; }
+      .bar-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+      .bar-lbl { font-family: var(--body); font-weight: 900; font-size: 46px; color: var(--soft); }
+      .bar-val { font-family: var(--display); font-size: 96px; line-height: 1; }
+      .track { position: relative; height: 70px; border-radius: 35px; background: #ece7f4; box-shadow: inset 6px 6px 12px rgba(120,110,160,.22), inset -6px -6px 12px rgba(255,255,255,.9); overflow: hidden; }
+      .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 35px; transform-origin: left center;
+        background-image: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 60%); }
+      .note { font-family: var(--body); font-weight: 700; font-size: 38px; color: var(--soft); }
+
+      /* ---------- mascot (one host for the whole film) ---------- */
+      #mascot { position: absolute; left: 0; top: 0; width: 490px; height: 766px; z-index: 8; transform-origin: 50% 100%; }
+      #m-bob, #m-sq { width: 100%; height: 100%; transform-origin: 50% 100%; }
+      #m-img { width: 100%; height: 100%; display: block; filter: drop-shadow(14px 22px 26px rgba(110, 100, 150, 0.35)); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="21" data-width="1080" data-height="1920">
+
+      <div id="bg" data-layout-allow-overflow class="clip" data-start="0" data-duration="21" data-track-index="0" data-track-kind="graphics">
+        <div id="b1" class="blob"></div><div id="b2" class="blob"></div><div id="b3" class="blob"></div>
+      </div>
+
+      <!-- A. Hook 0–2.5 -->
+      <section id="sA" class="clip scene" data-start="0" data-duration="2.8" data-track-index="1" data-track-kind="graphics" style="z-index:1">
+        <div class="scene-content">
+          <div id="a-card" class="card title-card">
+            <div id="a-l1" class="t-xl">할 일이 많을수록</div>
+            <div id="a-l2" class="t-xl"><span class="hl"><span id="a-u" class="u"></span><span class="coral">일은 안</span></span> 끝난다</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- B/C. Pile + trash 2.5–10.3 -->
+      <section id="sB" class="clip scene" data-start="2.5" data-duration="7.8" data-track-index="2" data-track-kind="graphics" style="z-index:2">
+        <div class="scene-content">
+          <div class="head">
+            <div id="b-headA"><span class="lbl">오늘 할 일</span><div id="cnt" class="bubble"><span id="cntv">3</span></div></div>
+            <div id="b-headB"><span class="lbl"><span class="hl"><span id="b-u" class="u"></span><span class="coral">버릴 것</span></span>부터 정한다</span></div>
+          </div>
+          <div id="pile">
+            <div class="todo" id="p1"  style="left:0;   top:0;   background:#d9e8f6"><i style="background:#6fa8dc"></i>메일 47통 답장</div>
+            <div class="todo" id="p2"  style="left:420px;top:18px; background:#ffe0d6"><i style="background:#ff8e72"></i>주간 회의 자료</div>
+            <div class="todo" id="p3"  style="left:20px; top:112px;background:#fff0cc"><i style="background:#ffc95c"></i>핵심 보고서 마감<div class="keep-ring"></div></div>
+            <div class="todo" id="p4"  style="left:410px;top:130px;background:#e8e0f8"><i style="background:#a98fe0"></i>슬랙 알림 확인</div>
+            <div class="todo" id="p5"  style="left:0;   top:226px;background:#d3f1e6"><i style="background:#54c7a3"></i>고객 미팅 준비<div class="keep-ring"></div></div>
+            <div class="todo" id="p6"  style="left:420px;top:242px;background:#fde0ea"><i style="background:#f58fb0"></i>지난 회의록 정리</div>
+            <div class="todo" id="p7"  style="left:16px; top:340px;background:#d9e8f6"><i style="background:#6fa8dc"></i>팀원 1:1 면담<div class="keep-ring"></div></div>
+            <div class="todo" id="p8"  style="left:405px;top:356px;background:#fff0cc"><i style="background:#ffc95c"></i>엑셀 서식 다듬기</div>
+            <div class="todo" id="p9"  style="left:0;   top:454px;background:#e8e0f8"><i style="background:#a98fe0"></i>보고서 표지 디자인</div>
+            <div class="todo" id="p10" style="left:420px;top:470px;background:#ffffff"><i style="background:#c9c3d9"></i>+ 14개 더…</div>
+          </div>
+        </div>
+        <div id="trash"><div class="can"></div><div id="lid"></div></div>
+      </section>
+
+      <!-- D. Three left 10–14 -->
+      <section id="sD" class="clip scene" data-start="10" data-duration="4.3" data-track-index="1" data-track-kind="graphics" style="z-index:3">
+        <div class="scene-content">
+          <div id="d-title" class="card title-card"><div class="t-lg">남은 <span class="coral">3개</span>에만 집중</div></div>
+          <div class="rows3">
+            <div id="d1" class="card r3"><div class="bubble" style="background-color:#ff8e72">1</div><div class="txt">핵심 보고서 마감</div></div>
+            <div id="d2" class="card r3"><div class="bubble" style="background-color:#54c7a3">2</div><div class="txt">고객 미팅 준비</div></div>
+            <div id="d3" class="card r3"><div class="bubble" style="background-color:#6fa8dc">3</div><div class="txt">팀원 1:1 면담</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- E. Bars 14–18 -->
+      <section id="sE" class="clip scene" data-start="14" data-duration="4.3" data-track-index="2" data-track-kind="graphics" style="z-index:4">
+        <div class="scene-content">
+          <div id="e-title" class="card title-card"><div class="t-lg">같은 시간, <span class="coral">8배</span> 집중</div></div>
+          <div id="e-bars" class="card bars">
+            <div>
+              <div class="bar-top"><span class="bar-lbl">23개로 나누면</span><span class="bar-val" style="color:#8a84a3"><span id="v1">0</span>%</span></div>
+              <div class="track"><div id="f1" class="fill" style="background-color:#b9b2cc"></div></div>
+            </div>
+            <div>
+              <div class="bar-top"><span class="bar-lbl" style="color:#403c52">3개로 나누면</span><span class="bar-val coral"><span id="v2">0</span>%</span></div>
+              <div class="track"><div id="f2" class="fill" style="background-color:#ff8e72"></div></div>
+            </div>
+            <div id="e-note" class="note">하나에 쓰는 시간의 몫</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- F. Outro 18–21 -->
+      <section id="sF" class="clip scene" data-start="18" data-duration="3" data-track-index="1" data-track-kind="graphics" style="z-index:5">
+        <div class="scene-content">
+          <div id="f-card" class="card title-card">
+            <div id="f-l1" class="t-lg">오늘,</div>
+            <div id="f-l2" class="t-lg"><span class="hl"><span id="f-u" class="u"></span><span class="coral">안 할 일</span></span>부터</div>
+            <div id="f-l3" class="t-lg">지워보세요</div>
+          </div>
+        </div>
+        <div style="position:absolute; left:100px; right:170px; top:1366px; display:flex; justify-content:center">
+          <div id="f-chip" class="pill" style="white-space:nowrap">
+            <svg width="34" height="34" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" fill="#ff8e72"/></svg>저장해두고 내일 아침 다시 보기
+          </div>
+        </div>
+      </section>
+
+      <!-- Mascot host, whole film -->
+      <div id="mascot" class="clip" data-start="0" data-duration="21" data-track-index="3" data-track-kind="graphics">
+        <div id="m-bob"><div id="m-sq"><img id="m-img" src="assets/mascot.png" alt="" /></div></div>
+      </div>
+
+      <audio id="music" class="clip" data-start="0" data-duration="21" data-track-index="9" src="assets/soundtrack.wav" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- ambient ----------
+      tl.to("#b1", { x: 120, y: 90, duration: 3.5, ease: "sine.inOut", yoyo: true, repeat: 5 }, 0);
+      tl.to("#b2", { x: -110, y: -120, duration: 4.2, ease: "sine.inOut", yoyo: true, repeat: 4 }, 0);
+      tl.to("#b3", { x: 90, y: -80, duration: 3, ease: "sine.inOut", yoyo: true, repeat: 6 }, 0);
+
+      // ---------- mascot: place by bottom-centre (cx, by) and scale ----------
+      const M = (cx, by, s) => ({ x: cx - 245, y: by - 766, scale: s });
+      tl.set("#mascot", M(505, 1462, 0.88), 0);
+      tl.to("#m-bob", { y: -16, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 34 }, 0);           // float
+      tl.to("#m-sq", { scaleX: 1.035, scaleY: 0.965, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 34 }, 0.3); // breathe/squash
+      tl.fromTo("#mascot", { rotation: -3 }, { rotation: 3, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0); // head-scratch sway
+      tl.to("#mascot", { ...M(210, 1462, 0.42), rotation: 0, duration: 0.5, ease: "back.inOut(1.4)" }, 2.4);
+      // walk toward the trash 6.0–6.6 (single pose: bob + lean)
+      tl.to("#mascot", { x: 470 - 245, duration: 0.66, ease: "power1.inOut" }, 6.0);
+      tl.fromTo("#mascot", { rotation: -6 }, { rotation: 6, duration: 0.165, ease: "sine.inOut", yoyo: true, repeat: 3 }, 6.0);
+      tl.to("#m-img", { scaleY: 0.9, scaleX: 1.08, transformOrigin: "50% 100%", duration: 0.08, yoyo: true, repeat: 7, ease: "power1.inOut" }, 6.0);
+      tl.to("#mascot", { rotation: 0, duration: 0.15 }, 6.66);
+      // cheer on every catch
+      for (let i = 0; i < 7; i++) tl.to("#mascot", { y: 1462 - 766 - 26, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 6.92 + i * 0.42);
+      tl.to("#mascot", { ...M(790, 1462, 0.38), duration: 0.45, ease: "power2.inOut" }, 9.85); // bottom-right corner for D/E
+      tl.to("#mascot", { ...M(505, 1338, 0.6), duration: 0.55, ease: "back.out(1.5)" }, 17.9);
+      tl.fromTo("#mascot", { rotation: 0 }, { rotation: 8, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut" }, 18.5);
+
+      // ---------- A. Hook (card already on screen at frame 0) ----------
+      tl.from("#a-card", { scale: 0.92, y: 20, duration: 0.6, ease: "back.out(2.2)" }, 0);
+      tl.from("#a-l2", { y: 40, opacity: 0, duration: 0.45, ease: "back.out(2)" }, 0.55);
+      tl.fromTo("#a-u", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.inOut" }, 1.0);
+      tl.to("#a-card", { rotation: -1.5, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.6);
+
+      // ---------- B. Cards rain down and pile up ----------
+      tl.from("#b-headA", { y: -40, opacity: 0, duration: 0.45, ease: "back.out(2)" }, 2.55);
+      const rots = [-3, 2.5, -1.5, 3, 2, -2.5, -3, 1.5, 2.5, -2];
+      const drops = [2.75, 3.05, 3.3, 3.52, 3.72, 3.9, 4.06, 4.2, 4.33, 4.5];
+      drops.forEach((t, i) => {
+        tl.set(`#p${i + 1}`, { rotation: rots[i] }, 2.5);
+        tl.from(`#p${i + 1}`, { y: -760, opacity: 0, duration: 0.5, ease: "bounce.out" }, t);
+      });
+      const cnt = { v: 3 }, cntEl = document.getElementById("cntv");
+      tl.to(cnt, { v: 23, duration: 1.9, ease: "power1.in", onUpdate: () => { cntEl.textContent = Math.round(cnt.v); } }, 2.75);
+      tl.fromTo("#cnt", { scale: 1 }, { scale: 1.3, duration: 0.14, yoyo: true, repeat: 1, ease: "back.out(3)" }, 4.62);
+      tl.fromTo("#pile", { x: 0 }, { x: 7, duration: 0.06, yoyo: true, repeat: 9, ease: "none" }, 4.7);
+
+      // ---------- C. Into the trash ----------
+      tl.to("#b-headA", { y: -30, opacity: 0, duration: 0.3, ease: "power2.in" }, 5.9);
+      tl.from("#b-headB", { y: 40, opacity: 0, duration: 0.45, ease: "back.out(2)" }, 6.05);
+      tl.fromTo("#b-u", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.inOut" }, 6.35);
+      tl.from("#trash", { y: 260, scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 6.0);
+      // pile origin on the page: x 100, y 360 + head 190 + gap 40 = 590; trash mouth ≈ (810, 1262)
+      const pos = { 1: [0, 0], 2: [420, 18], 4: [410, 130], 6: [420, 242], 8: [405, 356], 9: [0, 454], 10: [420, 470] };
+      [1, 2, 4, 6, 8, 9, 10].forEach((n, i) => {
+        const t = 6.6 + i * 0.42, [l, tp] = pos[n];
+        const dx = 810 - (100 + l + 195), dy = 1262 - (590 + tp + 46);
+        tl.to(`#p${n}`, { x: dx, y: dy, scale: 0.18, rotation: 220, duration: 0.34, ease: "power2.in" }, t);
+        tl.to(`#p${n}`, { opacity: 0, duration: 0.06 }, t + 0.3);
+        tl.to("#lid", { rotation: -38, duration: 0.1, ease: "power2.out" }, t + 0.22);
+        tl.to("#lid", { rotation: 0, duration: 0.12, ease: "power2.in" }, t + 0.32);
+        tl.to("#trash .can", { scaleX: 1.08, scaleY: 0.92, duration: 0.07, ease: "power2.out" }, t + 0.34);
+        tl.to("#trash .can", { scaleX: 1, scaleY: 1, duration: 0.1, ease: "back.out(3)" }, t + 0.41);
+      });
+      tl.to(".keep-ring", { opacity: 1, duration: 0.25, ease: "power1.out" }, 9.5);
+      tl.to(["#p3", "#p5", "#p7"], { rotation: 0, scale: 1.06, duration: 0.35, ease: "back.out(2.5)", stagger: 0.08 }, 9.5);
+
+      // ---------- D. Three left ----------
+      tl.from("#sD", { opacity: 0, duration: 0.3, ease: "power1.out" }, 10);
+      tl.from("#d-title", { y: 50, scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 10.1);
+      tl.from(["#d1", "#d2", "#d3"], { y: 70, opacity: 0, duration: 0.5, ease: "back.out(1.8)", stagger: 0.18 }, 10.45);
+      tl.from("#sD .bubble", { scale: 0, rotation: -200, duration: 0.55, ease: "back.out(2)", stagger: 0.18 }, 10.55);
+      ["#d1", "#d2", "#d3"].forEach((id, i) => tl.to(id, { y: -8, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 3 }, 11.2 + i * 0.15));
+
+      // ---------- E. Jelly bars ----------
+      tl.from("#sE", { opacity: 0, duration: 0.3, ease: "power1.out" }, 14);
+      tl.from("#e-title", { y: 50, scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 14.1);
+      tl.from("#e-bars", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 14.35);
+      tl.fromTo("#f1", { scaleX: 0 }, { scaleX: 0.13, duration: 0.6, ease: "elastic.out(1, 0.5)" }, 14.8);
+      tl.fromTo("#f2", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "elastic.out(1, 0.6)" }, 15.3);
+      const v1 = { v: 0 }, v2 = { v: 0 };
+      const v1El = document.getElementById("v1"), v2El = document.getElementById("v2");
+      tl.to(v1, { v: 4, duration: 0.6, ease: "power2.out", onUpdate: () => { v1El.textContent = Math.round(v1.v); } }, 14.8);
+      tl.to(v2, { v: 33, duration: 1.0, ease: "power2.out", onUpdate: () => { v2El.textContent = Math.round(v2.v); } }, 15.3);
+      tl.from("#e-note", { opacity: 0, y: 16, duration: 0.4, ease: "power2.out" }, 16.3);
+
+      // ---------- F. Outro ----------
+      tl.from("#sF", { opacity: 0, duration: 0.3, ease: "power1.out" }, 18);
+      tl.from("#f-card", { y: 60, scale: 0.9, duration: 0.5, ease: "back.out(2)" }, 18.0);
+      tl.from("#f-l1", { y: 30, opacity: 0, duration: 0.35, ease: "power3.out" }, 18.1);
+      tl.from("#f-l2", { y: 30, opacity: 0, duration: 0.4, ease: "back.out(2)" }, 18.3);
+      tl.fromTo("#f-u", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.inOut" }, 18.65);
+      tl.from("#f-l3", { y: 30, opacity: 0, duration: 0.4, ease: "expo.out" }, 18.55);
+      tl.from("#f-chip", { y: 40, scale: 0.85, opacity: 0, duration: 0.5, ease: "back.out(2.4)" }, 18.85);
+
+      // crossfades: scenes share one background, so the outgoing scene fades out as the next fades in
+      [["#sA", 2.5], ["#sB", 10], ["#sD", 14], ["#sE", 18]].forEach(([id, t]) => tl.to(id, { opacity: 0, duration: 0.3, ease: "power1.in" }, t));
+      tl.from("#sB", { opacity: 0, duration: 0.3, ease: "power1.out" }, 2.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
