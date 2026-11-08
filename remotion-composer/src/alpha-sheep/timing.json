@@ -414,78 +414,78 @@
    "id": "06",
    "start": 3120,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 3142,
-     "end": 3202,
+     "end": 3194,
      "added": false,
      "cues": [
       {
        "start": 3142,
-       "end": 3202,
+       "end": 3194,
        "text": "일하는 방식도 달라집니다.",
-       "show": 3216
+       "show": 3209
       }
      ]
     },
     {
-     "start": 3218,
-     "end": 3312,
+     "start": 3211,
+     "end": 3308,
      "added": false,
      "cues": [
       {
-       "start": 3218,
-       "end": 3312,
+       "start": 3211,
+       "end": 3308,
        "text": "AI가 조사하고 정리하고\n제작을 돕습니다.",
-       "show": 3325
+       "show": 3323
       }
      ]
     },
     {
-     "start": 3327,
-     "end": 3420,
+     "start": 3325,
+     "end": 3404,
      "added": false,
      "cues": [
       {
-       "start": 3327,
-       "end": 3420,
+       "start": 3325,
+       "end": 3404,
        "text": "사람은 방향을 정하고\n결과를 판단합니다.",
-       "show": 3433
+       "show": 3419
       }
      ]
     },
     {
-     "start": 3435,
-     "end": 3525,
+     "start": 3421,
+     "end": 3497,
      "added": false,
      "cues": [
       {
-       "start": 3435,
-       "end": 3525,
+       "start": 3421,
+       "end": 3497,
        "text": "AI와 자연스럽게 협업하는 시대입니다.",
-       "show": 3540
+       "show": 3512
       }
      ]
     },
     {
-     "start": 3553,
-     "end": 3625,
+     "start": 3527,
+     "end": 3597,
      "added": true,
      "cues": [
       {
-       "start": 3553,
-       "end": 3625,
+       "start": 3527,
+       "end": 3597,
        "text": "여섯 번째 트렌드, 바이브 워킹",
-       "show": 3640
+       "show": 3612
       }
      ]
     }
    ],
    "stage": {
     "A": 3120,
-    "B": 3429,
-    "C": 3549,
+    "B": 3415,
+    "C": 3523,
     "D": 3596,
     "E": 3636
    }
