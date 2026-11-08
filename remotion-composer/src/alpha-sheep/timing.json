@@ -6,70 +6,70 @@
    "id": "opening",
    "start": 0,
    "frames": 420,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 6,
-     "end": 84,
+     "end": 91,
      "added": false,
      "cues": [
       {
        "start": 6,
-       "end": 84,
+       "end": 91,
        "text": "혹시 요즘, 이런 생각 해보셨나요?",
-       "show": 97
+       "show": 105
       }
      ]
     },
     {
-     "start": 99,
-     "end": 160,
+     "start": 107,
+     "end": 152,
      "added": false,
      "cues": [
       {
-       "start": 99,
-       "end": 160,
+       "start": 107,
+       "end": 152,
        "text": "볼 건 많은데 재미가 없고,",
-       "show": 173
+       "show": 160
       }
      ]
     },
     {
-     "start": 175,
-     "end": 219,
+     "start": 162,
+     "end": 205,
      "added": false,
      "cues": [
       {
-       "start": 175,
-       "end": 219,
+       "start": 162,
+       "end": 205,
        "text": "시간은 부족하고,",
-       "show": 232
+       "show": 218
       }
      ]
     },
     {
-     "start": 234,
-     "end": 302,
+     "start": 220,
+     "end": 280,
      "added": false,
      "cues": [
       {
-       "start": 234,
-       "end": 302,
+       "start": 220,
+       "end": 280,
        "text": "AI는 하루가 다르게 바뀝니다.",
-       "show": 315
+       "show": 294
       }
      ]
     },
     {
-     "start": 317,
-     "end": 433,
+     "start": 296,
+     "end": 407,
      "added": false,
      "cues": [
       {
-       "start": 317,
-       "end": 433,
+       "start": 296,
+       "end": 407,
        "text": "2027년, 우리의 일상은\n어떻게 달라질까요?",
-       "show": 440
+       "show": 422
       }
      ]
     }
@@ -79,29 +79,29 @@
    "id": "01",
    "start": 420,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 442,
-     "end": 515,
+     "end": 518,
      "added": false,
      "cues": [
       {
        "start": 442,
-       "end": 515,
+       "end": 518,
        "text": "볼 것도, 즐길 것도 넘쳐납니다.",
-       "show": 528
+       "show": 533
       }
      ]
     },
     {
-     "start": 530,
-     "end": 595,
+     "start": 535,
+     "end": 594,
      "added": false,
      "cues": [
       {
-       "start": 530,
-       "end": 595,
+       "start": 535,
+       "end": 594,
        "text": "그런데 왜 이렇게 지루할까요?",
        "show": 608
       }
@@ -109,27 +109,27 @@
     },
     {
      "start": 610,
-     "end": 741,
+     "end": 716,
      "added": false,
      "cues": [
       {
        "start": 610,
-       "end": 741,
+       "end": 716,
        "text": "풍요 속에서 진짜 새로운 경험을\n찾는 사람들이 늘어납니다.",
-       "show": 756
+       "show": 731
       }
      ]
     },
     {
-     "start": 769,
-     "end": 831,
+     "start": 746,
+     "end": 808,
      "added": true,
      "cues": [
       {
-       "start": 769,
-       "end": 831,
+       "start": 746,
+       "end": 808,
        "text": "첫 번째 트렌드, 권태사회",
-       "show": 846
+       "show": 823
       }
      ]
     }
@@ -137,8 +137,8 @@
    "stage": {
     "A": 420,
     "B": 604,
-    "C": 765,
-    "D": 839,
+    "C": 742,
+    "D": 816,
     "E": 936
    }
   },
@@ -213,66 +213,66 @@
    "id": "03",
    "start": 1500,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 1522,
-     "end": 1621,
+     "end": 1598,
      "added": false,
      "cues": [
       {
        "start": 1522,
-       "end": 1621,
+       "end": 1598,
        "text": "우리가 기술을 사용하는 모습도 달라집니다.",
-       "show": 1634
+       "show": 1612
       }
      ]
     },
     {
-     "start": 1636,
-     "end": 1770,
+     "start": 1614,
+     "end": 1742,
      "added": false,
      "cues": [
       {
-       "start": 1636,
-       "end": 1770,
+       "start": 1614,
+       "end": 1742,
        "text": "스마트폰을 넘어 안경과 웨어러블,\nAI 기기로 확장됩니다.",
-       "show": 1783
+       "show": 1757
       }
      ]
     },
     {
-     "start": 1785,
-     "end": 1856,
+     "start": 1759,
+     "end": 1823,
      "added": false,
      "cues": [
       {
-       "start": 1785,
-       "end": 1856,
+       "start": 1759,
+       "end": 1823,
        "text": "형태가 바뀌면 경험도 바뀝니다.",
-       "show": 1871
+       "show": 1838
       }
      ]
     },
     {
-     "start": 1884,
-     "end": 1956,
+     "start": 1853,
+     "end": 1924,
      "added": true,
      "cues": [
       {
-       "start": 1884,
-       "end": 1956,
+       "start": 1853,
+       "end": 1924,
        "text": "세 번째 트렌드, 폼팩터 시프트",
-       "show": 1971
+       "show": 1939
       }
      ]
     }
    ],
    "stage": {
     "A": 1500,
-    "B": 1779,
-    "C": 1880,
-    "D": 1964,
+    "B": 1753,
+    "C": 1849,
+    "D": 1932,
     "E": 2016
    }
   },
@@ -280,66 +280,66 @@
    "id": "04",
    "start": 2040,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 2062,
-     "end": 2144,
+     "end": 2129,
      "added": false,
      "cues": [
       {
        "start": 2062,
-       "end": 2144,
+       "end": 2129,
        "text": "완벽하게 준비될 때까지 기다릴까요?",
-       "show": 2157
+       "show": 2143
       }
      ]
     },
     {
-     "start": 2159,
-     "end": 2208,
+     "start": 2145,
+     "end": 2191,
      "added": false,
      "cues": [
       {
-       "start": 2159,
-       "end": 2208,
+       "start": 2145,
+       "end": 2191,
        "text": "이제는 일단 해봅니다.",
-       "show": 2221
+       "show": 2205
       }
      ]
     },
     {
-     "start": 2223,
-     "end": 2366,
+     "start": 2207,
+     "end": 2321,
      "added": false,
      "cues": [
       {
-       "start": 2223,
-       "end": 2366,
+       "start": 2207,
+       "end": 2321,
        "text": "작은 시도에서 배우고, 경험을 통해\n새로운 기회를 발견합니다.",
-       "show": 2381
+       "show": 2336
       }
      ]
     },
     {
-     "start": 2395,
-     "end": 2456,
+     "start": 2351,
+     "end": 2417,
      "added": true,
      "cues": [
       {
-       "start": 2395,
-       "end": 2456,
+       "start": 2351,
+       "end": 2417,
        "text": "네 번째 트렌드, 해봄경제",
-       "show": 2471
+       "show": 2432
       }
      ]
     }
    ],
    "stage": {
     "A": 2040,
-    "B": 2217,
-    "C": 2391,
-    "D": 2464,
+    "B": 2201,
+    "C": 2347,
+    "D": 2425,
     "E": 2556
    }
   },
@@ -347,66 +347,66 @@
    "id": "05",
    "start": 2580,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 2602,
-     "end": 2684,
+     "end": 2670,
      "added": false,
      "cues": [
       {
        "start": 2602,
-       "end": 2684,
+       "end": 2670,
        "text": "우리는 매일 수많은 것을 저장합니다.",
-       "show": 2697
+       "show": 2685
       }
      ]
     },
     {
-     "start": 2699,
-     "end": 2771,
+     "start": 2687,
+     "end": 2767,
      "added": false,
      "cues": [
       {
-       "start": 2699,
-       "end": 2771,
+       "start": 2687,
+       "end": 2767,
        "text": "사진과 메모, 링크와 경험까지.",
-       "show": 2784
+       "show": 2781
       }
      ]
     },
     {
-     "start": 2786,
-     "end": 2917,
+     "start": 2783,
+     "end": 2895,
      "added": false,
      "cues": [
       {
-       "start": 2786,
-       "end": 2917,
+       "start": 2783,
+       "end": 2895,
        "text": "이 기록들은 필요할 때 다시 꺼내 쓰는\n나만의 자산이 됩니다.",
-       "show": 2932
+       "show": 2910
       }
      ]
     },
     {
-     "start": 2946,
-     "end": 3012,
+     "start": 2925,
+     "end": 2996,
      "added": true,
      "cues": [
       {
-       "start": 2946,
-       "end": 3012,
+       "start": 2925,
+       "end": 2996,
        "text": "다섯 번째 트렌드, 저장인류",
-       "show": 3027
+       "show": 3011
       }
      ]
     }
    ],
    "stage": {
     "A": 2580,
-    "B": 2780,
-    "C": 2942,
-    "D": 3020,
+    "B": 2777,
+    "C": 2921,
+    "D": 3004,
     "E": 3096
    }
   },

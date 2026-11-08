@@ -98,19 +98,37 @@ def syllables(t):
 
 
 def analyse_audio(x, sentences):
-    """Split one section take into sentences (by the longest pauses) and cue chunks."""
-    runs = silent_runs(x)
+    """Split one section take into sentences and cue chunks.
+
+    Sentence boundaries are the set of pauses that best fits each sentence's expected
+    length (from its syllable count) while preferring longer pauses. Pure "longest
+    pauses" fails when a comma pause (e.g. "이천이십칠 년,") is longer than a sentence break.
+    """
+    import itertools
+    runs = silent_runs(x, min_len=0.08)
     lead = runs[0][1] if runs and runs[0][0] == 0 else 0.0
     tail = runs[-1][0] if runs and runs[-1][1] >= len(x) / SR - 0.02 else len(x) / SR
     inner = [r for r in runs if r[0] > lead + 0.05 and r[1] < tail - 0.05]
     n = len(sentences)
     if len(inner) < n - 1:
         raise SystemExit(f"take has {len(inner)} pauses but {n} sentences — check the narration file")
-    bounds = sorted(sorted(inner, key=lambda r: r[1] - r[0], reverse=True)[: n - 1])
+    syl = [syllables(sen["tts"]) for sen in sentences]
+    span = tail - lead
+    best, best_score = None, -1e9
+    for combo in itertools.combinations(range(len(inner)), n - 1):
+        b = [inner[k] for k in combo]
+        edges = [lead] + [v for r in b for v in r] + [tail]
+        durs = [edges[2 * i + 1] - edges[2 * i] for i in range(n)]
+        speech = sum(durs)
+        exp = [speech * w / sum(syl) for w in syl]
+        cost = sum((d - e) ** 2 / e for d, e in zip(durs, exp))
+        score = -cost + 1.5 * sum(r[1] - r[0] for r in b)
+        if score > best_score:
+            best, best_score = b, score
     segs, s0 = [], lead
-    for b in bounds:
-        segs.append((s0, b[0]))
-        s0 = b[1]
+    for r in best:
+        segs.append((s0, r[0]))
+        s0 = r[1]
     segs.append((s0, tail))
     out = []
     for (a, b), sen in zip(segs, sentences):
