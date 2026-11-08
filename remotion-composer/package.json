@@ -7,7 +7,7 @@
     "build": "npx remotion render src/index.tsx Explainer out/video.mp4",
     "upgrade": "npx remotion upgrade",
     "clay:preview": "npx remotion studio src/no-persuade-clay/index.tsx",
-    "clay:render": "npx remotion render src/no-persuade-clay/index.tsx NoPersuadeClay output/no-persuade-clay-final.mp4 --codec=h264 --audio-codec=aac"
+    "clay:render": "node scripts/render-no-persuade-clay.mjs"
   },
   "dependencies": {
     "@fontsource/anton": "^5.2.7",

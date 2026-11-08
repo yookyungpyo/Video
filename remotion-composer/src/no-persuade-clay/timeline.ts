@@ -1,8 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // no-persuade-clay — every image, caption and timing lives in this file.
 //
-// Audio: public/no-persuade-clay/original-audio.wav is the untouched audio track
-// of no-persuade_final.mp4 (narration + its own soft bed, 40.93 s). Nothing else
+// Audio: public/no-persuade-clay/original.mp4 is the original video; its audio track
+// (narration + its own soft bed, 40.93 s) is used untouched. Nothing else
 // is added. All frame numbers below are at 30 fps and follow the narration onsets
 // of that track (the same onsets the original on-screen captions used).
 // ─────────────────────────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@ export const FPS = 30;
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
 export const TOTAL_FRAMES = 1228; // 40.93 s — same as the original video
-export const AUDIO = "no-persuade-clay/original-audio.wav";
+export const AUDIO = "no-persuade-clay/original.mp4"; // audio track of the original video
 export const FADE_OUT_FRAMES = 9; // ~0.3 s fade to ivory at the very end
 
 // ---------- colours & type ----------
