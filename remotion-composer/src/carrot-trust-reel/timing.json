@@ -1,0 +1,600 @@
+{
+ "fps": 30,
+ "totalFrames": 3911,
+ "sections": [
+  {
+   "id": "s1",
+   "audio": true,
+   "sentences": [
+    {
+     "id": "hook",
+     "kind": "title",
+     "start": 18,
+     "end": 111,
+     "cues": [
+      {
+       "start": 18,
+       "end": 75,
+       "text": "나는 노트북을 찍었는데,",
+       "show": 73
+      },
+      {
+       "start": 75,
+       "end": 111,
+       "text": "상대는 나를 봤다.",
+       "show": 129
+      }
+     ]
+    },
+    {
+     "id": "post",
+     "kind": "normal",
+     "start": 134,
+     "end": 199,
+     "cues": [
+      {
+       "start": 134,
+       "end": 199,
+       "text": "사용하던 노트북을\n당근에 올렸다.",
+       "show": 217
+      }
+     ]
+    },
+    {
+     "id": "blanket",
+     "kind": "normal",
+     "start": 219,
+     "end": 251,
+     "cues": [
+      {
+       "start": 219,
+       "end": 251,
+       "text": "구겨진 이불 위.",
+       "show": 266
+      }
+     ]
+    },
+    {
+     "id": "chips",
+     "kind": "normal",
+     "start": 268,
+     "end": 308,
+     "cues": [
+      {
+       "start": 268,
+       "end": 308,
+       "text": "먹다 남은 과자봉지.",
+       "show": 321
+      }
+     ]
+    },
+    {
+     "id": "cable",
+     "kind": "normal",
+     "start": 323,
+     "end": 360,
+     "cues": [
+      {
+       "start": 323,
+       "end": 360,
+       "text": "엉켜 있는 충전선.",
+       "show": 378
+      }
+     ]
+    },
+    {
+     "id": "onlyLaptop",
+     "kind": "normal",
+     "start": 382,
+     "end": 431,
+     "cues": [
+      {
+       "start": 382,
+       "end": 431,
+       "text": "나는 노트북만 보고 찍었다.",
+       "show": 448
+      }
+     ]
+    },
+    {
+     "id": "surround",
+     "kind": "normal",
+     "start": 450,
+     "end": 512,
+     "cues": [
+      {
+       "start": 450,
+       "end": 512,
+       "text": "하지만 상대는\n주변까지 봤다.",
+       "show": 530
+      }
+     ]
+    },
+    {
+     "id": "thought1",
+     "kind": "thought",
+     "start": 541,
+     "end": 615,
+     "cues": [
+      {
+       "start": 541,
+       "end": 615,
+       "text": "“이 사람,\n노트북도 대충 썼을까?”",
+       "show": 633
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "audio": true,
+   "sentences": [
+    {
+     "id": "reshoot",
+     "kind": "normal",
+     "start": 645,
+     "end": 728,
+     "cues": [
+      {
+       "start": 645,
+       "end": 728,
+       "text": "이번에는 정돈된 책상 위에서\n다시 찍었다.",
+       "show": 746
+      }
+     ]
+    },
+    {
+     "id": "sameLaptop",
+     "kind": "key",
+     "start": 749,
+     "end": 773,
+     "cues": [
+      {
+       "start": 749,
+       "end": 773,
+       "text": "같은 노트북.",
+       "show": 783
+      }
+     ]
+    },
+    {
+     "id": "samePrice",
+     "kind": "key",
+     "start": 785,
+     "end": 804,
+     "cues": [
+      {
+       "start": 785,
+       "end": 804,
+       "text": "같은 가격.",
+       "show": 822
+      }
+     ]
+    },
+    {
+     "id": "diffImpression",
+     "kind": "normal",
+     "start": 826,
+     "end": 913,
+     "cues": [
+      {
+       "start": 826,
+       "end": 913,
+       "text": "그런데 이번에는\n다른 인상을 줄 수 있었다.",
+       "show": 931
+      }
+     ]
+    },
+    {
+     "id": "thought2",
+     "kind": "thought",
+     "start": 938,
+     "end": 998,
+     "cues": [
+      {
+       "start": 938,
+       "end": 998,
+       "text": "“깔끔하게 관리하면서\n썼을 것 같네.”",
+       "show": 1016
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "audio": true,
+   "sentences": [
+    {
+     "id": "why",
+     "kind": "normal",
+     "start": 1031,
+     "end": 1076,
+     "cues": [
+      {
+       "start": 1031,
+       "end": 1076,
+       "text": "왜 이런 차이가 생길까?",
+       "show": 1093
+      }
+     ]
+    },
+    {
+     "id": "unknown",
+     "kind": "normal",
+     "start": 1095,
+     "end": 1194,
+     "cues": [
+      {
+       "start": 1095,
+       "end": 1194,
+       "text": "구매자는 내가 노트북을\n어떻게 사용했는지 모른다.",
+       "show": 1212
+      }
+     ]
+    },
+    {
+     "id": "guess",
+     "kind": "normal",
+     "start": 1214,
+     "end": 1350,
+     "cues": [
+      {
+       "start": 1214,
+       "end": 1283,
+       "text": "그래서 사진 속 주변을 보고",
+       "show": 1281
+      },
+      {
+       "start": 1283,
+       "end": 1350,
+       "text": "보이지 않는 관리 습관까지\n짐작한다.",
+       "show": 1368
+      }
+     ]
+    },
+    {
+     "id": "notProof",
+     "kind": "normal",
+     "start": 1372,
+     "end": 1480,
+     "cues": [
+      {
+       "start": 1372,
+       "end": 1480,
+       "text": "물론 깨끗한 책상이\n노트북의 {성능을 증명}하는 건 아니다.",
+       "show": 1498
+      }
+     ]
+    },
+    {
+     "id": "clue",
+     "kind": "normal",
+     "start": 1500,
+     "end": 1640,
+     "cues": [
+      {
+       "start": 1500,
+       "end": 1569,
+       "text": "하지만 판단할 정보가\n적을 때는,",
+       "show": 1567
+      },
+      {
+       "start": 1569,
+       "end": 1640,
+       "text": "주변 모습도\n{하나의 단서}가 될 수 있다.",
+       "show": 1658
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s4",
+   "audio": true,
+   "sentences": [
+    {
+     "id": "firstMeet",
+     "kind": "normal",
+     "start": 1682,
+     "end": 1736,
+     "cues": [
+      {
+       "start": 1682,
+       "end": 1736,
+       "text": "처음 만나는 사람도 비슷하다.",
+       "show": 1753
+      }
+     ]
+    },
+    {
+     "id": "notYet",
+     "kind": "normal",
+     "start": 1755,
+     "end": 1905,
+     "cues": [
+      {
+       "start": 1755,
+       "end": 1868,
+       "text": "내가 얼마나 성실한지,\n일을 얼마나 잘하는지",
+       "show": 1866
+      },
+      {
+       "start": 1868,
+       "end": 1905,
+       "text": "아직 겪어보지 못했다.",
+       "show": 1923
+      }
+     ]
+    },
+    {
+     "id": "smallActs",
+     "kind": "normal",
+     "start": 1927,
+     "end": 2036,
+     "cues": [
+      {
+       "start": 1927,
+       "end": 2018,
+       "text": "그래서 눈에 보이는\n작은 행동으로",
+       "show": 2016
+      },
+      {
+       "start": 2018,
+       "end": 2036,
+       "text": "나를 조금씩 판단한다.",
+       "show": 2054
+      }
+     ]
+    },
+    {
+     "id": "docs",
+     "kind": "normal",
+     "start": 2059,
+     "end": 2123,
+     "cues": [
+      {
+       "start": 2059,
+       "end": 2123,
+       "text": "필요한 자료를\n정리해서 건네는 모습.",
+       "show": 2140
+      }
+     ]
+    },
+    {
+     "id": "onTime",
+     "kind": "normal",
+     "start": 2142,
+     "end": 2227,
+     "cues": [
+      {
+       "start": 2142,
+       "end": 2227,
+       "text": "약속한 시간에\n준비를 마치고 기다리는 모습.",
+       "show": 2245
+      }
+     ]
+    },
+    {
+     "id": "listen",
+     "kind": "normal",
+     "start": 2248,
+     "end": 2331,
+     "cues": [
+      {
+       "start": 2248,
+       "end": 2331,
+       "text": "질문을 끝까지 듣고\n차분하게 답하는 모습.",
+       "show": 2349
+      }
+     ]
+    },
+    {
+     "id": "expect",
+     "kind": "normal",
+     "start": 2352,
+     "end": 2410,
+     "cues": [
+      {
+       "start": 2352,
+       "end": 2410,
+       "text": "그런 행동을 보며\n기대하는 것이다.",
+       "show": 2428
+      }
+     ]
+    },
+    {
+     "id": "thought3",
+     "kind": "thought",
+     "start": 2439,
+     "end": 2502,
+     "cues": [
+      {
+       "start": 2439,
+       "end": 2502,
+       "text": "“일을 맡겨도\n이렇게 챙겨주겠네.”",
+       "show": 2520
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "audio": true,
+   "sentences": [
+    {
+     "id": "prepare",
+     "kind": "normal",
+     "start": 2538,
+     "end": 2741,
+     "cues": [
+      {
+       "start": 2538,
+       "end": 2618,
+       "text": "그러니 중요한 만남을\n앞두고 있다면,",
+       "show": 2616
+      },
+      {
+       "start": 2618,
+       "end": 2673,
+       "text": "내가 설명할 내용과 함께",
+       "show": 2671
+      },
+      {
+       "start": 2673,
+       "end": 2741,
+       "text": "상대가 나를 경험할 순간도\n준비하자.",
+       "show": 2759
+      }
+     ]
+    },
+    {
+     "id": "dress",
+     "kind": "normal",
+     "start": 2763,
+     "end": 2808,
+     "cues": [
+      {
+       "start": 2763,
+       "end": 2808,
+       "text": "옷차림을 {단정히} 하고,",
+       "show": 2818
+      }
+     ]
+    },
+    {
+     "id": "organize",
+     "kind": "normal",
+     "start": 2820,
+     "end": 2888,
+     "cues": [
+      {
+       "start": 2820,
+       "end": 2888,
+       "text": "자료는 상대가\n{보기 편하게} 정리하고,",
+       "show": 2901
+      }
+     ]
+    },
+    {
+     "id": "punctual",
+     "kind": "normal",
+     "start": 2903,
+     "end": 2940,
+     "cues": [
+      {
+       "start": 2903,
+       "end": 2940,
+       "text": "{시간 약속}을 지키고,",
+       "show": 2950
+      }
+     ]
+    },
+    {
+     "id": "hear",
+     "kind": "normal",
+     "start": 2952,
+     "end": 3000,
+     "cues": [
+      {
+       "start": 2952,
+       "end": 3000,
+       "text": "상대의 말을 {끝까지} 듣자.",
+       "show": 3018
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s6",
+   "audio": false,
+   "sentences": [
+    {
+     "id": "notProve",
+     "kind": "normal",
+     "start": 3039,
+     "end": 3149,
+     "cues": [
+      {
+       "start": 3039,
+       "end": 3149,
+       "text": "이런 행동 하나가\n내 실력을 증명하지는 않는다.",
+       "show": 3163
+      }
+     ]
+    },
+    {
+     "id": "start",
+     "kind": "normal",
+     "start": 3165,
+     "end": 3348,
+     "cues": [
+      {
+       "start": 3165,
+       "end": 3242,
+       "text": "하지만 내 이야기를\n더 들어보고,",
+       "show": 3240
+      },
+      {
+       "start": 3242,
+       "end": 3348,
+       "text": "함께 일해보고 싶게 만드는\n{시작}은 될 수 있다.",
+       "show": 3362
+      }
+     ]
+    },
+    {
+     "id": "groom",
+     "kind": "normal",
+     "start": 3364,
+     "end": 3534,
+     "cues": [
+      {
+       "start": 3364,
+       "end": 3427,
+       "text": "나를 가꾸고 정돈하는 일도,",
+       "show": 3425
+      },
+      {
+       "start": 3427,
+       "end": 3534,
+       "text": "내가 가진 실력을\n제대로 전달하기 위한 준비다.",
+       "show": 3552
+      }
+     ]
+    },
+    {
+     "id": "skill",
+     "kind": "final",
+     "start": 3566,
+     "end": 3638,
+     "cues": [
+      {
+       "start": 3566,
+       "end": 3638,
+       "text": "실력이 기회를 잡게 해준다면,",
+       "show": 3656
+      }
+     ]
+    },
+    {
+     "id": "trust",
+     "kind": "final",
+     "start": 3670,
+     "end": 3791,
+     "cues": [
+      {
+       "start": 3670,
+       "end": 3791,
+       "text": "신뢰를 주는 모습은\n그 실력을 보여줄 기회를 만든다.",
+       "show": 3896
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
