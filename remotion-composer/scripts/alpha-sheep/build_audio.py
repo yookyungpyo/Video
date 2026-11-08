@@ -136,9 +136,26 @@ def analyse_audio(x, sentences):
         splits = []
         if k > 1:
             cand = [r for r in inner if a + 0.2 < r[0] and r[1] < b - 0.2]
-            splits = sorted(r[1] for r in sorted(cand, key=lambda r: r[1] - r[0], reverse=True)[: k - 1])
+            splits = fit_splits(a, b, cand, [syllables(c) for c in sen["cues"]])
         out.append({"a": a, "b": b, "splits": splits})
     return out
+
+
+def fit_splits(a, b, cand, weights):
+    """Pick len(weights)-1 pauses inside [a, b] so each chunk's length fits its text (same rule as sentences)."""
+    import itertools
+    k = len(weights)
+    if len(cand) < k - 1:
+        return [a + (b - a) * sum(weights[: i + 1]) / sum(weights) for i in range(k - 1)]
+    best, best_score = None, -1e9
+    for combo in itertools.combinations(cand, k - 1):
+        edges = [a] + [v for r in combo for v in r] + [b]
+        durs = [edges[2 * i + 1] - edges[2 * i] for i in range(k)]
+        exp = [sum(durs) * w / sum(weights) for w in weights]
+        score = -sum((d - e) ** 2 / e for d, e in zip(durs, exp)) + 1.5 * sum(r[1] - r[0] for r in combo)
+        if score > best_score:
+            best, best_score = combo, score
+    return [r[1] for r in best]
 
 
 def estimate(sentences):

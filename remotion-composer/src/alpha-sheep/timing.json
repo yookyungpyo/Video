@@ -688,72 +688,72 @@
    "id": "10",
    "start": 5280,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 5302,
-     "end": 5376,
+     "end": 5372,
      "added": false,
      "cues": [
       {
        "start": 5302,
-       "end": 5376,
+       "end": 5372,
        "text": "AI는 수많은 답을 만들어냅니다.",
-       "show": 5389
+       "show": 5387
       }
      ]
     },
     {
-     "start": 5391,
-     "end": 5572,
+     "start": 5389,
+     "end": 5546,
      "added": false,
      "cues": [
       {
-       "start": 5391,
-       "end": 5481,
-       "text": "하지만 무엇이 좋은지,\n무엇이 나에게 맞는지",
-       "show": 5479
+       "start": 5389,
+       "end": 5443,
+       "text": "하지만 무엇이 좋은지,",
+       "show": 5441
       },
       {
-       "start": 5481,
-       "end": 5572,
-       "text": "판단하는 것은\n또 다른 능력입니다.",
-       "show": 5585
+       "start": 5443,
+       "end": 5546,
+       "text": "무엇이 나에게 맞는지 판단하는 것은\n또 다른 능력입니다.",
+       "show": 5561
       }
      ]
     },
     {
-     "start": 5587,
-     "end": 5658,
+     "start": 5563,
+     "end": 5635,
      "added": false,
      "cues": [
       {
-       "start": 5587,
-       "end": 5658,
+       "start": 5563,
+       "end": 5635,
        "text": "이제 안목 자체가 자본이 됩니다.",
-       "show": 5673
+       "show": 5650
       }
      ]
     },
     {
-     "start": 5686,
-     "end": 5747,
+     "start": 5665,
+     "end": 5730,
      "added": true,
      "cues": [
       {
-       "start": 5686,
-       "end": 5747,
+       "start": 5665,
+       "end": 5730,
        "text": "열 번째 트렌드, 안목자본",
-       "show": 5762
+       "show": 5745
       }
      ]
     }
    ],
    "stage": {
     "A": 5280,
-    "B": 5581,
-    "C": 5682,
-    "D": 5755,
+    "B": 5557,
+    "C": 5661,
+    "D": 5738,
     "E": 5796
    }
   },
@@ -761,70 +761,70 @@
    "id": "ending",
    "start": 5820,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 5841,
-     "end": 5945,
+     "end": 5926,
      "added": false,
      "cues": [
       {
        "start": 5841,
-       "end": 5945,
+       "end": 5926,
        "text": "이 열 가지 변화는\n하나의 질문으로 이어집니다.",
-       "show": 5958
+       "show": 5940
       }
      ]
     },
     {
-     "start": 5960,
-     "end": 6020,
+     "start": 5942,
+     "end": 5998,
      "added": false,
      "cues": [
       {
-       "start": 5960,
-       "end": 6020,
+       "start": 5942,
+       "end": 5998,
        "text": "우리는 변화를 기다릴까요?",
-       "show": 6033
+       "show": 6010
       }
      ]
     },
     {
-     "start": 6035,
+     "start": 6012,
+     "end": 6063,
+     "added": false,
+     "cues": [
+      {
+       "start": 6012,
+       "end": 6063,
+       "text": "아니면, 먼저 시도할까요?",
+       "show": 6078
+      }
+     ]
+    },
+    {
+     "start": 6080,
      "end": 6096,
      "added": false,
      "cues": [
       {
-       "start": 6035,
+       "start": 6080,
        "end": 6096,
-       "text": "아니면, 먼저 시도할까요?",
-       "show": 6109
-      }
-     ]
-    },
-    {
-     "start": 6111,
-     "end": 6127,
-     "added": false,
-     "cues": [
-      {
-       "start": 6111,
-       "end": 6127,
        "text": "ALPHA SHEEP",
-       "show": 6140
+       "show": 6111
       }
      ]
     },
     {
-     "start": 6142,
-     "end": 6285,
+     "start": 6113,
+     "end": 6231,
      "added": false,
      "cues": [
       {
-       "start": 6142,
-       "end": 6285,
+       "start": 6113,
+       "end": 6231,
        "text": "이제 전미영 박사님의 강연에서,\n그 답을 함께 찾아보겠습니다.",
-       "show": 6300
+       "show": 6246
       }
      ]
     }
