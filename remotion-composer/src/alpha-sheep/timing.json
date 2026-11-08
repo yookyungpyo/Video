@@ -561,66 +561,66 @@
    "id": "08",
    "start": 4200,
    "frames": 540,
-   "audio": false,
+   "audio": true,
    "sentences": [
     {
      "start": 4222,
-     "end": 4373,
+     "end": 4359,
      "added": false,
      "cues": [
       {
        "start": 4222,
-       "end": 4373,
+       "end": 4359,
        "text": "그런데 AI가 똑똑해질수록,\n오히려 사람의 가치가 중요해집니다.",
-       "show": 4386
+       "show": 4374
       }
      ]
     },
     {
-     "start": 4388,
-     "end": 4460,
+     "start": 4376,
+     "end": 4455,
      "added": false,
      "cues": [
       {
-       "start": 4388,
-       "end": 4460,
+       "start": 4376,
+       "end": 4455,
        "text": "공감과 창의성, 책임 있는 판단.",
-       "show": 4473
+       "show": 4469
       }
      ]
     },
     {
-     "start": 4475,
-     "end": 4546,
+     "start": 4471,
+     "end": 4530,
      "added": false,
      "cues": [
       {
-       "start": 4475,
-       "end": 4546,
+       "start": 4471,
+       "end": 4530,
        "text": "이것이 인간만의 차별화입니다.",
-       "show": 4561
+       "show": 4545
       }
      ]
     },
     {
-     "start": 4575,
-     "end": 4641,
+     "start": 4560,
+     "end": 4629,
      "added": true,
      "cues": [
       {
-       "start": 4575,
-       "end": 4641,
+       "start": 4560,
+       "end": 4629,
        "text": "여덟 번째 트렌드, 휴먼엣지",
-       "show": 4656
+       "show": 4644
       }
      ]
     }
    ],
    "stage": {
     "A": 4200,
-    "B": 4469,
-    "C": 4571,
-    "D": 4649,
+    "B": 4465,
+    "C": 4556,
+    "D": 4637,
     "E": 4716
    }
   },
