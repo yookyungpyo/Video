@@ -1,0 +1,318 @@
+{
+ "fps": 30,
+ "totalFrames": 2400,
+ "fadeOutFrames": 24,
+ "estimated": [
+  "leader",
+  "narrator_c"
+ ],
+ "scenes": [
+  {
+   "scene": 1,
+   "from": 0,
+   "to": 153
+  },
+  {
+   "scene": 2,
+   "from": 153,
+   "to": 288
+  },
+  {
+   "scene": 3,
+   "from": 288,
+   "to": 500
+  },
+  {
+   "scene": 4,
+   "from": 500,
+   "to": 682
+  },
+  {
+   "scene": 5,
+   "from": 682,
+   "to": 871
+  },
+  {
+   "scene": 6,
+   "from": 871,
+   "to": 1079
+  },
+  {
+   "scene": 7,
+   "from": 1079,
+   "to": 1280
+  },
+  {
+   "scene": 8,
+   "from": 1280,
+   "to": 1408
+  },
+  {
+   "scene": 9,
+   "from": 1408,
+   "to": 1670
+  },
+  {
+   "scene": 10,
+   "from": 1670,
+   "to": 1860
+  },
+  {
+   "scene": 11,
+   "from": 1860,
+   "to": 2086
+  },
+  {
+   "scene": 12,
+   "from": 2086,
+   "to": 2400
+  }
+ ],
+ "lines": [
+  {
+   "id": "s01",
+   "scene": 1,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 12,
+   "end": 149,
+   "cues": [
+    {
+     "start": 12,
+     "end": 149,
+     "text": "우리 팀장님은 정말 좋은 분입니다. 화도 안 내고, 늘 웃으시죠."
+    }
+   ]
+  },
+  {
+   "id": "s02",
+   "scene": 2,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 162,
+   "end": 284,
+   "cues": [
+    {
+     "start": 162,
+     "end": 284,
+     "text": "그런데 이상하게도, 이 팀에서 일하는 건 너무 힘들었습니다."
+    }
+   ]
+  },
+  {
+   "id": "s03q",
+   "scene": 3,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 297,
+   "end": 403,
+   "cues": [
+    {
+     "start": 297,
+     "end": 403,
+     "text": "팀장님, 이번 프로젝트에서 가장 중요한 게 뭔가요?"
+    }
+   ]
+  },
+  {
+   "id": "s03a",
+   "scene": 3,
+   "speaker": "leader",
+   "audio": false,
+   "start": 413,
+   "end": 492,
+   "cues": [
+    {
+     "start": 413,
+     "end": 492,
+     "text": "다 중요하니까, 잘 챙겨봅시다."
+    }
+   ]
+  },
+  {
+   "id": "s04q",
+   "scene": 4,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 509,
+   "end": 581,
+   "cues": [
+    {
+     "start": 509,
+     "end": 581,
+     "text": "일정이 부족한데, 무엇을 빼야 할까요?"
+    }
+   ]
+  },
+  {
+   "id": "s04a",
+   "scene": 4,
+   "speaker": "leader",
+   "audio": false,
+   "start": 591,
+   "end": 676,
+   "cues": [
+    {
+     "start": 591,
+     "end": 676,
+     "text": "가능하면, 다 해보면 좋겠는데요?"
+    }
+   ]
+  },
+  {
+   "id": "s05",
+   "scene": 5,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 691,
+   "end": 867,
+   "cues": [
+    {
+     "start": 691,
+     "end": 755,
+     "text": "결국 모든 일이 중요해졌고,"
+    },
+    {
+     "start": 755,
+     "end": 805,
+     "text": "우리는 계속 만들고,"
+    },
+    {
+     "start": 805,
+     "end": 831,
+     "text": "고치고,"
+    },
+    {
+     "start": 831,
+     "end": 867,
+     "text": "다시 만들어야 했습니다."
+    }
+   ]
+  },
+  {
+   "id": "s06",
+   "scene": 6,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 880,
+   "end": 1075,
+   "cues": [
+    {
+     "start": 880,
+     "end": 1075,
+     "text": "문제는 팀장님이 착하다는 게 아니었습니다. 결정해야 할 순간에, 결정하지 않는 것이었죠."
+    }
+   ]
+  },
+  {
+   "id": "s07",
+   "scene": 7,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 1088,
+   "end": 1277,
+   "cues": [
+    {
+     "start": 1088,
+     "end": 1277,
+     "text": "우리는 일을 못해서 지친 게 아니었습니다. 어디로 가는지 모른 채, 계속 달려야 해서 지친 겁니다."
+    }
+   ]
+  },
+  {
+   "id": "s08",
+   "scene": 8,
+   "speaker": "narrator",
+   "audio": true,
+   "start": 1289,
+   "end": 1404,
+   "cues": [
+    {
+     "start": 1289,
+     "end": 1404,
+     "text": "그러던 어느 날, 팀장님이 처음으로 명확하게 말씀하셨습니다."
+    }
+   ]
+  },
+  {
+   "id": "s09",
+   "scene": 9,
+   "speaker": "leader",
+   "audio": false,
+   "start": 1417,
+   "end": 1666,
+   "cues": [
+    {
+     "start": 1417,
+     "end": 1666,
+     "text": "이번 프로젝트의 목표는, 고객이 신청을 쉽게 끝내게 만드는 겁니다. 사용 편의성이 최우선입니다."
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "scene": 10,
+   "speaker": "leader",
+   "audio": false,
+   "start": 1679,
+   "end": 1857,
+   "cues": [
+    {
+     "start": 1679,
+     "end": 1784,
+     "text": "시간이 부족하면, 부가 기능은 미룹시다."
+    },
+    {
+     "start": 1784,
+     "end": 1857,
+     "text": "중요한 것부터 완성합시다."
+    }
+   ]
+  },
+  {
+   "id": "s11",
+   "scene": 11,
+   "speaker": "narrator",
+   "audio": false,
+   "start": 1869,
+   "end": 2083,
+   "cues": [
+    {
+     "start": 1869,
+     "end": 1961,
+     "text": "좋은 리더는 세 가지를 명확히 합니다."
+    },
+    {
+     "start": 1961,
+     "end": 1991,
+     "text": "어디로 갈지,"
+    },
+    {
+     "start": 1991,
+     "end": 2034,
+     "text": "무엇이 중요한지,"
+    },
+    {
+     "start": 2034,
+     "end": 2083,
+     "text": "무엇을 하지 않을지."
+    }
+   ]
+  },
+  {
+   "id": "s12",
+   "scene": 12,
+   "speaker": "narrator",
+   "audio": false,
+   "start": 2095,
+   "end": 2328,
+   "cues": [
+    {
+     "start": 2095,
+     "end": 2328,
+     "text": "좋은 리더는 팀원 대신 달리는 사람이 아닙니다. 모두가 같은 방향으로 달릴 수 있게 만드는 사람입니다."
+    }
+   ]
+  }
+ ]
+}

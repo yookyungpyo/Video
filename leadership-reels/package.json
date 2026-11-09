@@ -1,0 +1,22 @@
+{
+  "name": "leadership-reels",
+  "version": "1.0.0",
+  "private": true,
+  "description": "착한데 같이 일하기 싫은 팀장 — Leadership / Clear Direction (9:16 Remotion reel)",
+  "scripts": {
+    "preview": "remotion studio src/index.ts",
+    "render": "node scripts/render.mjs",
+    "audio": "python scripts/build_audio.py"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.441",
+    "pretendard": "^1.3.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.3.0"
+  }
+}
