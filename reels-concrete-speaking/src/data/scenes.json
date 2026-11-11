@@ -13,6 +13,7 @@
    "workW": 3641,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.04,
    "coverMagnification": 5.42
   },
   {
@@ -24,6 +25,7 @@
    "workW": 3634,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.05,
    "coverMagnification": 5.42
   },
   {
@@ -35,6 +37,7 @@
    "workW": 3641,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.04,
    "coverMagnification": 5.42
   },
   {
@@ -46,6 +49,7 @@
    "workW": 3634,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.05,
    "coverMagnification": 5.42
   },
   {
@@ -57,6 +61,7 @@
    "workW": 3641,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.04,
    "coverMagnification": 5.42
   },
   {
@@ -68,6 +73,7 @@
    "workW": 3634,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.05,
    "coverMagnification": 5.42
   },
   {
@@ -79,6 +85,7 @@
    "workW": 3610,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.04,
    "coverMagnification": 5.38
   },
   {
@@ -90,6 +97,7 @@
    "workW": 3603,
    "workH": 2400,
    "source": "storyboard",
+   "cardMagnification": 2.05,
    "coverMagnification": 5.38
   }
  ]

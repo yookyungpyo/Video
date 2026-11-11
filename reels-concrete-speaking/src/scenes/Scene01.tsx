@@ -1,14 +1,21 @@
 import React from "react";
-import { Shot } from "../components/Camera";
+import { Shot, TOP_ZONE_CY } from "../components/Camera";
+import { Pop } from "../components/Kinetic";
+import { cue, SCENE_T } from "../data";
 import { SceneProps } from "./common";
 
-// 01 Hook — same talk, two reactions. Start on the presenter (both panels), then pan to the audience
-// (bored above / surprised below). Subtitle sits on the diagonal divider (see Subtitles in the composition).
-export const Scene01: React.FC<SceneProps> = ({ g }) => (
-  <Shot n={1} g={g} keys={[
-    [0, { z: 1.03, x: 0.2, y: 0.5 }],
-    [55, { z: 1.04, x: 0.2, y: 0.5 }],
-    [108, { z: 1.05, x: 0.8, y: 0.5 }],
-    [160, { z: 1.07, x: 0.8, y: 0.5 }],
-  ]} />
-);
+// 01 Hook — the whole split scene: same talk, bored audience (top) vs surprised audience (bottom).
+// A slow push toward the lower (concrete) half while the question lands.
+export const Scene01: React.FC<SceneProps> = ({ g }) => {
+  const end = SCENE_T[1].to;
+  return (
+    <>
+      <Shot n={1} g={g} keys={[
+        [0, { z: 1.0, x: 0.5, y: 0.5 }],
+        [cue(1, 1), { z: 1.0, x: 0.5, y: 0.5 }],
+        [end + 6, { z: 1.06, x: 0.6, y: 0.62 }],
+      ]} />
+      <Pop f={g} at={cue(1, 1) + 6} until={end + 4} x={540} y={TOP_ZONE_CY} text="설득력?" size={150} />
+    </>
+  );
+};

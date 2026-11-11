@@ -16,7 +16,7 @@ import type { SceneProps } from "../scenes/common";
 
 // scene order, the transition that brings each scene in, and where its subtitles sit
 const SCENES: { n: number; C: React.FC<SceneProps>; inKind: TransitionKind; sub: "bottom" | "middle" }[] = [
-  { n: 1, C: Scene01, inKind: "none", sub: "middle" },
+  { n: 1, C: Scene01, inKind: "none", sub: "bottom" },
   { n: 2, C: Scene02, inKind: "push", sub: "bottom" },
   { n: 3, C: Scene03, inKind: "wipe", sub: "bottom" },
   { n: 4, C: Scene04, inKind: "fade", sub: "bottom" },

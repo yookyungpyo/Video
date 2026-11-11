@@ -1,37 +1,29 @@
 import React from "react";
-import { Shot } from "../components/Camera";
-import { Vague } from "../components/Kinetic";
+import { Shot, TOP_ZONE_CY } from "../components/Camera";
+import { Pop, Vague } from "../components/Kinetic";
 import { cue, SCENE_T } from "../data";
 import { SceneProps } from "./common";
 
-// 04 Why — the thinker, then the tangled thought (abstract words drift apart), then the clear checklist.
+// 04 Why — whole scene; a nudge toward the tangled thought (abstract words drift apart), then toward the clear checklist.
 export const Scene04: React.FC<SceneProps> = ({ g }) => {
   const end = SCENE_T[4].to;
+  const spread = cue(4, 2);
+  const k = Math.max(0, Math.min(1, (g - spread) / 40));
+  const out = cue(4, 3) + 6;
   return (
-    <Shot n={4} g={g} keys={[
-      [530, { z: 1.06, x: 0.47, y: 0.55 }],
-      [cue(4, 1) - 6, { z: 1.06, x: 0.47, y: 0.55 }],
-      [cue(4, 1) + 20, { z: 1.05, x: 0.2, y: 0.45 }],
-      [cue(4, 3) - 6, { z: 1.05, x: 0.2, y: 0.45 }],
-      [cue(4, 3) + 24, { z: 1.06, x: 0.8, y: 0.45 }],
-      [end + 10, { z: 1.08, x: 0.8, y: 0.42 }],
-    ]}>
-      {(p) => {
-        const at = cue(4, 1) + 6;
-        const out = cue(4, 3) + 12;
-        const spread = cue(4, 2); // "듣는 사람마다 다르게 해석" — the words drift apart
-        const k = Math.max(0, Math.min(1, (g - spread) / 40));
-        const [x1, y1] = p.P(0.17, 0.15);
-        const [x2, y2] = p.P(0.29, 0.29);
-        const [x3, y3] = p.P(0.15, 0.4);
-        return (
-          <>
-            <Vague f={g} at={at} until={out} x={x1 - 25 * k} y={y1 - 40 * k} text="혁신?" size={96} seed={1} />
-            <Vague f={g} at={at + 6} until={out} x={x2 + 50 * k} y={y2} text="효율성?" size={80} seed={3} />
-            <Vague f={g} at={at + 12} until={out} x={x3 - 20 * k} y={y3 + 50 * k} text="소통 강화?" size={80} seed={5} />
-          </>
-        );
-      }}
-    </Shot>
+    <>
+      <Shot n={4} g={g} keys={[
+        [530, { z: 1.0, x: 0.5, y: 0.5 }],
+        [cue(4, 1), { z: 1.0, x: 0.5, y: 0.5 }],
+        [cue(4, 1) + 26, { z: 1.07, x: 0.3, y: 0.35 }],
+        [cue(4, 3) - 4, { z: 1.07, x: 0.3, y: 0.35 }],
+        [cue(4, 3) + 26, { z: 1.07, x: 0.72, y: 0.35 }],
+        [end + 10, { z: 1.08, x: 0.74, y: 0.36 }],
+      ]} />
+      <Vague f={g} at={cue(4, 1) + 2} until={out} x={290 - 70 * k} y={TOP_ZONE_CY - 80 - 30 * k} text="혁신?" size={104} seed={1} />
+      <Vague f={g} at={cue(4, 1) + 8} until={out} x={760 + 60 * k} y={TOP_ZONE_CY - 20} text="효율성?" size={88} seed={3} />
+      <Vague f={g} at={cue(4, 1) + 14} until={out} x={440 - 30 * k} y={TOP_ZONE_CY + 100 + 30 * k} text="소통 강화?" size={88} seed={5} />
+      <Pop f={g} at={cue(4, 3) + 10} until={end + 4} x={540} y={TOP_ZONE_CY} text="눈앞에 그려지나?" size={96} color="#FFFFFF" />
+    </>
   );
 };

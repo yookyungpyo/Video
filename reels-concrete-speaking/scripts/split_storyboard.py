@@ -14,7 +14,8 @@ Needs: Python 3 + numpy + Pillow   (pip install numpy pillow)
    - otherwise the storyboard cell is enlarged with Lanczos (no regeneration, faces unchanged)
      plus a very light unsharp mask, and a QUALITY WARNING is printed.
 4. Writes src/data/scenes.json: each scene's source size, which file is used, and how much the
-   source must be magnified to cover 1080×1920 (the number to watch for sharpness).
+   source is magnified on screen. Each cell is shown WHOLE on a 1016 px-wide card (see src/components/Camera.tsx),
+   so the number to watch for sharpness is cardMagnification (× up to ~1.08 for the camera push).
 """
 import json
 import os
@@ -33,7 +34,8 @@ COLS, ROWS = 2, 4
 W, H = 1080, 1920
 INSET = 2           # px trimmed inside each divider
 WORK_H = 2400       # working-copy height (room for ~1.25× camera zoom on a 1920-high frame)
-WARN_AT = 2.0       # magnification above this is flagged
+CARD_W = 1016       # on-screen card width (whole scene, original aspect)
+WARN_AT = 2.2       # on-screen magnification above this is flagged
 
 
 def runs(mask):
@@ -88,7 +90,7 @@ def main():
             hi = next((os.path.join(HIRES, f"scene-{n:02d}.{e}") for e in ("png", "jpg", "jpeg", "webp")
                        if os.path.exists(os.path.join(HIRES, f"scene-{n:02d}.{e}"))), None)
             src = Image.open(hi).convert("RGB") if hi else cell
-            mag = max(W / src.width, H / src.height)  # cover magnification at zoom 1.0
+            mag = CARD_W / src.width * 1.08  # on-screen magnification at the strongest camera push
             if hi:
                 work = src if src.height >= WORK_H else src.resize((round(src.width * WORK_H / src.height), WORK_H), Image.LANCZOS)
             else:
@@ -98,16 +100,17 @@ def main():
             work.save(os.path.join(PUB, f"scene-{n:02d}.jpg"), quality=93)
             meta.append({"n": n, "file": f"scenes/scene-{n:02d}.jpg", "srcW": src.width, "srcH": src.height,
                          "aspect": round(src.width / src.height, 4), "workW": work.width, "workH": work.height,
-                         "source": "hires" if hi else "storyboard", "coverMagnification": round(mag, 2)})
+                         "source": "hires" if hi else "storyboard", "cardMagnification": round(mag, 2),
+                         "coverMagnification": round(max(W / src.width, H / src.height), 2)})
             flag = "  ← QUALITY WARNING" if mag > WARN_AT else ""
             print(f"scene-{n:02d}: {src.width}×{src.height} ({'hi-res original' if hi else 'storyboard cell'})  "
-                  f"cover magnification ×{mag:.2f}{flag}")
+                  f"on-screen magnification ×{mag:.2f}{flag}")
             if mag > WARN_AT:
                 warn.append(n)
     os.makedirs(os.path.dirname(META), exist_ok=True)
     json.dump({"cover": {"w": W, "h": H}, "scenes": meta}, open(META, "w", encoding="utf-8"), indent=1)
     if warn:
-        print(f"\n! QUALITY WARNING: scenes {warn} are magnified more than ×{WARN_AT} to cover 1080×1920 and will look soft.\n"
+        print(f"\n! QUALITY WARNING: scenes {warn} are magnified more than ×{WARN_AT} on screen and will look soft.\n"
               f"  Put the high-resolution single images in assets/scenes-hires/scene-0X.png and run this script again —\n"
               f"  the video picks them up automatically (same framing values work if the composition is the same).")
 

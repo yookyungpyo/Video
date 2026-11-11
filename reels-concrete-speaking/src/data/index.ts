@@ -6,7 +6,7 @@ import scenes from "./scenes.json";
 
 export type Chunk = { start: number; end: number; text: string; quote: boolean; fontSize: number; lines: number };
 export type SceneTiming = { n: number; from: number; to: number; voice: boolean; chunks: Chunk[] };
-export type SceneImage = { n: number; file: string; srcW: number; srcH: number; aspect: number; source: string; coverMagnification: number };
+export type SceneImage = { n: number; file: string; srcW: number; srcH: number; aspect: number; source: string; coverMagnification: number; cardMagnification: number };
 
 export const SCRIPT = script;
 export const TIMING = timing as unknown as { totalFrames: number; scenes: SceneTiming[]; overflowSeconds: number };
