@@ -139,16 +139,18 @@ def main():
     width = measure_factory()
     report, layout, plan = [], [], []
     rate = sc["readingRate"]
-    t = 0.0
     natural_total = 0.0
+    LEAD, TAIL = 0.3, 0.35  # voiced scene: silence before the first word / after the last one (minimum)
+
+    # pass 1 — what each scene needs
+    info = []
     for s in sc["scenes"]:
-        a0, b0 = s["window"]
-        win = b0 - a0
-        reads = [plain(c.get("read", c["text"])) for c in s["chunks"]]
-        w = [syllables(r) for r in reads]
+        win = s["window"][1] - s["window"][0]
+        w = [syllables(plain(c.get("read", c["text"]))) for c in s["chunks"]]
         est = sum(w) / rate + 0.45 * (len(w) - 1) + 0.6
         natural_total += est
         f = next((p for p in (os.path.join(NARR, f"scene-{s['n']:02d}.{e}") for e in ("mp3", "wav", "m4a")) if os.path.exists(p)), None)
+        it = {"s": s, "win": win, "w": w, "est": est, "f": f, "need": 0.0}
         if f:
             x = decode(f)
             runs = silent_runs(x)
@@ -157,32 +159,46 @@ def main():
             inner = [r for r in runs if r[0] > lead_s + 0.05 and r[1] < tail_s - 0.05]
             sp = fit(lead_s, tail_s, inner, w)
             vd = tail_s - lead_s
-            lead, tail = 0.3, 0.45
-            dur = max(win, lead + vd + tail)
-            splits = [r[1] - lead_s for r in sp] if sp is not None else [vd * sum(w[: i + 1]) / sum(w) for i in range(len(w) - 1)]
-            starts = [t + lead] + [t + lead + v for v in splits]
-            plan.append((t + lead, x[int(lead_s * SR): int(tail_s * SR)]))
-            report.append(f"S{s['n']:02d} voice {vd:5.2f}s → scene {dur:5.2f}s (window {win}s){'  OVER by %.2fs' % (dur - win) if dur > win + 0.01 else ''}")
+            it.update(vd=vd, seg=x[int(lead_s * SR): int(tail_s * SR)], need=LEAD + vd + TAIL,
+                      splits=[r[1] - lead_s for r in sp] if sp is not None else [vd * sum(w[: i + 1]) / sum(w) for i in range(len(w) - 1)])
+        info.append(it)
+
+    # pass 2 — scene lengths: keep the brief's windows; a scene whose take is longer grows, and the time is
+    # taken back from scenes that have spare silence, so the total stays at the target when the voice allows it
+    durs = [max(it["win"], it["need"]) for it in info]
+    target_s = sc["targetFrames"] / FPS
+    excess = sum(durs) - target_s
+    if excess > 0:
+        slack = [d - it["need"] if it["f"] else 0.0 for d, it in zip(durs, info)]
+        if sum(slack) > 0:
+            k = min(1.0, excess / sum(slack))
+            durs = [d - sl * k for d, sl in zip(durs, slack)]
+
+    t = 0.0
+    for it, dur in zip(info, durs):
+        s, win, w = it["s"], it["win"], it["w"]
+        if it["f"]:
+            starts = [t + LEAD] + [t + LEAD + v for v in it["splits"]]
+            plan.append((t + LEAD, it["seg"]))
+            report.append(f"S{s['n']:02d} voice {it['vd']:5.2f}s → scene {dur:5.2f}s (window {win}s){'  OVER by %.2fs' % (dur - win) if dur > win + 0.01 else ''}")
         else:
-            dur = win
             lead = 0.3 if s["n"] == 1 else 0.12
             usable = dur - lead - 0.1
             wt = [v + 4 for v in w]  # +4: short chunks ("보다,") still get a readable moment
             starts = [t + lead + usable * sum(wt[:i]) / sum(wt) for i in range(len(wt))]
-            report.append(f"S{s['n']:02d} no voice — window {win}s, natural reading ≈ {est:4.1f}s ({'+%.1fs' % (est - win) if est > win else 'fits'})")
+            report.append(f"S{s['n']:02d} no voice — window {win}s, natural reading ≈ {it['est']:4.1f}s ({'+%.1fs' % (it['est'] - win) if it['est'] > win else 'fits'})")
         ends = starts[1:] + [t + dur]
         chunks = []
         for c, st, en in zip(s["chunks"], starts, ends):
-            lines = plain(c["text"]).split(" ") if False else c["text"].replace("{", "").replace("}", "").split("\n")
+            lines = c["text"].replace("{", "").replace("}", "").split("\n")
             size = SUB_SIZE[0]
             while size > SUB_SIZE[1] and max(width(l, size) for l in lines) > SUB_MAX_W:
                 size -= 1
-            fits = max(width(l, size) for l in lines) <= SUB_MAX_W
-            if not fits:
+            if max(width(l, size) for l in lines) > SUB_MAX_W:
                 print(f"! S{s['n']:02d} subtitle too wide even at {size}px: {plain(c['text'])}")
             chunks.append({"start": round(st * FPS), "end": round(en * FPS), "text": c["text"], "quote": bool(c.get("quote")),
                            "fontSize": size, "lines": len(lines)})
-        layout.append({"n": s["n"], "from": round(t * FPS), "to": round((t + dur) * FPS), "voice": bool(f), "chunks": chunks})
+        layout.append({"n": s["n"], "from": round(t * FPS), "to": round((t + dur) * FPS), "voice": bool(it["f"]), "chunks": chunks})
         t += dur
 
     total_f = round(t * FPS)
@@ -298,7 +314,7 @@ def build_music(N, total_s, layout):
     pad((146.8, 155.6), cut[2], cut[3] + 0.3, 0.06)
     for i in range(int((end_s[2] - cut[2]) / (beat * 2))):
         add(bed, cut[2] + 0.3 + i * beat * 2, keys(146.8, 1.4), 0.05)
-    t1 = chunk[2][3]
+    t1 = chunk[2][1]
     gl = tt(0.9)
     add(sfx, t1 + 0.15, np.sin(2 * np.pi * (330 - 90 * gl / 0.9) * gl) * np.exp(-2.5 * gl) * np.minimum(1, gl / 0.02), 0.05)
 
@@ -328,14 +344,14 @@ def build_music(N, total_s, layout):
     for i, f in enumerate((A, E, F, C)):
         add(bed, cut[4] + 0.2 + i * 1.6, keys(f, 2.0), 0.07)
     for i, f in enumerate((C * 2, E * 2, G * 2, C * 4)):
-        add(sfx, chunk[4][3] + i * 0.09, mallet(f, 0.7), 0.05)
+        add(sfx, chunk[4][1] + 0.9 + i * 0.09, mallet(f, 0.7), 0.05)
 
     # S5–S7 groove — C G Am F
     prog = [(C, E, G), (B / 2 * 2 * 0.5 * 2, D * 2, G), (A, C * 2, E * 2), (F, A, C * 2)]
     groove(cut[5], end_s[7], prog, 1.0)
     pad((130.8, 196.0, 261.6), cut[5], end_s[7] + 0.3, 0.045)
     for i in range(6):  # clock ticks under "매주 두 시간씩 … 30분으로"
-        add(sfx, chunk[5][2] + i * 0.3, hat(), 0.18 if i % 2 == 0 else 0.12)
+        add(sfx, chunk[5][1] + i * 0.3, hat(), 0.18 if i % 2 == 0 else 0.12)
 
     # S8 resolve — fuller, lifting, ends on a resolved C chord with soft applause
     groove(cut[8], end_s[8] - 2.2, [(F, A, C * 2), (G, B, D * 2), (E, G, C * 2), (A, C * 2, E * 2)], 1.05)
@@ -344,7 +360,7 @@ def build_music(N, total_s, layout):
     for j, f in enumerate((65.4, 130.8, C, E, G, C * 2)):
         add(bed, tf + j * 0.04, keys(f, 3.2), 0.07)
     # applause: many short noise claps, swelling then fading
-    a0, a1 = chunk[8][3] - 0.3, total_s
+    a0, a1 = chunk[8][2] - 0.3, total_s
     for _ in range(int((a1 - a0) * 26)):
         tc = rng.uniform(a0, a1)
         lvl = np.clip((tc - a0) / 1.2, 0, 1) * np.clip((a1 - tc) / 2.0, 0, 1)
@@ -364,7 +380,7 @@ def build_music(N, total_s, layout):
     def pop(f):
         t = tt(0.18)
         return np.sin(2 * np.pi * f * (1 + 0.3 * np.exp(-30 * t)) * t) * np.exp(-20 * t)
-    for n, ci, f in ((1, 1, 660), (3, 0, 784), (3, 1, 880), (5, 2, 784), (7, 1, 660), (8, 1, 660)):
+    for n, ci, f in ((1, 1, 660), (3, 0, 784), (3, 1, 880), (5, 1, 784), (7, 1, 660), (8, 0, 660)):
         add(sfx, chunk[n][ci] + 0.05, pop(f), 0.07)
     return bed, sfx
 

@@ -5,6 +5,7 @@
   "description": "왜 똑같은 말을 해도 설득력이 다를까? — 55s 9:16 clay reel (Remotion)",
   "scripts": {
     "split": "python scripts/split_storyboard.py",
+    "take": "python scripts/split_take.py",
     "audio": "python scripts/build_audio.py",
     "preview": "remotion studio src/index.ts",
     "render": "node scripts/render.mjs",

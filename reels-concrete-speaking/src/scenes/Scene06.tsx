@@ -11,10 +11,10 @@ export const Scene06: React.FC<SceneProps> = ({ g }) => {
     <>
       <Shot n={6} g={g} keys={[
         [950, { z: 1.0, x: 0.5, y: 0.5 }],
-        [cue(6, 3) - 6, { z: 1.0, x: 0.5, y: 0.5 }],
-        [cue(6, 3) + 24, { z: 1.07, x: 0.56, y: 0.62 }],
-        [cue(6, 4) - 2, { z: 1.07, x: 0.56, y: 0.62 }],
-        [cue(6, 4) + 28, { z: 1.06, x: 0.7, y: 0.42 }],
+        [cue(6, 2) - 6, { z: 1.0, x: 0.5, y: 0.5 }],
+        [cue(6, 2) + 22, { z: 1.07, x: 0.56, y: 0.62 }],
+        [end - 40, { z: 1.07, x: 0.56, y: 0.62 }],
+        [end - 8, { z: 1.06, x: 0.7, y: 0.42 }],
         [end + 10, { z: 1.07, x: 0.72, y: 0.42 }],
       ]}>
         {(p) => {
@@ -22,14 +22,14 @@ export const Scene06: React.FC<SceneProps> = ({ g }) => {
           const [kx, ky] = p.P(0.69, 0.73);
           return (
             <>
-              <Ring f={g} at={cue(6, 3) + 20} until={cue(6, 4) + 12} x={cx} y={cy} r={0.06 * p.hi} />
-              <Ring f={g} at={cue(6, 3) + 36} until={cue(6, 4) + 12} x={kx} y={ky} r={0.2 * p.hi} />
+              <Ring f={g} at={cue(6, 2) + 18} until={end - 20} x={cx} y={cy} r={0.06 * p.hi} />
+              <Ring f={g} at={cue(6, 2) + 34} until={end - 20} x={kx} y={ky} r={0.2 * p.hi} />
             </>
           );
         }}
       </Shot>
-      <Vague f={g} at={cue(6, 1) + 2} until={cue(6, 3) + 2} x={540} y={TOP_ZONE_CY} text="책임감 강화" size={100} seed={6} />
-      <Pop f={g} at={cue(6, 3) + 6} until={end + 4} x={540} y={TOP_ZONE_CY} text="담당자 · 그날 · 공유" size={92} />
+      <Vague f={g} at={cue(6, 1) + 2} until={cue(6, 2) + 2} x={540} y={TOP_ZONE_CY} text="책임감 강화" size={100} seed={6} />
+      <Pop f={g} at={cue(6, 2) + 6} until={end + 4} x={540} y={TOP_ZONE_CY} text="담당자 · 그날 · 공유" size={92} />
     </>
   );
 };

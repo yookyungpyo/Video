@@ -15,7 +15,7 @@ const ICONS = [
 export const Scene07: React.FC<SceneProps> = ({ g }) => {
   const end = SCENE_T[7].to;
   const a = cue(7, 1);
-  const step = Math.round((cueEnd(7, 1) - a) / 3);
+  const step = Math.min(18, Math.round((cueEnd(7, 1) - a) / 3)); // ~0.6 s per word, as spoken
   const at = [a, a + step, a + 2 * step];
   return (
     <>

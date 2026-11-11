@@ -10,7 +10,8 @@ React + TypeScript + Remotion 4 · 1080×1920 · 30fps · 1650프레임(55초) �
 npm install            # 처음 한 번
 pip install numpy pillow   # 처음 한 번 (분할·오디오 스크립트용 Python 패키지)
 npm run split          # assets/storyboard.png → assets/scenes/scene-01~08.png + 작업용 사본 (public/scenes)
-npm run audio          # 자막 타이밍 + 배경음악·효과음 (+ 내레이션이 있으면 믹스) → src/data/timing.json, public/audio/track.mp4
+npm run take           # (음성 교체 시) 한 번에 읽은 테이크를 장면별 파일로 나누기
+npm run audio          # 자막 타이밍 + 내레이션 + 배경음악·효과음 믹스 → src/data/timing.json, public/audio/track.mp4
 npm run preview        # Remotion Studio 미리보기
 npm run render         # → output/concrete-speaking.mp4
 npm run verify         # 1080×1920 · 30fps · 1650프레임 · 코덱 검사 + 장면별 확인용 프레임 output/stills/
@@ -32,30 +33,30 @@ npm run verify         # 1080×1920 · 30fps · 1650프레임 · 코덱 검사 +
 - 고해상도 개별 이미지가 있으면 `assets/scenes-hires/scene-01.png … scene-08.png`로 넣고 `npm run split`을 다시 실행하세요. 자동으로 교체됩니다.
 - 확대 배율은 `npm run split` 출력과 `src/data/scenes.json`의 `cardMagnification`에서 확인할 수 있습니다.
 
-## ⚠ 내레이션 길이 — 55초 초과 보고
+## 내레이션
 
-현재 내레이션 음성은 없습니다(임의 TTS 미사용). 영상은 장면 시간(0–5–11–18–25–32–39–47–55초)에 맞춰 **자막만** 나오고, 배경음악과 효과음이 깔립니다.
+- **목소리:** ElevenLabs `eleven_v4` · Leo (Young, Calm & Clear). 한 번에 읽은 테이크 `assets/narration/full-take.mp3`(47.7초)를 `scripts/split_take.py`가 쉼 위치에 맞춰 장면별 `scene-01.wav … scene-08.wav`로 나눕니다.
+- **대본:** 원래 대본은 자연스러운 속도로 읽으면 약 93초(55초보다 약 38초 김)라서, 사용자가 고른 **55초 축약 대본**으로 녹음했습니다. 자막도 축약 대본입니다.
 
-대본을 자연스러운 속도(약 5.5음절/초)로 읽으면 **약 93초**로, **55초보다 약 38초 깁니다.** 장면별로는 S01 +1.0초, S02 +4.3초, S03 +3.6초, S04 +5.5초, S05 +5.1초, S06 +7.0초, S07 +2.6초, S08 +9.1초입니다(`output/timing-report.txt`).
-
-음성 파일을 넣는 방법:
-1. 장면별로 `assets/narration/scene-01.mp3 … scene-08.mp3`(wav, m4a도 가능)를 넣습니다. 문장 사이는 0.4초 이상 쉬어 주세요.
-2. `npm run audio` 다음 `npm run render`를 실행합니다.
-   - 실제 음성 길이로 장면 길이와 자막 경계(쉼 위치)를 다시 계산합니다.
-   - 음성을 빠르게 하거나 자르지 않습니다. 55초를 넘으면 영상이 그만큼 길어지고, 초과분을 `output/timing-report.txt`에 적습니다.
-
-55초 안에 자연스럽게 읽히는 **축약 대본 제안**입니다(약 230음절, 적용하지 않음). 쓰려면 `src/data/script.json`의 자막을 바꾸면 됩니다.
-
-| 장면 | 제안 문장 |
+| 장면 | 대본 (자막 원본: `src/data/script.json`) |
 |---|---|
 | 01 | 같은 내용인데, 왜 어떤 말은 설득력이 없을까요? |
 | 02 | "고객 중심의 혁신으로 효율성을 강화하겠습니다." 그래서 뭘 하겠다는 거죠? |
-| 03 | "신청서 작성에 10분. 입력 항목 20개를 8개로 줄이겠습니다." 바로 이해되죠. |
+| 03 | 신청서 작성에 10분. 입력 항목 20개를 8개로 줄이겠습니다. 바로 이해되죠. |
 | 04 | 혁신, 효율성, 소통 강화. 듣는 사람마다 다르게 그려지는 말이기 때문입니다. |
-| 05 | "회의 문화 개선" 대신 "주 2시간 회의를 30분으로." 대상과 행동이 보입니다. |
-| 06 | 토론도 같습니다. "책임감 강화" 대신 "담당자가 그날 원인과 일정을 공유하자." |
+| 05 | "회의 문화 개선" 대신, "주 2시간 회의를 30분으로." 대상과 행동이 보입니다. |
+| 06 | 토론도 같습니다. "책임감 강화" 대신, "담당자가 그날 원인과 일정을 공유하자." |
 | 07 | 발표 전에 세 가지만 확인하세요. 누가, 무엇을, 어떻게 하는가? |
 | 08 | 처음 질문의 답은 이겁니다. 멋진 단어 대신, 상대의 머릿속에 장면을 만드세요. |
+
+- **타이밍:** 장면 시간(0–5–11–18–25–32–39–47–55초)을 유지합니다.
+  - 각 장면은 0.3초 뒤에 목소리가 시작합니다.
+  - 자막 경계는 실제 음성의 쉼 위치를 따릅니다.
+  - 테이크가 장면보다 길면 그 장면이 늘어나고, 그만큼을 여유 있는 장면에서 가져와 전체를 1650프레임으로 지킵니다.
+  - 음성은 빠르게 하거나 자르지 않습니다. 결과는 `output/timing-report.txt`에 남습니다.
+- **음성 교체:**
+  - 한 번에 읽은 새 테이크가 있으면 `assets/narration/full-take.mp3`를 바꾸고 `npm run take` → `npm run audio` → `npm run render`를 실행합니다.
+  - 장면별 파일이 있으면 `scene-0X.mp3`(또는 wav)를 직접 넣고 `npm run audio`부터 실행하면 됩니다.
 
 ## 폴더
 
@@ -64,7 +65,8 @@ npm run verify         # 1080×1920 · 30fps · 1650프레임 · 코덱 검사 +
 | `assets/storyboard.png` | 원본 스토리보드 (2열×4행, 왼쪽 위→오른쪽 아래 01~08) |
 | `assets/scenes/scene-0X.png` | 분할한 원본 픽셀 (구분선 자동 검출, 경계선 2px 안쪽에서 자름) |
 | `assets/scenes-hires/` | (선택) 고해상도 개별 이미지를 넣으면 자동 교체 |
-| `assets/narration/` | (선택) 장면별 내레이션 |
+| `assets/narration/` | 내레이션: `full-take.mp3`(원본 테이크) + 장면별 `scene-0X.wav` |
+| `scripts/split_take.py` | 원본 테이크를 쉼 위치에 맞춰 장면별로 나누기 |
 | `scripts/split_storyboard.py` | 분할 + 작업용 사본 + 확대 배율 경고 |
 | `scripts/build_audio.py` | 자막 타이밍 · 음성 정렬 · 음악/효과음 합성 · 믹스 · SRT · 길이 보고 |
 | `scripts/render.mjs` · `scripts/verify.mjs` | 렌더(무음 렌더 후 오디오 합치기) · 결과 검사 |
