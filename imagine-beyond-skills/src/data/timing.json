@@ -1,0 +1,303 @@
+{
+ "fps": 30,
+ "totalFrames": 1960,
+ "targetFrames": 1500,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "naturalNarrationSeconds": 74.3,
+ "overflowSeconds": 15.33,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 174,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 9,
+     "end": 99,
+     "text": "남들은 {AI}로 뭔가를 만들어내는데,",
+     "quote": false,
+     "rhythm": true,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 99,
+     "end": 174,
+     "text": "나는 왜 아직\n{시작도} 못 하고 있을까요?",
+     "quote": false,
+     "rhythm": true,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 174,
+   "to": 362,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 183,
+     "end": 257,
+     "text": "{실력}이 부족해서만은 아닙니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 257,
+     "end": 362,
+     "text": "무언가를 만드는 {방법} 자체가\n달라졌기 때문입니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 362,
+   "to": 566,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 371,
+     "end": 439,
+     "text": "예전에는 좋은 아이디어가 있어도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 439,
+     "end": 507,
+     "text": "{코딩}을 모르거나\n{디자인}을 못 하면",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 507,
+     "end": 566,
+     "text": "누군가의 {도움}이 필요했습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 566,
+   "to": 773,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 575,
+     "end": 674,
+     "text": "하지만 지금은\n{AI}에게 아이디어를 설명하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 674,
+     "end": 773,
+     "text": "실제로 작동하는 {시제품}까지\n만들어볼 수 있습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 773,
+   "to": 1040,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 782,
+     "end": 883,
+     "text": "매일 {반복}하는 업무가\n불편하다고 생각해 보세요.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 883,
+     "end": 922,
+     "text": "이제는 AI와 함께,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 922,
+     "end": 1040,
+     "text": "그 일을 {자동화}하는 도구를\n직접 만들어볼 수 있습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 1040,
+   "to": 1308,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1049,
+     "end": 1155,
+     "text": "물론 AI가 모든 걸\n대신해 주지는 않습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1155,
+     "end": 1243,
+     "text": "하지만 이전에는\n시작조차 어려웠던 일들을,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1243,
+     "end": 1308,
+     "text": "이제는 {직접 시도}할 수 있습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1308,
+   "to": 1552,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1317,
+     "end": 1434,
+     "text": "이제 중요한 건 무엇을\n{할 줄 아느냐}만이 아닙니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1434,
+     "end": 1477,
+     "text": "무엇을 {상상}하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1477,
+     "end": 1552,
+     "text": "얼마나 {구체적으로 실행}하느냐입니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1552,
+   "to": 1960,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1561,
+     "end": 1634,
+     "text": "왜 아직 시작하지 못했을까요?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1634,
+     "end": 1756,
+     "text": "어쩌면 {내 실력 안}에서만\n가능성을 찾았기 때문입니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1756,
+     "end": 1856,
+     "text": "이제는 {상상하는 만큼}\n도전할 수 있는 시대.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1856,
+     "end": 1960,
+     "text": "당신은 무엇을\n{만들고} 싶나요?",
+     "quote": false,
+     "rhythm": false,
+     "center": true,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  }
+ ]
+}

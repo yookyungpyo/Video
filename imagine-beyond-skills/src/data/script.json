@@ -1,0 +1,42 @@
+{
+ "title": "실력만큼 가능했던 시대에서 상상하는 만큼 가능한 시대로",
+ "project": "Imagine Beyond Skills",
+ "fps": 30,
+ "targetFrames": 1500,
+ "readingRate": 5.5,
+ "tailHold": 1.6,
+ "music": "auto",
+ "voiceNote": "내레이션: ElevenLabs eleven_v4 · Leo (Young, Calm & Clear). assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+ "scenes": [
+  {"n": 1, "title": "질문과 비교", "window": [0, 5], "chunks": [
+   {"text": "남들은 {AI}로 뭔가를 만들어내는데,", "rhythm": true},
+   {"text": "나는 왜 아직\n{시작도} 못 하고 있을까요?", "rhythm": true}]},
+  {"n": 2, "title": "기술 장벽의 붕괴", "window": [5, 10], "chunks": [
+   {"text": "{실력}이 부족해서만은 아닙니다."},
+   {"text": "무언가를 만드는 {방법} 자체가\n달라졌기 때문입니다."}]},
+  {"n": 3, "title": "과거의 한계", "window": [10, 16], "chunks": [
+   {"text": "예전에는 좋은 아이디어가 있어도,"},
+   {"text": "{코딩}을 모르거나\n{디자인}을 못 하면"},
+   {"text": "누군가의 {도움}이 필요했습니다."}]},
+  {"n": 4, "title": "AI를 통한 구현", "window": [16, 22], "chunks": [
+   {"text": "하지만 지금은\n{AI}에게 아이디어를 설명하고,"},
+   {"text": "실제로 작동하는 {시제품}까지\n만들어볼 수 있습니다."}]},
+  {"n": 5, "title": "반복 업무 자동화", "window": [22, 30], "chunks": [
+   {"text": "매일 {반복}하는 업무가\n불편하다고 생각해 보세요."},
+   {"text": "이제는 AI와 함께,"},
+   {"text": "그 일을 {자동화}하는 도구를\n직접 만들어볼 수 있습니다."}]},
+  {"n": 6, "title": "아이디어의 시제품화", "window": [30, 36], "chunks": [
+   {"text": "물론 AI가 모든 걸\n대신해 주지는 않습니다."},
+   {"text": "하지만 이전에는\n시작조차 어려웠던 일들을,"},
+   {"text": "이제는 {직접 시도}할 수 있습니다."}]},
+  {"n": 7, "title": "가능성의 확장", "window": [36, 42], "chunks": [
+   {"text": "이제 중요한 건 무엇을\n{할 줄 아느냐}만이 아닙니다."},
+   {"text": "무엇을 {상상}하고,"},
+   {"text": "얼마나 {구체적으로 실행}하느냐입니다."}]},
+  {"n": 8, "title": "새로운 미래", "window": [42, 50], "chunks": [
+   {"text": "왜 아직 시작하지 못했을까요?"},
+   {"text": "어쩌면 {내 실력 안}에서만\n가능성을 찾았기 때문입니다."},
+   {"text": "이제는 {상상하는 만큼}\n도전할 수 있는 시대."},
+   {"text": "당신은 무엇을\n{만들고} 싶나요?", "center": true}]}
+ ]
+}
