@@ -52,7 +52,7 @@ export const Swap: React.FC<Base & { from: string; to: string; switchAt: number;
       <div style={{ display: "flex", alignItems: "center", gap: size * 0.22, fontWeight: 900, letterSpacing: -2, lineHeight: 1 }}>
         <div style={{ position: "relative", fontSize: size * 0.78, color: WHITE, opacity: 1 - 0.45 * strike, transform: `scale(${0.7 + 0.3 * s0})`, ...stroke, textShadow: OUTLINE }}>
           {from}
-          <div style={{ position: "absolute", left: -6, top: "52%", height: 9, width: `calc(${strike * 100}% + 12px)`, background: "#FF6B5A", borderRadius: 5 }} />
+          {strike > 0 && <div style={{ position: "absolute", left: -6, top: "52%", height: 9, width: `calc((100% + 12px) * ${strike})`, background: "#FF6B5A", borderRadius: 5 }} />}
         </div>
         <div style={{ fontSize: size * 0.6, color: WHITE, opacity: interpolate(f, [switchAt - 6, switchAt], [0, 1], clamp), textShadow: OUTLINE }}>→</div>
         <div style={{ fontSize: size, color: YELLOW, opacity: interpolate(f, [switchAt - 1, switchAt + 4], [0, 1], clamp), transform: `scale(${0.5 + 0.5 * s1})`, ...stroke, textShadow: OUTLINE }}>{to}</div>

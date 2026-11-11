@@ -22,6 +22,6 @@ if (!existsSync(TRACK)) {
 mkdirSync("output", { recursive: true });
 npx(["remotion", "render", ENTRY, COMP, TMP, "--codec=h264", "--crf=18", "--muted", ...process.argv.slice(2)]);
 npx(["remotion", "ffmpeg", "-loglevel", "error", "-y", "-i", TMP, "-i", TRACK, "-map", "0:v:0", "-map", "1:a:0",
-  "-c", "copy", "-shortest", "-movflags", "+faststart", OUT]);
+  "-c", "copy", "-movflags", "+faststart", OUT]); // no -shortest: the track is built to the exact length, and -shortest can drop the last video frame
 rmSync(TMP, { force: true });
 console.log(`\n✔ ${OUT}   (check it with: npm run verify)`);
