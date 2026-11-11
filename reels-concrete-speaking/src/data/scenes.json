@@ -1,0 +1,96 @@
+{
+ "cover": {
+  "w": 1080,
+  "h": 1920
+ },
+ "scenes": [
+  {
+   "n": 1,
+   "file": "scenes/scene-01.jpg",
+   "srcW": 537,
+   "srcH": 354,
+   "aspect": 1.5169,
+   "workW": 3641,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 2,
+   "file": "scenes/scene-02.jpg",
+   "srcW": 536,
+   "srcH": 354,
+   "aspect": 1.5141,
+   "workW": 3634,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 3,
+   "file": "scenes/scene-03.jpg",
+   "srcW": 537,
+   "srcH": 354,
+   "aspect": 1.5169,
+   "workW": 3641,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 4,
+   "file": "scenes/scene-04.jpg",
+   "srcW": 536,
+   "srcH": 354,
+   "aspect": 1.5141,
+   "workW": 3634,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 5,
+   "file": "scenes/scene-05.jpg",
+   "srcW": 537,
+   "srcH": 354,
+   "aspect": 1.5169,
+   "workW": 3641,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 6,
+   "file": "scenes/scene-06.jpg",
+   "srcW": 536,
+   "srcH": 354,
+   "aspect": 1.5141,
+   "workW": 3634,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.42
+  },
+  {
+   "n": 7,
+   "file": "scenes/scene-07.jpg",
+   "srcW": 537,
+   "srcH": 357,
+   "aspect": 1.5042,
+   "workW": 3610,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.38
+  },
+  {
+   "n": 8,
+   "file": "scenes/scene-08.jpg",
+   "srcW": 536,
+   "srcH": 357,
+   "aspect": 1.5014,
+   "workW": 3603,
+   "workH": 2400,
+   "source": "storyboard",
+   "coverMagnification": 5.38
+  }
+ ]
+}

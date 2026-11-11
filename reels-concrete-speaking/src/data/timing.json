@@ -1,0 +1,314 @@
+{
+ "fps": 30,
+ "totalFrames": 1650,
+ "targetFrames": 1650,
+ "voiced": [],
+ "naturalNarrationSeconds": 93.2,
+ "overflowSeconds": 0,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 150,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 9,
+     "end": 68,
+     "text": "똑같은 내용을 발표했는데,",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 68,
+     "end": 150,
+     "text": "왜 어떤 사람의 말은\n{설득력}이 없을까요?",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 150,
+   "to": 330,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 154,
+     "end": 201,
+     "text": "“우리는 고객 중심의 {혁신}을 통해",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 201,
+     "end": 249,
+     "text": "업무 효율성을 강화하겠습니다.”",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 249,
+     "end": 288,
+     "text": "어디선가 들어본 말이죠.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 288,
+     "end": 330,
+     "text": "그래서 뭘 하겠다는 거지?",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 330,
+   "to": 540,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 334,
+     "end": 406,
+     "text": "고객이 신청서를 작성하는 데\n{10분} 걸립니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 406,
+     "end": 475,
+     "text": "입력 항목 {20개}를\n{8개}로 줄이겠습니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 475,
+     "end": 540,
+     "text": "이제 무엇을 바꿀지\n바로 이해됩니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 540,
+   "to": 750,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 544,
+     "end": 582,
+     "text": "왜 이런 차이가 생길까요?",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 582,
+     "end": 618,
+     "text": "{혁신}, 효율성, 소통 강화.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 618,
+     "end": 678,
+     "text": "이런 말은 듣는 사람마다\n다르게 해석합니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 678,
+     "end": 750,
+     "text": "무엇을 해야 할지 눈앞에\n그려지지 않기 때문입니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 750,
+   "to": 960,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 754,
+     "end": 799,
+     "text": "“회의 문화를 개선하겠습니다.”",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 799,
+     "end": 816,
+     "text": "보다,",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 816,
+     "end": 889,
+     "text": "“매주 두 시간씩 하던 회의를\n{30분}으로 줄이겠습니다.”",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 889,
+     "end": 960,
+     "text": "명사로 대상을 짚고,\n동사로 행동을 보여준 겁니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 960,
+   "to": 1170,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 964,
+     "end": 995,
+     "text": "토론할 때도 같습니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 995,
+     "end": 1027,
+     "text": "“책임감을 강화합시다.”",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1027,
+     "end": 1041,
+     "text": "대신,",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1041,
+     "end": 1111,
+     "text": "“문제가 생기면 담당자가 그날\n원인과 해결 일정을 공유합시다.”",
+     "quote": true,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1111,
+     "end": 1170,
+     "text": "상대가 무엇에 동의해야 하는지\n분명해집니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1170,
+   "to": 1410,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 1174,
+     "end": 1245,
+     "text": "이제 발표 전에\n세 가지만 확인하세요.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1245,
+     "end": 1302,
+     "text": "{누가}, {무엇을}, {어떻게} 하는가?",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1302,
+     "end": 1410,
+     "text": "이 세 가지가 문장에 들어가면\n상대가 이해하기 쉬워집니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1410,
+   "to": 1650,
+   "voice": false,
+   "chunks": [
+    {
+     "start": 1414,
+     "end": 1451,
+     "text": "처음 질문으로 돌아가 볼까요?",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1451,
+     "end": 1501,
+     "text": "똑같은 내용을 발표해도\n{설득력}이 다른 이유.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1501,
+     "end": 1573,
+     "text": "상대가 이해하고 판단할 수 있도록\n구체적으로 말했기 때문입니다.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    },
+    {
+     "start": 1573,
+     "end": 1605,
+     "text": "멋진 단어를 찾지 마세요.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1605,
+     "end": 1650,
+     "text": "상대의 머릿속에\n장면을 만드세요.",
+     "quote": false,
+     "fontSize": 56,
+     "lines": 2
+    }
+   ]
+  }
+ ]
+}

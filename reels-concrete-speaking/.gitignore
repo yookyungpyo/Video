@@ -1,0 +1,5 @@
+node_modules/
+output/
+.remotion/
+# working copies made by scripts/split_storyboard.py from assets/
+public/scenes/
