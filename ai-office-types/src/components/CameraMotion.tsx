@@ -5,7 +5,8 @@ import { at, SceneData } from "../data/scenes";
 
 // Layout: the storyboard cells are square, the frame is 9:16. Each scene sits whole on a square card in the
 // middle (never stretched); a blurred, darkened copy of the same image fills the rest of the frame.
-export const CARD = { x: 40, y: 375, w: 1000, h: 1000 };
+// The top 350 px stay empty (Instagram header), so: title y 356–480, card y 490–1410, subtitles below to 1590.
+export const CARD = { x: 80, y: 490, w: 920, h: 920 };
 
 export type Pose = { z: number; x: number; y: number };
 

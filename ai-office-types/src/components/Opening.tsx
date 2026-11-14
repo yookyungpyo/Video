@@ -12,7 +12,7 @@ export const Opening: React.FC<{ g: number; to: number }> = ({ g, to }) => {
   const idx = Math.min(8, Math.floor((g - flashFrom) / 3));
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 640, textAlign: "center", fontFamily: FONT, opacity: titleOut }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 700, textAlign: "center", fontFamily: FONT, opacity: titleOut }}>
         {SCRIPT.opening.map((line, li) => (
           <div key={li} style={{ fontSize: li === 2 ? 104 : 76, fontWeight: li === 2 ? 900 : 700, letterSpacing: -2, lineHeight: 1.28, color: WHITE, marginTop: li === 2 ? 14 : 0 }}>
             {line.split(/(\{[^}]+\}|\s+)/).filter((p) => p !== "").map((p, i) => {

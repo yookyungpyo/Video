@@ -66,11 +66,11 @@ export const TypeTitle: React.FC<{ f: number; start: number; end: number; n: num
   if (a <= 0) return null;
   const s = spring({ frame: f - start, fps: FPS, config: { damping: 16, stiffness: 180, mass: 0.7 } });
   return (
-    <div style={{ position: "absolute", left: 0, width: W, top: 212, textAlign: "center", fontFamily: FONT, opacity: a }}>
-      <div style={{ display: "inline-block", fontSize: 28, fontWeight: 800, letterSpacing: 3, color: "#17181d", background: YELLOW, borderRadius: 999, padding: "6px 20px 7px" }}>
+    <div style={{ position: "absolute", left: 0, width: W, top: SAFE.top + 6, textAlign: "center", fontFamily: FONT, opacity: a }}>
+      <div style={{ display: "inline-block", fontSize: 26, fontWeight: 800, letterSpacing: 3, color: "#17181d", background: YELLOW, borderRadius: 999, padding: "5px 18px 6px" }}>
         TYPE {String(n).padStart(2, "0")} <span style={{ opacity: 0.55 }}>/ {String(total).padStart(2, "0")}</span>
       </div>
-      <div style={{ marginTop: 14, fontSize: fitSize(title, 74, 960), fontWeight: 800, letterSpacing: -1.5, color: WHITE, textShadow: "0 4px 18px rgba(0,0,0,0.6)",
+      <div style={{ marginTop: 8, fontSize: fitSize(title, 66, 960), lineHeight: 1.15, fontWeight: 800, letterSpacing: -1.5, color: WHITE, textShadow: "0 4px 18px rgba(0,0,0,0.6)",
         transform: `translateY(${(1 - s) * 16}px)` }}>{title}</div>
     </div>
   );

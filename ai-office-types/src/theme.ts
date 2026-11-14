@@ -11,7 +11,8 @@ export const MUTED = "#8A8F9C"; // vague / abstract words
 export const FONT = "'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif";
 
 // editing safe area for this reel (not a platform spec): left 90 / right 150 / top 200 / bottom 330
-export const SAFE = { left: 90, right: W - 150, top: 200, bottom: H - 330 };
+// Instagram covers the top ~330 px (post view: "게시물" + account name) and the bottom ~330 px (caption, buttons)
+export const SAFE = { left: 90, right: W - 150, top: 350, bottom: H - 330 };
 export const SAFE_W = SAFE.right - SAFE.left; // 840
 
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;

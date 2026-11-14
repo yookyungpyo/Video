@@ -113,12 +113,12 @@ const Subscriptions: React.FC<G> = ({ scene, g }) => {
         const s = pop(Math.min(g, stop), t0, 12);
         const bob = g < stop ? 3 * Math.sin((g + i * 7) / 9) : 3 * Math.sin((stop + i * 7) / 9);
         return (
-          <div key={i} style={{ position: "absolute", left: 22 + i * 80, top: 22 + bob, width: 70, height: 70, borderRadius: 18, background: c, color: WHITE, fontSize: 38,
+          <div key={i} style={{ position: "absolute", left: 20 + i * ((CARD.w - 40 - 66) / 11), top: 20 + bob, width: 66, height: 66, borderRadius: 17, background: c, color: WHITE, fontSize: 36,
             display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 16px rgba(0,0,0,0.35)", opacity: fade, transform: `scale(${s})` }}>{GLYPHS[i]}</div>
         );
       })}
       {shown > 0 && (
-        <div style={{ ...chip, position: "absolute", right: 24, top: 108, fontSize: 34, padding: "9px 20px 11px", background: "rgba(14,15,20,0.82)", color: WHITE, opacity: fade }}>
+        <div style={{ ...chip, position: "absolute", right: 22, top: 100, fontSize: 34, padding: "9px 20px 11px", background: "rgba(14,15,20,0.82)", color: WHITE, opacity: fade }}>
           구독 중 <span style={{ color: YELLOW }}>{shown}개</span>
         </div>
       )}
