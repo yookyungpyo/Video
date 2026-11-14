@@ -1,0 +1,260 @@
+{
+ "title": "AI 시대, 우리 회사에 꼭 있는 9가지 직장인 유형",
+ "fps": 30,
+ "targetSeconds": [
+  65,
+  75
+ ],
+ "openingSeconds": 3.0,
+ "endingSeconds": 4.8,
+ "sceneLead": 0.32,
+ "lineGap": 0.32,
+ "captionGap": 0.35,
+ "sceneTail": 0.1,
+ "music": "auto",
+ "voices": {
+  "hero": {
+   "take": "take-hero",
+   "name": "Leo - Young, Calm & Clear",
+   "role": "주인공 (직원·대리·과장·팀장): 담담하고 현실적인 말투"
+  },
+  "boss": {
+   "take": "take-boss",
+   "name": "Hyeonwoo (50대 중반, 점잖은 목소리)",
+   "role": "부장·상사·대표: 자신감 있고 권위적인 말투",
+   "boundaries": [
+    3.3,
+    6.9,
+    10.9,
+    12.3,
+    13.2,
+    15.4,
+    19.6,
+    23.6
+   ]
+  },
+  "peer": {
+   "take": "take-peer",
+   "name": "Rowan - Warm and Gentle Korean Voice",
+   "role": "동료·팀원: 평범하고 현실적인 말투"
+  }
+ },
+ "scenes": [
+  {
+   "n": 1,
+   "title": "라떼는 부장형",
+   "lines": [
+    {
+     "voice": "boss",
+     "who": "부장",
+     "text": "{AI?} 사람이 직접 해야\n실력이 느는 거야.",
+     "read": "에이아이 사람이 직접 해야 실력이 느는 거야"
+    },
+    {
+     "voice": "boss",
+     "who": "부장",
+     "text": "김 대리, 근데 {내 보고서}는\nAI로 빨리 좀 만들어봐.",
+     "read": "김 대리 근데 내 보고서는 에이아이로 빨리 좀 만들어봐",
+     "gapBefore": 0.45
+    }
+   ],
+   "captionGap": 0.3,
+   "caption": "본인은 안 쓰지만\n{남이 쓰는 건} 적극 찬성."
+  },
+  {
+   "n": 2,
+   "title": "일복 터진 에이스형",
+   "lines": [
+    {
+     "voice": "hero",
+     "who": "에이스",
+     "text": "이거 AI로 하면 {금방} 됩니다.",
+     "read": "이거 에이아이로 하면 금방 됩니다"
+    },
+    {
+     "voice": "boss",
+     "who": "상사",
+     "text": "오, 그래? 그럼 {이것도, 이것도,}\n{이것까지} 해봐.",
+     "read": "오 그래 그럼 이것도 이것도 이것까지 해봐"
+    }
+   ],
+   "caption": "업무 효율 {3배}.\n업무량도 {3배}."
+  },
+  {
+   "n": 3,
+   "title": "조용한 칼퇴 고수형",
+   "lines": [
+    {
+     "voice": "peer",
+     "who": "동료",
+     "text": "벌써 퇴근해?"
+    },
+    {
+     "voice": "hero",
+     "who": "칼퇴 고수",
+     "text": "네. {다 끝났는데요.}",
+     "read": "네 다 끝났는데요"
+    },
+    {
+     "voice": "peer",
+     "who": "동료",
+     "text": "어떻게?"
+    },
+    {
+     "voice": "hero",
+     "who": "칼퇴 고수",
+     "text": "그냥 좀 {빨리} 했어요.",
+     "gapBefore": 0.4
+    }
+   ],
+   "caption": "AI 활용 노하우는\n{영업비밀}."
+  },
+  {
+   "n": 4,
+   "title": "생각도 외주 준 대리형",
+   "lines": [
+    {
+     "voice": "boss",
+     "who": "상사",
+     "text": "자네 {생각}은 어때?"
+    },
+    {
+     "voice": "hero",
+     "who": "대리",
+     "text": "{잠시만요.}",
+     "gapBefore": 0.75
+    }
+   ],
+   "captionGap": 1.1,
+   "caption": "본인 생각을\n{ChatGPT에서 생성 중.}"
+  },
+  {
+   "n": 5,
+   "title": "자신감만 만렙 과장형",
+   "lines": [
+    {
+     "voice": "hero",
+     "who": "과장",
+     "text": "제가 AI로 분석해 봤는데\n{확실합니다.}",
+     "read": "제가 에이아이로 분석해 봤는데 확실합니다"
+    },
+    {
+     "voice": "boss",
+     "who": "상사",
+     "text": "{근거는?}",
+     "gapBefore": 0.3
+    },
+    {
+     "voice": "hero",
+     "who": "과장",
+     "text": "그건… 다시 물어보겠습니다.",
+     "read": "그건 다시 물어보겠습니다",
+     "gapBefore": 0.7,
+     "small": true
+    }
+   ],
+   "caption": "검증은 안 했지만\n확신은 {100%}."
+  },
+  {
+   "n": 6,
+   "title": "구독료 부자형",
+   "lines": [
+    {
+     "voice": "hero",
+     "who": "구독 부자",
+     "text": "이번에 나온 AI\n진짜 {대박}이야.",
+     "read": "이번에 나온 에이아이 진짜 대박이야"
+    },
+    {
+     "voice": "peer",
+     "who": "동료",
+     "text": "그래서 지난주에 {부탁한 건?}"
+    },
+    {
+     "voice": "hero",
+     "who": "구독 부자",
+     "text": "그건 아직 {테스트 중}이야.",
+     "gapBefore": 0.45
+    }
+   ],
+   "captionGap": 0.45,
+   "caption": "구독한 AI는 {12개}.\n완성한 결과물은 {0개}."
+  },
+  {
+   "n": 7,
+   "title": "몰래 성장하는 실속형",
+   "lines": [
+    {
+     "voice": "boss",
+     "who": "상사",
+     "text": "이거 어떻게 이렇게\n{잘} 만들었어?"
+    },
+    {
+     "voice": "hero",
+     "who": "실속형",
+     "text": "AI로 초안 잡고\n{제가 좀 고쳤습니다.}",
+     "read": "에이아이로 초안 잡고 제가 좀 고쳤습니다"
+    }
+   ],
+   "caption": "AI를 쓸수록\n{본인 실력}도 늘어나는 사람."
+  },
+  {
+   "n": 8,
+   "title": "AI 부하직원 둔 팀장형",
+   "lines": [
+    {
+     "voice": "hero",
+     "who": "팀장",
+     "text": "자료 조사하고,\n{세 가지 안}으로 비교해."
+    },
+    {
+     "voice": "peer",
+     "who": "팀원",
+     "text": "저한테 시키시는 거예요?"
+    },
+    {
+     "voice": "hero",
+     "who": "팀장",
+     "text": "아니, {AI한테.}",
+     "read": "아니 에이아이한테",
+     "gapBefore": 0.4
+    }
+   ],
+   "caption": "사람에게는 {퇴근}을,\nAI에게는 {업무}를."
+  },
+  {
+   "n": 9,
+   "title": "입만 AI 전문가형",
+   "lines": [
+    {
+     "voice": "boss",
+     "who": "대표",
+     "text": "요즘 다른 회사들은 {AI 에이전트}로\n업무를 다 자동화한다더라.",
+     "read": "요즘 다른 회사들은 에이아이 에이전트로 업무를 다 자동화한다더라"
+    },
+    {
+     "voice": "boss",
+     "who": "대표",
+     "text": "어느 회사는 직원 몇 명이 하던 일을\n{AI 혼자} 다 한다던데?",
+     "read": "어느 회사는 직원 몇 명이 하던 일을 에이아이 혼자 다 한다던데"
+    },
+    {
+     "voice": "boss",
+     "who": "대표",
+     "text": "우리도 빨리\n{도입}해야 하는 거 아니야?"
+    }
+   ],
+   "captionGap": 0.9,
+   "caption": "남의 회사 {성공 사례}는 줄줄 외우는데,\n우리 회사 {실행 계획}은 없다."
+  }
+ ],
+ "opening": [
+  "AI 시대,",
+  "우리 회사에 꼭 있는",
+  "{9가지} 직장인 유형"
+ ],
+ "ending": [
+  "당신은 어떤 {유형}인가요?",
+  "아니면…\n지금 {누군가} 떠오르셨나요?"
+ ]
+}

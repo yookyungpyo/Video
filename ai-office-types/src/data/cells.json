@@ -1,0 +1,88 @@
+{
+ "source": "assets/storyboard.png",
+ "width": 2048,
+ "height": 2048,
+ "cells": [
+  {
+   "n": 1,
+   "file": "scenes/scene-01.png",
+   "left": 4,
+   "top": 4,
+   "width": 670,
+   "height": 670,
+   "aspect": 1
+  },
+  {
+   "n": 2,
+   "file": "scenes/scene-02.png",
+   "left": 691,
+   "top": 4,
+   "width": 666,
+   "height": 670,
+   "aspect": 0.994
+  },
+  {
+   "n": 3,
+   "file": "scenes/scene-03.png",
+   "left": 1374,
+   "top": 4,
+   "width": 670,
+   "height": 670,
+   "aspect": 1
+  },
+  {
+   "n": 4,
+   "file": "scenes/scene-04.png",
+   "left": 4,
+   "top": 691,
+   "width": 670,
+   "height": 665,
+   "aspect": 1.0075
+  },
+  {
+   "n": 5,
+   "file": "scenes/scene-05.png",
+   "left": 691,
+   "top": 691,
+   "width": 666,
+   "height": 665,
+   "aspect": 1.0015
+  },
+  {
+   "n": 6,
+   "file": "scenes/scene-06.png",
+   "left": 1374,
+   "top": 691,
+   "width": 670,
+   "height": 665,
+   "aspect": 1.0075
+  },
+  {
+   "n": 7,
+   "file": "scenes/scene-07.png",
+   "left": 4,
+   "top": 1374,
+   "width": 670,
+   "height": 670,
+   "aspect": 1
+  },
+  {
+   "n": 8,
+   "file": "scenes/scene-08.png",
+   "left": 691,
+   "top": 1374,
+   "width": 666,
+   "height": 670,
+   "aspect": 0.994
+  },
+  {
+   "n": 9,
+   "file": "scenes/scene-09.png",
+   "left": 1374,
+   "top": 1374,
+   "width": 670,
+   "height": 670,
+   "aspect": 1
+  }
+ ]
+}
