@@ -1,0 +1,46 @@
+{
+ "title": "웹툰 스타일 테스트 — 여행 일기",
+ "fps": 30,
+ "note": "말풍선·효과음 문구는 테스트용 임시 문구입니다. x, y, tail은 그림 기준 0–1 좌표, at은 컷이 멈춘 뒤 몇 프레임째에 나오는지입니다.",
+ "titleHold": 54,
+ "scrollFrames": 16,
+ "endHold": 84,
+ "titleCard": {"kicker": "EP.01", "title": "우리 가족\n여행 일기", "sub": "웹툰 스타일 테스트"},
+ "endCard": {"title": "다음 여행은\n어디로 갈까?", "sub": "— 끝 —"},
+ "panels": [
+  {"file": "panels/photo-03.png", "w": 1086, "h": 1448, "hold": 84, "items": [
+    {"type": "narr", "text": "드디어 출발!", "x": 0.27, "y": 0.05, "at": 4},
+    {"type": "shout", "text": "우와아—!!", "x": 0.74, "y": 0.2, "at": 16},
+    {"type": "sfx", "text": "두근두근", "x": 0.77, "y": 0.52, "at": 34, "size": 62, "rot": -8}]},
+  {"file": "panels/photo-01.png", "w": 1086, "h": 1448, "hold": 100, "items": [
+    {"type": "sfx", "text": "휘이이잉—", "x": 0.5, "y": 0.17, "at": 4, "size": 108, "rot": -6, "sound": "wind"},
+    {"type": "speech", "text": "바람 뭐야~!", "x": 0.25, "y": 0.43, "tail": [0.3, 0.535], "at": 26},
+    {"type": "speech", "text": "모자\n날아간다!!", "x": 0.74, "y": 0.39, "tail": [0.66, 0.5], "at": 48}]},
+  {"file": "panels/photo-06.png", "w": 1448, "h": 1086, "hold": 90, "items": [
+    {"type": "speech", "text": "바다다!!", "x": 0.2, "y": 0.15, "tail": [0.31, 0.34], "at": 6},
+    {"type": "sfx", "text": "쪼오옥", "x": 0.57, "y": 0.83, "at": 28, "size": 70, "rot": 8},
+    {"type": "narr", "text": "더울 땐 망고 주스.", "x": 0.26, "y": 0.93, "at": 48}]},
+  {"file": "panels/photo-05.png", "w": 1196, "h": 1315, "hold": 86, "items": [
+    {"type": "sfx", "text": "찰칵!", "x": 0.17, "y": 0.1, "at": 4, "size": 96, "rot": -10, "sound": "shutter"},
+    {"type": "speech", "text": "여기 봐요~", "x": 0.6, "y": 0.09, "tail": [0.7, 0.24], "at": 24},
+    {"type": "narr", "text": "다 같이 한 컷.", "x": 0.3, "y": 0.95, "at": 44}]},
+  {"file": "panels/photo-07.png", "w": 1086, "h": 1448, "hold": 92, "items": [
+    {"type": "speech", "text": "아이스크림은\n못 참지!", "x": 0.25, "y": 0.12, "tail": [0.35, 0.26], "at": 6},
+    {"type": "sfx", "text": "냠", "x": 0.13, "y": 0.34, "at": 28, "size": 92, "rot": -12},
+    {"type": "thought", "text": "녹기 전에 빨리…", "x": 0.7, "y": 0.065, "tail": [0.66, 0.15], "at": 46}]},
+  {"file": "panels/photo-02.png", "w": 1086, "h": 1448, "hold": 98, "items": [
+    {"type": "speech", "text": "포즈는\n이렇게!", "x": 0.25, "y": 0.25, "tail": [0.25, 0.37], "at": 6},
+    {"type": "sfx", "text": "반짝", "x": 0.52, "y": 0.12, "at": 26, "size": 84, "rot": 6, "sound": "sparkle"},
+    {"type": "speech", "text": "훗.", "x": 0.8, "y": 0.27, "tail": [0.68, 0.36], "at": 46}]},
+  {"file": "panels/photo-09.png", "w": 1448, "h": 1086, "hold": 94, "items": [
+    {"type": "sfx", "text": "오물오물", "x": 0.17, "y": 0.27, "at": 6, "size": 60, "rot": -6},
+    {"type": "thought", "text": "나는 언제 먹지…", "x": 0.68, "y": 0.09, "tail": [0.61, 0.17], "at": 28},
+    {"type": "narr", "text": "먹는 게 남는 거다.", "x": 0.28, "y": 0.94, "at": 50}]},
+  {"file": "panels/photo-04.png", "w": 1196, "h": 1315, "hold": 84, "items": [
+    {"type": "shout", "text": "ㅋㅋㅋㅋㅋㅋ", "x": 0.5, "y": 0.13, "at": 6},
+    {"type": "sfx", "text": "깔깔", "x": 0.83, "y": 0.3, "at": 26, "size": 76, "rot": 10}]},
+  {"file": "panels/photo-08.png", "w": 1448, "h": 1086, "hold": 88, "items": [
+    {"type": "narr", "text": "마지막 컷은 둘이서.", "x": 0.68, "y": 0.08, "at": 6},
+    {"type": "speech", "text": "잘 놀았다!", "x": 0.74, "y": 0.25, "tail": [0.69, 0.38], "at": 28}]}
+ ]
+}

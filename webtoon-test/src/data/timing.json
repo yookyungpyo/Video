@@ -1,0 +1,70 @@
+{
+ "fps": 30,
+ "totalFrames": 1114,
+ "items": [
+  {
+   "kind": "title",
+   "arrive": 0,
+   "leave": 54
+  },
+  {
+   "kind": "panel",
+   "index": 0,
+   "arrive": 70,
+   "leave": 154
+  },
+  {
+   "kind": "panel",
+   "index": 1,
+   "arrive": 170,
+   "leave": 270
+  },
+  {
+   "kind": "panel",
+   "index": 2,
+   "arrive": 286,
+   "leave": 376
+  },
+  {
+   "kind": "panel",
+   "index": 3,
+   "arrive": 392,
+   "leave": 478
+  },
+  {
+   "kind": "panel",
+   "index": 4,
+   "arrive": 494,
+   "leave": 586
+  },
+  {
+   "kind": "panel",
+   "index": 5,
+   "arrive": 602,
+   "leave": 700
+  },
+  {
+   "kind": "panel",
+   "index": 6,
+   "arrive": 716,
+   "leave": 810
+  },
+  {
+   "kind": "panel",
+   "index": 7,
+   "arrive": 826,
+   "leave": 910
+  },
+  {
+   "kind": "panel",
+   "index": 8,
+   "arrive": 926,
+   "leave": 1014
+  },
+  {
+   "kind": "end",
+   "arrive": 1030,
+   "leave": 1114
+  }
+ ]
+}
