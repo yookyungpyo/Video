@@ -28,5 +28,5 @@ for (const s of timing.scenes) {
   const t = ((s.from + s.to) / 2 / 30).toFixed(3);
   run(["remotion", "ffmpeg", "-loglevel", "error", "-y", "-ss", t, "-i", OUT, "-frames:v", "1", `output/stills/scene-${String(s.n).padStart(2, "0")}.png`]);
 }
-console.log("stills → output/stills/scene-01.png … scene-08.png");
+console.log(`stills → output/stills/scene-01.png … scene-${String(timing.scenes.length).padStart(2, "0")}.png`);
 process.exit(ok ? 0 : 1);
