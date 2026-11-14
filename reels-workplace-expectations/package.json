@@ -1,0 +1,25 @@
+{
+  "name": "reels-workplace-expectations",
+  "version": "1.0.0",
+  "private": true,
+  "description": "기대가 만드는 직장 스트레스 — 9-scene clay reel (9:16, Remotion)",
+  "scripts": {
+    "split": "python scripts/split_storyboard.py",
+    "take": "python scripts/split_take.py",
+    "audio": "python scripts/build_audio.py",
+    "preview": "remotion studio src/index.ts",
+    "render": "node scripts/render.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.441",
+    "pretendard": "^1.3.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.3.0"
+  }
+}

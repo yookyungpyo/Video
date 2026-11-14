@@ -1,0 +1,282 @@
+{
+ "fps": 30,
+ "totalFrames": 2021,
+ "targetFrames": 1350,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "naturalNarrationSeconds": 73.1,
+ "overflowSeconds": 22.37,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 143,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 9,
+     "end": 143,
+     "text": "직장에서 나를 가장 힘들게 하는 건, 정말 사람일까요?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 143,
+   "to": 315,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 152,
+     "end": 205,
+     "text": "때로는 그 사람보다,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 205,
+     "end": 315,
+     "text": "그 사람에게 품었던 기대가 나를 더 힘들게 합니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 315,
+   "to": 576,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 324,
+     "end": 430,
+     "text": "내가 이만큼 해줬으니, 저 사람도 해주겠지.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 48,
+     "lines": 1
+    },
+    {
+     "start": 430,
+     "end": 497,
+     "text": "이 정도는 알아서 하겠지.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 497,
+     "end": 576,
+     "text": "적어도 내 마음은 알아주겠지.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 576,
+   "to": 832,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 585,
+     "end": 698,
+     "text": "그런데 상대방은 내 기대와 다르게 행동합니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 44,
+     "lines": 1
+    },
+    {
+     "start": 698,
+     "end": 832,
+     "text": "그 순간 서운해지고, 실망하고, 결국 화가 납니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 832,
+   "to": 1060,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 841,
+     "end": 884,
+     "text": "왜 그럴까요?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 884,
+     "end": 964,
+     "text": "우리는 상대방의 행동만 보는 게 아니라,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 51,
+     "lines": 1
+    },
+    {
+     "start": 964,
+     "end": 1060,
+     "text": "내가 예상했던 모습과 비교하기 때문입니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 47,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 1060,
+   "to": 1303,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1069,
+     "end": 1197,
+     "text": "똑같은 행동도 기대하지 않았다면 그냥 지나갈 수 있습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    },
+    {
+     "start": 1197,
+     "end": 1303,
+     "text": "하지만 기대했다면, 배신감마저 느낄 수 있죠.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 46,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1303,
+   "to": 1582,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1312,
+     "end": 1461,
+     "text": "그렇다고 아무도 믿지 말고, 아무것도 기대하지 말라는 뜻은 아닙니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    },
+    {
+     "start": 1461,
+     "end": 1582,
+     "text": "내 기대가 상대방의 의무는 아니라는 걸 아는 겁니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1582,
+   "to": 1865,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1591,
+     "end": 1696,
+     "text": "누군가에게 실망했을 때, 한 번만 물어보세요.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 46,
+     "lines": 1
+    },
+    {
+     "start": 1696,
+     "end": 1776,
+     "text": "저 사람이 잘못한 걸까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    },
+    {
+     "start": 1776,
+     "end": 1865,
+     "text": "아니면, 내가 혼자 기대했던 걸까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 56,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "from": 1865,
+   "to": 2021,
+   "voice": true,
+   "chunks": [
+    {
+     "start": 1874,
+     "end": 2021,
+     "text": "상대방을 탓하기 전에, 내 기대부터 들여다보세요.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  }
+ ]
+}
