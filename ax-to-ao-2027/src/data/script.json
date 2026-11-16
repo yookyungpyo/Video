@@ -1,0 +1,53 @@
+{
+ "title": "2027년, AX에서 AO로",
+ "fps": 30,
+ "targetFrames": 1500,
+ "readingRate": 5.6,
+ "tailHold": 2.3,
+ "music": "auto",
+ "voiceNote": "내레이션: ElevenLabs eleven_v4 · Ji-hwan (Cinematic Deep Baritone). assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+ "scenes": [
+  {"n": 1, "title": "후킹", "window": [0, 5], "chunks": [
+   {"text": "{2027년},", "read": "이천이십칠년"},
+   {"text": "당신은!"},
+   {"text": "우리는!"},
+   {"text": "회사는!"},
+   {"text": "이렇게 {바뀌어야} 한다!"}]},
+  {"n": 2, "title": "AI를 활용하는 조직 (AX)", "window": [5, 10], "chunks": [
+   {"text": "지금까지 우리는 {AI를 이용해}", "read": "지금까지 우리는 에이아이를 이용해"},
+   {"text": "{문서}를 쓰고,"},
+   {"text": "{자료}를 찾고,"},
+   {"text": "업무 {속도}를 높였습니다."}]},
+  {"n": 3, "title": "여전히 사람이 병목", "window": [10, 16], "chunks": [
+   {"text": "하지만 일을 {지시}하고,"},
+   {"text": "{나누고},"},
+   {"text": "{확인}하고,"},
+   {"text": "{다음 일}을 시작하는 건,"},
+   {"text": "여전히 {사람}입니다."}]},
+  {"n": 4, "title": "전환점", "window": [16, 21], "chunks": [
+   {"text": "이제 AI를 사용하는 것을 넘어,", "read": "이제 에이아이를 사용하는 것을 넘어"},
+   {"text": "AI에게 일을 {맡기는} 조직으로", "read": "에이아이에게 일을 맡기는 조직으로"},
+   {"text": "바뀌어야 합니다."}]},
+  {"n": 5, "title": "AO · Agent Organization", "window": [21, 27], "chunks": [
+   {"text": "바로 {AO},", "read": "바로 에이오"},
+   {"text": "{Agent Organization}입니다.", "read": "에이전트 오거니제이션입니다"},
+   {"text": "AI Agent가 업무를 {계획}하고,", "read": "에이아이 에이전트가 업무를 계획하고"},
+   {"text": "{실행}하며,"},
+   {"text": "서로 {협업}하는 조직입니다."}]},
+  {"n": 6, "title": "Agent 워크플로", "window": [27, 36], "tail": 1.1, "chunks": [
+   {"text": "{고객 요청}이 들어오면,"},
+   {"text": "Agent가 요구사항을 {분석}하고,", "read": "에이전트가 요구사항을 분석하고"},
+   {"text": "{제안서 초안}을 만들고,"},
+   {"text": "{일정}까지 정리합니다."}]},
+  {"n": 7, "title": "사람의 역할", "window": [36, 43], "chunks": [
+   {"text": "사람은 {목표}를 정하고,"},
+   {"text": "결과를 {검토}하고,"},
+   {"text": "중요한 {결정}을 내립니다."},
+   {"text": "{일하는 방식} 자체가\n달라지는 겁니다."}]},
+  {"n": 8, "title": "질문", "window": [43, 50], "chunks": [
+   {"text": "당신의 조직은,"},
+   {"text": "{AI를 활용하는 조직}인가?", "read": "에이아이를 활용하는 조직인가"},
+   {"text": "아니면,"},
+   {"text": "{AI로 움직이는 조직}인가?", "read": "에이아이로 움직이는 조직인가"}]}
+ ]
+}
