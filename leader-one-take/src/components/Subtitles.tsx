@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame } from "remotion";
 import { pictureOf, sizeOf } from "../camera/assets";
 import { viewFor } from "../camera/solve";
+import { cuesOf } from "../config/cues";
 import { SCENES, STARTS } from "../config/scenes";
 import { CHAPTER_LABELS, FPS, FRAME, H, HALF, SAFE } from "../config/video";
 import { FONT } from "./Fonts";
@@ -16,11 +17,11 @@ export const SubtitleText: React.FC = () => {
   const frame = useCurrentFrame();
   return (
     <>
-      {SCENES.flatMap((scene, i) => scene.subtitles.map((cue, j) => {
+      {SCENES.flatMap((_, i) => cuesOf(i).map((cue, j) => {
         const from = STARTS[i] + cue.at;
         const until = STARTS[i] + cue.until;
         if (frame < from - 1 || frame > until) return null;
-        const out = interpolate(frame, [until - 7, until], [1, 0], clamp);
+        const out = interpolate(frame, [until - 5, until], [1, 0], clamp);
         return (
           <div key={`${i}-${j}`} style={{ position: "absolute", left: SAFE.left, width: SAFE.right - SAFE.left, bottom: H - SAFE.bottom + 26, textAlign: "center",
             fontFamily: FONT, fontWeight: 800, fontSize: SIZE, lineHeight: 1.3, letterSpacing: -1.2, color: "#fff", opacity: out,

@@ -4,7 +4,7 @@
 
 - React + TypeScript + Remotion 4 · 1080×1920 · 30fps · H.264 · **1650프레임(55초)**
 - **결과 파일:** `output/leader-one-take.mp4`
-- **현재 상태:** 장면 이미지가 확정 전이라 **스토리보드에서 자른 초안 이미지**로 렌더링했습니다. 초안은 가로형이라 화면 가운데 창에 장면 전체가 보이게 배치했습니다(아래 "배치"). 음성·음악 파일이 없어 **무음**이고, 자막은 **임시 문구**입니다. 자세한 내용은 [`PRODUCTION_LOG.md`](PRODUCTION_LOG.md), 검증 결과는 [`VERIFICATION.md`](VERIFICATION.md)에 있습니다.
+- **현재 상태:** 장면 이미지가 확정 전이라 **스토리보드에서 자른 초안 이미지**로 렌더링했습니다. 초안은 가로형이라 화면 가운데 창에 장면 전체가 보이게 배치했습니다(아래 "배치"). **내레이션이 들어 있고**(배경음악은 없음), 자막과 내레이션 문구는 **임시 문구**입니다. 자세한 내용은 [`PRODUCTION_LOG.md`](PRODUCTION_LOG.md), 검증 결과는 [`VERIFICATION.md`](VERIFICATION.md)에 있습니다.
 
 ## 실행 (Windows · VS Code 터미널, `leader-one-take` 폴더에서)
 
@@ -14,6 +14,7 @@ npm run preview    # Remotion Studio 미리보기 (public/ 을 먼저 스캔)
 npm run render     # → output/leader-one-take.mp4 (최종 H.264 MP4)
 npm run verify     # 프레임 단위 검증 → VERIFICATION.md
 npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다시 스캔
+npm run narration  # (선택) 한 번에 읽은 내레이션을 장면별로 나누기. pip install numpy 필요
 ```
 
 ## 이미지 교체
@@ -113,15 +114,25 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 | 파일 | 동작 |
 |---|---|
 | `public/audio/narration.mp3` (wav · m4a · aac) | 영상 처음부터 재생 |
-| `public/audio/narration/scene-01.mp3` … | 장면별 파일. 각 장면 시작 8프레임 뒤에 재생 |
+| `public/audio/narration/scene-01.wav` … | 장면별 파일. 각 장면 시작 0.5~1초 뒤에 재생 **(현재 사용 중)** |
 | `public/audio/bgm.mp3` (wav · m4a · aac) | 반복 재생, 시작과 끝 페이드. 내레이션이 있으면 22%, 없으면 60% 음량 |
+
+### 현재 내레이션
+
+- **목소리:** ElevenLabs `eleven_v4` · **Minho - Deep & Trustworthy Narrator**(차분하고 따뜻한 중저음 남성)
+- **대본:** 자막 16줄 그대로. 한 번에 읽은 테이크는 32.2초입니다(`assets/narration/full-take.mp3`).
+- **분리:** `npm run narration`이 테이크의 쉼 위치에서 장면별 `scene-0X.wav`로 나누고, 줄마다 말하는 시간을 `timing.json`에 적습니다. 음성 속도를 바꾸거나 자르지 않았습니다.
+- **자막 타이밍:** 줄 타이밍이 있으면 자막이 **실제로 말하는 순간**에 맞춰 뜹니다(`src/config/cues.ts`). 없으면 `scenes.ts`에 적힌 시간을 씁니다.
+- **빈 구간:** 영상은 55초, 음성은 32초라서 장면마다 음성이 끝난 뒤 1.5~4초가 조용합니다. 배경음악을 넣거나 대본을 늘리면 채워집니다.
+- **다른 테이크:** 같은 대본의 두 번째 테이크가 `assets/narration/take-b.mp3`에 있습니다. `python scripts/split_narration.py assets/narration/take-b.mp3` → `npm run render`로 바꿉니다.
+- **문구를 고친 뒤:** `scenes.ts`의 자막을 고치면 음성도 다시 녹음해야 합니다. 새 테이크를 `assets/narration/full-take.mp3`로 넣고 `npm run narration` → `npm run render`.
 
 ## 검증 — `npm run verify`
 
 | 구분 | 검사 내용 |
 |---|---|
-| A. 카메라 계산 | 1650프레임 전체에서 화면을 덮는지, 요청한 이동이 얼마나 잘렸는지, 얼굴이 프레임 안에 있는지, 카메라 속도 급변, 경계에서 인물 크기 변화, 자막 타이밍 |
-| B. 렌더링된 영상 | 해상도 · fps · 프레임 수 · 코덱, 경계 앞뒤 10프레임의 프레임 간 변화량(이미지 점프), 가장자리 검은 띠 |
+| A. 카메라 계산 | 1650프레임 전체에서 화면을 덮는지, 요청한 이동이 얼마나 잘렸는지, 얼굴이 프레임 안에 있는지, 카메라 속도 급변, 경계에서 인물 크기 변화, 자막 타이밍, 내레이션이 장면 안에 들어가는지 |
+| B. 렌더링된 영상 | 해상도 · fps · 프레임 수 · 코덱, 영상 오디오에서 내레이션이 예상 구간에 있는지, 경계 앞뒤 10프레임의 프레임 간 변화량(이미지 점프), 가장자리 검은 띠 |
 | C. 자막 · 장면 표시 | 글자 레이어만 따로 렌더링해서 글자 영역이 안전 영역 안에 있는지 픽셀로 측정 |
 
 브라우저를 찾지 못하면 `npm run verify -- --browser-executable=<chrome 경로>`처럼 넘깁니다(`npm run render`도 같습니다).
@@ -143,5 +154,8 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 | `scripts/scan-assets.mjs` | `public/` 스캔 → 있는 파일만 등록 |
 | `scripts/render.mjs` · `verify.ts` | 최종 렌더링 · 프레임 단위 검증 |
 | `scripts/make_drafts.py` | (선택) 스토리보드에서 초안 이미지 만들기. `pip install numpy pillow` 필요 |
+| `scripts/split_narration.py` | (선택) 한 번에 읽은 내레이션을 장면별 클립으로 나누기 |
+| `src/config/cues.ts` | 내레이션 시작 시점과 음성에 맞춘 자막 타이밍 |
+| `assets/narration/` · `public/audio/narration/` | 내레이션 원본 테이크 · 장면별 클립과 줄 타이밍 |
 | `assets/storyboard.png` | 받은 스토리보드 원본 |
 | `PRODUCTION_LOG.md` · `VERIFICATION.md` | 제작 로그(숨겨진 컷 위치) · 검증 결과 |

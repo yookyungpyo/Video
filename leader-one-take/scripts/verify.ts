@@ -10,11 +10,12 @@
 //   npm run verify            (after npm run render; without the MP4 part B is skipped)
 //   npm run verify -- --browser-executable=<path to chrome>     if Remotion cannot find a browser
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import sharp from "sharp";
 import { ASSETS, auxOf, layersOf, pictureOf, sizeOf } from "../src/camera/assets";
 import { onScreen, poseAt, solve, travel, viewFor, NO_MOD } from "../src/camera/solve";
 import { cameraMods, inTransition, progress, whipOffsets, horizontal } from "../src/camera/transition";
+import { cuesOf, voiceEnd, voiceLead } from "../src/config/cues";
 import { END, SCENES, STARTS } from "../src/config/scenes";
 import { FPS, H, HALF, OVERLAP, SAFE, TOTAL_FRAMES, W } from "../src/config/video";
 
@@ -156,11 +157,27 @@ table(["경계", "프레임", "전환 구간", "전환", "컷 처리", "인물 �
 
 // subtitle timing
 let cueBad = 0;
-SCENES.forEach((s) => s.subtitles.forEach((c, j) => {
-  if (c.at < HALF || c.until > s.frames - HALF || c.until <= c.at || (j > 0 && c.at < s.subtitles[j - 1].until)) { cueBad++; fails.push(`${s.id}: 자막 "${c.text.replace(/\n/g, " ")}"의 시간이 장면/전환 구간과 겹침`); }
+SCENES.forEach((s, i) => cuesOf(i).forEach((c, j, all) => {
+  if (c.at < HALF || c.until > s.frames - HALF || c.until <= c.at || (j > 0 && c.at < all[j - 1].until)) { cueBad++; fails.push(`${s.id}: 자막 "${c.text.replace(/\n/g, " ")}"의 시간이 장면/전환 구간과 겹침`); }
 }));
 say(`- 자막 타이밍: ${SCENES.reduce((n, s) => n + s.subtitles.length, 0)}개 모두 자기 장면 안에 있고 전환 구간(경계 ±${HALF}프레임)과 겹치지 않음 → ${cueBad ? "✘" : "✔"}`);
 say();
+
+// narration clips against their scenes
+const voiced = SCENES.map((_, i) => i).filter((i) => voiceEnd(i) !== undefined);
+if (voiced.length) {
+  say("### 내레이션이 장면 안에 들어가는지");
+  say();
+  say("장면별 음성 클립이 그 장면 안에서 시작하고 끝나는지 확인한다. 음성은 속도를 바꾸거나 자르지 않으므로, 넘치면 다음 장면의 음성과 겹친다.");
+  say();
+  table(["장면", "장면 길이", "음성 시작", "음성 끝", "남는 시간", "판정"], voiced.map((i) => {
+    const s = SCENES[i];
+    const end = voiceEnd(i)!;
+    const left = s.frames - end;
+    if (left < 0) fails.push(`${s.id}: 내레이션이 장면보다 ${(-left / FPS).toFixed(2)}초 길어 다음 장면으로 넘어감`);
+    return [`${String(s.n).padStart(2, "0")} ${s.title}`, `${(s.frames / FPS).toFixed(1)}초`, `${(voiceLead(i) / FPS).toFixed(2)}초`, `${(end / FPS).toFixed(2)}초`, `${(left / FPS).toFixed(2)}초`, left < 0 ? "✘ 넘침" : "✔"];
+  }));
+}
 
 // ── B. the rendered file ─────────────────────────────────────────────────────────────────────────────────────
 say("## B. 렌더링된 영상");
@@ -194,6 +211,31 @@ if (!existsSync(OUT)) {
 
   rmSync(TMP, { recursive: true, force: true });
   mkdirSync(TMP, { recursive: true });
+
+  // is the narration really in the file, and where? (loudness of the MP4's audio inside and outside each expected window)
+  if (a && voiced.length) {
+    const SR = 16000;
+    npx(["remotion", "ffmpeg", "-loglevel", "error", "-y", "-i", OUT, "-vn", "-ac", "1", "-ar", String(SR), "-c:a", "pcm_s16le", `${TMP}/audio.wav`]);
+    const wav = readFileSync(`${TMP}/audio.wav`);
+    const pcm = new Int16Array(wav.buffer, wav.byteOffset + 44, Math.floor((wav.length - 44) / 2));
+    const rms = (f0: number, f1: number) => {
+      const [i0, i1] = [Math.max(0, Math.round((f0 / FPS) * SR)), Math.min(pcm.length, Math.round((f1 / FPS) * SR))];
+      let sum = 0;
+      for (let k = i0; k < i1; k++) sum += (pcm[k] / 32768) ** 2;
+      return i1 > i0 ? Math.sqrt(sum / (i1 - i0)) : 0;
+    };
+    const db = (v: number) => (v > 0 ? `${(20 * Math.log10(v)).toFixed(0)}dB` : "무음");
+    say("영상 파일의 오디오를 꺼내, 장면마다 음성이 있어야 할 구간과 음성이 끝난 뒤 구간의 음량을 잰 값.");
+    say();
+    table(["장면", "음성 구간 (영상 시간)", "구간 음량", "음성 뒤 음량", "판정"], voiced.map((i) => {
+      const [v0, v1] = [STARTS[i] + voiceLead(i), STARTS[i] + voiceEnd(i)!];
+      const [inside, after] = [rms(v0, v1), rms(v1 + 6, STARTS[i] + SCENES[i].frames)];
+      const ok = inside > 0.01 && (ASSETS.audio.bgm ? true : after < inside / 8);
+      if (!ok) fails.push(`${SCENES[i].id}: 영상 오디오에서 내레이션이 예상 구간(${(v0 / FPS).toFixed(2)}–${(v1 / FPS).toFixed(2)}초)에 있지 않음`);
+      return [`${String(SCENES[i].n).padStart(2, "0")} ${SCENES[i].title}`, `${(v0 / FPS).toFixed(2)}–${(v1 / FPS).toFixed(2)}초`, db(inside), db(after), ok ? "✔" : "✘"];
+    }));
+  }
+
   const R = 10; // frames on each side of a boundary
   const rows: (string | number)[][] = [];
   let darkest = 255;
@@ -240,7 +282,7 @@ const bundle = `${TMP}/bundle`;
 npx(["remotion", "bundle", "src/index.ts", `--out-dir=${bundle}`, "--log=error"]);
 const subRows: (string | number)[][] = [];
 for (const [i, s] of SCENES.entries()) {
-  for (const [j, c] of s.subtitles.entries()) {
+  for (const [j, c] of cuesOf(i).entries()) {
     const frame = STARTS[i] + Math.min(c.until - 9, c.at + 24);
     const file = `${TMP}/sub_${s.n}_${j}.png`;
     npx(["remotion", "still", bundle, "SubtitleProbe", file, `--frame=${frame}`, "--log=error", ...extra]);

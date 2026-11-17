@@ -5,6 +5,7 @@
   "description": "리더가 되면 달라져야 한다 — 8장면 하이브리드 원테이크 릴스 (9:16, Remotion)",
   "scripts": {
     "assets": "node scripts/scan-assets.mjs",
+    "narration": "python scripts/split_narration.py",
     "preview": "node scripts/scan-assets.mjs && remotion studio src/index.ts",
     "render": "node scripts/render.mjs",
     "verify": "tsx scripts/verify.ts",

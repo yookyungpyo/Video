@@ -3,7 +3,7 @@
 // file can never break a render — a missing picture becomes a placeholder, missing audio means a silent film.
 // Runs automatically before `npm run preview` and `npm run render`. Run `npm run assets` after adding files
 // while the preview is open.
-import { closeSync, existsSync, mkdirSync, openSync, readdirSync, readSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -48,7 +48,7 @@ const find = (dir, stem, exts) => {
 };
 const picture = (src, kind) => (src ? { src, kind, ...imageSize(join(PUB, src)) } : null);
 
-const assets = { images: {}, layers: {}, aux: {}, audio: { narration: null, bgm: null, sceneNarration: {} } };
+const assets = { images: {}, layers: {}, aux: {}, audio: { narration: null, bgm: null, sceneNarration: {}, lineTiming: {} } };
 for (const id of SCENES) {
   assets.images[id] = picture(find("images", id, IMG_EXT), "final") ?? picture(find("images/draft", id, IMG_EXT), "draft");
   const layers = Object.fromEntries(["bg", "mid", "fg"].map((l) => [l, picture(find("images/layers", `${id}-${l}`, IMG_EXT), "layer")]));
@@ -57,6 +57,14 @@ for (const id of SCENES) {
   if (line) assets.audio.sceneNarration[id] = line;
 }
 for (const key of AUX) assets.aux[key] = picture(find("images", key, IMG_EXT), "final");
+// where each subtitle line is spoken inside its scene clip (written by scripts/split_narration.py); optional
+const timingFile = join(PUB, "audio", "narration", "timing.json");
+if (existsSync(timingFile)) {
+  const timing = JSON.parse(readFileSync(timingFile, "utf8")).scenes ?? {};
+  for (const id of Object.keys(assets.audio.sceneNarration)) {
+    if (timing[id]) assets.audio.lineTiming[id] = { duration: timing[id].duration, lines: timing[id].lines.map(({ start, end }) => ({ start, end })) };
+  }
+}
 assets.audio.narration = find("audio", "narration", AUDIO_EXT);
 assets.audio.bgm = find("audio", "bgm", AUDIO_EXT);
 

@@ -8,7 +8,13 @@ type Manifest = {
   images: Record<string, Picture | null>;
   layers: Record<string, Record<LayerName, Picture | null> | null>;
   aux: Record<string, Picture | null>;
-  audio: { narration: string | null; bgm: string | null; sceneNarration: Record<string, string> };
+  audio: {
+    narration: string | null;
+    bgm: string | null;
+    sceneNarration: Record<string, string>;
+    /** seconds inside the scene clip at which each subtitle line is spoken */
+    lineTiming: Record<string, { duration: number; lines: { start: number; end: number }[] }>;
+  };
 };
 export const ASSETS = manifest as unknown as Manifest;
 

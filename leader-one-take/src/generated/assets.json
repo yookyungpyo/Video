@@ -67,6 +67,121 @@
   "audio": {
     "narration": null,
     "bgm": null,
-    "sceneNarration": {}
+    "sceneNarration": {
+      "scene-01": "audio/narration/scene-01.wav",
+      "scene-02": "audio/narration/scene-02.wav",
+      "scene-03": "audio/narration/scene-03.wav",
+      "scene-04": "audio/narration/scene-04.wav",
+      "scene-05": "audio/narration/scene-05.wav",
+      "scene-06": "audio/narration/scene-06.wav",
+      "scene-07": "audio/narration/scene-07.wav",
+      "scene-08": "audio/narration/scene-08.wav"
+    },
+    "lineTiming": {
+      "scene-01": {
+        "duration": 3.26,
+        "lines": [
+          {
+            "start": 0,
+            "end": 0.96
+          },
+          {
+            "start": 1.1,
+            "end": 3.22
+          }
+        ]
+      },
+      "scene-02": {
+        "duration": 3.52,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.42
+          },
+          {
+            "start": 1.7,
+            "end": 3.48
+          }
+        ]
+      },
+      "scene-03": {
+        "duration": 4.01,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.99
+          },
+          {
+            "start": 2.21,
+            "end": 3.97
+          }
+        ]
+      },
+      "scene-04": {
+        "duration": 3.61,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.721
+          },
+          {
+            "start": 1.721,
+            "end": 3.57
+          }
+        ]
+      },
+      "scene-05": {
+        "duration": 3.1,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.69
+          },
+          {
+            "start": 1.89,
+            "end": 3.06
+          }
+        ]
+      },
+      "scene-06": {
+        "duration": 3.64,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.98
+          },
+          {
+            "start": 2.16,
+            "end": 3.6
+          }
+        ]
+      },
+      "scene-07": {
+        "duration": 3.87,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.75
+          },
+          {
+            "start": 1.98,
+            "end": 3.83
+          }
+        ]
+      },
+      "scene-08": {
+        "duration": 3.07,
+        "lines": [
+          {
+            "start": 0.04,
+            "end": 1.07
+          },
+          {
+            "start": 1.21,
+            "end": 3.03
+          }
+        ]
+      }
+    }
   }
 }
