@@ -117,8 +117,8 @@ export const SCENES: SceneConfig[] = [
       { f: 210, scale: 1.04, focal: [0.46, 0.5], ease: "inOut" },
     ],
     subjects: [
-      { name: "리더 얼굴", at: [0.3, 0.18], size: [0.12, 0.32], frames: [0, 12] },
-      { name: "리더 얼굴", at: [0.3, 0.18], size: [0.12, 0.32], frames: [196, 210] },
+      { name: "리더 얼굴", at: [0.3, 0.2], size: [0.12, 0.28], frames: [0, 12] },
+      { name: "리더 얼굴", at: [0.3, 0.2], size: [0.12, 0.28], frames: [196, 210] },
     ],
     motion: {
       asked: "업무 자료를 향해 Tilt Down, 이후 전체 팀을 보여주는 상향 이동 (상부 시점 이미지가 있으면 전환)",
@@ -162,12 +162,12 @@ export const SCENES: SceneConfig[] = [
     // stay on the team member who solved it, then pull out towards the leader
     keys: [
       { f: 0, scale: 1.22, focal: [0.34, 0.48] },
-      { f: 120, scale: 1.2, focal: [0.37, 0.54], ease: "inOut" },
+      { f: 120, scale: 1.2, focal: [0.38, 0.5], ease: "inOut" },
       { f: 270, scale: 1.04, focal: [0.55, 0.5], ease: "inOut" },
     ],
     subjects: [
-      { name: "해결한 팀원", at: [0.33, 0.38], size: [0.22, 0.56], frames: [0, 270] },
-      { name: "리더 얼굴", at: [0.7, 0.27], size: [0.2, 0.5], frames: [230, 270] },
+      { name: "해결한 팀원", at: [0.33, 0.4], size: [0.22, 0.52], frames: [0, 270] },
+      { name: "리더 얼굴", at: [0.7, 0.3], size: [0.2, 0.42], frames: [240, 270] },
     ],
     motion: {
       asked: "팀원의 해결 행동에 집중한 뒤 Pull Out (실제 초점 이동은 전경/배경 레이어가 있을 때만)",
