@@ -35,12 +35,21 @@ export type AuxShot = {
 
 export type SubtitleCue = { at: number; until: number; text: string }; // local frames; "{word}" = accent, "\n" = line break
 
+/**
+ * How a picture is placed.
+ *   cover  it fills the whole 1080x1920 frame (for portrait pictures)
+ *   frame  it is shown inside the window (config/video.ts FRAME) over a blurred copy of itself
+ *   auto   cover for portrait pictures (width / height up to 0.8), frame for everything wider
+ */
+export type Layout = "auto" | "cover" | "frame";
+
 export type SceneConfig = {
   n: number;
   id: string;                  // picture: public/images/<id>.(png|jpg|jpeg|webp)
   title: string;
   frames: number;              // scene length; the eight lengths add up to 1650
-  anchor: Vec2;                // screen position (0-1) where the focal point sits
+  layout?: Layout;             // default auto
+  anchor: Vec2;                // position inside the view (0-1) where the focal point sits
   keys: CameraKey[];
   subjects: Subject[];
   /** What was asked for, what the single flat picture really gets, and what separate layers would add. */

@@ -11,11 +11,14 @@ import { SceneConfig } from "./types";
 //  Extra views  public/images/scene-02-alt.*, scene-05-top.*, scene-08-top.*   optional (see `aux`)
 //
 //  focal / subjects are positions inside the picture (0-1 from the left, 0-1 from the top).
-//  THE VALUES BELOW ARE TUNED FOR THE STORYBOARD DRAFTS (landscape 16:9 crops). When a final picture replaces a
-//  draft, set its focal points and subjects again and run `npm run verify`.
+//  Layout       a portrait picture fills the screen; a wider one is shown whole in a window (see config/video.ts
+//               FRAME) and the camera works inside that window. `layout: "cover"` forces full screen.
+//
+//  THE VALUES BELOW ARE TUNED FOR THE STORYBOARD DRAFTS (landscape crops, shown in the window). When a final
+//  picture replaces a draft, set its focal points and subjects again and run `npm run verify`.
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-const ANCHOR: [number, number] = [0.5, 0.44];
+const ANCHOR: [number, number] = [0.5, 0.5];
 const DEPTH = { bg: { zoom: 0.75, pan: 0.8 }, mid: { zoom: 1, pan: 1 }, fg: { zoom: 1.3, pan: 1.25 } };
 
 export const SCENES: SceneConfig[] = [
@@ -23,10 +26,10 @@ export const SCENES: SceneConfig[] = [
     n: 1, id: "scene-01", title: "후킹", frames: 180, anchor: ANCHOR,
     // 1.08 → 1.20, one smooth ease in-out, scaled around the face so the person stays put on screen
     keys: [
-      { f: 0, scale: 1.08, focal: [0.5, 0.36] },
-      { f: 180, scale: 1.2, focal: [0.5, 0.36], ease: "inOut" },
+      { f: 0, scale: 1.08, focal: [0.5, 0.42] },
+      { f: 180, scale: 1.2, focal: [0.5, 0.42], ease: "inOut" },
     ],
-    subjects: [{ name: "리더 얼굴", at: [0.5, 0.36], size: [0.2, 0.4], frames: [0, 180] }],
+    subjects: [{ name: "리더 얼굴", at: [0.48, 0.25], size: [0.26, 0.48], frames: [0, 180] }],
     motion: {
       asked: "인물 고정, 배경만 확대되는 Dolly Zoom 유사 연출 (scale 1.08→1.20, easeInOut)",
       flat: "얼굴을 기준점으로 한 2D 스케일 푸시인. 인물과 배경이 함께 커진다 (Dolly Zoom 아님)",
@@ -42,11 +45,11 @@ export const SCENES: SceneConfig[] = [
     n: 2, id: "scene-02", title: "역할의 변화", frames: 180, anchor: ANCHOR,
     // behind the shoulder first, then pull out 1.18 → 1.02 towards the team he is talking to
     keys: [
-      { f: 0, scale: 1.18, focal: [0.17, 0.42] },
-      { f: 36, scale: 1.17, focal: [0.19, 0.43], ease: "linear" },
-      { f: 180, scale: 1.02, focal: [0.58, 0.55], ease: "inOut" },
+      { f: 0, scale: 1.18, focal: [0.32, 0.45] },
+      { f: 36, scale: 1.17, focal: [0.33, 0.46], ease: "linear" },
+      { f: 180, scale: 1.02, focal: [0.47, 0.5], ease: "inOut" },
     ],
-    subjects: [{ name: "팀원들", at: [0.6, 0.55], size: [0.2, 0.16], frames: [165, 180] }],
+    subjects: [{ name: "팀원들", at: [0.6, 0.5], size: [0.3, 0.24], frames: [150, 180] }],
     motion: {
       asked: "어깨 뒤로 시점이 이동(보조 이미지가 있으면 사용) 후 Pull Out (scale 1.18→1.02)",
       flat: "리더의 뒷모습에서 팀 쪽으로 2D 팬 + 풀아웃. 시점이 실제로 어깨 뒤로 돌아가지는 않는다 (Orbit 아님)",
@@ -68,11 +71,11 @@ export const SCENES: SceneConfig[] = [
     n: 3, id: "scene-03", title: "방향 재정립", frames: 210, anchor: ANCHOR,
     // pan from the chart to the leader, then push in 1.05 → 1.15
     keys: [
-      { f: 0, scale: 1.05, focal: [0.8, 0.45] },
-      { f: 110, scale: 1.05, focal: [0.48, 0.36], ease: "inOut" },
-      { f: 210, scale: 1.15, focal: [0.43, 0.32], ease: "inOut" },
+      { f: 0, scale: 1.05, focal: [0.64, 0.5] },
+      { f: 110, scale: 1.05, focal: [0.36, 0.5], ease: "inOut" },
+      { f: 210, scale: 1.15, focal: [0.4, 0.4], ease: "inOut" },
     ],
-    subjects: [{ name: "리더 얼굴", at: [0.42, 0.3], size: [0.1, 0.24], frames: [112, 210] }],
+    subjects: [{ name: "리더 얼굴", at: [0.42, 0.19], size: [0.12, 0.3], frames: [0, 210] }],
     motion: {
       asked: "좌우 Pan 후 리더의 설명 장면에 Push In (scale 1.05→1.15)",
       flat: "차트 → 리더로 2D 팬, 이어서 얼굴 기준 2D 푸시인",
@@ -89,10 +92,10 @@ export const SCENES: SceneConfig[] = [
     n: 4, id: "scene-04", title: "사람에 대한 이해", frames: 180, anchor: ANCHOR,
     // lateral tracking: the picture slides from +80 px to −80 px. Scale 1.16 leaves ±86 px of room even for a 9:16 picture.
     keys: [
-      { f: 0, scale: 1.16, focal: [0.49, 0.42], x: 80 },
-      { f: 180, scale: 1.16, focal: [0.49, 0.42], x: -80, ease: "inOut" },
+      { f: 0, scale: 1.16, focal: [0.5, 0.48], x: 80 },
+      { f: 180, scale: 1.16, focal: [0.5, 0.48], x: -80, ease: "inOut" },
     ],
-    subjects: [{ name: "리더 얼굴", at: [0.48, 0.42], size: [0.17, 0.38], frames: [0, 180] }],
+    subjects: [{ name: "리더 얼굴", at: [0.5, 0.33], size: [0.19, 0.5], frames: [0, 180] }],
     motion: {
       asked: "팀원들을 따라 Lateral Tracking (x 80px→-80px, easeInOut)",
       flat: "이미지 전체가 좌우로 160px 이동하는 2D 슬라이드",
@@ -109,13 +112,13 @@ export const SCENES: SceneConfig[] = [
     n: 5, id: "scene-05", title: "역할 배치", frames: 210, anchor: ANCHOR,
     // tilt down to the notes on the board, then rise again and widen
     keys: [
-      { f: 0, scale: 1.12, focal: [0.32, 0.3] },
-      { f: 95, scale: 1.18, focal: [0.62, 0.52], ease: "inOut" },
-      { f: 210, scale: 1.04, focal: [0.385, 0.38], ease: "inOut" },
+      { f: 0, scale: 1.12, focal: [0.34, 0.44] },
+      { f: 95, scale: 1.18, focal: [0.66, 0.6], ease: "inOut" },
+      { f: 210, scale: 1.04, focal: [0.46, 0.5], ease: "inOut" },
     ],
     subjects: [
-      { name: "리더 얼굴", at: [0.3, 0.3], size: [0.1, 0.24], frames: [0, 12] },
-      { name: "리더 얼굴", at: [0.3, 0.3], size: [0.1, 0.24], frames: [196, 210] },
+      { name: "리더 얼굴", at: [0.3, 0.18], size: [0.12, 0.32], frames: [0, 12] },
+      { name: "리더 얼굴", at: [0.3, 0.18], size: [0.12, 0.32], frames: [196, 210] },
     ],
     motion: {
       asked: "업무 자료를 향해 Tilt Down, 이후 전체 팀을 보여주는 상향 이동 (상부 시점 이미지가 있으면 전환)",
@@ -138,10 +141,10 @@ export const SCENES: SceneConfig[] = [
     n: 6, id: "scene-06", title: "문제 해결", frames: 180, anchor: ANCHOR,
     // push in on the team member who is stuck: 1.03 → 1.16
     keys: [
-      { f: 0, scale: 1.03, focal: [0.5, 0.45] },
-      { f: 180, scale: 1.16, focal: [0.34, 0.5], ease: "inOut" },
+      { f: 0, scale: 1.03, focal: [0.5, 0.5] },
+      { f: 180, scale: 1.16, focal: [0.36, 0.52], ease: "inOut" },
     ],
-    subjects: [{ name: "고민하는 팀원", at: [0.33, 0.5], size: [0.2, 0.42], frames: [140, 180] }],
+    subjects: [{ name: "고민하는 팀원", at: [0.33, 0.42], size: [0.22, 0.6], frames: [0, 180] }],
     motion: {
       asked: "고민하는 팀원에게 Push In (scale 1.03→1.16)",
       flat: "두 사람 사이에서 팀원 얼굴로 2D 푸시인",
@@ -158,13 +161,13 @@ export const SCENES: SceneConfig[] = [
     n: 7, id: "scene-07", title: "성장 지원", frames: 270, anchor: ANCHOR,
     // stay on the team member who solved it, then pull out towards the leader
     keys: [
-      { f: 0, scale: 1.22, focal: [0.34, 0.5] },
-      { f: 120, scale: 1.2, focal: [0.36, 0.55], ease: "inOut" },
-      { f: 270, scale: 1.04, focal: [0.66, 0.4], ease: "inOut" },
+      { f: 0, scale: 1.22, focal: [0.34, 0.48] },
+      { f: 120, scale: 1.2, focal: [0.37, 0.54], ease: "inOut" },
+      { f: 270, scale: 1.04, focal: [0.55, 0.5], ease: "inOut" },
     ],
     subjects: [
-      { name: "해결한 팀원", at: [0.34, 0.47], size: [0.2, 0.44], frames: [0, 120] },
-      { name: "리더 얼굴", at: [0.7, 0.36], size: [0.17, 0.42], frames: [250, 270] },
+      { name: "해결한 팀원", at: [0.33, 0.38], size: [0.22, 0.56], frames: [0, 270] },
+      { name: "리더 얼굴", at: [0.7, 0.27], size: [0.2, 0.5], frames: [230, 270] },
     ],
     motion: {
       asked: "팀원의 해결 행동에 집중한 뒤 Pull Out (실제 초점 이동은 전경/배경 레이어가 있을 때만)",
@@ -182,10 +185,10 @@ export const SCENES: SceneConfig[] = [
     n: 8, id: "scene-08", title: "최종 결론", frames: 240, anchor: ANCHOR,
     // 1.20 → 1.02 pull out while the camera rises from the seated team to the leader
     keys: [
-      { f: 0, scale: 1.2, focal: [0.69, 0.55] },
-      { f: 240, scale: 1.02, focal: [0.535, 0.4], ease: "inOut" },
+      { f: 0, scale: 1.2, focal: [0.62, 0.62] },
+      { f: 240, scale: 1.02, focal: [0.5, 0.5], ease: "inOut" },
     ],
-    subjects: [{ name: "리더 얼굴", at: [0.535, 0.2], size: [0.08, 0.17], frames: [215, 240] }],
+    subjects: [{ name: "리더 얼굴", at: [0.535, 0.2], size: [0.09, 0.19], frames: [150, 240] }],
     motion: {
       asked: "Pull Out (scale 1.20→1.02), 상부 시점 이미지가 있으면 Crane Up 유사 전환",
       flat: "앉아 있는 팀원에서 서 있는 리더로 올라가는 2D 상향 이동 + 풀아웃 (Crane Up 아님)",

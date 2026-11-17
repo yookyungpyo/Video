@@ -13,12 +13,13 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import sharp from "sharp";
 import { ASSETS, auxOf, layersOf, pictureOf, sizeOf } from "../src/camera/assets";
-import { onScreen, poseAt, solve, travel, NO_MOD } from "../src/camera/solve";
+import { onScreen, poseAt, solve, travel, viewFor, NO_MOD } from "../src/camera/solve";
 import { cameraMods, inTransition, progress, whipOffsets, horizontal } from "../src/camera/transition";
 import { END, SCENES, STARTS } from "../src/config/scenes";
 import { FPS, H, HALF, OVERLAP, SAFE, TOTAL_FRAMES, W } from "../src/config/video";
 
 const OUT = "output/leader-one-take.mp4";
+const DRAFT_UPSCALE = 3; // scripts/make_drafts.py saves the storyboard cells enlarged 3x; magnification is reported against the real cell
 const TMP = "output/verify";
 const extra = process.argv.slice(2);
 const npx = (args: string[], quiet = true) => execFileSync("npx", args, { encoding: "utf8", shell: process.platform === "win32", stdio: quiet ? ["ignore", "pipe", "pipe"] : "inherit", maxBuffer: 1 << 26 });
@@ -45,7 +46,8 @@ if (END !== TOTAL_FRAMES) fails.push(`장면 길이 합 ${END} ≠ ${TOTAL_FRAME
 say(`- 타임라인: 장면 길이 합 **${END}프레임** (${END / FPS}초). 전환은 경계 앞뒤 ${HALF}프레임씩 ${OVERLAP}프레임이며 총길이에 더해지지 않음 → ${END === TOTAL_FRAMES ? "✔" : "✘"}`);
 
 const sceneAt = (f: number) => Math.max(0, STARTS.findIndex((b, i) => f >= b && f < (STARTS[i + 1] ?? END)));
-const rectOf = (i: number, f: number, mod = NO_MOD) => solve(sizeOf(pictureOf(SCENES[i].id)), poseAt(SCENES[i].keys, f - STARTS[i]), SCENES[i].anchor, mod);
+const viewOf = (i: number) => viewFor(sizeOf(pictureOf(SCENES[i].id)), SCENES[i].layout);
+const rectOf = (i: number, f: number, mod = NO_MOD) => solve(sizeOf(pictureOf(SCENES[i].id)), poseAt(SCENES[i].keys, f - STARTS[i]), SCENES[i].anchor, mod, viewOf(i));
 
 // cover, on every frame, for every picture that is on screen (both pictures during a scene change)
 let uncovered = 0;
@@ -65,12 +67,13 @@ for (let f = 0; f < TOTAL_FRAMES; f++) {
   } else shown.push([sceneAt(f), NO_MOD]);
   for (const [i, mod] of shown) {
     const r = rectOf(i, f, mod);
-    if (r.left > 0.01 || r.top > 0.01 || r.left + r.width < W - 0.01 || r.top + r.height < H - 0.01) uncovered++;
+    const v = viewOf(i);
+    if (r.left > 0.01 || r.top > 0.01 || r.left + r.width < v.w - 0.01 || r.top + r.height < v.h - 0.01) uncovered++;
   }
 }
 if (uncovered) fails.push(`화면을 덮지 못한 프레임 ${uncovered}개`);
 if (whipGap) fails.push(`휩 전환에서 두 화면 사이에 틈이 생긴 프레임 ${whipGap}개`);
-say(`- 검은 여백(계산): 이미지가 1080×1920을 덮지 못한 프레임 **${uncovered}개**, 휩 전환에서 두 화면 사이 틈 **${whipGap}개** → ${uncovered + whipGap === 0 ? "✔" : "✘"}`);
+say(`- 검은 여백(계산): 이미지가 자기 영역(전체 화면 또는 창)을 덮지 못한 프레임 **${uncovered}개**, 휩 전환에서 두 화면 사이 틈 **${whipGap}개** → ${uncovered + whipGap === 0 ? "✔" : "✘"}`);
 say();
 
 say("### 장면별 카메라와 이동 여유");
@@ -80,16 +83,17 @@ say();
 const camRows: (string | number)[][] = [];
 SCENES.forEach((s, i) => {
   const img = sizeOf(pictureOf(s.id));
+  const view = viewOf(i);
   let minS = 9, maxS = 0, cx = 0, cy = 0, speed = 0, jump = 0, speedAt = 0;
   let prev: [number, number] | null = null;
   let prevV = 0;
   for (let l = -HALF; l < s.frames + HALF; l++) {
     const pose = poseAt(s.keys, l);
-    const r = solve(img, pose, s.anchor);
+    const r = solve(img, pose, s.anchor, NO_MOD, view);
     minS = Math.min(minS, r.scale); maxS = Math.max(maxS, r.scale);
     cx = Math.max(cx, Math.abs(r.clampX)); cy = Math.max(cy, Math.abs(r.clampY));
     // screen position of the picture point under the frame centre → camera speed in px/frame
-    const c: [number, number] = [(W / 2 - r.left) / r.width, (H / 2 - r.top) / r.height];
+    const c: [number, number] = [(view.w / 2 - r.left) / r.width, (view.h / 2 - r.top) / r.height];
     if (prev) {
       const v = Math.hypot((c[0] - prev[0]) * r.width, (c[1] - prev[1]) * r.height);
       if (v > speed) { speed = v; speedAt = l; }
@@ -98,27 +102,28 @@ SCENES.forEach((s, i) => {
     }
     prev = c;
   }
-  const t = travel(img, minS);
+  const t = travel(img, minS, view);
   const usesPx = s.keys.some((k) => (k.x ?? 0) !== 0 || (k.y ?? 0) !== 0);
   const pxClamped = usesPx && s.keys.some((k) => (k.x ?? 0) !== 0) && cx > 0.5;
   if (pxClamped) warns.push(`${s.id}: px로 지정한 가로 이동이 ${px(cx)} 잘림 — 스케일을 키우거나 이동 폭을 줄일 것`);
   if (jump > 14) warns.push(`${s.id}: 카메라 속도가 한 프레임에 ${jump.toFixed(1)}px/f 변함 (프레임 ${speedAt})`);
-  camRows.push([`${String(s.n).padStart(2, "0")} ${s.title}`, `${img.width}×${img.height}`, `${minS.toFixed(2)}–${maxS.toFixed(2)}`, `${px(t.x)} / ${px(t.y)}`, `${px(cx)} / ${px(cy)}`, `${speed.toFixed(1)}px/f`, `${jump.toFixed(1)}`, pxClamped ? "⚠ px 이동 잘림" : "✔"]);
+  camRows.push([`${String(s.n).padStart(2, "0")} ${s.title}`, `${img.width}×${img.height}`, view.framed ? `창 ${view.w}×${view.h}` : "전체 화면", `${(Math.max(view.w / img.width, view.h / img.height) * maxS * (pictureOf(s.id)?.kind === "draft" ? DRAFT_UPSCALE : 1)).toFixed(1)}배`, `${minS.toFixed(2)}–${maxS.toFixed(2)}`, `${px(t.x)} / ${px(t.y)}`, `${px(cx)} / ${px(cy)}`, `${speed.toFixed(1)}px/f`, `${jump.toFixed(1)}`, pxClamped ? "⚠ px 이동 잘림" : "✔"]);
 });
-table(["장면", "이미지", "스케일", "이동 여유 (가로/세로)", "잘린 최대 폭 (가로/세로)", "최대 속도", "최대 속도 변화", "판정"], camRows);
+table(["장면", "이미지", "배치", "원본 대비 최대 확대", "스케일", "이동 여유 (가로/세로)", "잘린 최대 폭 (가로/세로)", "최대 속도", "최대 속도 변화", "판정"], camRows);
 
 say("### 피사체(얼굴)가 프레임 안에 있는지");
 say();
-say("각 장면에서 카메라가 그 인물을 비추는 구간만 검사한다. 여백 = 얼굴 상자에서 화면 가장자리까지의 최소 거리(음수면 잘림).");
+say("각 장면에서 카메라가 그 인물을 비추는 구간만 검사한다. 여백 = 얼굴 상자에서 화면(창 배치면 창) 가장자리까지의 최소 거리(음수면 잘림).");
 say();
 const subjRows: (string | number)[][] = [];
 SCENES.forEach((s, i) => s.subjects.forEach((sub) => {
   let margin = 1e9, ui = 0, n = 0;
   for (let l = sub.frames[0]; l <= Math.min(sub.frames[1], s.frames - 1); l++) {
-    const r = solve(sizeOf(pictureOf(s.id)), poseAt(s.keys, l), s.anchor);
+    const v = viewOf(i);
+    const r = solve(sizeOf(pictureOf(s.id)), poseAt(s.keys, l), s.anchor, NO_MOD, v);
     const b = onScreen(r, sub.at, sub.size);
-    margin = Math.min(margin, b.left, W - b.right, b.top, H - b.bottom);
-    if (b.top < SAFE.top || b.bottom > SAFE.bottom) ui++;
+    margin = Math.min(margin, b.left, v.w - b.right, b.top, v.h - b.bottom);
+    if (v.y + b.top < SAFE.top || v.y + b.bottom > SAFE.bottom) ui++;
     n++;
   }
   const ok = margin >= 0;
@@ -226,9 +231,9 @@ if (!existsSync(OUT)) {
 }
 
 // ── C. subtitles ─────────────────────────────────────────────────────────────────────────────────────────────
-say("## C. 자막 잘림");
+say("## C. 자막·장면 표시 잘림");
 say();
-say(`자막만 검은 배경에 렌더링(SubtitleProbe)해서 글자가 차지하는 영역을 픽셀로 측정. 허용 영역: x ${SAFE.left}–${SAFE.right}, y ${SAFE.top}–${SAFE.bottom} (위 350px · 아래 330px · 오른쪽 150px 제외).`);
+say(`글자 레이어(자막 + 창 위의 장면 표시)만 검은 배경에 렌더링(SubtitleProbe)해서 글자가 차지하는 영역을 픽셀로 측정. 허용 영역: x ${SAFE.left}–${SAFE.right}, y ${SAFE.top}–${SAFE.bottom} (위 350px · 아래 330px · 오른쪽 150px 제외).`);
 say();
 mkdirSync(TMP, { recursive: true });
 const bundle = `${TMP}/bundle`;

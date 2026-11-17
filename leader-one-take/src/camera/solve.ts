@@ -1,6 +1,6 @@
 import { Easing, interpolate } from "remotion";
-import { CameraKey, Ease, Vec2 } from "../config/types";
-import { H, W } from "../config/video";
+import { CameraKey, Ease, Layout, Vec2 } from "../config/types";
+import { FRAME, H, W } from "../config/video";
 
 // Pure camera maths — no React. Used by the scenes and by scripts/verify.ts, so what is checked is what is drawn.
 
@@ -36,33 +36,40 @@ export const poseAt = (keys: CameraKey[], f: number): Pose => {
   return k(keys.length - 1);
 };
 
-/** Scale at which a picture exactly covers the 1080x1920 frame. */
-export const coverScale = (img: Size) => Math.max(W / img.width, H / img.height);
+/** The rectangle of the screen the camera fills: the whole frame, or the window for pictures that are not portrait. */
+export type View = { x: number; y: number; w: number; h: number; framed: boolean };
+export const SCREEN: View = { x: 0, y: 0, w: W, h: H, framed: false };
+export const WINDOW: View = { x: 0, y: FRAME.top, w: W, h: FRAME.height, framed: true };
+export const viewFor = (img: Size, layout: Layout = "auto"): View =>
+  layout === "cover" || (layout === "auto" && img.width / img.height <= 0.8) ? SCREEN : WINDOW;
+
+/** Scale at which a picture exactly covers the view. */
+export const coverScale = (img: Size, view: View = SCREEN) => Math.max(view.w / img.width, view.h / img.height);
 
 /**
- * Where the picture is drawn. The picture always covers the whole frame: the scale never goes below cover, and
- * the position is clamped so that no edge of the picture enters the frame. `clampX/Y` is how far the requested
- * position had to be pulled back (0 = the move fits inside the picture).
+ * Where the picture is drawn, relative to the view's top-left corner. The picture always covers the whole view:
+ * the scale never goes below cover, and the position is clamped so that no edge of the picture enters the view.
+ * `clampX/Y` is how far the requested position had to be pulled back (0 = the move fits inside the picture).
  */
-export const solve = (img: Size, pose: Pose, anchor: Vec2, mod: CamMod = NO_MOD) => {
+export const solve = (img: Size, pose: Pose, anchor: Vec2, mod: CamMod = NO_MOD, view: View = SCREEN) => {
   const s = Math.max(1, pose.scale * mod.scaleMul);
-  const width = img.width * coverScale(img) * s;
-  const height = img.height * coverScale(img) * s;
-  const wantLeft = anchor[0] * W - pose.focal[0] * width + pose.x + mod.dx;
-  const wantTop = anchor[1] * H - pose.focal[1] * height + pose.y + mod.dy;
-  const left = Math.min(0, Math.max(W - width, wantLeft));
-  const top = Math.min(0, Math.max(H - height, wantTop));
+  const width = img.width * coverScale(img, view) * s;
+  const height = img.height * coverScale(img, view) * s;
+  const wantLeft = anchor[0] * view.w - pose.focal[0] * width + pose.x + mod.dx;
+  const wantTop = anchor[1] * view.h - pose.focal[1] * height + pose.y + mod.dy;
+  const left = Math.min(0, Math.max(view.w - width, wantLeft));
+  const top = Math.min(0, Math.max(view.h - height, wantTop));
   return { left, top, width, height, scale: s, clampX: left - wantLeft, clampY: top - wantTop };
 };
 export type Rect = ReturnType<typeof solve>;
 
 /** How far the picture can move at a given scale before an edge would show: total travel in px on each axis. */
-export const travel = (img: Size, scale: number) => {
-  const c = coverScale(img) * Math.max(1, scale);
-  return { x: img.width * c - W, y: img.height * c - H };
+export const travel = (img: Size, scale: number, view: View = SCREEN) => {
+  const c = coverScale(img, view) * Math.max(1, scale);
+  return { x: img.width * c - view.w, y: img.height * c - view.h };
 };
 
-/** Screen rectangle of a box given in picture coordinates (centre, size as fractions of the picture). */
+/** Rectangle (relative to the view) of a box given in picture coordinates (centre, size as fractions of the picture). */
 export const onScreen = (r: Rect, at: Vec2, size: Vec2) => ({
   left: r.left + (at[0] - size[0] / 2) * r.width,
   right: r.left + (at[0] + size[0] / 2) * r.width,

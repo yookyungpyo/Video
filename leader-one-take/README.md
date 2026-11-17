@@ -4,7 +4,7 @@
 
 - React + TypeScript + Remotion 4 · 1080×1920 · 30fps · H.264 · **1650프레임(55초)**
 - **결과 파일:** `output/leader-one-take.mp4`
-- **현재 상태:** 장면 이미지가 확정 전이라 **스토리보드에서 자른 초안 이미지**로 렌더링했습니다. 음성·음악 파일이 없어 **무음**이고, 자막은 **임시 문구**입니다. 자세한 내용은 [`PRODUCTION_LOG.md`](PRODUCTION_LOG.md), 검증 결과는 [`VERIFICATION.md`](VERIFICATION.md)에 있습니다.
+- **현재 상태:** 장면 이미지가 확정 전이라 **스토리보드에서 자른 초안 이미지**로 렌더링했습니다. 초안은 가로형이라 화면 가운데 창에 장면 전체가 보이게 배치했습니다(아래 "배치"). 음성·음악 파일이 없어 **무음**이고, 자막은 **임시 문구**입니다. 자세한 내용은 [`PRODUCTION_LOG.md`](PRODUCTION_LOG.md), 검증 결과는 [`VERIFICATION.md`](VERIFICATION.md)에 있습니다.
 
 ## 실행 (Windows · VS Code 터미널, `leader-one-take` 폴더에서)
 
@@ -27,9 +27,20 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 | `public/images/scene-02-alt.*` | 02: 어깨 뒤로 넘어가는 중간 시점 | 본 이미지 안의 2D 이동 |
 | `public/images/scene-05-top.*`, `scene-08-top.*` | 05 · 08: 상부 시점 | 본 이미지 안의 2D 상향 이동 |
 
-- **권장 크기:** 세로 9:16, **1296×2304 이상**. 최대 스케일이 1.22라서 이 크기부터 확대해도 원본 해상도가 유지됩니다. 비율이 달라도 화면을 덮도록 자동 계산합니다.
+- **권장 크기:** 세로 9:16, **1296×2304 이상**. 최대 스케일이 1.22라서 이 크기부터 확대해도 원본 해상도가 유지됩니다.
 - **교체 후 할 일:** `src/config/scenes.ts`의 `focal`(화면 기준점에 놓을 이미지 속 위치)과 `subjects`(프레임 안에 있어야 하는 얼굴)를 새 이미지에 맞게 고치고 `npm run verify`를 실행합니다. 지금 값은 스토리보드 초안 기준입니다.
 - **레이어 규칙:** `-bg` 파일이 있어야 레이어 모드가 켜집니다. `-mid`, `-fg`는 있는 것만 씁니다.
+
+## 배치 — 전체 화면 채움과 창
+
+이미지 모양에 따라 장면마다 자동으로 정해집니다.
+
+| 이미지 | 배치 | 카메라가 움직이는 영역 |
+|---|---|---|
+| 세로형 (가로/세로 0.8 이하) | 1080×1920 전체를 채움 (cover) | 전체 화면 |
+| 그보다 넓은 이미지 (정사각형 · 가로형) | 가운데 창 1080×728에 장면 전체, 위아래는 같은 장면을 흐리게 깐 배경 | 창 안 |
+
+가로형 이미지로 세로 화면을 채우면 가로의 1/3만 보이고 3배 가까이 더 확대되기 때문입니다. `src/config/scenes.ts`에서 장면별로 `layout: "cover"` 또는 `"frame"`을 적으면 고정됩니다. 창의 위치와 높이는 `src/config/video.ts`의 `FRAME`입니다.
 
 ## 카메라 설정 — `src/config/scenes.ts`
 
@@ -37,12 +48,12 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 
 ```ts
 {
-  n: 4, id: "scene-04", title: "사람에 대한 이해", frames: 180, anchor: [0.5, 0.44],
+  n: 4, id: "scene-04", title: "사람에 대한 이해", frames: 180, anchor: [0.5, 0.5],
   keys: [
-    { f: 0,   scale: 1.16, focal: [0.49, 0.42], x: 80 },
-    { f: 180, scale: 1.16, focal: [0.49, 0.42], x: -80, ease: "inOut" },
+    { f: 0,   scale: 1.16, focal: [0.5, 0.48], x: 80 },
+    { f: 180, scale: 1.16, focal: [0.5, 0.48], x: -80, ease: "inOut" },
   ],
-  subjects: [{ name: "리더 얼굴", at: [0.48, 0.42], size: [0.17, 0.38], frames: [0, 180] }],
+  subjects: [{ name: "리더 얼굴", at: [0.5, 0.33], size: [0.19, 0.5], frames: [0, 180] }],
   enter: { kind: "whip", dir: "left", note: "…" },
   subtitles: [{ at: 14, until: 84, text: "그리고 한 사람 한 사람을" }, …],
 }
@@ -52,10 +63,11 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 |---|---|
 | `frames` | 장면 길이. 8개 합이 1650이어야 합니다(다르면 시작할 때 오류) |
 | `keys[].f` | 장면 안의 프레임 번호 (0 = 장면 경계) |
-| `keys[].scale` | 1 = 화면을 딱 덮는 크기. 1 아래로는 내려가지 않습니다 |
-| `keys[].focal` | 화면 기준점(`anchor`)에 놓일 이미지 속 위치 (0–1, 0–1) |
+| `layout` | `auto`(기본) · `cover` · `frame` — 위 "배치" 참고 |
+| `keys[].scale` | 1 = 화면(창 배치면 창)을 딱 덮는 크기. 1 아래로는 내려가지 않습니다 |
+| `keys[].focal` | 기준점(`anchor`, 화면 또는 창 안의 위치)에 놓일 이미지 속 위치 (0–1, 0–1) |
 | `keys[].x`, `y` | 추가 이동(px). `x: 80`은 이미지를 오른쪽으로 80px |
-| `keys[].ease` | 이 키로 **들어오는** 구간의 가감속: `inOut`(기본) · `in` · `out` · `linear` |
+| `keys[].ease` | 이 키로 **들어오는** 구간의 가감속: `inOut`(기본) · `in` · `out` · `linear`. 사인 곡선 기반 |
 | `subjects` | 그 프레임 구간 동안 화면 안에 있어야 하는 얼굴 (검증용) |
 | `enter` | 이 장면으로 들어오는 전환: `occluder` · `glass` · `whip` · `push`, 방향 `left` · `right` · `up` · `down` |
 | `depth` | 레이어가 있을 때 층별로 카메라를 따라가는 정도 (zoom · pan) |
@@ -68,13 +80,13 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 
 `src/camera/solve.ts`가 매 프레임 이미지의 위치와 크기를 계산합니다.
 
-1. 이미지 비율에서 화면을 덮는 배율(cover)을 구하고, 스케일은 그 아래로 내려가지 않습니다.
+1. 이미지 비율에서 화면(창 배치면 창)을 덮는 배율(cover)을 구하고, 스케일은 그 아래로 내려가지 않습니다.
 2. 초점 위치와 px 이동으로 원하는 위치를 구한 뒤, 이미지 가장자리가 화면 안으로 들어오지 않는 범위로 제한합니다.
 3. 요청한 이동이 이미지보다 크면 가장자리에서 멈춥니다. `npm run verify`가 장면별 이동 여유와 잘린 폭을 표로 보여줍니다.
 
 ## 장면 타임라인
 
-| # | 시간 | 프레임 | 카메라 (현재: 평면 이미지 2D) | 들어오는 전환 |
+| # | 시간 | 프레임 | 카메라 (현재: 평면 이미지 2D, 창 안에서 이동) | 들어오는 전환 |
 |---|---|---|---|---|
 | 01 후킹 | 0–6초 | 0–180 | 얼굴 기준 푸시인 1.08→1.20 | — |
 | 02 역할의 변화 | 6–12초 | 180–360 | 어깨 뒤에서 팀 쪽으로 팬 + 풀아웃 1.18→1.02 | 오브젝트 가림 → |
@@ -91,6 +103,7 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 
 - `src/components/Subtitles.tsx` — 이미지와 분리된 별도 레이어입니다.
 - 위 350px(인스타그램 "게시물" · 계정명), 아래 330px(캡션 · 버튼), 오른쪽 150px(버튼 열)을 비웁니다. 글자는 x 90–930, y 약 1415–1565 안에 놓입니다.
+- 창 배치에서는 창 위에 작은 장면 표시("01 — 후킹")가 함께 나옵니다. `src/config/video.ts`의 `CHAPTER_LABELS`로 끕니다.
 - 문구는 `src/config/scenes.ts`의 `subtitles`에서 고칩니다. **지금 문구는 임시입니다.**
 
 ## 오디오
@@ -109,7 +122,7 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 |---|---|
 | A. 카메라 계산 | 1650프레임 전체에서 화면을 덮는지, 요청한 이동이 얼마나 잘렸는지, 얼굴이 프레임 안에 있는지, 카메라 속도 급변, 경계에서 인물 크기 변화, 자막 타이밍 |
 | B. 렌더링된 영상 | 해상도 · fps · 프레임 수 · 코덱, 경계 앞뒤 10프레임의 프레임 간 변화량(이미지 점프), 가장자리 검은 띠 |
-| C. 자막 | 자막만 따로 렌더링해서 글자 영역이 안전 영역 안에 있는지 픽셀로 측정 |
+| C. 자막 · 장면 표시 | 글자 레이어만 따로 렌더링해서 글자 영역이 안전 영역 안에 있는지 픽셀로 측정 |
 
 브라우저를 찾지 못하면 `npm run verify -- --browser-executable=<chrome 경로>`처럼 넘깁니다(`npm run render`도 같습니다).
 
@@ -118,14 +131,14 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 | 경로 | 내용 |
 |---|---|
 | `src/config/scenes.ts` | **장면별 카메라 설정** (스케일 · 초점 · 이동 · 전환 · 자막) |
-| `src/config/video.ts` · `types.ts` | 해상도 · fps · 전환 길이 · 안전 영역 / 설정 타입 |
+| `src/config/video.ts` · `types.ts` | 해상도 · fps · 전환 길이 · 안전 영역 · 창 위치 / 설정 타입 |
 | `src/camera/solve.ts` | 카메라 계산: 키프레임 보간, cover 배치, 이동 범위 제한 |
 | `src/camera/transition.ts` | 전환 계산: 진행도, 전환 중 카메라 변화, 휩 이동량 |
 | `src/camera/assets.ts` · `src/generated/assets.json` | 실제로 있는 파일 목록 (`npm run assets`가 만듦) |
 | `src/scenes/Scene01Hook.tsx` … `Scene08Conclusion.tsx` | 장면 컴포넌트 (각각 독립) |
-| `src/components/SceneView.tsx` | 한 장면 그리기: 레이어 · 평면 이미지 · 플레이스홀더 · 보조 이미지 |
+| `src/components/SceneView.tsx` | 한 장면 그리기: 전체 화면/창 배치 · 레이어 · 평면 이미지 · 플레이스홀더 · 보조 이미지 |
 | `src/components/Transition.tsx` | 전환 4종: 오브젝트 가림 · 유리벽 마스킹 · 휩 · 줌 스루 |
-| `src/components/Subtitles.tsx` · `AudioTracks.tsx` · `Fonts.tsx` | 자막 · 오디오 트랙 · Pretendard 로딩 |
+| `src/components/Subtitles.tsx` · `AudioTracks.tsx` · `Fonts.tsx` | 자막과 장면 표시 · 오디오 트랙 · Pretendard 로딩 |
 | `src/compositions/LeaderOneTake.tsx` | 전체 타임라인 조립 |
 | `scripts/scan-assets.mjs` | `public/` 스캔 → 있는 파일만 등록 |
 | `scripts/render.mjs` · `verify.ts` | 최종 렌더링 · 프레임 단위 검증 |

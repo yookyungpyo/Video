@@ -4,7 +4,7 @@ import { CamMod, NO_MOD } from "../camera/solve";
 import { inTransition, progress } from "../camera/transition";
 import { AudioTracks } from "../components/AudioTracks";
 import { Fonts } from "../components/Fonts";
-import { Subtitles, SubtitleText } from "../components/Subtitles";
+import { ChapterLabels, Subtitles, SubtitleText } from "../components/Subtitles";
 import { Transition } from "../components/Transition";
 import { END, SCENES, STARTS } from "../config/scenes";
 import { HALF, OVERLAP } from "../config/video";
@@ -41,10 +41,11 @@ export const LeaderOneTake: React.FC = () => {
   );
 };
 
-/** Subtitles alone on black — rendered by `npm run verify` to measure that no line leaves the safe area. */
+/** All text layers alone on black — rendered by `npm run verify` to measure that nothing leaves the safe area. */
 export const SubtitleProbe: React.FC = () => (
   <AbsoluteFill style={{ background: "#000" }}>
     <Fonts />
+    <ChapterLabels />
     <SubtitleText />
   </AbsoluteFill>
 );
