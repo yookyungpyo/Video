@@ -18,5 +18,5 @@ export const SAFE = { left: 90, right: W - 150, top: 350, bottom: H - 330 };
  */
 export const FRAME = { top: 596, height: 728, feather: 46 };
 
-/** Small scene marker above the window ("01 후킹"). Only drawn for pictures shown in the window. */
-export const CHAPTER_LABELS = true;
+/** Small scene marker above the window ("01 — 후킹"). Off: the film carries no text except the subtitles. */
+export const CHAPTER_LABELS = false;

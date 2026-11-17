@@ -103,7 +103,7 @@ npm run assets     # 미리보기를 켜 둔 채 파일을 추가했을 때 다�
 
 - `src/components/Subtitles.tsx` — 이미지와 분리된 별도 레이어입니다.
 - 위 350px(인스타그램 "게시물" · 계정명), 아래 330px(캡션 · 버튼), 오른쪽 150px(버튼 열)을 비웁니다. 글자는 x 90–930, y 약 1415–1565 안에 놓입니다.
-- 창 배치에서는 창 위에 작은 장면 표시("01 — 후킹")가 함께 나옵니다. `src/config/video.ts`의 `CHAPTER_LABELS`로 끕니다.
+- 창 위의 장면 표시("01 — 후킹")는 꺼 두었습니다. 다시 쓰려면 `src/config/video.ts`의 `CHAPTER_LABELS`를 `true`로 바꿉니다.
 - 문구는 `src/config/scenes.ts`의 `subtitles`에서 고칩니다. **지금 문구는 임시입니다.**
 
 ## 오디오
