@@ -1,0 +1,72 @@
+{
+  "images": {
+    "scene-01": {
+      "src": "images/draft/scene-01.jpg",
+      "kind": "draft",
+      "width": 1752,
+      "height": 975
+    },
+    "scene-02": {
+      "src": "images/draft/scene-02.jpg",
+      "kind": "draft",
+      "width": 1755,
+      "height": 975
+    },
+    "scene-03": {
+      "src": "images/draft/scene-03.jpg",
+      "kind": "draft",
+      "width": 1752,
+      "height": 975
+    },
+    "scene-04": {
+      "src": "images/draft/scene-04.jpg",
+      "kind": "draft",
+      "width": 1755,
+      "height": 975
+    },
+    "scene-05": {
+      "src": "images/draft/scene-05.jpg",
+      "kind": "draft",
+      "width": 1752,
+      "height": 975
+    },
+    "scene-06": {
+      "src": "images/draft/scene-06.jpg",
+      "kind": "draft",
+      "width": 1755,
+      "height": 975
+    },
+    "scene-07": {
+      "src": "images/draft/scene-07.jpg",
+      "kind": "draft",
+      "width": 1752,
+      "height": 975
+    },
+    "scene-08": {
+      "src": "images/draft/scene-08.jpg",
+      "kind": "draft",
+      "width": 1755,
+      "height": 975
+    }
+  },
+  "layers": {
+    "scene-01": null,
+    "scene-02": null,
+    "scene-03": null,
+    "scene-04": null,
+    "scene-05": null,
+    "scene-06": null,
+    "scene-07": null,
+    "scene-08": null
+  },
+  "aux": {
+    "scene-02-alt": null,
+    "scene-05-top": null,
+    "scene-08-top": null
+  },
+  "audio": {
+    "narration": null,
+    "bgm": null,
+    "sceneNarration": {}
+  }
+}
