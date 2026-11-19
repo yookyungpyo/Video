@@ -1,0 +1,77 @@
+{
+ "storyboard": "assets/storyboard.png",
+ "scenes": [
+  {
+   "n": 1,
+   "file": "scenes/scene01.jpg",
+   "srcW": 432,
+   "srcH": 436,
+   "aspect": 0.9908,
+   "source": "storyboard",
+   "cardMagnification": 2.08
+  },
+  {
+   "n": 2,
+   "file": "scenes/scene02.jpg",
+   "srcW": 433,
+   "srcH": 433,
+   "aspect": 1.0,
+   "source": "storyboard",
+   "cardMagnification": 2.08
+  },
+  {
+   "n": 3,
+   "file": "scenes/scene03.jpg",
+   "srcW": 437,
+   "srcH": 436,
+   "aspect": 1.0023,
+   "source": "storyboard",
+   "cardMagnification": 2.06
+  },
+  {
+   "n": 4,
+   "file": "scenes/scene04.jpg",
+   "srcW": 436,
+   "srcH": 436,
+   "aspect": 1.0,
+   "source": "storyboard",
+   "cardMagnification": 2.06
+  },
+  {
+   "n": 5,
+   "file": "scenes/scene05.jpg",
+   "srcW": 432,
+   "srcH": 436,
+   "aspect": 0.9908,
+   "source": "storyboard",
+   "cardMagnification": 2.08
+  },
+  {
+   "n": 6,
+   "file": "scenes/scene06.jpg",
+   "srcW": 435,
+   "srcH": 436,
+   "aspect": 0.9977,
+   "source": "storyboard",
+   "cardMagnification": 2.07
+  },
+  {
+   "n": 7,
+   "file": "scenes/scene07.jpg",
+   "srcW": 437,
+   "srcH": 436,
+   "aspect": 1.0023,
+   "source": "storyboard",
+   "cardMagnification": 2.06
+  },
+  {
+   "n": 8,
+   "file": "scenes/scene08.jpg",
+   "srcW": 436,
+   "srcH": 436,
+   "aspect": 1.0,
+   "source": "storyboard",
+   "cardMagnification": 2.06
+  }
+ ]
+}

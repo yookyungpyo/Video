@@ -1,0 +1,357 @@
+{
+ "fps": 30,
+ "totalFrames": 1388,
+ "targetFrames": 1350,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "naturalNarrationSeconds": 56.0,
+ "overflowSeconds": 1.27,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 115,
+   "voice": true,
+   "voiceEnd": 106,
+   "chunks": [
+    {
+     "start": 8,
+     "end": 52,
+     "text": "내가 옳았는데,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 52,
+     "end": 115,
+     "text": "왜 아무도 움직이지 않았을까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 8,
+    "end": 108,
+    "text": "내가 옳았는데,\n왜 아무도 {움직이지 않았을까?}",
+    "fontSize": 62,
+    "lines": 2
+   }
+  },
+  {
+   "n": 2,
+   "from": 115,
+   "to": 264,
+   "voice": true,
+   "voiceEnd": 255,
+   "chunks": [
+    {
+     "start": 122,
+     "end": 187,
+     "text": "분명 틀린 말은 아니었다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 187,
+     "end": 221,
+     "text": "논리도 있었고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 221,
+     "end": 264,
+     "text": "근거도 충분했다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 122,
+    "end": 257,
+    "text": "{틀린 말}은 아니었다",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 3,
+   "from": 264,
+   "to": 384,
+   "voice": true,
+   "voiceEnd": 375,
+   "chunks": [
+    {
+     "start": 271,
+     "end": 328,
+     "text": "그런데 이상하게도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 328,
+     "end": 384,
+     "text": "사람들은 움직이지 않았다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 328,
+    "end": 377,
+    "text": "사람들은 {움직이지 않았다}",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 4,
+   "from": 384,
+   "to": 576,
+   "voice": true,
+   "voiceEnd": 567,
+   "chunks": [
+    {
+     "start": 392,
+     "end": 484,
+     "text": "나는 그들이 이해하지 못한다고 생각했다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 49,
+     "lines": 1
+    },
+    {
+     "start": 484,
+     "end": 532,
+     "text": "그래서 더 설명하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 532,
+     "end": 576,
+     "text": "더 설득하려 했다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 484,
+    "end": 569,
+    "text": "나는 더 {설득}하려 했다",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 5,
+   "from": 576,
+   "to": 746,
+   "voice": true,
+   "voiceEnd": 737,
+   "chunks": [
+    {
+     "start": 584,
+     "end": 649,
+     "text": "그런데 이제야 알았다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 649,
+     "end": 746,
+     "text": "내가 옳다는 걸 증명하는 데만 집중했다는 걸.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 45,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 649,
+    "end": 739,
+    "text": "내가 옳다는 걸 {증명}하려 했다",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 6,
+   "from": 746,
+   "to": 948,
+   "voice": true,
+   "voiceEnd": 939,
+   "chunks": [
+    {
+     "start": 754,
+     "end": 839,
+     "text": "사람들은 누군가의 정답을 따를 때보다,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 51,
+     "lines": 1
+    },
+    {
+     "start": 839,
+     "end": 896,
+     "text": "스스로 선택했다고 느낄 때,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 896,
+     "end": 948,
+     "text": "더 적극적으로 움직인다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 839,
+    "end": 941,
+    "text": "{스스로 선택}할 때 움직인다",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 7,
+   "from": 948,
+   "to": 1127,
+   "voice": true,
+   "voiceEnd": 1118,
+   "chunks": [
+    {
+     "start": 956,
+     "end": 1018,
+     "text": "나는 답을 주는 사람이 아니라,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 1018,
+     "end": 1127,
+     "text": "스스로 답을 선택할 수 있게 돕는 사람이 되어야 했다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 44,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 1018,
+    "end": 1120,
+    "text": "선택할 수 있게 {돕는 사람}",
+    "fontSize": 62,
+    "lines": 1
+   }
+  },
+  {
+   "n": 8,
+   "from": 1127,
+   "to": 1388,
+   "voice": true,
+   "voiceEnd": 1349,
+   "chunks": [
+    {
+     "start": 1135,
+     "end": 1213,
+     "text": "나는 사람들을 설득하려 했다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 1213,
+     "end": 1248,
+     "text": "하지만 이제는,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 1248,
+     "end": 1310,
+     "text": "사람들이 스스로 선택하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    },
+    {
+     "start": 1310,
+     "end": 1388,
+     "text": "움직이게 만들고 싶다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 62,
+     "lines": 1
+    }
+   ],
+   "subtitle": {
+    "start": 1248,
+    "end": 1374,
+    "text": "{스스로 선택}하고\n움직이게 만드는 {리더}",
+    "fontSize": 62,
+    "lines": 2
+   }
+  }
+ ]
+}
