@@ -1,0 +1,46 @@
+{
+  "title": "나는 편안함을 거부한다",
+  "targetFrames": 1500,
+  "readingRate": 5.0,
+  "tailHold": 2.0,
+  "music": "auto",
+  "voiceNote": "내레이션: ElevenLabs eleven_v4 · Minho - Deep & Trustworthy Narrator. assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+  "scenes": [
+    {"n": 1, "title": "질문", "window": [0, 5], "chunks": [
+      {"text": "나는 왜 일이 {편해질} 때마다,"},
+      {"text": "스스로 {불편한 상황}을 만들까?"}]},
+    {"n": 2, "title": "안주", "window": [5, 10], "chunks": [
+      {"text": "나는 {편안함}을\n오래 즐기지 않는다."},
+      {"text": "편해지는 순간,"},
+      {"text": "나도 모르게\n{안주}하기 시작하기 때문이다."}]},
+    {"n": 3, "title": "반복", "window": [10, 15], "chunks": [
+      {"text": "처음에는 어렵던 일도,"},
+      {"text": "반복하다 보면 {쉬워진다.}"},
+      {"text": "어느 순간,"},
+      {"text": "고민하지 않아도\n잘할 수 있게 된다."}]},
+    {"n": 4, "title": "착각", "window": [15, 20], "chunks": [
+      {"text": "그런데 그때부터\n{착각}이 시작된다."},
+      {"text": "내가 많이 성장해서,"},
+      {"text": "이제는 뭐든\n잘할 수 있을 것 같은 {착각.}"}]},
+    {"n": 5, "title": "경계", "window": [20, 24], "tail": 0.6, "chunks": [
+      {"text": "{익숙한 일}만 반복하면서도,"},
+      {"text": "나는 여전히\n성장하고 있다고 믿는다."}]},
+    {"n": 6, "title": "전환", "window": [24, 30], "chunks": [
+      {"text": "그래서 나는 일부러\n{불편한 상황}을 만든다."},
+      {"text": "{모르는 일}을 시작하고,"},
+      {"text": "{어려운 문제}를 선택한다."}]},
+    {"n": 7, "title": "산", "window": [30, 35], "chunks": [
+      {"text": "그러면 다시\n{부족한 내}가 보인다."},
+      {"text": "모르는 게 많고,"},
+      {"text": "배워야 할 것도 많다는 걸\n깨닫는다."}]},
+    {"n": 8, "title": "계단", "window": [35, 42], "chunks": [
+      {"text": "그 {불편함}이,"},
+      {"text": "나를 다시 {공부}하게 만들고,"},
+      {"text": "다시 {도전}하게 만들고,"},
+      {"text": "결국 어제보다\n{조금 더 나은 사람}으로 만든다."}]},
+    {"n": 9, "title": "정상", "window": [42, 50], "chunks": [
+      {"text": "내가 편안함을 거부하는 이유는\n단순하다."},
+      {"text": "편안함은 지금의 나를 유지하지만,", "center": true},
+      {"text": "불편함은 {새로운 나}를 만든다.", "read": "불편함은 새로운 나를 만들기 때문이다.", "center": true}]}
+  ]
+}

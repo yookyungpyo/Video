@@ -1,0 +1,371 @@
+{
+ "fps": 30,
+ "totalFrames": 2005,
+ "targetFrames": 1500,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "naturalNarrationSeconds": 77.3,
+ "overflowSeconds": 16.83,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 148,
+   "voice": true,
+   "voiceEnd": 136,
+   "chunks": [
+    {
+     "start": 9,
+     "end": 70,
+     "text": "나는 왜 일이 {편해질} 때마다,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 70,
+     "end": 148,
+     "text": "스스로 {불편한 상황}을 만들까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 148,
+   "to": 372,
+   "voice": true,
+   "voiceEnd": 360,
+   "chunks": [
+    {
+     "start": 158,
+     "end": 251,
+     "text": "나는 {편안함}을\n오래 즐기지 않는다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 251,
+     "end": 288,
+     "text": "편해지는 순간,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 288,
+     "end": 372,
+     "text": "나도 모르게\n{안주}하기 시작하기 때문이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 372,
+   "to": 605,
+   "voice": true,
+   "voiceEnd": 593,
+   "chunks": [
+    {
+     "start": 381,
+     "end": 436,
+     "text": "처음에는 어렵던 일도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 436,
+     "end": 502,
+     "text": "반복하다 보면 {쉬워진다.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 502,
+     "end": 529,
+     "text": "어느 순간,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 529,
+     "end": 605,
+     "text": "고민하지 않아도\n잘할 수 있게 된다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 605,
+   "to": 850,
+   "voice": true,
+   "voiceEnd": 839,
+   "chunks": [
+    {
+     "start": 614,
+     "end": 710,
+     "text": "그런데 그때부터\n{착각}이 시작된다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 710,
+     "end": 758,
+     "text": "내가 많이 성장해서,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 758,
+     "end": 850,
+     "text": "이제는 뭐든\n잘할 수 있을 것 같은 {착각.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 850,
+   "to": 1008,
+   "voice": true,
+   "voiceEnd": 990,
+   "chunks": [
+    {
+     "start": 860,
+     "end": 923,
+     "text": "{익숙한 일}만 반복하면서도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 923,
+     "end": 1008,
+     "text": "나는 여전히\n성장하고 있다고 믿는다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 1008,
+   "to": 1223,
+   "voice": true,
+   "voiceEnd": 1211,
+   "chunks": [
+    {
+     "start": 1017,
+     "end": 1119,
+     "text": "그래서 나는 일부러\n{불편한 상황}을 만든다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 1119,
+     "end": 1167,
+     "text": "{모르는 일}을 시작하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1167,
+     "end": 1223,
+     "text": "{어려운 문제}를 선택한다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1223,
+   "to": 1436,
+   "voice": true,
+   "voiceEnd": 1424,
+   "chunks": [
+    {
+     "start": 1232,
+     "end": 1321,
+     "text": "그러면 다시\n{부족한 내}가 보인다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 1321,
+     "end": 1360,
+     "text": "모르는 게 많고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1360,
+     "end": 1436,
+     "text": "배워야 할 것도 많다는 걸\n깨닫는다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1436,
+   "to": 1687,
+   "voice": true,
+   "voiceEnd": 1675,
+   "chunks": [
+    {
+     "start": 1445,
+     "end": 1480,
+     "text": "그 {불편함}이,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1480,
+     "end": 1537,
+     "text": "나를 다시 {공부}하게 만들고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1537,
+     "end": 1584,
+     "text": "다시 {도전}하게 만들고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1584,
+     "end": 1687,
+     "text": "결국 어제보다\n{조금 더 나은 사람}으로 만든다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "from": 1687,
+   "to": 2005,
+   "voice": true,
+   "voiceEnd": 1945,
+   "chunks": [
+    {
+     "start": 1696,
+     "end": 1795,
+     "text": "내가 편안함을 거부하는 이유는\n단순하다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 1795,
+     "end": 1868,
+     "text": "편안함은 지금의 나를 유지하지만,",
+     "quote": false,
+     "rhythm": false,
+     "center": true,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1868,
+     "end": 2005,
+     "text": "불편함은 {새로운 나}를 만든다.",
+     "quote": false,
+     "rhythm": false,
+     "center": true,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,86 @@
+{
+ "storyboard": "assets/storyboard.png",
+ "scenes": [
+  {
+   "n": 1,
+   "file": "scenes/scene-01.jpg",
+   "srcW": 408,
+   "srcH": 385,
+   "aspect": 1.0597,
+   "source": "storyboard",
+   "magnification": 2.3
+  },
+  {
+   "n": 2,
+   "file": "scenes/scene-02.jpg",
+   "srcW": 401,
+   "srcH": 385,
+   "aspect": 1.0416,
+   "source": "storyboard",
+   "magnification": 2.34
+  },
+  {
+   "n": 3,
+   "file": "scenes/scene-03.jpg",
+   "srcW": 405,
+   "srcH": 385,
+   "aspect": 1.0519,
+   "source": "storyboard",
+   "magnification": 2.32
+  },
+  {
+   "n": 4,
+   "file": "scenes/scene-04.jpg",
+   "srcW": 408,
+   "srcH": 407,
+   "aspect": 1.0025,
+   "source": "storyboard",
+   "magnification": 2.3
+  },
+  {
+   "n": 5,
+   "file": "scenes/scene-05.jpg",
+   "srcW": 401,
+   "srcH": 407,
+   "aspect": 0.9853,
+   "source": "storyboard",
+   "magnification": 2.34
+  },
+  {
+   "n": 6,
+   "file": "scenes/scene-06.jpg",
+   "srcW": 405,
+   "srcH": 407,
+   "aspect": 0.9951,
+   "source": "storyboard",
+   "magnification": 2.32
+  },
+  {
+   "n": 7,
+   "file": "scenes/scene-07.jpg",
+   "srcW": 408,
+   "srcH": 427,
+   "aspect": 0.9555,
+   "source": "storyboard",
+   "magnification": 2.3
+  },
+  {
+   "n": 8,
+   "file": "scenes/scene-08.jpg",
+   "srcW": 401,
+   "srcH": 427,
+   "aspect": 0.9391,
+   "source": "storyboard",
+   "magnification": 2.34
+  },
+  {
+   "n": 9,
+   "file": "scenes/scene-09.jpg",
+   "srcW": 405,
+   "srcH": 427,
+   "aspect": 0.9485,
+   "source": "storyboard",
+   "magnification": 2.32
+  }
+ ]
+}
