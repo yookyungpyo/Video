@@ -1,0 +1,341 @@
+{
+ "fps": 30,
+ "totalFrames": 1721,
+ "targetFrames": 1350,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "naturalNarrationSeconds": 68.2,
+ "overflowSeconds": 12.37,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 159,
+   "voice": true,
+   "voiceEnd": 141,
+   "chunks": [
+    {
+     "start": 9,
+     "end": 94,
+     "text": "모든 사람에게\n{좋은 사람}으로 남으면서,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    },
+    {
+     "start": 94,
+     "end": 159,
+     "text": "{좋은 리더}가 될 수 있을까요?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 159,
+   "to": 363,
+   "voice": true,
+   "voiceEnd": 351,
+   "chunks": [
+    {
+     "start": 168,
+     "end": 210,
+     "text": "어렵습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 210,
+     "end": 296,
+     "text": "리더는 모두에게\n{사랑받는 사람}이 아니라,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    },
+    {
+     "start": 296,
+     "end": 363,
+     "text": "{해야 할 일}을 하는 사람이니까요.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 363,
+   "to": 526,
+   "voice": true,
+   "voiceEnd": 514,
+   "chunks": [
+    {
+     "start": 372,
+     "end": 428,
+     "text": "누군가의 잘못을 보고도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 428,
+     "end": 476,
+     "text": "관계가 불편해질까 봐,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 476,
+     "end": 526,
+     "text": "{모른 척한 적 있습니까?}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 526,
+   "to": 663,
+   "voice": true,
+   "voiceEnd": 651,
+   "chunks": [
+    {
+     "start": 535,
+     "end": 582,
+     "text": "{해야 할 말을 삼키고,}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 582,
+     "end": 663,
+     "text": "잘못된 결정에도\n고개를 끄덕입니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 663,
+   "to": 836,
+   "voice": true,
+   "voiceEnd": 824,
+   "chunks": [
+    {
+     "start": 672,
+     "end": 773,
+     "text": "그 순간 한 사람과의 관계는\n지켰을지 몰라도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    },
+    {
+     "start": 773,
+     "end": 836,
+     "text": "{팀의 기준은 무너집니다.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 836,
+   "to": 1066,
+   "voice": true,
+   "voiceEnd": 1042,
+   "chunks": [
+    {
+     "start": 845,
+     "end": 898,
+     "text": "싫은 소리를 하지 않는 건,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 898,
+     "end": 956,
+     "text": "{배려가 아닐 수 있습니다.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 956,
+     "end": 975,
+     "text": "그저,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 975,
+     "end": 1066,
+     "text": "{내가 미움받기 싫은 것}일 수도 있습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1066,
+   "to": 1368,
+   "voice": true,
+   "voiceEnd": 1356,
+   "chunks": [
+    {
+     "start": 1075,
+     "end": 1153,
+     "text": "{틀린 건 틀렸다}고 말하세요.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1153,
+     "end": 1185,
+     "text": "불편하더라도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1185,
+     "end": 1247,
+     "text": "필요한 이야기는 해야 합니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1247,
+     "end": 1318,
+     "text": "단, 사람을 공격하지 말고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1318,
+     "end": 1368,
+     "text": "{문제를 이야기하세요.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1368,
+   "to": 1721,
+   "voice": true,
+   "voiceEnd": 1676,
+   "chunks": [
+    {
+     "start": 1377,
+     "end": 1489,
+     "text": "모든 사람에게\n좋은 사람일 필요는 없습니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    },
+    {
+     "start": 1489,
+     "end": 1550,
+     "text": "남에게 싫은 소리 하기 싫다면,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1550,
+     "end": 1590,
+     "text": "{혼자 일하세요.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 1
+    },
+    {
+     "start": 1590,
+     "end": 1721,
+     "text": "함께 일한다면,\n{해야 할 말은 해야 합니다.}",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 60,
+     "lines": 2
+    }
+   ]
+  }
+ ]
+}

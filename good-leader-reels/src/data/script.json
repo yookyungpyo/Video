@@ -1,0 +1,43 @@
+{
+  "title": "좋은 사람과 좋은 리더는 다르다",
+  "targetFrames": 1350,
+  "readingRate": 5.0,
+  "tailHold": 1.5,
+  "music": "auto",
+  "voiceNote": "내레이션: ElevenLabs eleven_v4 · Minho - Deep & Trustworthy Narrator. assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+  "scenes": [
+    {"n": 1, "title": "질문형 후킹", "window": [0, 5], "tail": 0.6, "chunks": [
+      {"text": "모든 사람에게\n{좋은 사람}으로 남으면서,"},
+      {"text": "{좋은 리더}가 될 수 있을까요?"}]},
+    {"n": 2, "title": "결론", "window": [5, 10], "chunks": [
+      {"text": "어렵습니다."},
+      {"text": "리더는 모두에게\n{사랑받는 사람}이 아니라,"},
+      {"text": "{해야 할 일}을 하는 사람이니까요."}]},
+    {"n": 3, "title": "공감", "window": [10, 15], "chunks": [
+      {"text": "누군가의 잘못을 보고도,"},
+      {"text": "관계가 불편해질까 봐,"},
+      {"text": "{모른 척한 적 있습니까?}"}]},
+    {"n": 4, "title": "문제", "window": [15, 19], "chunks": [
+      {"text": "{해야 할 말을 삼키고,}"},
+      {"text": "잘못된 결정에도\n고개를 끄덕입니다."}]},
+    {"n": 5, "title": "결과", "window": [19, 24], "chunks": [
+      {"text": "그 순간 한 사람과의 관계는\n지켰을지 몰라도,"},
+      {"text": "{팀의 기준은 무너집니다.}"}]},
+    {"n": 6, "title": "심리적 반전", "window": [24, 31], "tail": 0.8, "chunks": [
+      {"text": "싫은 소리를 하지 않는 건,"},
+      {"text": "{배려가 아닐 수 있습니다.}"},
+      {"text": "그저,"},
+      {"text": "{내가 미움받기 싫은 것}일 수도 있습니다."}]},
+    {"n": 7, "title": "행동", "window": [31, 37], "chunks": [
+      {"text": "{틀린 건 틀렸다}고 말하세요."},
+      {"text": "불편하더라도,"},
+      {"text": "필요한 이야기는 해야 합니다."},
+      {"text": "단, 사람을 공격하지 말고,"},
+      {"text": "{문제를 이야기하세요.}"}]},
+    {"n": 8, "title": "엔딩", "window": [37, 45], "chunks": [
+      {"text": "모든 사람에게\n좋은 사람일 필요는 없습니다."},
+      {"text": "남에게 싫은 소리 하기 싫다면,"},
+      {"text": "{혼자 일하세요.}"},
+      {"text": "함께 일한다면,\n{해야 할 말은 해야 합니다.}"}]}
+  ]
+}
