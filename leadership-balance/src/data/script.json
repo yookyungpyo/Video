@@ -1,0 +1,29 @@
+{
+ "title": "리더는 그 중간 어디쯤",
+ "targetFrames": 1560,
+ "readingRate": 5.0,
+ "tailHold": 2.4,
+ "music": "auto",
+ "subtitles": false,
+ "voiceNote": "내레이션: ElevenLabs eleven_v4 · Minho - Deep & Trustworthy Narrator. assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+ "scenes": [
+  { "n": 1, "title": "후킹", "window": [0, 5], "chunks": [
+    { "text": "리더는" }, { "text": "조직 중심이어야 할까?" }, { "text": "사람 중심이어야 할까?" } ] },
+  { "n": 2, "title": "현실", "window": [5, 10], "chunks": [
+    { "text": "조직의 성과를 생각하면," }, { "text": "때로는 냉정한 결정을" }, { "text": "내려야 한다." } ] },
+  { "n": 3, "title": "갈등", "window": [10, 15], "chunks": [
+    { "text": "하지만 그 결정이," }, { "text": "누군가에게는 상처가" }, { "text": "될 수도 있다." } ] },
+  { "n": 4, "title": "반대편", "window": [15, 21], "chunks": [
+    { "text": "그렇다고 사람만 생각하다 보면," }, { "text": "조직이 지켜야 할 원칙과 목표가," }, { "text": "흔들릴 수도 있다." } ] },
+  { "n": 5, "title": "고민", "window": [21, 27], "tail": 0.7, "chunks": [
+    { "text": "그래서 늘 어렵다." }, { "text": "어디까지 이해해야 하고," }, { "text": "어디서부터 원칙을 지켜야 할까." } ] },
+  { "n": 6, "title": "깨달음", "window": [27, 32], "chunks": [
+    { "text": "어쩌면 리더십에는," }, { "text": "정해진 중심이 없는지도 모른다." } ] },
+  { "n": 7, "title": "통찰", "window": [32, 38], "chunks": [
+    { "text": "어떤 순간에는 조직을 위해 단호해야 하고," }, { "text": "어떤 순간에는 사람을 위해 한 걸음 물러서야 한다." } ] },
+  { "n": 8, "title": "철학", "window": [38, 44], "chunks": [
+    { "text": "중요한 건," }, { "text": "어느 한쪽을 선택하는 게 아니라," }, { "text": "그때마다 무엇이 더 중요한지," }, { "text": "판단하는 일이다." } ] },
+  { "n": 9, "title": "결론", "window": [44, 52], "chunks": [
+    { "text": "리더는 조직과 사람 사이," }, { "text": "그 중간 어디쯤에서," }, { "text": "끊임없이 균형을 찾아가는 사람이다." }, { "text": "그 균형에는 정답이 없기에," }, { "text": "늘 어렵다." } ] }
+ ]
+}

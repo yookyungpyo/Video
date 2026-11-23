@@ -1,0 +1,48 @@
+{
+ "_": "On-screen typography. x/y = screen px of the block (x: left edge, centre or right edge according to align; y: top). size = px of the line (bold key words); serif parts inside a bold line may set their own size. at = [narration phrase of the scene, how far into it 0–1]; out (optional) = when the line leaves, same form — default: the end of the scene. scrim = the soft black gradient under the block.",
+ "blocks": [
+  { "scene": 1, "place": "하단 왼쪽", "x": 90, "y": 1270, "align": "left", "scrim": {"side": "bottom", "h": 430, "strength": 0.78}, "lines": [
+    {"size": 48, "at": [0, 0], "parts": [{"t": "리더는"}]},
+    {"size": 88, "at": [1, 0], "parts": [{"t": "조직 중심?", "k": "bold"}]},
+    {"size": 88, "at": [2, 0], "parts": [{"t": "사람 중심?", "k": "bold"}]} ] },
+  { "scene": 2, "place": "하단 왼쪽", "x": 90, "y": 1322, "align": "left", "scrim": {"side": "bottom", "h": 400, "strength": 0.72}, "lines": [
+    {"size": 46, "at": [0, 0], "parts": [{"t": "조직의 성과를 생각하면"}]},
+    {"size": 82, "at": [1, 0.3], "parts": [{"t": "냉정한 결정", "k": "bold"}, {"t": "을", "size": 48}]},
+    {"size": 46, "at": [2, 0], "parts": [{"t": "내려야 한다."}]} ] },
+  { "scene": 3, "place": "하단 왼쪽", "x": 90, "y": 1322, "align": "left", "scrim": {"side": "bottom", "h": 400, "strength": 0.78}, "lines": [
+    {"size": 46, "at": [0, 0], "parts": [{"t": "하지만 그 결정이"}]},
+    {"size": 76, "at": [1, 0], "parts": [{"t": "누군가에게는 상처", "k": "bold"}, {"t": "가", "size": 48}]},
+    {"size": 46, "at": [1, 0.74], "parts": [{"t": "될 수도 있다."}]} ] },
+  { "scene": 4, "place": "하단 중앙", "x": 510, "y": 1328, "align": "center", "scrim": {"side": "bottom", "h": 440, "strength": 0.85}, "lines": [
+    {"size": 46, "at": [0, 0.2], "parts": [{"t": "사람만 생각하다 보면"}]},
+    {"size": 80, "at": [1, 0.45], "parts": [{"t": "원칙과 목표", "k": "bold"}, {"t": "가", "size": 48}]},
+    {"size": 46, "at": [2, 0], "parts": [{"t": "흔들릴 수도 있다."}]} ] },
+  { "scene": 5, "place": "중하단 왼쪽 (왼쪽 저울 아래)", "x": 318, "y": 1292, "align": "center", "scrim": {"side": "bottom", "h": 400, "strength": 0.66}, "lines": [
+    {"size": 44, "at": [1, 0], "parts": [{"t": "어디까지"}]},
+    {"size": 72, "at": [1, 0.35], "parts": [{"t": "이해", "k": "bold"}, {"t": "하고", "size": 46}]} ] },
+  { "scene": 5, "place": "중하단 오른쪽 (오른쪽 저울 아래)", "x": 772, "y": 1292, "align": "center", "lines": [
+    {"size": 44, "at": [2, 0], "parts": [{"t": "어디서부터"}]},
+    {"size": 72, "at": [2, 0.3], "parts": [{"t": "원칙", "k": "bold"}, {"t": "을", "size": 46}]},
+    {"size": 44, "at": [2, 0.6], "parts": [{"t": "지킬까"}]} ] },
+  { "scene": 6, "place": "상단 중앙", "x": 500, "y": 408, "align": "center", "scrim": {"side": "top", "h": 330, "strength": 0.82}, "lines": [
+    {"size": 48, "at": [0, 0], "parts": [{"t": "어쩌면 리더십에는"}]},
+    {"size": 76, "at": [1, 0.08], "parts": [{"t": "정해진 중심은 없다", "k": "bold"}]} ] },
+  { "scene": 7, "place": "하단 왼쪽 (조직 쪽)", "x": 90, "y": 1300, "align": "left", "scrim": {"side": "bottom", "h": 420, "strength": 0.78}, "lines": [
+    {"size": 44, "at": [0, 0.46], "out": [1, 0.1], "parts": [{"t": "때로는"}]},
+    {"size": 76, "at": [0, 0.6], "out": [1, 0.1], "parts": [{"t": "단호하게", "k": "bold"}]} ] },
+  { "scene": 7, "place": "하단 오른쪽 (사람 쪽)", "x": 930, "y": 1290, "align": "right", "lines": [
+    {"size": 44, "at": [1, 0.4], "parts": [{"t": "때로는"}]},
+    {"size": 62, "at": [1, 0.54], "parts": [{"t": "한 걸음", "k": "bold"}]},
+    {"size": 62, "at": [1, 0.66], "parts": [{"t": "물러서서", "k": "bold"}]} ] },
+  { "scene": 8, "place": "하단 중앙", "x": 510, "y": 1328, "align": "center", "scrim": {"side": "bottom", "h": 440, "strength": 0.85}, "lines": [
+    {"size": 44, "at": [0, 0], "out": [1, 0], "parts": [{"t": "중요한 건"}]} ] },
+  { "scene": 8, "place": "하단 중앙", "x": 510, "y": 1328, "align": "center", "lines": [
+    {"size": 44, "at": [1, 0.05], "parts": [{"t": "어느 한쪽을 선택하는 게 아니라"}]},
+    {"size": 62, "at": [2, 0.3], "parts": [{"t": "무엇이 더 중요한지", "k": "bold"}]},
+    {"size": 62, "at": [3, 0], "parts": [{"t": "판단하는 일", "k": "bold"}]} ] },
+  { "scene": 9, "place": "하단 중앙 (엔딩)", "x": 510, "y": 1296, "align": "center", "scrim": {"side": "bottom", "h": 480, "strength": 0.88}, "lines": [
+    {"size": 70, "at": [1, 0], "parts": [{"t": "리더는 그 중간 어디쯤", "k": "bold"}]},
+    {"size": 48, "at": [3, 0], "gap": 16, "parts": [{"t": "그 균형에는 정답이 없기에"}]},
+    {"size": 56, "at": [4, 0], "parts": [{"t": "늘 어렵다.", "k": "bold"}]} ] }
+ ]
+}

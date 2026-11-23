@@ -1,0 +1,86 @@
+{
+ "storyboard": "assets/leadership-storyboard.png",
+ "scenes": [
+  {
+   "n": 1,
+   "file": "scenes/scene-01.jpg",
+   "srcW": 384,
+   "srcH": 421,
+   "aspect": 0.9121,
+   "source": "storyboard",
+   "magnification": 2.81
+  },
+  {
+   "n": 2,
+   "file": "scenes/scene-02.jpg",
+   "srcW": 383,
+   "srcH": 421,
+   "aspect": 0.9097,
+   "source": "storyboard",
+   "magnification": 2.82
+  },
+  {
+   "n": 3,
+   "file": "scenes/scene-03.jpg",
+   "srcW": 385,
+   "srcH": 421,
+   "aspect": 0.9145,
+   "source": "storyboard",
+   "magnification": 2.81
+  },
+  {
+   "n": 4,
+   "file": "scenes/scene-04.jpg",
+   "srcW": 384,
+   "srcH": 420,
+   "aspect": 0.9143,
+   "source": "storyboard",
+   "magnification": 2.81
+  },
+  {
+   "n": 5,
+   "file": "scenes/scene-05.jpg",
+   "srcW": 383,
+   "srcH": 420,
+   "aspect": 0.9119,
+   "source": "storyboard",
+   "magnification": 2.82
+  },
+  {
+   "n": 6,
+   "file": "scenes/scene-06.jpg",
+   "srcW": 385,
+   "srcH": 420,
+   "aspect": 0.9167,
+   "source": "storyboard",
+   "magnification": 2.81
+  },
+  {
+   "n": 7,
+   "file": "scenes/scene-07.jpg",
+   "srcW": 384,
+   "srcH": 425,
+   "aspect": 0.9035,
+   "source": "storyboard",
+   "magnification": 2.81
+  },
+  {
+   "n": 8,
+   "file": "scenes/scene-08.jpg",
+   "srcW": 383,
+   "srcH": 425,
+   "aspect": 0.9012,
+   "source": "storyboard",
+   "magnification": 2.82
+  },
+  {
+   "n": 9,
+   "file": "scenes/scene-09.jpg",
+   "srcW": 385,
+   "srcH": 425,
+   "aspect": 0.9059,
+   "source": "storyboard",
+   "magnification": 2.81
+  }
+ ]
+}

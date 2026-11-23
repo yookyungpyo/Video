@@ -1,0 +1,534 @@
+{
+ "title": "리더는 그 중간 어디쯤",
+ "fps": 30,
+ "totalFrames": 1750,
+ "totalSeconds": 58.33,
+ "scenes": [
+  {
+   "scene": 1,
+   "start": 0,
+   "end": 4.6,
+   "voiceEnd": 4.17,
+   "narration": [
+    {
+     "start": 0.27,
+     "text": "리더는"
+    },
+    {
+     "start": 0.83,
+     "text": "조직 중심이어야 할까?"
+    },
+    {
+     "start": 2.7,
+     "text": "사람 중심이어야 할까?"
+    }
+   ]
+  },
+  {
+   "scene": 2,
+   "start": 4.6,
+   "end": 9.33,
+   "voiceEnd": 8.87,
+   "narration": [
+    {
+     "start": 4.87,
+     "text": "조직의 성과를 생각하면,"
+    },
+    {
+     "start": 6.7,
+     "text": "때로는 냉정한 결정을"
+    },
+    {
+     "start": 8.03,
+     "text": "내려야 한다."
+    }
+   ]
+  },
+  {
+   "scene": 3,
+   "start": 9.33,
+   "end": 13.77,
+   "voiceEnd": 13.3,
+   "narration": [
+    {
+     "start": 9.6,
+     "text": "하지만 그 결정이,"
+    },
+    {
+     "start": 11.2,
+     "text": "누군가에게는 상처가"
+    },
+    {
+     "start": 13.13,
+     "text": "될 수도 있다."
+    }
+   ]
+  },
+  {
+   "scene": 4,
+   "start": 13.77,
+   "end": 20.17,
+   "voiceEnd": 19.7,
+   "narration": [
+    {
+     "start": 14.03,
+     "text": "그렇다고 사람만 생각하다 보면,"
+    },
+    {
+     "start": 16.3,
+     "text": "조직이 지켜야 할 원칙과 목표가,"
+    },
+    {
+     "start": 18.73,
+     "text": "흔들릴 수도 있다."
+    }
+   ]
+  },
+  {
+   "scene": 5,
+   "start": 20.17,
+   "end": 27.17,
+   "voiceEnd": 26.47,
+   "narration": [
+    {
+     "start": 20.43,
+     "text": "그래서 늘 어렵다."
+    },
+    {
+     "start": 22.7,
+     "text": "어디까지 이해해야 하고,"
+    },
+    {
+     "start": 24.5,
+     "text": "어디서부터 원칙을 지켜야 할까."
+    }
+   ]
+  },
+  {
+   "scene": 6,
+   "start": 27.17,
+   "end": 31.63,
+   "voiceEnd": 31.17,
+   "narration": [
+    {
+     "start": 27.43,
+     "text": "어쩌면 리더십에는,"
+    },
+    {
+     "start": 29.13,
+     "text": "정해진 중심이 없는지도 모른다."
+    }
+   ]
+  },
+  {
+   "scene": 7,
+   "start": 31.63,
+   "end": 38.93,
+   "voiceEnd": 38.5,
+   "narration": [
+    {
+     "start": 31.9,
+     "text": "어떤 순간에는 조직을 위해 단호해야 하고,"
+    },
+    {
+     "start": 35.13,
+     "text": "어떤 순간에는 사람을 위해 한 걸음 물러서야 한다."
+    }
+   ]
+  },
+  {
+   "scene": 8,
+   "start": 38.93,
+   "end": 45.93,
+   "voiceEnd": 45.5,
+   "narration": [
+    {
+     "start": 39.23,
+     "text": "중요한 건,"
+    },
+    {
+     "start": 40.17,
+     "text": "어느 한쪽을 선택하는 게 아니라,"
+    },
+    {
+     "start": 42.3,
+     "text": "그때마다 무엇이 더 중요한지,"
+    },
+    {
+     "start": 44.57,
+     "text": "판단하는 일이다."
+    }
+   ]
+  },
+  {
+   "scene": 9,
+   "start": 45.93,
+   "end": 58.33,
+   "voiceEnd": 55.93,
+   "narration": [
+    {
+     "start": 46.23,
+     "text": "리더는 조직과 사람 사이,"
+    },
+    {
+     "start": 48.53,
+     "text": "그 중간 어디쯤에서,"
+    },
+    {
+     "start": 50.13,
+     "text": "끊임없이 균형을 찾아가는 사람이다."
+    },
+    {
+     "start": 52.8,
+     "text": "그 균형에는 정답이 없기에,"
+    },
+    {
+     "start": 55,
+     "text": "늘 어렵다."
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "scene": 1,
+   "text": "리더는",
+   "emphasis": [],
+   "position": "하단 왼쪽",
+   "start": 0.27,
+   "end": 4.53,
+   "startFrame": 8,
+   "endFrame": 136
+  },
+  {
+   "scene": 1,
+   "text": "조직 중심?",
+   "emphasis": [
+    "조직 중심?"
+   ],
+   "position": "하단 왼쪽",
+   "start": 0.83,
+   "end": 4.53,
+   "startFrame": 25,
+   "endFrame": 136
+  },
+  {
+   "scene": 1,
+   "text": "사람 중심?",
+   "emphasis": [
+    "사람 중심?"
+   ],
+   "position": "하단 왼쪽",
+   "start": 2.7,
+   "end": 4.53,
+   "startFrame": 81,
+   "endFrame": 136
+  },
+  {
+   "scene": 2,
+   "text": "조직의 성과를 생각하면",
+   "emphasis": [],
+   "position": "하단 왼쪽",
+   "start": 4.87,
+   "end": 9.27,
+   "startFrame": 146,
+   "endFrame": 278
+  },
+  {
+   "scene": 2,
+   "text": "냉정한 결정을",
+   "emphasis": [
+    "냉정한 결정"
+   ],
+   "position": "하단 왼쪽",
+   "start": 7.1,
+   "end": 9.27,
+   "startFrame": 213,
+   "endFrame": 278
+  },
+  {
+   "scene": 2,
+   "text": "내려야 한다.",
+   "emphasis": [],
+   "position": "하단 왼쪽",
+   "start": 8.03,
+   "end": 9.27,
+   "startFrame": 241,
+   "endFrame": 278
+  },
+  {
+   "scene": 3,
+   "text": "하지만 그 결정이",
+   "emphasis": [],
+   "position": "하단 왼쪽",
+   "start": 9.6,
+   "end": 13.7,
+   "startFrame": 288,
+   "endFrame": 411
+  },
+  {
+   "scene": 3,
+   "text": "누군가에게는 상처가",
+   "emphasis": [
+    "누군가에게는 상처"
+   ],
+   "position": "하단 왼쪽",
+   "start": 11.2,
+   "end": 13.7,
+   "startFrame": 336,
+   "endFrame": 411
+  },
+  {
+   "scene": 3,
+   "text": "될 수도 있다.",
+   "emphasis": [],
+   "position": "하단 왼쪽",
+   "start": 12.63,
+   "end": 13.7,
+   "startFrame": 379,
+   "endFrame": 411
+  },
+  {
+   "scene": 4,
+   "text": "사람만 생각하다 보면",
+   "emphasis": [],
+   "position": "하단 중앙",
+   "start": 14.5,
+   "end": 20.1,
+   "startFrame": 435,
+   "endFrame": 603
+  },
+  {
+   "scene": 4,
+   "text": "원칙과 목표가",
+   "emphasis": [
+    "원칙과 목표"
+   ],
+   "position": "하단 중앙",
+   "start": 17.4,
+   "end": 20.1,
+   "startFrame": 522,
+   "endFrame": 603
+  },
+  {
+   "scene": 4,
+   "text": "흔들릴 수도 있다.",
+   "emphasis": [],
+   "position": "하단 중앙",
+   "start": 18.73,
+   "end": 20.1,
+   "startFrame": 562,
+   "endFrame": 603
+  },
+  {
+   "scene": 5,
+   "text": "어디까지",
+   "emphasis": [],
+   "position": "중하단 왼쪽 (왼쪽 저울 아래)",
+   "start": 22.7,
+   "end": 27.1,
+   "startFrame": 681,
+   "endFrame": 813
+  },
+  {
+   "scene": 5,
+   "text": "이해하고",
+   "emphasis": [
+    "이해"
+   ],
+   "position": "중하단 왼쪽 (왼쪽 저울 아래)",
+   "start": 23.33,
+   "end": 27.1,
+   "startFrame": 700,
+   "endFrame": 813
+  },
+  {
+   "scene": 5,
+   "text": "어디서부터",
+   "emphasis": [],
+   "position": "중하단 오른쪽 (오른쪽 저울 아래)",
+   "start": 24.5,
+   "end": 27.1,
+   "startFrame": 735,
+   "endFrame": 813
+  },
+  {
+   "scene": 5,
+   "text": "원칙을",
+   "emphasis": [
+    "원칙"
+   ],
+   "position": "중하단 오른쪽 (오른쪽 저울 아래)",
+   "start": 25.1,
+   "end": 27.1,
+   "startFrame": 753,
+   "endFrame": 813
+  },
+  {
+   "scene": 5,
+   "text": "지킬까",
+   "emphasis": [],
+   "position": "중하단 오른쪽 (오른쪽 저울 아래)",
+   "start": 25.67,
+   "end": 27.1,
+   "startFrame": 770,
+   "endFrame": 813
+  },
+  {
+   "scene": 6,
+   "text": "어쩌면 리더십에는",
+   "emphasis": [],
+   "position": "상단 중앙",
+   "start": 27.43,
+   "end": 31.57,
+   "startFrame": 823,
+   "endFrame": 947
+  },
+  {
+   "scene": 6,
+   "text": "정해진 중심은 없다",
+   "emphasis": [
+    "정해진 중심은 없다"
+   ],
+   "position": "상단 중앙",
+   "start": 29.3,
+   "end": 31.57,
+   "startFrame": 879,
+   "endFrame": 947
+  },
+  {
+   "scene": 7,
+   "text": "때로는",
+   "emphasis": [],
+   "position": "하단 왼쪽 (조직 쪽)",
+   "start": 33.4,
+   "end": 35.47,
+   "startFrame": 1002,
+   "endFrame": 1064
+  },
+  {
+   "scene": 7,
+   "text": "단호하게",
+   "emphasis": [
+    "단호하게"
+   ],
+   "position": "하단 왼쪽 (조직 쪽)",
+   "start": 33.83,
+   "end": 35.47,
+   "startFrame": 1015,
+   "endFrame": 1064
+  },
+  {
+   "scene": 7,
+   "text": "때로는",
+   "emphasis": [],
+   "position": "하단 오른쪽 (사람 쪽)",
+   "start": 36.47,
+   "end": 38.87,
+   "startFrame": 1094,
+   "endFrame": 1166
+  },
+  {
+   "scene": 7,
+   "text": "한 걸음",
+   "emphasis": [
+    "한 걸음"
+   ],
+   "position": "하단 오른쪽 (사람 쪽)",
+   "start": 36.97,
+   "end": 38.87,
+   "startFrame": 1109,
+   "endFrame": 1166
+  },
+  {
+   "scene": 7,
+   "text": "물러서서",
+   "emphasis": [
+    "물러서서"
+   ],
+   "position": "하단 오른쪽 (사람 쪽)",
+   "start": 37.37,
+   "end": 38.87,
+   "startFrame": 1121,
+   "endFrame": 1166
+  },
+  {
+   "scene": 8,
+   "text": "중요한 건",
+   "emphasis": [],
+   "position": "하단 중앙",
+   "start": 39.23,
+   "end": 40.17,
+   "startFrame": 1177,
+   "endFrame": 1205
+  },
+  {
+   "scene": 8,
+   "text": "어느 한쪽을 선택하는 게 아니라",
+   "emphasis": [],
+   "position": "하단 중앙",
+   "start": 40.27,
+   "end": 45.87,
+   "startFrame": 1208,
+   "endFrame": 1376
+  },
+  {
+   "scene": 8,
+   "text": "무엇이 더 중요한지",
+   "emphasis": [
+    "무엇이 더 중요한지"
+   ],
+   "position": "하단 중앙",
+   "start": 42.97,
+   "end": 45.87,
+   "startFrame": 1289,
+   "endFrame": 1376
+  },
+  {
+   "scene": 8,
+   "text": "판단하는 일",
+   "emphasis": [
+    "판단하는 일"
+   ],
+   "position": "하단 중앙",
+   "start": 44.57,
+   "end": 45.87,
+   "startFrame": 1337,
+   "endFrame": 1376
+  },
+  {
+   "scene": 9,
+   "text": "리더는 그 중간 어디쯤",
+   "emphasis": [
+    "리더는 그 중간 어디쯤"
+   ],
+   "position": "하단 중앙 (엔딩)",
+   "start": 48.53,
+   "end": 58.33,
+   "startFrame": 1456,
+   "endFrame": 1750
+  },
+  {
+   "scene": 9,
+   "text": "그 균형에는 정답이 없기에",
+   "emphasis": [],
+   "position": "하단 중앙 (엔딩)",
+   "start": 52.8,
+   "end": 58.33,
+   "startFrame": 1584,
+   "endFrame": 1750
+  },
+  {
+   "scene": 9,
+   "text": "늘 어렵다.",
+   "emphasis": [
+    "늘 어렵다."
+   ],
+   "position": "하단 중앙 (엔딩)",
+   "start": 55,
+   "end": 58.33,
+   "startFrame": 1650,
+   "endFrame": 1750
+  }
+ ]
+}

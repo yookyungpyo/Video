@@ -1,0 +1,381 @@
+{
+ "fps": 30,
+ "totalFrames": 1750,
+ "targetFrames": 1560,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "naturalNarrationSeconds": 68.2,
+ "overflowSeconds": 6.33,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 138,
+   "voice": true,
+   "voiceEnd": 125,
+   "chunks": [
+    {
+     "start": 8,
+     "end": 25,
+     "text": "리더는",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 25,
+     "end": 81,
+     "text": "조직 중심이어야 할까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 81,
+     "end": 138,
+     "text": "사람 중심이어야 할까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 138,
+   "to": 280,
+   "voice": true,
+   "voiceEnd": 266,
+   "chunks": [
+    {
+     "start": 146,
+     "end": 201,
+     "text": "조직의 성과를 생각하면,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 201,
+     "end": 241,
+     "text": "때로는 냉정한 결정을",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 241,
+     "end": 280,
+     "text": "내려야 한다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 280,
+   "to": 413,
+   "voice": true,
+   "voiceEnd": 399,
+   "chunks": [
+    {
+     "start": 288,
+     "end": 336,
+     "text": "하지만 그 결정이,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 336,
+     "end": 394,
+     "text": "누군가에게는 상처가",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 394,
+     "end": 413,
+     "text": "될 수도 있다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 413,
+   "to": 605,
+   "voice": true,
+   "voiceEnd": 591,
+   "chunks": [
+    {
+     "start": 421,
+     "end": 489,
+     "text": "그렇다고 사람만 생각하다 보면,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 489,
+     "end": 562,
+     "text": "조직이 지켜야 할 원칙과 목표가,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 562,
+     "end": 605,
+     "text": "흔들릴 수도 있다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 605,
+   "to": 815,
+   "voice": true,
+   "voiceEnd": 794,
+   "chunks": [
+    {
+     "start": 613,
+     "end": 681,
+     "text": "그래서 늘 어렵다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 681,
+     "end": 735,
+     "text": "어디까지 이해해야 하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 735,
+     "end": 815,
+     "text": "어디서부터 원칙을 지켜야 할까.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 815,
+   "to": 949,
+   "voice": true,
+   "voiceEnd": 935,
+   "chunks": [
+    {
+     "start": 823,
+     "end": 874,
+     "text": "어쩌면 리더십에는,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 874,
+     "end": 949,
+     "text": "정해진 중심이 없는지도 모른다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 949,
+   "to": 1168,
+   "voice": true,
+   "voiceEnd": 1155,
+   "chunks": [
+    {
+     "start": 957,
+     "end": 1054,
+     "text": "어떤 순간에는 조직을 위해 단호해야 하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 48,
+     "lines": 1
+    },
+    {
+     "start": 1054,
+     "end": 1168,
+     "text": "어떤 순간에는 사람을 위해 한 걸음 물러서야 한다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1168,
+   "to": 1378,
+   "voice": true,
+   "voiceEnd": 1365,
+   "chunks": [
+    {
+     "start": 1177,
+     "end": 1205,
+     "text": "중요한 건,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1205,
+     "end": 1269,
+     "text": "어느 한쪽을 선택하는 게 아니라,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1269,
+     "end": 1337,
+     "text": "그때마다 무엇이 더 중요한지,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1337,
+     "end": 1378,
+     "text": "판단하는 일이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "from": 1378,
+   "to": 1750,
+   "voice": true,
+   "voiceEnd": 1678,
+   "chunks": [
+    {
+     "start": 1387,
+     "end": 1456,
+     "text": "리더는 조직과 사람 사이,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1456,
+     "end": 1504,
+     "text": "그 중간 어디쯤에서,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1504,
+     "end": 1584,
+     "text": "끊임없이 균형을 찾아가는 사람이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1584,
+     "end": 1650,
+     "text": "그 균형에는 정답이 없기에,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1650,
+     "end": 1750,
+     "text": "늘 어렵다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  }
+ ]
+}
