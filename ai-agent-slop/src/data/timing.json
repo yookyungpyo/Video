@@ -1,0 +1,431 @@
+{
+ "fps": 30,
+ "totalFrames": 1892,
+ "targetFrames": 1650,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "naturalNarrationSeconds": 76.6,
+ "overflowSeconds": 8.07,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 161,
+   "voice": true,
+   "voiceEnd": 146,
+   "chunks": [
+    {
+     "start": 6,
+     "end": 35,
+     "text": "AI 에이전트 100개로",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 35,
+     "end": 100,
+     "text": "회사를 만들었다고?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 100,
+     "end": 161,
+     "text": "정말 그 회사가 돌아갈까?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 161,
+   "to": 398,
+   "voice": true,
+   "voiceEnd": 388,
+   "chunks": [
+    {
+     "start": 167,
+     "end": 229,
+     "text": "요즘 매일 쏟아진다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 229,
+     "end": 309,
+     "text": "AI 에이전트로 회사를 만들었다느니,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 309,
+     "end": 398,
+     "text": "멀티 에이전트 100개로 조직을 운영한다느니.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 44,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 398,
+   "to": 555,
+   "voice": true,
+   "voiceEnd": 538,
+   "chunks": [
+    {
+     "start": 404,
+     "end": 455,
+     "text": "그런데 묻고 싶다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 455,
+     "end": 502,
+     "text": "그래서 실제로,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 502,
+     "end": 555,
+     "text": "무슨 일을 끝냈는데?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 555,
+   "to": 716,
+   "voice": true,
+   "voiceEnd": 707,
+   "chunks": [
+    {
+     "start": 561,
+     "end": 634,
+     "text": "화면에서는 에이전트들이 회의하고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 634,
+     "end": 668,
+     "text": "역할을 나누고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 668,
+     "end": 716,
+     "text": "서로 일을 주고받는다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 716,
+   "to": 860,
+   "voice": true,
+   "voiceEnd": 850,
+   "chunks": [
+    {
+     "start": 722,
+     "end": 755,
+     "text": "하지만 그건,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 755,
+     "end": 789,
+     "text": "조직이 일하는 모습을",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 789,
+     "end": 860,
+     "text": "흉내 내는 것에 불과할 수도 있다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 860,
+   "to": 1098,
+   "voice": true,
+   "voiceEnd": 1088,
+   "chunks": [
+    {
+     "start": 866,
+     "end": 926,
+     "text": "실제 업무는 다르다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 926,
+     "end": 977,
+     "text": "고객의 요구는 바뀌고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 977,
+     "end": 1039,
+     "text": "예상하지 못한 문제가 생기고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1039,
+     "end": 1098,
+     "text": "결과물에는 책임이 따른다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1098,
+   "to": 1337,
+   "voice": true,
+   "voiceEnd": 1327,
+   "chunks": [
+    {
+     "start": 1104,
+     "end": 1178,
+     "text": "그럴듯한 보고서와 코드가 나왔다고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1178,
+     "end": 1215,
+     "text": "끝이 아니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1215,
+     "end": 1262,
+     "text": "실제로 쓸 수 있는지,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1262,
+     "end": 1337,
+     "text": "사람이 다시 확인하고 고쳐야 한다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1337,
+   "to": 1574,
+   "voice": true,
+   "voiceEnd": 1564,
+   "chunks": [
+    {
+     "start": 1343,
+     "end": 1372,
+     "text": "에이전트가 100개라는 게",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1372,
+     "end": 1432,
+     "text": "중요한 게 아니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1432,
+     "end": 1467,
+     "text": "단 하나라도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1467,
+     "end": 1574,
+     "text": "실제 업무를 끝까지 완수할 수 있느냐가 중요하다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 42,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "from": 1574,
+   "to": 1892,
+   "voice": true,
+   "voiceEnd": 1832,
+   "chunks": [
+    {
+     "start": 1580,
+     "end": 1641,
+     "text": "겉으로는 대단해 보인다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1641,
+     "end": 1688,
+     "text": "하지만 막상 써보면,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1688,
+     "end": 1748,
+     "text": "쓸 수 없는 결과물들.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1748,
+     "end": 1790,
+     "text": "대단한 척하지만,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1790,
+     "end": 1813,
+     "text": "결국,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1813,
+     "end": 1892,
+     "text": "SLOP이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,527 @@
+{
+ "title": "AI 에이전트 100개? 결국 SLOP이다.",
+ "fps": 30,
+ "totalFrames": 1892,
+ "totalSeconds": 63.07,
+ "scenes": [
+  {
+   "scene": 1,
+   "start": 0,
+   "end": 5.37,
+   "voiceEnd": 4.87,
+   "narration": [
+    {
+     "start": 0.2,
+     "text": "AI 에이전트 100개로"
+    },
+    {
+     "start": 1.17,
+     "text": "회사를 만들었다고?"
+    },
+    {
+     "start": 3.33,
+     "text": "정말 그 회사가 돌아갈까?"
+    }
+   ]
+  },
+  {
+   "scene": 2,
+   "start": 5.37,
+   "end": 13.27,
+   "voiceEnd": 12.93,
+   "narration": [
+    {
+     "start": 5.57,
+     "text": "요즘 매일 쏟아진다."
+    },
+    {
+     "start": 7.63,
+     "text": "AI 에이전트로 회사를 만들었다느니,"
+    },
+    {
+     "start": 10.3,
+     "text": "멀티 에이전트 100개로 조직을 운영한다느니."
+    }
+   ]
+  },
+  {
+   "scene": 3,
+   "start": 13.27,
+   "end": 18.5,
+   "voiceEnd": 17.93,
+   "narration": [
+    {
+     "start": 13.47,
+     "text": "그런데 묻고 싶다."
+    },
+    {
+     "start": 15.17,
+     "text": "그래서 실제로,"
+    },
+    {
+     "start": 16.73,
+     "text": "무슨 일을 끝냈는데?"
+    }
+   ]
+  },
+  {
+   "scene": 4,
+   "start": 18.5,
+   "end": 23.87,
+   "voiceEnd": 23.57,
+   "narration": [
+    {
+     "start": 18.7,
+     "text": "화면에서는 에이전트들이 회의하고,"
+    },
+    {
+     "start": 21.13,
+     "text": "역할을 나누고,"
+    },
+    {
+     "start": 22.27,
+     "text": "서로 일을 주고받는다."
+    }
+   ]
+  },
+  {
+   "scene": 5,
+   "start": 23.87,
+   "end": 28.67,
+   "voiceEnd": 28.33,
+   "narration": [
+    {
+     "start": 24.07,
+     "text": "하지만 그건,"
+    },
+    {
+     "start": 25.17,
+     "text": "조직이 일하는 모습을"
+    },
+    {
+     "start": 26.3,
+     "text": "흉내 내는 것에 불과할 수도 있다."
+    }
+   ]
+  },
+  {
+   "scene": 6,
+   "start": 28.67,
+   "end": 36.6,
+   "voiceEnd": 36.27,
+   "narration": [
+    {
+     "start": 28.87,
+     "text": "실제 업무는 다르다."
+    },
+    {
+     "start": 30.87,
+     "text": "고객의 요구는 바뀌고,"
+    },
+    {
+     "start": 32.57,
+     "text": "예상하지 못한 문제가 생기고,"
+    },
+    {
+     "start": 34.63,
+     "text": "결과물에는 책임이 따른다."
+    }
+   ]
+  },
+  {
+   "scene": 7,
+   "start": 36.6,
+   "end": 44.57,
+   "voiceEnd": 44.23,
+   "narration": [
+    {
+     "start": 36.8,
+     "text": "그럴듯한 보고서와 코드가 나왔다고,"
+    },
+    {
+     "start": 39.27,
+     "text": "끝이 아니다."
+    },
+    {
+     "start": 40.5,
+     "text": "실제로 쓸 수 있는지,"
+    },
+    {
+     "start": 42.07,
+     "text": "사람이 다시 확인하고 고쳐야 한다."
+    }
+   ]
+  },
+  {
+   "scene": 8,
+   "start": 44.57,
+   "end": 52.47,
+   "voiceEnd": 52.13,
+   "narration": [
+    {
+     "start": 44.77,
+     "text": "에이전트가 100개라는 게"
+    },
+    {
+     "start": 45.73,
+     "text": "중요한 게 아니다."
+    },
+    {
+     "start": 47.73,
+     "text": "단 하나라도,"
+    },
+    {
+     "start": 48.9,
+     "text": "실제 업무를 끝까지 완수할 수 있느냐가 중요하다."
+    }
+   ]
+  },
+  {
+   "scene": 9,
+   "start": 52.47,
+   "end": 63.07,
+   "voiceEnd": 61.07,
+   "narration": [
+    {
+     "start": 52.67,
+     "text": "겉으로는 대단해 보인다."
+    },
+    {
+     "start": 54.7,
+     "text": "하지만 막상 써보면,"
+    },
+    {
+     "start": 56.27,
+     "text": "쓸 수 없는 결과물들."
+    },
+    {
+     "start": 58.27,
+     "text": "대단한 척하지만,"
+    },
+    {
+     "start": 59.67,
+     "text": "결국,"
+    },
+    {
+     "start": 60.43,
+     "text": "SLOP이다."
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "scene": 1,
+   "text": "AI 에이전트",
+   "emphasis": [],
+   "animation": "scale",
+   "position": "하단 왼쪽",
+   "start": 0.2,
+   "end": 5.2,
+   "startFrame": 6,
+   "endFrame": 156
+  },
+  {
+   "scene": 1,
+   "text": "100개?",
+   "emphasis": [
+    "100개?"
+   ],
+   "animation": "pop",
+   "position": "하단 왼쪽",
+   "start": 1.17,
+   "end": 5.2,
+   "startFrame": 35,
+   "endFrame": 156
+  },
+  {
+   "scene": 1,
+   "text": "정말 회사가 돌아갈까?",
+   "emphasis": [],
+   "animation": "scale",
+   "position": "하단 왼쪽",
+   "start": 3.33,
+   "end": 5.2,
+   "startFrame": 100,
+   "endFrame": 156
+  },
+  {
+   "scene": 2,
+   "text": "요즘 매일 쏟아진다",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 중앙",
+   "start": 5.57,
+   "end": 10.43,
+   "startFrame": 167,
+   "endFrame": 313
+  },
+  {
+   "scene": 2,
+   "text": "“AI 에이전트로 회사를 만들었다”",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 중앙",
+   "start": 7.63,
+   "end": 10.43,
+   "startFrame": 229,
+   "endFrame": 313
+  },
+  {
+   "scene": 2,
+   "text": "100개의 에이전트",
+   "emphasis": [
+    "100개"
+   ],
+   "animation": "pop",
+   "position": "상단 중앙",
+   "start": 10.77,
+   "end": 13.2,
+   "startFrame": 323,
+   "endFrame": 396
+  },
+  {
+   "scene": 2,
+   "text": "AI 조직 운영",
+   "emphasis": [],
+   "animation": "pop",
+   "position": "상단 중앙",
+   "start": 11.73,
+   "end": 13.2,
+   "startFrame": 352,
+   "endFrame": 396
+  },
+  {
+   "scene": 3,
+   "text": "그래서 실제로",
+   "emphasis": [],
+   "animation": "scale",
+   "position": "하단 중앙",
+   "start": 15.17,
+   "end": 18.33,
+   "startFrame": 455,
+   "endFrame": 550
+  },
+  {
+   "scene": 3,
+   "text": "무슨 일을 끝냈는데?",
+   "emphasis": [
+    "무슨 일을 끝냈는데?"
+   ],
+   "animation": "scale",
+   "position": "하단 중앙",
+   "start": 16.73,
+   "end": 18.33,
+   "startFrame": 502,
+   "endFrame": 550
+  },
+  {
+   "scene": 4,
+   "text": "회의",
+   "emphasis": [],
+   "animation": "pop",
+   "position": "하단 중앙 (한 줄)",
+   "start": 20.47,
+   "end": 23.5,
+   "startFrame": 614,
+   "endFrame": 705
+  },
+  {
+   "scene": 4,
+   "text": "역할 분담",
+   "emphasis": [],
+   "animation": "pop",
+   "position": "하단 중앙 (한 줄)",
+   "start": 21.13,
+   "end": 23.5,
+   "startFrame": 634,
+   "endFrame": 705
+  },
+  {
+   "scene": 4,
+   "text": "업무 전달",
+   "emphasis": [],
+   "animation": "pop",
+   "position": "하단 중앙 (한 줄)",
+   "start": 22.67,
+   "end": 23.5,
+   "startFrame": 680,
+   "endFrame": 705
+  },
+  {
+   "scene": 5,
+   "text": "일하는 모습",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 오른쪽",
+   "start": 25.33,
+   "end": 28.47,
+   "startFrame": 760,
+   "endFrame": 854
+  },
+  {
+   "scene": 5,
+   "text": "그저 흉내일 수도 있다",
+   "emphasis": [
+    "흉내"
+   ],
+   "animation": "rise",
+   "position": "상단 오른쪽",
+   "start": 26.3,
+   "end": 28.47,
+   "startFrame": 789,
+   "endFrame": 854
+  },
+  {
+   "scene": 6,
+   "text": "고객의 요구",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 왼쪽",
+   "start": 30.87,
+   "end": 36.4,
+   "startFrame": 926,
+   "endFrame": 1092
+  },
+  {
+   "scene": 6,
+   "text": "예상하지 못한 문제",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 왼쪽",
+   "start": 32.57,
+   "end": 36.4,
+   "startFrame": 977,
+   "endFrame": 1092
+  },
+  {
+   "scene": 6,
+   "text": "결과물에 대한 책임",
+   "emphasis": [
+    "책임"
+   ],
+   "animation": "rise",
+   "position": "상단 왼쪽",
+   "start": 34.63,
+   "end": 36.4,
+   "startFrame": 1039,
+   "endFrame": 1092
+  },
+  {
+   "scene": 7,
+   "text": "그럴듯한 결과물",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "하단 중앙",
+   "start": 37.03,
+   "end": 44.33,
+   "startFrame": 1111,
+   "endFrame": 1330
+  },
+  {
+   "scene": 7,
+   "text": "하지만 실제로 쓸 수 있을까?",
+   "emphasis": [
+    "하지만 실제로 쓸 수 있을까?"
+   ],
+   "animation": "scale",
+   "position": "하단 중앙",
+   "start": 40.5,
+   "end": 44.33,
+   "startFrame": 1215,
+   "endFrame": 1330
+  },
+  {
+   "scene": 8,
+   "text": "100개가 중요한 게 아니다.",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 중앙",
+   "start": 45.1,
+   "end": 47.73,
+   "startFrame": 1353,
+   "endFrame": 1432
+  },
+  {
+   "scene": 8,
+   "text": "단 1개라도",
+   "emphasis": [
+    "1개"
+   ],
+   "animation": "pop",
+   "position": "하단 중앙",
+   "start": 47.73,
+   "end": 52.4,
+   "startFrame": 1432,
+   "endFrame": 1572
+  },
+  {
+   "scene": 8,
+   "text": "제대로 일할 수 있는가?",
+   "emphasis": [],
+   "animation": "scale",
+   "position": "하단 중앙",
+   "start": 49.3,
+   "end": 52.4,
+   "startFrame": 1479,
+   "endFrame": 1572
+  },
+  {
+   "scene": 9,
+   "text": "겉으로는 대단해 보인다",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 중앙",
+   "start": 52.67,
+   "end": 58.17,
+   "startFrame": 1580,
+   "endFrame": 1745
+  },
+  {
+   "scene": 9,
+   "text": "쓸 수 없는 결과물들",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "상단 중앙",
+   "start": 56.27,
+   "end": 58.17,
+   "startFrame": 1688,
+   "endFrame": 1745
+  },
+  {
+   "scene": 9,
+   "text": "대단한 척하지만",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "중앙 (엔딩)",
+   "start": 58.27,
+   "end": 60.77,
+   "startFrame": 1748,
+   "endFrame": 1823
+  },
+  {
+   "scene": 9,
+   "text": "결국",
+   "emphasis": [],
+   "animation": "rise",
+   "position": "중앙 (엔딩)",
+   "start": 59.67,
+   "end": 60.77,
+   "startFrame": 1790,
+   "endFrame": 1823
+  },
+  {
+   "scene": 9,
+   "text": "SLOP.",
+   "emphasis": [
+    "SLOP."
+   ],
+   "animation": "slam",
+   "position": "중앙 (엔딩)",
+   "start": 60.43,
+   "end": 63.07,
+   "startFrame": 1813,
+   "endFrame": 1892
+  }
+ ]
+}

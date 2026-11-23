@@ -1,0 +1,52 @@
+{
+ "_": "On-screen typography. x/y = screen px of the block (x: left edge, centre or right edge according to align; y: top). size = px, w = font weight, c = white | grey | coral | red. at = [narration phrase of the scene, how far into it 0–1]; out (optional) = when the line leaves, same form — default: the end of the scene. anim = rise (sentence) | scale (question) | pop (key word) | slam (ending). flow: row = the lines stand next to each other. scrim = the soft dark gradient under the block.",
+ "blocks": [
+  { "scene": 1, "place": "하단 왼쪽", "x": 90, "y": 1232, "align": "left", "scrim": {"side": "bottom", "h": 470, "strength": 0.82}, "lines": [
+    {"size": 70, "w": 800, "at": [0, 0], "anim": "scale", "parts": [{"t": "AI 에이전트"}]},
+    {"size": 124, "w": 900, "at": [1, 0], "anim": "pop", "parts": [{"t": "100개?", "c": "coral"}]},
+    {"size": 58, "w": 700, "at": [2, 0], "anim": "scale", "gap": 8, "parts": [{"t": "정말 회사가 돌아갈까?"}]} ] },
+
+  { "scene": 2, "place": "상단 중앙", "x": 510, "y": 410, "align": "center", "scrim": {"side": "top", "h": 380, "strength": 0.84}, "lines": [
+    {"size": 54, "w": 700, "at": [0, 0], "out": [2, 0.05], "parts": [{"t": "요즘 매일 쏟아진다"}]},
+    {"size": 40, "w": 600, "at": [1, 0], "out": [2, 0.05], "parts": [{"t": "“AI 에이전트로 회사를 만들었다”", "c": "grey"}]} ] },
+  { "scene": 2, "place": "상단 중앙", "x": 510, "y": 410, "align": "center", "scrim": {"side": "top", "h": 430, "strength": 0.96}, "lines": [
+    {"size": 82, "w": 800, "at": [2, 0.18], "anim": "pop", "parts": [{"t": "100개", "c": "coral"}, {"t": "의 에이전트"}]},
+    {"size": 82, "w": 800, "at": [2, 0.55], "anim": "pop", "parts": [{"t": "AI 조직 운영"}]} ] },
+
+  { "scene": 3, "place": "하단 중앙", "x": 510, "y": 1352, "align": "center", "scrim": {"side": "bottom", "h": 400, "strength": 0.86}, "lines": [
+    {"size": 68, "w": 700, "at": [1, 0], "anim": "scale", "parts": [{"t": "그래서 실제로"}]},
+    {"size": 82, "w": 900, "at": [2, 0], "anim": "scale", "parts": [{"t": "무슨 일을 끝냈는데?", "c": "coral"}]} ] },
+
+  { "scene": 4, "place": "하단 중앙 (한 줄)", "x": 510, "y": 1420, "align": "center", "flow": "row", "scrim": {"side": "bottom", "h": 330, "strength": 0.84}, "lines": [
+    {"size": 68, "w": 800, "at": [0, 0.72], "anim": "pop", "parts": [{"t": "회의"}]},
+    {"size": 68, "w": 800, "at": [1, 0], "anim": "pop", "parts": [{"t": "역할 분담"}]},
+    {"size": 68, "w": 800, "at": [2, 0.3], "anim": "pop", "parts": [{"t": "업무 전달"}]} ] },
+
+  { "scene": 5, "place": "상단 오른쪽", "x": 930, "y": 410, "align": "right", "scrim": {"side": "top", "h": 360, "strength": 0.8}, "lines": [
+    {"size": 72, "w": 800, "at": [1, 0.15], "parts": [{"t": "일하는 모습"}]},
+    {"size": 58, "w": 700, "at": [2, 0], "parts": [{"t": "그저 "}, {"t": "흉내", "c": "coral", "w": 900}, {"t": "일 수도 있다"}]} ] },
+
+  { "scene": 6, "place": "상단 왼쪽", "x": 90, "y": 408, "align": "left", "scrim": {"side": "top", "h": 400, "strength": 0.84}, "lines": [
+    {"size": 60, "w": 800, "at": [1, 0], "parts": [{"t": "고객의 요구"}]},
+    {"size": 60, "w": 800, "at": [2, 0], "parts": [{"t": "예상하지 못한 문제"}]},
+    {"size": 60, "w": 800, "at": [3, 0], "parts": [{"t": "결과물에 대한 "}, {"t": "책임", "c": "coral"}]} ] },
+
+  { "scene": 7, "place": "하단 중앙", "x": 510, "y": 1372, "align": "center", "scrim": {"side": "bottom", "h": 380, "strength": 0.86}, "lines": [
+    {"size": 62, "w": 700, "at": [0, 0.1], "parts": [{"t": "그럴듯한 결과물"}]},
+    {"size": 60, "w": 800, "at": [2, 0], "anim": "scale", "parts": [{"t": "하지만 실제로 쓸 수 있을까?", "c": "coral"}]} ] },
+
+  { "scene": 8, "place": "상단 중앙", "x": 510, "y": 412, "align": "center", "scrim": {"side": "top", "h": 300, "strength": 0.84}, "lines": [
+    {"size": 60, "w": 800, "at": [0, 0.35], "out": [2, 0], "parts": [{"t": "100개", "c": "grey"}, {"t": "가 중요한 게 아니다."}]} ] },
+  { "scene": 8, "place": "하단 중앙", "x": 510, "y": 1370, "align": "center", "scrim": {"side": "bottom", "h": 400, "strength": 0.86}, "lines": [
+    {"size": 80, "w": 800, "at": [2, 0], "anim": "pop", "parts": [{"t": "단 "}, {"t": "1개", "c": "coral", "w": 900}, {"t": "라도"}]},
+    {"size": 62, "w": 700, "at": [3, 0.12], "anim": "scale", "parts": [{"t": "제대로 일할 수 있는가?"}]} ] },
+
+  { "scene": 9, "place": "상단 중앙", "x": 510, "y": 412, "align": "center", "scrim": {"side": "top", "h": 330, "strength": 0.84}, "lines": [
+    {"size": 52, "w": 600, "at": [0, 0], "out": [3, -0.06], "parts": [{"t": "겉으로는 대단해 보인다", "c": "grey"}]},
+    {"size": 62, "w": 800, "at": [2, 0], "out": [3, -0.06], "parts": [{"t": "쓸 수 없는 결과물들"}]} ] },
+  { "scene": 9, "place": "중앙 (엔딩)", "x": 510, "y": 640, "align": "center", "lines": [
+    {"size": 60, "w": 700, "at": [3, 0], "out": [5, 0.55], "parts": [{"t": "대단한 척하지만"}]},
+    {"size": 84, "w": 800, "at": [4, 0], "out": [5, 0.55], "parts": [{"t": "결국"}]},
+    {"size": 300, "w": 900, "at": [5, 0], "anim": "slam", "gap": 6, "parts": [{"t": "SLOP.", "c": "red"}]} ] }
+ ]
+}

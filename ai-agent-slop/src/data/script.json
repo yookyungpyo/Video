@@ -1,0 +1,29 @@
+{
+ "title": "AI 에이전트 100개? 결국 SLOP이다.",
+ "targetFrames": 1650,
+ "readingRate": 5.2,
+ "tailHold": 2.0,
+ "music": "auto",
+ "subtitles": false,
+ "voiceNote": "내레이션: ElevenLabs eleven_v4 · Minho - Deep & Trustworthy Narrator. assets/narration/full-take.mp3 → scripts/split_take.py → scene-0X.wav",
+ "scenes": [
+  { "n": 1, "title": "AI 회사의 탄생", "window": [0, 5], "tail": 0.5, "chunks": [
+    { "text": "AI 에이전트 100개로", "read": "에이아이 에이전트 백 개로" }, { "text": "회사를 만들었다고?" }, { "text": "정말 그 회사가 돌아갈까?" } ] },
+  { "n": 2, "title": "100개의 에이전트", "window": [5, 11], "chunks": [
+    { "text": "요즘 매일 쏟아진다." }, { "text": "AI 에이전트로 회사를 만들었다느니,", "read": "에이아이 에이전트로 회사를 만들었다느니," }, { "text": "멀티 에이전트 100개로 조직을 운영한다느니.", "read": "멀티 에이전트 백 개로 조직을 운영한다느니." } ] },
+  { "n": 3, "title": "그래서 뭘 끝냈는데?", "window": [11, 15], "tail": 0.55, "chunks": [
+    { "text": "그런데 묻고 싶다." }, { "text": "그래서 실제로," }, { "text": "무슨 일을 끝냈는데?" } ] },
+  { "n": 4, "title": "일하는 척하는 조직", "window": [15, 21], "chunks": [
+    { "text": "화면에서는 에이전트들이 회의하고," }, { "text": "역할을 나누고," }, { "text": "서로 일을 주고받는다." } ] },
+  { "n": 5, "title": "무대 뒤의 실체", "window": [21, 27], "chunks": [
+    { "text": "하지만 그건," }, { "text": "조직이 일하는 모습을" }, { "text": "흉내 내는 것에 불과할 수도 있다." } ] },
+  { "n": 6, "title": "실제 업무의 현실", "window": [27, 34], "chunks": [
+    { "text": "실제 업무는 다르다." }, { "text": "고객의 요구는 바뀌고," }, { "text": "예상하지 못한 문제가 생기고," }, { "text": "결과물에는 책임이 따른다." } ] },
+  { "n": 7, "title": "결국 사람이 검증한다", "window": [34, 40], "chunks": [
+    { "text": "그럴듯한 보고서와 코드가 나왔다고," }, { "text": "끝이 아니다." }, { "text": "실제로 쓸 수 있는지," }, { "text": "사람이 다시 확인하고 고쳐야 한다." } ] },
+  { "n": 8, "title": "100개보다 중요한 1개", "window": [40, 47], "chunks": [
+    { "text": "에이전트가 100개라는 게", "read": "에이전트가 백 개라는 게" }, { "text": "중요한 게 아니다." }, { "text": "단 하나라도," }, { "text": "실제 업무를 끝까지 완수할 수 있느냐가 중요하다." } ] },
+  { "n": 9, "title": "결국 SLOP", "window": [47, 55], "chunks": [
+    { "text": "겉으로는 대단해 보인다." }, { "text": "하지만 막상 써보면," }, { "text": "쓸 수 없는 결과물들." }, { "text": "대단한 척하지만," }, { "text": "결국," }, { "text": "SLOP이다.", "read": "슬롭이다." } ] }
+ ]
+}
