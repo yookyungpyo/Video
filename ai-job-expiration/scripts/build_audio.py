@@ -117,9 +117,12 @@ def main():
         add(sfx, sec(s["sent"]), soft_tick(880, 0.06, 60), 0.1)
     started = set()
     for p in tl["pieces"]:
-        if p["tone"] == "red":                                   # the one red line: slow, heavier, one tick per character
-            add(sfx, sec(p["f"]), soft_tick(310, 0.07, 55), 0.3)
+        if p["tone"] != "white":                                 # an emphasised line: slow, heavier, one tick per character
+            add(sfx, sec(p["f"]), soft_tick(310, 0.07, 55), 0.3 if p["tone"] == "red" else 0.22)
             add(sfx, sec(p["f"]), key("key"), 0.15)
+        elif p["silent"]:                                        # in the silence every piece is heard, like a key
+            add(sfx, sec(p["f"]), soft_tick(rng.uniform(1500, 1900), 0.022, 170), 0.05)
+            add(sfx, sec(p["f"]), key("key"), 0.1)
         else:
             add(sfx, sec(p["f"]), soft_tick(rng.uniform(1500, 1900), 0.022, 170), 0.03 if not p["silent"] else 0.05)
         if p["id"] not in started and not p["silent"]:
