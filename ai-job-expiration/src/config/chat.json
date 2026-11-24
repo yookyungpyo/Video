@@ -1,5 +1,5 @@
 {
- "_": "Everything about WHEN: what is said, how fast it is typed or streamed, every pause and every hold. Times are frames (30 = 1 second). perChar = frames per character. Run `npm run timeline` after editing, then `npm run audio` and `npm run render`.",
+ "_": "Everything about WHEN: what is said, how fast it is typed or streamed, every pause and every hold. Times are frames (30 = 1 second). perChar = frames per character. tone: white (default) | emph (white, larger and bolder) | red (red neon). Run `npm run timeline` after editing, then `npm run audio` and `npm run render`.",
  "fps": 30,
  "seed": 7,
  "startDelay": 20,
@@ -34,8 +34,9 @@
   { "type": "user", "id": "u5", "scene": 5, "perChar": 3.0, "lines": ["퍼블리셔"], "music": "stop-on-send" },
   { "type": "ai", "id": "a5", "scene": 5, "think": 60, "thinkLabel": "생각 중", "hold": 60, "silent": true, "lines": [
     { "text": "잠깐만.", "perChar": 2.6 },
-    { "text": "아직도 남아 있어? 🤔", "perChar": 6.5, "before": 36, "mode": "char", "tone": "red" } ],
-    "zoom": { "scale": 1.15, "line": 1, "frames": 56 } },
+    { "text": "이건…", "perChar": 5.0, "before": 36, "mode": "char" },
+    { "text": "대답 안 하면 안 될까? 😶", "perChar": 5.5, "before": 16, "mode": "char", "tone": "emph" } ],
+    "zoom": { "scale": 1.05, "line": 2, "frames": 50 } },
 
   { "type": "user", "id": "u6", "scene": 6, "perChar": 5.2, "before": 8, "lines": ["그럼 안전한 직업은 뭐야?"], "music": "low-in" },
   { "type": "ai", "id": "a6", "scene": 6, "think": 20, "hold": 46, "lines": [

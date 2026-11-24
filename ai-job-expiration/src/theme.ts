@@ -35,7 +35,7 @@ export const VIEW = { top: HEADER_H, h: APP.h - HEADER_H - INPUT_BASE_H - INPUT.
 // Bubbles — larger than in the reference so they read on a phone.
 export const B = {
   font: 46, line: 66, padV: 24, padH: 32, radius: 36, gap: 34,
-  bigFont: 58, bigLine: 84,                       // the red line
+  bigFont: 54, bigLine: 80,                       // an emphasised line (tone emph / red)
   aiAvatar: 84, userAvatar: 76, side: 22, avatarGap: 16,
   top: 26, bottom: 26,
   thinkH: 68,

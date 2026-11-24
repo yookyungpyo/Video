@@ -19,11 +19,12 @@ export const AIStreaming: React.FC<{ m: AiMsg; g: number; lines: number }> = ({ 
         const cs = chars(l.text);
         const n = shown(l.steps, g);
         const red = l.tone === "red";
+        const big = l.tone !== "white";
         return (
-          <div key={i} style={{ height: lineHeight(m, i), lineHeight: `${lineHeight(m, i)}px`, whiteSpace: "pre", fontFamily: FONT, fontWeight: red ? 800 : 500, fontSize: red ? B.bigFont : B.font, letterSpacing: red ? -1.2 : -0.6,
+          <div key={i} style={{ height: lineHeight(m, i), lineHeight: `${lineHeight(m, i)}px`, whiteSpace: "pre", fontFamily: FONT, fontWeight: red ? 800 : big ? 700 : 500, fontSize: big ? B.bigFont : B.font, letterSpacing: big ? -1.2 : -0.6,
             color: red ? C.red : C.text, textShadow: red ? "0 0 14px rgba(255,60,85,0.85), 0 0 36px rgba(255,40,70,0.5)" : undefined }}>
             {cs.slice(0, n).join("")}
-            {streaming && i === last && <span style={{ display: "inline-block", width: red ? 5 : 4, height: (red ? B.bigFont : B.font) * 0.92, marginLeft: 5, verticalAlign: "-0.12em", background: red ? C.red : C.violetLight, opacity: Math.floor(g / 9) % 2 === 0 || n < cs.length ? 1 : 0.15, boxShadow: `0 0 10px ${red ? C.red : C.violet}` }} />}
+            {streaming && i === last && <span style={{ display: "inline-block", width: big ? 5 : 4, height: (big ? B.bigFont : B.font) * 0.92, marginLeft: 5, verticalAlign: "-0.12em", background: red ? C.red : C.violetLight, opacity: Math.floor(g / 9) % 2 === 0 || n < cs.length ? 1 : 0.15, boxShadow: `0 0 10px ${red ? C.red : C.violet}` }} />}
           </div>
         );
       })}

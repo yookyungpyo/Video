@@ -6,7 +6,7 @@ import { B, VIEW } from "../theme";
 export type Row = { m: Msg; kind: "bubble" | "think"; y: number; h: number; bubbleH: number; lines: number };
 
 const aiLinesStarted = (m: AiMsg, g: number) => m.lines.filter((l) => l.from <= g).length;
-export const lineHeight = (m: Msg, i: number) => (m.role === "ai" && m.lines[i].tone === "red" ? B.bigLine : B.line);
+export const lineHeight = (m: Msg, i: number) => (m.role === "ai" && m.lines[i].tone !== "white" ? B.bigLine : B.line);
 
 /** rows visible at frame g, top to bottom, with their y in content space */
 export const rowsAt = (g: number): { rows: Row[]; height: number } => {

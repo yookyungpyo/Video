@@ -2,7 +2,7 @@
 import timeline from "./timeline.json";
 
 export type Step = { count: number; f: number };
-export type AiLine = { text: string; chars: number; tone: "white" | "red"; from: number; steps: Step[]; to: number };
+export type AiLine = { text: string; chars: number; tone: "white" | "emph" | "red"; from: number; steps: Step[]; to: number };
 export type UserMsg = { id: string; role: "user"; scene: number; lines: { text: string; chars: number }[]; typeFrom: number; typed: { line: number; count: number; f: number }[]; press: number; appear: number };
 export type AiMsg = { id: string; role: "ai"; scene: number; thinkFrom: number; thinkTo: number; thinkLabel: string | null; appear: number; lines: AiLine[]; done: number; cursorOff: number };
 export type Msg = UserMsg | AiMsg;
