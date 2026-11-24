@@ -1,0 +1,55 @@
+{
+ "_": "Everything about WHEN: what is said, how fast it is typed or streamed, every pause and every hold. Times are frames (30 = 1 second). perChar = frames per character. Run `npm run timeline` after editing, then `npm run audio` and `npm run render`.",
+ "fps": 30,
+ "seed": 7,
+ "startDelay": 20,
+ "user": { "afterTyping": 8, "pressFrames": 4, "jitter": 0.9, "punctuationPause": 5, "lineBreakPause": 7 },
+ "ai": { "replyDelay": 7, "cursorOff": 6 },
+ "steps": [
+  { "type": "user", "id": "u1", "scene": 1, "perChar": 2.0, "lines": ["AI 때문에 많은 직업이 사라질 위기잖아.", "앞으로 얼마나 버틸 수 있을까?", "내가 직업을 하나씩 물어볼게."] },
+  { "type": "ai", "id": "a1", "scene": 1, "think": 22, "hold": 34, "lines": [
+    { "text": "좋아. 상처받지 않기다. 😏", "perChar": 1.7 } ] },
+
+  { "type": "user", "id": "u2", "scene": 2, "perChar": 2.6, "lines": ["프론트엔드 개발자"] },
+  { "type": "ai", "id": "a2", "scene": 2, "think": 16, "hold": 42, "lines": [
+    { "text": "아직은 필요해.", "perChar": 1.2 },
+    { "text": "내가 짠 코드에 문제가 생기면", "perChar": 2.8, "before": 24 },
+    { "text": "누군가는 책임져야 하잖아. 😅", "perChar": 3.2, "before": 3 } ],
+    "zoom": { "scale": 1.05, "line": 2, "frames": 44 },
+    "sfx": [{ "kind": "bass", "line": 2, "at": 0.4 }] },
+
+  { "type": "user", "id": "u3", "scene": 3, "perChar": 2.5, "lines": ["UI/UX 디자이너"] },
+  { "type": "ai", "id": "a3", "scene": 3, "think": 4, "hold": 48, "lines": [
+    { "text": "시안은 내가 만들게.", "perChar": 0.9 },
+    { "text": "고객이 왜 마음에 안 드는지는", "perChar": 3.0, "before": 14 },
+    { "text": "네가 좀 알아내 줘. 😏", "perChar": 3.3, "before": 3 } ] },
+
+  { "type": "user", "id": "u4", "scene": 4, "perChar": 2.8, "lines": ["UI 기획자"] },
+  { "type": "ai", "id": "a4", "scene": 4, "think": 16, "hold": 44, "heartbeat": true, "lines": [
+    { "text": "음…", "perChar": 4.0 },
+    { "text": "나는 이미 화면을 만들었는데,", "perChar": 2.6, "before": 30 },
+    { "text": "넌 아직 화면설계서 그리고 있어? 😳", "perChar": 3.2, "before": 6 } ],
+    "zoom": { "scale": 1.1, "line": 2, "frames": 80 } },
+
+  { "type": "user", "id": "u5", "scene": 5, "perChar": 3.0, "lines": ["퍼블리셔"], "music": "stop-on-send" },
+  { "type": "ai", "id": "a5", "scene": 5, "think": 60, "thinkLabel": "생각 중", "hold": 60, "silent": true, "lines": [
+    { "text": "잠깐만.", "perChar": 2.6 },
+    { "text": "아직도 남아 있어? 🤔", "perChar": 6.5, "before": 36, "mode": "char", "tone": "red" } ],
+    "zoom": { "scale": 1.15, "line": 1, "frames": 56 } },
+
+  { "type": "user", "id": "u6", "scene": 6, "perChar": 5.2, "before": 8, "lines": ["그럼 안전한 직업은 뭐야?"], "music": "low-in" },
+  { "type": "ai", "id": "a6", "scene": 6, "think": 20, "hold": 46, "lines": [
+    { "text": "글쎄…", "perChar": 4.0 },
+    { "text": "나도 다음 버전이 나오면", "perChar": 3.0, "before": 30 },
+    { "text": "어떻게 될지 모르는데? 😅", "perChar": 3.0, "before": 3 } ],
+    "music": "stop-on-done" },
+
+  { "type": "user", "id": "u7", "scene": 7, "perChar": 9.0, "before": 4, "even": true, "lines": ["........"] },
+  { "type": "silence", "scene": 7, "frames": 60 },
+  { "type": "fade", "scene": 7, "frames": 45 },
+  { "type": "ending", "scene": 8, "before": 14, "lines": [
+    { "text": "당신의 직업은 살아남을 것인가.", "perChar": 3.4, "tone": "white" },
+    { "text": "당신은 살아남을 것인가.", "perChar": 4.2, "before": 45, "tone": "red" } ],
+    "hold": 90, "caption": "AI 시대의 직업 변화를 소재로 한 풍자" }
+ ]
+}

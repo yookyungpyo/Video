@@ -1,0 +1,24 @@
+{
+  "name": "ai-job-expiration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI에게 내 직업의 유통기한을 물었다 — chat-screen reel (9:16, Remotion)",
+  "scripts": {
+    "timeline": "node scripts/build-timeline.mjs",
+    "audio": "python scripts/build_audio.py",
+    "preview": "remotion studio src/index.ts",
+    "render": "node scripts/render.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.441",
+    "pretendard": "^1.3.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "4.0.441"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.3.0"
+  }
+}

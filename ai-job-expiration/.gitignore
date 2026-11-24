@@ -1,0 +1,7 @@
+node_modules/
+output/
+.remotion/
+# working copies made by scripts/split-storyboard.mjs from scenes/
+public/scenes/
+__pycache__/
+ai_job_expiration_final.mp4
