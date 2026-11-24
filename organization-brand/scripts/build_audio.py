@@ -9,7 +9,7 @@ Reads   src/data/script.json                    scenes, subtitle chunks, target 
         audio/custom-music.mp3|wav|m4a          OPTIONAL licensed music file — used instead of the built-in music
 Writes  src/data/timing.json                    frame timings + per-chunk font size (do not edit by hand)
         public/audio/track.mp4                  final mix (AAC stereo 48 kHz)
-        audio/narration.wav, bgm.wav, sfx.wav    the three stems of that mix; audio/sfx/*.wav every effect on its own
+        audio/narration.m4a, bgm.m4a, sfx.m4a    the three stems of that mix; audio/sfx/*.wav every effect on its own
         subtitles.srt, narration_script.txt     the subtitles / the narration with its real timing
         output/timing-report.txt
 
@@ -79,7 +79,7 @@ def encode(x, path):
             wf.setframerate(SR)
             wf.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
         subprocess.run([FFMPEG, "-loglevel", "error", "-y", "-i", w, "-af", "pan=stereo|c0=c0|c1=c0",
-                        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", path], check=True)
+                        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-f", "mp4", path], check=True)   # -f: this ffmpeg build does not know ".m4a"
 
 
 def syllables(t):
@@ -273,10 +273,11 @@ def main():
             w.setsampwidth(2)
             w.setframerate(SR)
             w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
-    wav(voice, os.path.join(STEMS, "narration.wav"))
+    norm = lambda x: x / (np.max(np.abs(x)) + 1e-9) * 0.8
+    encode(voice, os.path.join(STEMS, "narration.m4a"))
     if music_src != "none":
-        wav(stem_bed, os.path.join(STEMS, "bgm.wav"), 0.8)
-    wav(stem_sfx, os.path.join(STEMS, "sfx.wav"), 0.8)
+        encode(norm(stem_bed), os.path.join(STEMS, "bgm.m4a"))
+    encode(norm(stem_sfx), os.path.join(STEMS, "sfx.m4a"))
     for name, sig in samples.items():
         wav(sig, os.path.join(STEMS, "sfx", name + ".wav"), 0.8)
 

@@ -5,5 +5,3 @@ output/
 public/scenes/
 __pycache__/
 organization_brand_final.mp4
-# large uncompressed stems (the .m4a versions are kept)
-audio/*.wav
