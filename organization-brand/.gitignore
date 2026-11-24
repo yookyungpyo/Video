@@ -1,0 +1,9 @@
+node_modules/
+output/
+.remotion/
+# working copies made by scripts/split-storyboard.mjs from scenes/
+public/scenes/
+__pycache__/
+organization_brand_final.mp4
+# large uncompressed stems (the .m4a versions are kept)
+audio/*.wav

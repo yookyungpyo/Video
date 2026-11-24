@@ -1,0 +1,451 @@
+{
+ "fps": 30,
+ "totalFrames": 2093,
+ "targetFrames": 1860,
+ "voiced": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "naturalNarrationSeconds": 82.4,
+ "overflowSeconds": 7.77,
+ "scenes": [
+  {
+   "n": 1,
+   "from": 0,
+   "to": 186,
+   "voice": true,
+   "voiceEnd": 176,
+   "chunks": [
+    {
+     "start": 7,
+     "end": 91,
+     "text": "당신의 조직에는 {브랜드}가 있는가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 91,
+     "end": 126,
+     "text": "회사의 로고나 슬로건을",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 126,
+     "end": 186,
+     "text": "이야기하는 것이 아니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "from": 186,
+   "to": 467,
+   "voice": true,
+   "voiceEnd": 457,
+   "chunks": [
+    {
+     "start": 193,
+     "end": 265,
+     "text": "조직도 하나의 {브랜드}다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 265,
+     "end": 299,
+     "text": "같은 태도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 299,
+     "end": 332,
+     "text": "같은 언어,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 332,
+     "end": 401,
+     "text": "같은 기준으로 일을 하는 것.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 401,
+     "end": 467,
+     "text": "그것이 조직의 {브랜딩}이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "from": 467,
+   "to": 674,
+   "voice": true,
+   "voiceEnd": 664,
+   "chunks": [
+    {
+     "start": 474,
+     "end": 518,
+     "text": "누구를 만나더라도,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 518,
+     "end": 610,
+     "text": "고객이 {같은 가치}를\n경험할 수 있어야 한다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 610,
+     "end": 674,
+     "text": "그것이 조직의 {브랜딩}이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "from": 674,
+   "to": 869,
+   "voice": true,
+   "voiceEnd": 859,
+   "chunks": [
+    {
+     "start": 681,
+     "end": 773,
+     "text": "그러기 위해서는\n{세 가지 질문}이 필요하다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 773,
+     "end": 808,
+     "text": "우리 조직에는,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 808,
+     "end": 869,
+     "text": "명확한 {목표점}이 있는가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "from": 869,
+   "to": 1006,
+   "voice": true,
+   "voiceEnd": 996,
+   "chunks": [
+    {
+     "start": 875,
+     "end": 947,
+     "text": "구성원 모두가\n그 목표를 향해,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 947,
+     "end": 1006,
+     "text": "{같은 방향}으로\n가고 있는가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "from": 1006,
+   "to": 1179,
+   "voice": true,
+   "voiceEnd": 1155,
+   "chunks": [
+    {
+     "start": 1013,
+     "end": 1073,
+     "text": "그리고 방향을 잃었을 때,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1073,
+     "end": 1119,
+     "text": "다시 길을 안내해 줄,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1119,
+     "end": 1179,
+     "text": "{내비게이션}이 있는가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "from": 1179,
+   "to": 1362,
+   "voice": true,
+   "voiceEnd": 1352,
+   "chunks": [
+    {
+     "start": 1186,
+     "end": 1241,
+     "text": "목표점은 비전이고,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1241,
+     "end": 1291,
+     "text": "방향성은 전략이며,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1291,
+     "end": 1362,
+     "text": "내비게이션은 리더의 역할이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "from": 1362,
+   "to": 1632,
+   "voice": true,
+   "voiceEnd": 1622,
+   "chunks": [
+    {
+     "start": 1368,
+     "end": 1431,
+     "text": "같은 방향을 바라본다는 것이,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1431,
+     "end": 1510,
+     "text": "모두가 똑같아야 한다는\n뜻은 아니다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    },
+    {
+     "start": 1510,
+     "end": 1563,
+     "text": "각자의 방식으로 일하되,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1563,
+     "end": 1632,
+     "text": "{같은 가치}를 만들어내는 것이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "from": 1632,
+   "to": 1836,
+   "voice": true,
+   "voiceEnd": 1826,
+   "chunks": [
+    {
+     "start": 1639,
+     "end": 1677,
+     "text": "조직의 브랜드는,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1677,
+     "end": 1734,
+     "text": "리더가 선언하는 것이 아니라,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1734,
+     "end": 1795,
+     "text": "구성원들의 {일하는 방식}으로,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1795,
+     "end": 1836,
+     "text": "{증명}되는 것이다.",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "from": 1836,
+   "to": 2093,
+   "voice": true,
+   "voiceEnd": 2024,
+   "chunks": [
+    {
+     "start": 1843,
+     "end": 1881,
+     "text": "당신의 조직은,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1881,
+     "end": 1928,
+     "text": "하나의 {브랜드}인가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1928,
+     "end": 1952,
+     "text": "아니면,",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 1
+    },
+    {
+     "start": 1952,
+     "end": 2093,
+     "text": "그저 사람들이 모여 있는\n{집단}인가?",
+     "quote": false,
+     "rhythm": false,
+     "center": false,
+     "fontSize": 54,
+     "lines": 2
+    }
+   ]
+  }
+ ]
+}
